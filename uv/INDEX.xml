@@ -14,13 +14,6 @@
     <scraped_at>2026-01-16</scraped_at>
   </source>
   <source>
-    <title>Index | uv</title>
-    <description>Hub page linking to detailed concepts: project structure, initialisation, dependencies, running commands, lockfiles, syncing, configuration, building distributions, and workspaces.</description>
-    <source_url>https://docs.astral.sh/uv/concepts/projects</source_url>
-    <local_file>index-uv.md</local_file>
-    <scraped_at>2026-01-16</scraped_at>
-  </source>
-  <source>
     <title>Managing dependencies | uv</title>
     <description>Comprehensive guide to dependency fields, uv add/remove commands, dependency sources (Git, URL, path, workspace), optional dependencies, development groups, build dependencies, editable installations, and dependency specifiers syntax.</description>
     <source_url>https://docs.astral.sh/uv/concepts/projects/dependencies</source_url>
@@ -145,5 +138,40 @@
     <source_url>https://docs.astral.sh/uv/guides/integration/github</source_url>
     <local_file>using-uv-in-github-actions-uv.md</local_file>
     <scraped_at>2026-01-16</scraped_at>
+  </source>
+  <source>
+    <title>Installation | uv</title>
+    <description>Installation methods: standalone installer via curl/wget/PowerShell, PyPI with `pipx`/`pip`, Homebrew, MacPorts, WinGet, Scoop, Docker, GitHub releases, Cargo. Covers `uv self update`, shell autocompletion with `uv generate-shell-completion`, and uninstallation steps.</description>
+    <source_url>https://docs.astral.sh/uv/getting-started/installation</source_url>
+    <local_file>installation-uv.md</local_file>
+    <scraped_at>2026-01-24</scraped_at>
+  </source>
+  <source>
+    <title>Running scripts | uv</title>
+    <description>Running standalone Python scripts with `uv run`, declaring inline dependencies via PEP 723 script metadata, `uv add --script`, `--with` flag, `requires-python`, shebang executables, `uv lock --script`, `exclude-newer` reproducibility.</description>
+    <source_url>https://docs.astral.sh/uv/guides/scripts</source_url>
+    <local_file>running-scripts-uv.md</local_file>
+    <scraped_at>2026-01-24</scraped_at>
+  </source>
+  <source>
+    <title>Tools | uv</title>
+    <description>Tools concept: `uvx`/`uv tool run` for ephemeral execution, `uv tool install` for persistent installation, tool environments, version pinning with `@version`/`@latest`, `--with` for extra dependencies, `uv tool upgrade`, executable PATH management.</description>
+    <source_url>https://docs.astral.sh/uv/concepts/tools</source_url>
+    <local_file>tools-uv.md</local_file>
+    <scraped_at>2026-01-24</scraped_at>
+  </source>
+  <source>
+    <title>Using tools | uv</title>
+    <description>`uvx` and `uv tool run` for ephemeral tools, `--from` for package/command mismatches, version pinning, extras, Git sources, `--with` for plugins, `uv tool install` and `upgrade` for persistent installations, `--python` selection.</description>
+    <source_url>https://docs.astral.sh/uv/guides/tools</source_url>
+    <local_file>using-tools-uv.md</local_file>
+    <scraped_at>2026-01-24</scraped_at>
+  </source>
+  <source>
+    <title>Caching | uv</title>
+    <description>Dependency caching by source type (registry, URL, Git, local), cache invalidation with `--refresh`/`--reinstall`, `tool.uv.cache-keys` for dynamic metadata, `uv cache clean`/`prune`, CI caching strategies, cache directory configuration.</description>
+    <source_url>https://docs.astral.sh/uv/concepts/cache</source_url>
+    <local_file>caching-uv.md</local_file>
+    <scraped_at>2026-01-24</scraped_at>
   </source>
 </docs_index>

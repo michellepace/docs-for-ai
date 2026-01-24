@@ -132,4 +132,11 @@
     <local_file>optimize-your-terminal-setup-claude-code-docs.md</local_file>
     <scraped_at>2026-01-07</scraped_at>
   </source>
+  <source>
+    <title>Best Practices for Claude Code - Claude Code Docs</title>
+    <description>Best practices for effective Claude Code usage: managing context limits, verification-first workflows, Plan Mode, `CLAUDE.md` authoring, configuring permissions/skills/hooks/subagents, session commands (`/clear`, `/rewind`), headless automation, parallel sessions, failure patterns to avoid.</description>
+    <source_url>https://code.claude.com/docs/en/best-practices</source_url>
+    <local_file>best-practices-for-claude-code-claude-code-docs.md</local_file>
+    <scraped_at>2026-01-25</scraped_at>
+  </source>
 </docs_index>

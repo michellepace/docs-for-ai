@@ -1,0 +1,38 @@
+globs:
+  - "**/*.md" # All .md files; pruned by ignores below
+
+ignores:
+  - ".venv/**"
+  - ".pytest_cache/**"
+  - "__pycache__/**"
+  - "biome/**"
+  - "claudecode/**"
+  - "claudeplat/**"
+  - "clerk/**"
+  - "convex/**"
+  - "lefthook/**"
+  - "marimo/**"
+  - "nextjs/**"
+  - "playwright/**"
+  - "shadcn/**"
+  - "shiny/**"
+  - "tailwind/**"
+  - "tailwindplus/**"
+  - "uv/**"
+  - "vercel/**"
+  - "vitest/**"
+  - "zustand/**"
+
+# Disable rules
+config:
+  default: true # Enable all rules by default
+  MD013: false  # Ignore line length limit
+  MD024: false  # Allow duplicate headings
+  MD033: false  # Allow inline HTML
+  MD034: false  # Allow bare URLs
+  MD035: false  # Allow mixed horizontal rule styles
+  MD036: false  # Allow emphasis used as heading
+  MD040: false  # Allow fenced code blocks without a language
+  MD041: false  # Allow first line to not be h1
+  MD059: false  # Allow non-descriptive link text
+  MD060: false  # Allow inconsistent table pipe spacing

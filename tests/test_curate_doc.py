@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 
 # Test URL constant - valid documentation page for integration tests
-TEST_URL = "https://zustand.docs.pmnd.rs/guides/updating-state"
+TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
 
 
 def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:

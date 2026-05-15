@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with code in this repository. Always use British spelling.
-
 ## Overview
 
 Documentation collections scraped via FireCrawl Python SDK. INDEX.xml maps markdown files to semantic descriptions for targeted context retrieval.
@@ -36,13 +34,12 @@ uv add --dev <pkg>                # Add dev dependency
 uv lock --upgrade-package <pkg>   # Update specific package
 uv lock --upgrade && uv sync      # Update all packages and apply
 
-# Code Quality
-# Python (config in pyproject.toml)
+# Code Quality (see pyproject.toml)
 uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run all hooks manually
 
-# Markdown (config in .markdownlint.yaml)
+# Markdown (config in .markdownlint-cli2.yaml)
 npx markdownlint-cli2 --fix "filename.md"  # Lint and auto-fix
 ```

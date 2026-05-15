@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.8.5
+    rev: 0.11.14
     hooks:
       - id: uv-lock
 
@@ -37,9 +37,9 @@ repos:
         types: [xml]
 
 # Notes:
-# 1. Hook order: uv-lock (instant) → ruff-format (auto-fix) → ruff-check (validate) → pyright (type check) → pytest (slowest)
-# 2. `uv-lock` validates lockfile matches pyproject.toml (official Astral hook)
-# 3. All other tools use `uv run` for single source of truth (pyproject.toml versions)
-# 4. `ruff-format` runs before `ruff-check` so linting validates formatted code
-# 5. `--exit-non-zero-on-fix` blocks commits when ruff-check auto-fixes, forcing review
-# 6. `pass_filenames: false` runs tools on entire codebase for consistency
+# 1. Order: uv-lock → ruff-format → ruff-check → pyright → pytest → xmllint
+# 2. `uv-lock` keeps uv.lock in sync with pyproject.toml
+# 3. Python tools run via `uv run` (single version source: pyproject.toml)
+# 4. `ruff-format` precedes `ruff-check` so linting validates formatted code
+# 5. `--exit-non-zero-on-fix` blocks commits on ruff auto-fixes, review first
+# 6. `pass_filenames: false` on Python hooks runs on entire codebase

@@ -3,7 +3,7 @@
 Curate and index documentation from any website into collections like `tailwind/`, `horses/`, etc. Reference collection indexes in your AI chats (e.g. `@tailwind/INDEX.xml what's a utility?`) so that only relevant docs are analysed. Much cleaner than a web-fetch and more focussed than a web-search. Keep your AI context sharp.
 
 <div align="center">
-  <img src="x_docs/images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
+  <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
   <p><em>Complete workflow: curate → auto scrape → "/ask-docs biome Validate my config file please"</em></p>
 </div>
 
@@ -137,8 +137,8 @@ Instead of crawling, rather go to GitHub and automate downloading and index crea
 Instruction given to Claude Code and successfully run on `uv/` directory to update all documents via direct HTTP fetch (Python script), so no scraping, 100% clean, and no Firecrawl tokens.
 
 <div align="center">
-  <a href="x_docs/images/20260116_better_idea.jpg">
-    <img src="x_docs/images/20260116_better_idea.jpg" alt="Claude Code terminal showing user prompt to assess llms.txt approach: explains that instead of FireCrawl scraping (which isn't always clean), match INDEX.xml source_url entries to llms.txt markdown URLs and curl content directly. Shows Claude reading README.md, uv/llms.txt, and uv/INDEX.xml files." width="875">
+  <a href="images/20260116_better_idea.jpg">
+    <img src="images/20260116_better_idea.jpg" alt="Claude Code terminal showing user prompt to assess llms.txt approach: explains that instead of FireCrawl scraping (which isn't always clean), match INDEX.xml source_url entries to llms.txt markdown URLs and curl content directly. Shows Claude reading README.md, uv/llms.txt, and uv/INDEX.xml files." width="875">
   </a>
   <p><em>Refactor to use llms.txt + direct fetch</em></p>
 </div>

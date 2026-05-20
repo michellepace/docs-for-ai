@@ -271,6 +271,8 @@ class TestGithubSourcePath:
             assert "❌ Error: GITHUB_NOT_FOUND|" in output
             md_files = list(new_dir.glob("*.md")) if new_dir.exists() else []
             assert md_files == []
+            assert not (new_dir / "INDEX.xml").exists()
+            assert not (new_dir / "README.md").exists()
 
     def test_non_md_blob_rejected_before_fetch(self) -> None:
         """Non-markdown blob exits non-zero with UNSUPPORTED_GITHUB before any fetch."""
@@ -280,6 +282,9 @@ class TestGithubSourcePath:
 
             assert exit_code != 0
             assert "❌ Error: UNSUPPORTED_GITHUB|" in output
+            assert "✅ Fetched raw markdown|" not in output
+            assert not (new_dir / "INDEX.xml").exists()
+            assert not (new_dir / "README.md").exists()
 
     def test_filename_collision_is_rejected(self) -> None:
         """Same filename + different URL is rejected (not silently overwritten)."""

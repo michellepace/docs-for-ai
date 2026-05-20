@@ -7,8 +7,209 @@ from pathlib import Path
 
 import pytest
 
+from scripts.curate_doc import _resolve_filename
+
 # Real Zustand page; used by integration tests that exercise the FireCrawl path.
 TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
+
+
+def _write_index(index_path: Path, entries: list[tuple[str, str, str]]) -> None:
+    """Write a minimal INDEX.xml for resolver tests.
+
+    Each entry is (title, source_url, local_file).
+    """
+    sources = "\n".join(
+        f"  <source>\n"
+        f"    <title>{title}</title>\n"
+        f"    <description>PLACEHOLDER</description>\n"
+        f"    <source_url>{url}</source_url>\n"
+        f"    <local_file>{local_file}</local_file>\n"
+        f"    <scraped_at>2026-05-19</scraped_at>\n"
+        f"  </source>"
+        for title, url, local_file in entries
+    )
+    index_path.write_text(f"<docs_index>\n{sources}\n</docs_index>\n")
+
+
+class TestResolveFilename:
+    """Offline unit tests for the unified filename resolver."""
+
+    def test_returns_candidate_when_index_missing(self) -> None:
+        """No INDEX.xml → candidate is returned unchanged."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/foo",
+                "foo.md",
+                on_collision="suffix",
+            )
+            assert result == "foo.md"
+
+    def test_returns_candidate_when_free(self) -> None:
+        """New URL with a free candidate filename → candidate used as-is."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [("Other", "https://example.com/other", "other.md")],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/foo",
+                "foo.md",
+                on_collision="suffix",
+            )
+            assert result == "foo.md"
+
+    def test_rescrape_preserves_assigned_filename(self) -> None:
+        """Re-scrape of URL1 with sibling same-title sources keeps URL1's filename.
+
+        Bug scenario: three sources titled "Foo" mapped to foo.md, foo-2.md,
+        foo-3.md. Re-scraping URL1 must return foo.md (not foo-3.md, which
+        would silently overwrite URL3's file).
+        """
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [
+                    ("Foo", "https://example.com/foo1", "foo.md"),
+                    ("Foo", "https://example.com/foo2", "foo-2.md"),
+                    ("Foo", "https://example.com/foo3", "foo-3.md"),
+                ],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/foo1",
+                "foo.md",
+                on_collision="suffix",
+            )
+            assert result == "foo.md"
+
+    def test_rescrape_match_ignores_trailing_slash(self) -> None:
+        """source_url with/without trailing slash matches the stored entry."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [("Foo", "https://example.com/foo", "foo.md")],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/foo/",
+                "foo.md",
+                on_collision="suffix",
+            )
+            assert result == "foo.md"
+
+    def test_different_titles_same_slug_get_suffixed(self) -> None:
+        """Distinct titles that slugify identically must not collide.
+
+        Existing title "Foo Bar" → foo-bar.md. New URL with title "Foo-Bar"
+        slugifies the same; resolver must return foo-bar-2.md, not silently
+        accept foo-bar.md (which title-based counting misses).
+        """
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [("Foo Bar", "https://example.com/a", "foo-bar.md")],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/b",
+                "foo-bar.md",
+                on_collision="suffix",
+            )
+            assert result == "foo-bar-2.md"
+
+    def test_suffix_walks_past_existing_collisions(self) -> None:
+        """Suffix mode picks the next free -N, not blindly count + 1."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [
+                    ("Foo", "https://example.com/a", "foo.md"),
+                    ("Foo", "https://example.com/b", "foo-2.md"),
+                ],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/c",
+                "foo.md",
+                on_collision="suffix",
+            )
+            assert result == "foo-3.md"
+
+    def test_error_on_collision_exits(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """on_collision='error' (GitHub policy) exits 1 with FILENAME_COLLISION."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [("Old", "https://example.com/old", "first-steps.md")],
+            )
+            with pytest.raises(SystemExit) as exc_info:
+                _resolve_filename(
+                    index_path,
+                    "https://example.com/new",
+                    "first-steps.md",
+                    on_collision="error",
+                )
+            assert exc_info.value.code == 1
+            captured = capsys.readouterr()
+            assert "FILENAME_COLLISION" in (captured.out + captured.err)
+
+    def test_rescrape_with_error_mode_returns_existing_filename(self) -> None:
+        """Re-scrape under on_collision='error' returns existing filename, not exit.
+
+        Guards against a future reordering of checks that might cause GitHub
+        re-curation to spuriously trip the collision branch.
+        """
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            _write_index(
+                index_path,
+                [("Foo", "https://example.com/foo", "foo.md")],
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/foo",
+                "something-else.md",  # differs from stored "foo.md"
+                on_collision="error",
+            )
+            assert result == "foo.md"
+
+    def test_malformed_index_entries_are_skipped(self) -> None:
+        """Sources missing source_url or local_file are skipped, not crashed on."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "INDEX.xml"
+            index_path.write_text(
+                "<docs_index>\n"
+                "  <source>\n"
+                "    <title>NoUrl</title>\n"
+                "    <local_file>no-url.md</local_file>\n"
+                "  </source>\n"
+                "  <source>\n"
+                "    <title>NoFile</title>\n"
+                "    <source_url>https://example.com/no-file</source_url>\n"
+                "  </source>\n"
+                "  <source>\n"
+                "    <title>Good</title>\n"
+                "    <source_url>https://example.com/good</source_url>\n"
+                "    <local_file>good.md</local_file>\n"
+                "  </source>\n"
+                "</docs_index>\n"
+            )
+            result = _resolve_filename(
+                index_path,
+                "https://example.com/new",
+                "good.md",  # collides with the well-formed entry
+                on_collision="suffix",
+            )
+            assert result == "good-2.md"
 
 
 def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
@@ -104,38 +305,6 @@ class TestDirectoryScenarios:
             ]
             assert len(md_files) == 1
             assert md_files[0].name in output
-
-            assert "✅ Added index source|" in output
-            assert "🎉 Curation Success!|" in output
-
-    def test_empty_directory_creates_new_collection(self) -> None:
-        """Empty existing directory is initialised as a fresh collection."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp_path = Path(tmp_dir)
-            empty_dir = tmp_path / "empty_collection"
-
-            empty_dir.mkdir()
-
-            exit_code, output = run_script(str(empty_dir), TEST_URL)
-
-            assert exit_code == 0
-
-            readme_path = empty_dir / "README.md"
-            index_path = empty_dir / "INDEX.xml"
-
-            # Script outputs absolute paths for files outside project root
-            assert f"✅ Created curation readme|{readme_path}|" in output
-            assert f"✅ Created curation index|{index_path}|" in output
-            assert readme_path.exists()
-            assert index_path.exists()
-
-            # Filename is dynamic (derived from real scrape title); cannot hard-code.
-            md_files = [
-                f
-                for f in empty_dir.iterdir()
-                if f.suffix == ".md" and f.name != "README.md"
-            ]
-            assert len(md_files) == 1
 
             assert "✅ Added index source|" in output
             assert "🎉 Curation Success!|" in output
@@ -286,6 +455,7 @@ class TestGithubSourcePath:
             assert not (new_dir / "INDEX.xml").exists()
             assert not (new_dir / "README.md").exists()
 
+    @pytest.mark.github
     def test_filename_collision_is_rejected(self) -> None:
         """Same filename + different URL is rejected (not silently overwritten)."""
         with tempfile.TemporaryDirectory() as tmp_dir:

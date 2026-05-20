@@ -1,7 +1,8 @@
-"""Add or update documentation in collection directories by scraping URLs.
+"""Add or update documentation in collection directories.
 
-Scrapes web pages using Firecrawl, manages INDEX.xml metadata, and handles
-duplicate titles, rate limits, and file cleanup.
+Routes each source URL to either GitHub raw fetch (`github_source`) or
+FireCrawl scrape, then resolves a non-colliding filename and updates
+INDEX.xml. Filenames are stable across re-scrapes.
 """
 
 import argparse
@@ -12,9 +13,10 @@ import xml.etree.ElementTree as ET
 from datetime import date
 from os import environ
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from urllib.parse import urlparse
 
+import github_source
 from firecrawl import Firecrawl
 from firecrawl.v2.utils.error_handler import FirecrawlError, RateLimitError
 
@@ -28,25 +30,11 @@ def _normalise_directory_path(dir_path_str: str) -> Path:
 
 
 def _format_path_for_display(path: Path) -> str:
-    """Format path as relative-to-project for consistent display.
+    """Format path as a project-relative string, e.g. `vite/INDEX.xml`.
 
-    Converts any Path object to a clean relative path string for printing.
-    Ensures consistent output regardless of whether input paths are absolute,
-    relative, or use ./ notation.
-
-    Args:
-        path: Path object to format (can be absolute or relative)
-
-    Returns:
-        String representation relative to project root (e.g., "vite/INDEX.xml")
-
-    Examples:
-        Path("/home/mp/.../vite/README.md") → "vite/README.md"
-        Path("vite/README.md") → "vite/README.md"
-        Path("./vite/README.md") → "vite/README.md"
+    Falls back to `str(path)` for paths outside the project root.
     """
     try:
-        # Resolve to absolute, then make relative to project root
         absolute_path = path.resolve()
         project_root = Path.cwd()
         return str(absolute_path.relative_to(project_root))
@@ -63,8 +51,23 @@ def _validate_url(url: str) -> None:
         sys.exit(1)
 
 
+def _reject_uv_docs_url(url: str) -> None:
+    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub raw."""
+    if url.startswith("https://docs.astral.sh/uv/"):
+        print(
+            "❌ Error: USE_RAW_GITHUB|"
+            "Use the GitHub RAW URL for this source; "
+            "see uv/INDEX.xml for the canonical mapping|"
+            f"{url}|"
+        )
+        sys.exit(1)
+
+
 def _validate_directory_for_collection(dir_path: Path, index_path: Path) -> None:
-    """Validate directory is suitable for docs collection, exit if invalid."""
+    """Exit if directory exists, is non-empty, and lacks INDEX.xml.
+
+    Prevents overwriting unrelated files in a non-collection directory.
+    """
     if dir_path.exists() and not index_path.exists() and any(dir_path.iterdir()):
         print(
             f"❌ Error: INVALID_COLLECTION|"
@@ -80,40 +83,6 @@ def _slugify_title(title: str) -> str:
     slug = re.sub(r"[^\w\s-]", "", slug)
     slug = re.sub(r"[-\s]+", "-", slug)
     return slug.strip("-")
-
-
-def _get_duplicate_title_count(dir_path: Path, title: str, source_url: str) -> int:
-    """Count existing sources with same title but different URL.
-
-    Returns:
-        int: Number of existing sources with matching title and different URL
-             (0 if no duplicates, used to calculate suffix)
-    """
-    index_path = dir_path / "INDEX.xml"
-
-    # If INDEX doesn't exist yet, no duplicates possible
-    if not index_path.exists():
-        return 0
-
-    # Parse INDEX.xml
-    tree = ET.parse(index_path)
-    root = tree.getroot()
-
-    count = 0
-    for source in root.findall("source"):
-        title_elem = source.find("title")
-        url_elem = source.find("source_url")
-
-        # Count if same title AND different URL
-        if (
-            title_elem is not None
-            and title_elem.text == title
-            and url_elem is not None
-            and url_elem.text != source_url
-        ):
-            count += 1
-
-    return count
 
 
 def _create_readme(dir_path: Path, source_site_url: str) -> None:
@@ -143,23 +112,18 @@ def _create_index_xml(dir_path: Path) -> None:
 
 def _add_or_update_source_in_index(
     dir_path: Path, title: str, source_url: str, local_file: str
-) -> tuple[bool, Path | None]:
-    """Add new source or update existing source in INDEX.xml.
+) -> bool:
+    """Add or replace the source for `source_url` in INDEX.xml.
 
-    Returns:
-        (is_update, old_file_path): is_update=True if updating existing source,
-                                     old_file_path=Path to previous file if different
+    Returns `is_update` — True if an existing entry was replaced.
     """
     index_path = dir_path / "INDEX.xml"
 
-    # Parse existing XML
     tree = ET.parse(index_path)
     root = tree.getroot()
 
     is_update = False
-    old_filename = None
 
-    # Check for existing source with same URL
     for existing_source in root.findall("source"):
         existing_url_elem = existing_source.find("source_url")
         if (
@@ -167,17 +131,10 @@ def _add_or_update_source_in_index(
             and existing_url_elem.text is not None
             and existing_url_elem.text.rstrip("/") == source_url
         ):
-            # Found duplicate - capture old filename for cleanup
-            old_file_elem = existing_source.find("local_file")
-            if old_file_elem is not None:
-                old_filename = old_file_elem.text
-
-            # Delete old source entry
             root.remove(existing_source)
             is_update = True
             break
 
-    # Add new source entry (whether new or replacing old)
     source = ET.SubElement(root, "source")
     ET.SubElement(source, "title").text = title
     ET.SubElement(source, "description").text = "PLACEHOLDER"
@@ -185,10 +142,8 @@ def _add_or_update_source_in_index(
     ET.SubElement(source, "local_file").text = local_file
     ET.SubElement(source, "scraped_at").text = date.today().isoformat()
 
-    # Re-indent entire tree for pretty printing
     ET.indent(root, space="  ")
 
-    # Write back to file
     tree.write(index_path, encoding="unicode", xml_declaration=False)
 
     if is_update:
@@ -198,22 +153,63 @@ def _add_or_update_source_in_index(
 
     print("💡 INDEX.xml <description> pending: PLACEHOLDER requires summary|")
 
-    # Return Path object for cleanup (if filename changed)
-    old_file_path = (
-        (dir_path / old_filename) if old_filename and old_filename != local_file else None
-    )
-    return is_update, old_file_path
+    return is_update
 
 
-def _cleanup_old_file(old_file_path: Path | None) -> None:
-    """Delete old markdown file if filename changed during update.
+def _resolve_filename(
+    index_path: Path,
+    source_url: str,
+    candidate: str,
+    *,
+    on_collision: Literal["error", "suffix"],
+) -> str:
+    """Pick a non-colliding filename in INDEX.xml.
 
-    Args:
-        old_file_path: Path to previous file to remove (or None if no cleanup needed)
+    Re-scrape (`source_url` already in INDEX) reuses the assigned filename.
+    New source with a free candidate uses the candidate as-is. New source
+    colliding with a different source either exits (`error`) or appends
+    `-2`, `-3`, ... until free (`suffix`).
+
+    `candidate` must include an extension (e.g. `foo.md`); the suffix
+    branch splits on the final `.`.
     """
-    if old_file_path:
-        old_file_path.unlink(missing_ok=True)
-        print(f"🗑️ Removed old file|{_format_path_for_display(old_file_path)}|")
+    if not index_path.exists():
+        return candidate
+
+    root = ET.parse(index_path).getroot()
+    normalised = source_url.rstrip("/")
+    taken: dict[str, str] = {}  # local_file -> source_url (for other sources)
+
+    for source in root.findall("source"):
+        url_elem = source.find("source_url")
+        file_elem = source.find("local_file")
+        if (
+            url_elem is None
+            or url_elem.text is None
+            or file_elem is None
+            or file_elem.text is None
+        ):
+            continue
+        stored_url = url_elem.text.rstrip("/")
+        if stored_url == normalised:
+            return file_elem.text
+        taken[file_elem.text] = stored_url
+
+    if candidate not in taken:
+        return candidate
+
+    if on_collision == "error":
+        print(
+            f"❌ Error: FILENAME_COLLISION|"
+            f"{candidate} already mapped to {taken[candidate]}|{source_url}|"
+        )
+        sys.exit(1)
+
+    stem, ext = candidate.rsplit(".", 1)
+    n = 2
+    while f"{stem}-{n}.{ext}" in taken:
+        n += 1
+    return f"{stem}-{n}.{ext}"
 
 
 def _get_firecrawl_client() -> Firecrawl:
@@ -246,19 +242,10 @@ def _extract_metadata(result: Document) -> dict:
 
 
 def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
-    """Perform single scrape attempt.
+    """Make one Firecrawl scrape call and return `{markdown, metadata}`.
 
-    Args:
-        firecrawl: Configured Firecrawl client
-        url: URL to scrape
-
-    Returns:
-        Dict with markdown content and metadata
-
-    Raises:
-        RateLimitError: If rate limited
-        FirecrawlError: For other Firecrawl API errors
-        SystemExit(1): If scrape returns no content (NO_CONTENT error)
+    Exits with `NO_CONTENT` if the response has no markdown. Rate-limit,
+    API, network, and unexpected errors propagate to `_scrape_with_firecrawl`.
     """
     result = firecrawl.scrape(
         url,
@@ -269,7 +256,6 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
         max_age=86400000,  # Use cached content for speed (24 hours)
     )
 
-    # Validate result
     if not result or not hasattr(result, "markdown") or not result.markdown:
         print(f"❌ Error: NO_CONTENT|No scrape content returned|{url}|")
         sys.exit(1)
@@ -283,29 +269,19 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
 def _scrape_with_firecrawl(url: str, max_attempts: int = 2) -> dict:
     """Scrape URL using Firecrawl Python SDK with automatic retry on rate limits.
 
-    Automatically retries if rate limited, waiting the duration specified in the
-    error message plus a 2-second safety buffer. Non-rate-limit errors exit immediately
-    without retry.
-
-    Args:
-        url: URL to scrape
-        max_attempts: Maximum total scrape attempts (default: 2 = initial + 1 retry)
-
-    Returns:
-        Dict with 'markdown' (str) and 'metadata' (dict) keys
-
-    Raises:
-        SystemExit(1): On rate limit, API, network, or unexpected errors
+    Retries on `RateLimitError` for the retry-after duration plus a 2-second
+    safety buffer. `max_attempts` is initial + retries (default `2` = 1
+    initial + 1 retry). Exits via `sys.exit(1)` on rate-limit exhaustion or
+    any other API, network, or unexpected error.
     """
     firecrawl = _get_firecrawl_client()
 
-    # Attempt loop (zero-indexed: 0, 1, ... max_attempts-1)
     for attempt in range(max_attempts):
         try:
             return _perform_scrape(firecrawl, url)
 
         except RateLimitError as e:
-            if attempt < max_attempts - 1:  # More attempts available
+            if attempt < max_attempts - 1:
                 retry_seconds = _parse_retry_seconds(e)
                 wait_time = retry_seconds + 2  # Add 2s safety buffer
                 print(f"⏳ Rate limited|Waiting {wait_time}s before retry...|")
@@ -345,66 +321,76 @@ def main() -> None:
 
     Workflow:
         1. Validate URL and directory
-        2. Scrape content from URL (with rate limit retry)
+        2. Detect source: GitHub raw fetch or FireCrawl scrape
         3. Create collection structure if new (README.md, INDEX.xml)
-        4. Generate filename from title (with suffix for duplicates)
+        4. Resolve filename (re-scrape preserves assigned name; new sources
+           use candidate, with GitHub erroring on collision and FireCrawl
+           suffixing)
         5. Write markdown file and update INDEX.xml
-        6. Clean up old file if filename changed
+
+    Filenames are stable across re-scrapes even when the upstream title
+    changes — the URL, not the title, is the identity key in INDEX.
     """
     parser = argparse.ArgumentParser(
         description="Add or update documentation in a collection directory"
     )
 
-    parser.add_argument("directory", help="Documentation directory (e.g. `tailwind/`)")
-    parser.add_argument("source_url", help="Web URL to scrape and add new document from")
+    parser.add_argument(
+        "directory",
+        help="Documentation directory (e.g. `tailwind/`)",
+    )
+    parser.add_argument(
+        "source_url",
+        help="Web URL to curate (Firecrawl scrape or GitHub raw fetch)",
+    )
 
     args = parser.parse_args()
 
-    source_url = args.source_url.rstrip("/")  # Normalize: always without trailing slash
+    source_url = args.source_url.rstrip("/")  # canonical form: no trailing slash
     dir_path = _normalise_directory_path(args.directory)
     index_path = dir_path / "INDEX.xml"
 
     _validate_url(source_url)
+    _reject_uv_docs_url(source_url)
     _validate_directory_for_collection(dir_path, index_path)
 
-    # Print initial status message
     print(f"✅ Starting to curate from|{source_url}|")
 
-    # Ensure directory exists
     dir_path.mkdir(parents=True, exist_ok=True)
 
-    # Scrape with FireCrawl (do this before creating files to fail fast)
-    scraped_doc = _scrape_with_firecrawl(source_url, max_attempts=2)
-    content = scraped_doc["markdown"]
-    metadata = scraped_doc["metadata"]
+    # Route GitHub vs FireCrawl before creating files (fail fast).
+    is_github = github_source.is_github_url(source_url)
 
-    # Confirm successful scrape
-    char_count = len(content)
-    print(f"✅ Scraped content|({char_count:,} characters)|")
+    if is_github:
+        source_url = github_source.to_raw_url(source_url)
+        print(f"✅ Detected GitHub source|{source_url}|")
+        candidate = github_source.derive_filename(source_url)  # exits if invalid
+        content = github_source.fetch_raw(source_url)  # exits on 404/network
+        title = github_source.extract_title(content, source_url)
+    else:
+        scraped_doc = _scrape_with_firecrawl(source_url, max_attempts=2)
+        content = scraped_doc["markdown"]
+        print(f"✅ Scraped content|({len(content):,} characters)|")
+        title = scraped_doc["metadata"].get("title", "Untitled")
+        candidate = f"{_slugify_title(title)}.md"
 
-    title = metadata.get("title", "Untitled")
-
-    # Extract source site URL (scheme + netloc) for README collection source
+    # scheme + netloc for the README's curation-source link
     parsed_url = urlparse(source_url)
     source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
-    # Create README and INDEX if new collection
     if not index_path.exists():
         _create_readme(dir_path, source_site_url)
         _create_index_xml(dir_path)
 
-    # Generate filename from title (with suffix if duplicate title exists)
-    base_slug = _slugify_title(title)
-    duplicate_count = _get_duplicate_title_count(dir_path, title, source_url)
-
-    if duplicate_count == 0:
-        filename = f"{base_slug}.md"
-    else:
-        filename = f"{base_slug}-{duplicate_count + 1}.md"
+    filename = _resolve_filename(
+        index_path,
+        source_url,
+        candidate,
+        on_collision="error" if is_github else "suffix",
+    )
 
     file_path = dir_path / filename
 
-    # Write markdown file (overwrites if exists)
     file_existed = file_path.exists()
     file_path.write_text(content)
     if file_existed:
@@ -412,19 +398,11 @@ def main() -> None:
     else:
         print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
 
-    # Update INDEX.xml (add or update)
-    is_update, old_file_path = _add_or_update_source_in_index(
-        dir_path, title, source_url, filename
-    )
+    is_update = _add_or_update_source_in_index(dir_path, title, source_url, filename)
 
-    # Cleanup old .md file if filename changed
-    _cleanup_old_file(old_file_path)
-
-    # Print final success message
-    if is_update:
-        print("🎉 Curation Success!|scraped, overwrote and re-indexed document|\n")
-    else:
-        print("🎉 Curation Success!|scraped, created and indexed new document|\n")
+    # source_url is canonical (raw form for GitHub, rstripped user URL for FireCrawl)
+    verb = "overwrote and re-indexed" if is_update else "created and indexed new"
+    print(f"🎉 Curation Success!|{verb} document|{source_url}|\n")
 
 
 if __name__ == "__main__":

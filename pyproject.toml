@@ -8,7 +8,7 @@ description = "Curate and index clean docs for AI context and keep it fresh (wit
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "firecrawl-py>=4.26.0",
+    "firecrawl-py>=4.27.1",
 ]
 
 [dependency-groups]
@@ -87,3 +87,15 @@ max-statements = 50
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
+
+# =================================
+# Pytest Configuration
+# =================================
+[tool.pytest.ini_options]
+# scripts/curate_doc.py does `import github_source` (bare) so it runs as
+# `python scripts/curate_doc.py`. Put scripts/ on sys.path for pytest too.
+pythonpath = ["scripts"]
+markers = [
+    "firecrawl: hits FireCrawl API (paid, network)",
+    "github: hits raw.githubusercontent.com (free, network)",
+]

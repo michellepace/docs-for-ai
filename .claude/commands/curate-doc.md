@@ -1,24 +1,32 @@
 ---
 argument-hint: <collection-dir> <source_url>
-description: Scrape source URL and save to collection directory
-allowed-tools: Read, Write, Bash(find:*), Bash(uv run:scripts/curate_doc.py:*), Bash(uv run:scripts/update_index_descriptions.py:*)
+description: Curate source URL into collection directory
+allowed-tools:
+  - Read
+  - Write
+  - Bash(find *)
+  - Bash(printf *)
+  - Bash(uv run scripts/curate_doc.py *)
+  - Bash(uv run scripts/update_index_descriptions.py *)
 ---
 
-Scrape $2 and add to $1 collection directory with INDEX.xml entry.
+Curate source URL `$2` into collection directory `$1`, updating `$1/INDEX.xml` entry.
 
 ## Context
 
-Documentation curation enables targeted, efficient context retrieval for AI agents. Rather than searching entire documentation sites, curated collections provide semantic descriptions in INDEX.xml that map specific topics to relevant markdown files.
+Curating documentation into indexed collections enables targeted, efficient context retrieval for AI agents. Rather than searching entire documentation sites, agents search against the semantic `collection/INDEX.xml`.
 
-The script scrapes content from $2, writes it to a markdown file in $1/, and adds a new `<source>` entry to INDEX.xml with a PLACEHOLDER description. Your task is to replace PLACEHOLDER with a semantic summary after successful scraping.
+The Workflow script retrieves content from $2, writes it to a markdown file in $1/, and adds a new `<source>` entry to `$1/INDEX.xml` with a PLACEHOLDER description. **Your task:** replace PLACEHOLDER with a semantic summary after successful curation.
+
+GitHub source URLs are fetched directly as raw markdown — no scraping (FireCrawl) involved. All other URLs use FireCrawl.
 
 ## Workflow
 
+!`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
+
 ### 1. Validate arguments
 
-You are helping a new user curate a document from source URL $2 into an existing or new collection directory $1.
-
-**Existing collections:** !`find . -maxdepth 1 -type d -exec test -f {}/INDEX.xml \; -printf '%P\n'`
+You are helping a new user curate a document from source URL `$2` into an existing (`<existing_collections>`) or new collection directory `$1`.
 
 Here are just a few examples what new users can inadvertently get wrong - you are to help them do what they intend:
 
@@ -78,7 +86,7 @@ Success:
 <validation_success>
 
 ```
-## 🙂 Super! Scraping Shiny doc to shiny/ collection...
+## 🙂 Super! Curating Shiny doc to shiny/ collection...
 ```
 
 </validation_success>
@@ -96,6 +104,8 @@ uv run scripts/curate_doc.py "$1" "$2"
 ### 3. On script error
 
 Script errors print actionable information. If recovery is possible, propose specific fixes but wait for explicit user approval. Proceed ONLY when script outputs `🎉 Curation Success!` - don't waste effort if the script failed.
+
+GitHub-path failures (`GITHUB_*`, `UNSUPPORTED_GITHUB`) are not FireCrawl or API-key issues — never propose `FIRECRAWL_API_KEY` fixes for them.
 
 ### 4. Generate descriptions for PLACEHOLDER entries only
 
@@ -118,15 +128,15 @@ Descriptions must be optimised for **Claude Code semantic search**, not human re
 <!-- Good: 30 words, enumerates concepts with backticks -->
 <description>Folder and file conventions including top-level folders, routing files (`layout`, `page`, `loading`, `error`, `route`), dynamic routes, route groups, private folders, parallel and intercepted routes, metadata conventions, colocation patterns.</description>
 
-<!-- Good: 23 words, technical terms with backticks -->
-<description>`uv add`/`uv remove` commands, dependency sources (Git, URL, path, workspace), optional dependencies, development groups, build dependencies, editable installations, dependency specifiers syntax.</description>
+<!-- Good: 26 words, semantic prose — leads with genre, binds tokens with light connectives -->
+<description>Guide to running uv inside GitHub Actions workflows: installing via `astral-sh/setup-uv`, Python-version matrix testing with `UV_PYTHON`, persisting the uv cache, private-repo auth, and PyPI trusted publishing.</description>
 ```
 
 </example_description>
 
 Now, write a description:
 
-1. Analyse the scraped markdown file
+1. Analyse the curated markdown file
 2. Draft a description (20-30 words) following the 3 quality criteria above
 3. **COUNT THE WORDS** using `echo "description text" | wc -w` to verify it's 20-30 words - if not, rewrite until it is
 4. Write the validated description to `$1/description.txt` in this format:
@@ -144,7 +154,7 @@ Now, write a description:
 
 ### 5. Report success
 
-Output the final success message following the `<example_success_message>` format:
+Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`).
 
 <example_success_message>
 
@@ -152,7 +162,7 @@ Output the final success message following the `<example_success_message>` forma
 ## 🎉 Curation Success!
 
 🎯 What happened
-- Scraped source URL: https://shiny.posit.co/py/docs/overview.html
+- Source URL: https://shiny.posit.co/py/docs/overview.html
 - [Created/Overwrote] document: `shiny/overview.md`
 - Generated description: (see below!)
 - [Added/Updated] index: `shiny/INDEX.xml`

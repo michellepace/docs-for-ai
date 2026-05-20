@@ -5,7 +5,8 @@ import tempfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-# Import functions directly for unit testing
+import pytest
+
 from scripts.sync_index import (
     _get_changed_markdown_files,
     _restore_unchanged_descriptions,
@@ -53,12 +54,11 @@ class TestSyncIndexToFilesystem:
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
 
-            # Create 2 actual .md files
             (tmp_path / "doc-a.md").write_text("# Doc A")
             (tmp_path / "doc-b.md").write_text("# Doc B")
             (tmp_path / "README.md").write_text("# Collection")
 
-            # Create INDEX.xml with 4 sources (2 valid, 2 stale)
+            # 4 sources: 2 valid, 2 missing from filesystem (stale).
             sources = [
                 {
                     "title": "Doc A",
@@ -88,22 +88,18 @@ class TestSyncIndexToFilesystem:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, sources)
 
-            # Run sync
             md_files = get_markdown_files(tmp_path)
             valid_pairs, orphans, removed_count = _sync_index_to_filesystem(
                 index_path, md_files
             )
 
-            # Verify: 2 stale sources removed
             assert removed_count == 2
             assert len(valid_pairs) == 2
             assert ("doc-a.md", "https://example.com/a") in valid_pairs
             assert ("doc-b.md", "https://example.com/b") in valid_pairs
 
-            # Verify: No orphaned .md files (all are in INDEX)
             assert len(orphans) == 0
 
-            # Verify: INDEX.xml written with only 2 sources
             descriptions = get_descriptions_from_index(index_path)
             assert len(descriptions) == 2
             assert "doc-a.md" in descriptions
@@ -116,23 +112,20 @@ class TestSyncIndexToFilesystem:
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
 
-            # Create 3 .md files including README
             (tmp_path / "doc-a.md").write_text("# Doc A")
             (tmp_path / "doc-b.md").write_text("# Doc B")
             (tmp_path / "README.md").write_text("# Collection")
 
-            # Get markdown files
             md_files = get_markdown_files(tmp_path)
 
-            # Verify: README.md excluded
             assert len(md_files) == 2
             assert "doc-a.md" in md_files
             assert "doc-b.md" in md_files
             assert "README.md" not in md_files
 
 
-class TestDescriptionRestorationUnit:
-    """Unit tests for description restoration logic."""
+class TestDescriptionRestoration:
+    """Tests for description restoration logic."""
 
     def test_unchanged_files_restore_descriptions(self) -> None:
         """All unchanged files get descriptions restored from backup."""
@@ -175,10 +168,8 @@ class TestDescriptionRestorationUnit:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # No files changed
             changed_files = set()
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -215,10 +206,8 @@ class TestDescriptionRestorationUnit:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # File changed
             changed_files = {"doc-a.md"}
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -268,7 +257,6 @@ class TestDescriptionRestorationUnit:
             # Two changed, two unchanged
             changed_files = {"doc-a.md", "doc-c.md"}
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -297,15 +285,12 @@ class TestDescriptionRestorationUnit:
             backup_path = tmp_path / "INDEX.xml.backup"
             create_index_xml(backup_path, backup_sources)
 
-            # Current also PLACEHOLDER
             current_sources = backup_sources.copy()
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # No changes
             changed_files = set()
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -314,9 +299,99 @@ class TestDescriptionRestorationUnit:
             descriptions = get_descriptions_from_index(index_path)
             assert descriptions["doc-a.md"] == "PLACEHOLDER"
 
+    def test_whitespace_only_changes_restore_description(self) -> None:
+        """Files with only whitespace changes should have descriptions restored."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            collection_dir = tmp_path / "test_collection"
+            collection_dir.mkdir()
 
+            # Initialise git repo
+            for cmd in [
+                ["git", "init"],
+                ["git", "config", "user.email", "test@example.com"],
+                ["git", "config", "user.name", "Test User"],
+            ]:
+                subprocess.run(cmd, cwd=tmp_path, check=True, capture_output=True)
+
+            # Create INDEX.xml with a source
+            sources = [
+                {
+                    "title": "Test Document",
+                    "description": "Original description that should be restored",
+                    "source_url": "https://example.com/test-doc",
+                    "local_file": "test-doc.md",
+                },
+            ]
+            index_path = collection_dir / "INDEX.xml"
+            create_index_xml(index_path, sources)
+
+            md_file = collection_dir / "test-doc.md"
+            md_file.write_text("# Test Document\n\nSome content here.\n")
+
+            # Commit initial state
+            subprocess.run(
+                ["git", "add", "."], cwd=tmp_path, check=True, capture_output=True
+            )
+            subprocess.run(
+                ["git", "commit", "-m", "Initial commit"],
+                cwd=tmp_path,
+                check=True,
+                capture_output=True,
+            )
+
+            # Modify file with ONLY whitespace changes (add trailing spaces)
+            md_file.write_text("# Test Document\n\nSome content here.   \n")
+
+            # Verify git sees a change
+            git_diff_all = subprocess.run(
+                ["git", "diff", "--name-only"],
+                cwd=tmp_path,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            assert "test-doc.md" in git_diff_all.stdout
+
+            # Verify git with -w sees NO content change
+            git_diff_w = subprocess.run(
+                ["git", "diff", "-w"],
+                cwd=tmp_path,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            assert git_diff_w.stdout.strip() == ""
+
+            # Mock the scraping by manually setting description to PLACEHOLDER
+            # (simulating what curate_doc.py does)
+            sources[0]["description"] = "PLACEHOLDER"
+            create_index_xml(index_path, sources)
+
+            # Create a backup (simulating what sync_index does)
+            backup_path = index_path.parent / "INDEX.xml.backup"
+            sources[0]["description"] = "Original description that should be restored"
+            create_index_xml(backup_path, sources)
+
+            # Run the restoration function directly
+            changed_files = _get_changed_markdown_files(collection_dir)
+            restored_count = _restore_unchanged_descriptions(
+                index_path, backup_path, changed_files
+            )
+
+            # Description must be RESTORED (whitespace-only diff), not PLACEHOLDER.
+            descriptions = get_descriptions_from_index(index_path)
+            expected_desc = "Original description that should be restored"
+            assert descriptions["test-doc.md"] == expected_desc, (
+                f"Expected description to be restored, "
+                f"but got: {descriptions['test-doc.md']}"
+            )
+            assert restored_count == 1, f"Expected 1 restoration, got {restored_count}"
+
+
+@pytest.mark.firecrawl
 class TestIntegration:
-    """Integration test with real git and scraping."""
+    """Integration tests using real git and real FireCrawl scraping."""
 
     def test_full_rescrape_workflow(self) -> None:
         """Full end-to-end workflow with real git and scraping."""
@@ -325,7 +400,7 @@ class TestIntegration:
             collection_dir = tmp_path / "test_collection"
             collection_dir.mkdir()
 
-            # Initialize git repo
+            # Initialise git repo
             for cmd in [
                 ["git", "init"],
                 ["git", "config", "user.email", "test@example.com"],
@@ -383,22 +458,21 @@ class TestIntegration:
 
             descriptions = get_descriptions_from_index(index_path)
 
-            # Get actual filename from INDEX.xml (may have changed due to title change)
+            # Filename may differ from the seeded 'updating-state.md' if the real
+            # scrape produced a different title-slug.
             assert len(descriptions) == 1, "Should have exactly one source"
             actual_filename = next(iter(descriptions.keys()))
 
-            # Check if git detected changes in any .md file
             md_files_changed = [
                 line
                 for line in git_status.stdout.split("\n")
                 if line.endswith(".md") and not line.endswith("README.md")
             ]
 
-            # Verify correct behavior based on whether content changed
+            # Verify correct behaviour based on whether content changed
             if md_files_changed:
                 # Content changed → description is PLACEHOLDER
                 assert descriptions[actual_filename] == "PLACEHOLDER"
-                # Verify restoration message in output
                 assert "✅ Restored (.md whitespace-only changes)|0" in result.stdout
             else:
                 # Content unchanged (cache returned same) → description restored
@@ -406,98 +480,7 @@ class TestIntegration:
                     descriptions[actual_filename]
                     == "Original description for updating state"
                 )
-                # Verify restoration message in output
                 assert "✅ Restored (.md whitespace-only changes)|1" in result.stdout
-
-    def test_whitespace_only_changes_restore_description(self) -> None:
-        """Files with only whitespace changes should have descriptions restored."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp_path = Path(tmp_dir)
-            collection_dir = tmp_path / "test_collection"
-            collection_dir.mkdir()
-
-            # Initialize git repo
-            for cmd in [
-                ["git", "init"],
-                ["git", "config", "user.email", "test@example.com"],
-                ["git", "config", "user.name", "Test User"],
-            ]:
-                subprocess.run(cmd, cwd=tmp_path, check=True, capture_output=True)
-
-            # Create INDEX.xml with a source
-            sources = [
-                {
-                    "title": "Test Document",
-                    "description": "Original description that should be restored",
-                    "source_url": "https://example.com/test-doc",
-                    "local_file": "test-doc.md",
-                },
-            ]
-            index_path = collection_dir / "INDEX.xml"
-            create_index_xml(index_path, sources)
-
-            # Create markdown file with specific content
-            md_file = collection_dir / "test-doc.md"
-            md_file.write_text("# Test Document\n\nSome content here.\n")
-
-            # Commit initial state
-            subprocess.run(
-                ["git", "add", "."], cwd=tmp_path, check=True, capture_output=True
-            )
-            subprocess.run(
-                ["git", "commit", "-m", "Initial commit"],
-                cwd=tmp_path,
-                check=True,
-                capture_output=True,
-            )
-
-            # Modify file with ONLY whitespace changes (add trailing spaces)
-            md_file.write_text("# Test Document\n\nSome content here.   \n")
-
-            # Verify git sees a change
-            git_diff_all = subprocess.run(
-                ["git", "diff", "--name-only"],
-                cwd=tmp_path,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            assert "test-doc.md" in git_diff_all.stdout
-
-            # Verify git with -w sees NO content change
-            git_diff_w = subprocess.run(
-                ["git", "diff", "-w"],
-                cwd=tmp_path,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            assert git_diff_w.stdout.strip() == ""
-
-            # Mock the scraping by manually setting description to PLACEHOLDER
-            # (simulating what curate_doc.py does)
-            sources[0]["description"] = "PLACEHOLDER"
-            create_index_xml(index_path, sources)
-
-            # Create a backup (simulating what sync_index does)
-            backup_path = index_path.parent / "INDEX.xml.backup"
-            sources[0]["description"] = "Original description that should be restored"
-            create_index_xml(backup_path, sources)
-
-            # Run the restoration function directly
-            changed_files = _get_changed_markdown_files(collection_dir)
-            restored_count = _restore_unchanged_descriptions(
-                index_path, backup_path, changed_files
-            )
-
-            # Verify description was RESTORED (not left as PLACEHOLDER)
-            descriptions = get_descriptions_from_index(index_path)
-            expected_desc = "Original description that should be restored"
-            assert descriptions["test-doc.md"] == expected_desc, (
-                f"Expected description to be restored, "
-                f"but got: {descriptions['test-doc.md']}"
-            )
-            assert restored_count == 1, f"Expected 1 restoration, got {restored_count}"
 
 
 class TestErrorHandling:
@@ -523,3 +506,90 @@ class TestErrorHandling:
             assert result.returncode != 0
             assert "❌ Error: INVALID_XML|" in result.stdout + result.stderr
             assert "INDEX.xml" in result.stdout + result.stderr
+
+
+@pytest.mark.github
+class TestGitHubRawRoundTrip:
+    """Integration test: GitHub-raw INDEX entry round-trips through sync_index.py."""
+
+    def test_github_raw_entry_refetched_and_stale_content_replaced(self) -> None:
+        """Round-trip a GitHub-raw INDEX entry through unmodified sync_index.py.
+
+        Asserts:
+          1. Exit code == 0.
+          2. The stale sentinel .md is replaced by real upstream content —
+             proves the re-fetch ran via sync_index.py → curate_doc.py's
+             GitHub path.
+          3. source_url and local_file entries survive in INDEX.xml —
+             proves the entry wasn't dropped during sync.
+
+        NOTE: Description-restore (PLACEHOLDER → original) is NOT asserted —
+        this test runs in a temp dir outside the docs-for-ai repo, so
+        sync_index.py's git-diff returns an empty changed-set and restores
+        all descriptions unconditionally (non-discriminating here).
+        """
+        raw_url = "https://raw.githubusercontent.com/astral-sh/uv/main/docs/getting-started/first-steps.md"
+        local_file = "getting-started-first-steps.md"
+        stale_sentinel = "STALE SENTINEL"
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            collection_dir = tmp_path / "uv-test"
+            collection_dir.mkdir()
+
+            # Write the stale .md file — sync_index.py must overwrite this.
+            (collection_dir / local_file).write_text(
+                f"# {stale_sentinel}\n\nthis must be overwritten\n"
+            )
+
+            index_path = collection_dir / "INDEX.xml"
+            create_index_xml(
+                index_path,
+                [
+                    {
+                        "title": "First steps",
+                        "description": "Original curated description",
+                        "source_url": raw_url,
+                        "local_file": local_file,
+                    }
+                ],
+            )
+
+            # Run sync_index.py — delegates to curate_doc.py's GitHub raw path.
+            result = subprocess.run(
+                ["uv", "run", "python", "scripts/sync_index.py", str(collection_dir)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            # Signal 1: sync completed without error.
+            assert result.returncode == 0, (
+                f"sync_index.py exited {result.returncode}:\n"
+                f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+            )
+
+            # Signal 2: stale sentinel is gone; real upstream content is present.
+            md_text = (collection_dir / local_file).read_text()
+            assert stale_sentinel not in md_text, (
+                f"Stale sentinel still present in {local_file} — "
+                "sync_index.py did not re-fetch from GitHub"
+            )
+            # The H1 is the doc's own title (not body prose), so it's stable
+            # across upstream wording changes. Asserting it rejects HTML
+            # rate-limit / error bodies that size heuristics would let through.
+            assert "# First steps" in md_text, (
+                "Re-fetched .md is missing the upstream H1 '# First steps' — "
+                f"got a possible error page / wrong content:\n{md_text[:300]}"
+            )
+
+            # Signal 3: source_url and local_file entries survive in INDEX.xml.
+            final_index_text = index_path.read_text()
+            assert f"<source_url>{raw_url}</source_url>" in final_index_text, (
+                f"source_url missing from INDEX.xml after sync.\n"
+                f"INDEX.xml contents:\n{final_index_text}"
+            )
+            assert f"<local_file>{local_file}</local_file>" in final_index_text, (
+                f"local_file entry missing from INDEX.xml after sync.\n"
+                f"INDEX.xml contents:\n{final_index_text}"
+            )

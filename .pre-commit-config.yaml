@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.14
+    rev: 0.11.15
     hooks:
       - id: uv-lock
 
@@ -24,12 +24,21 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-      - id: pytest
-        name: pytest
+      - id: pytest-fast
+        name: pytest (excluding firecrawl)
+        entry: uv run pytest -m "not firecrawl"
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: pytest-full
+        name: pytest (full suite)
         entry: uv run pytest
         language: system
         types: [python]
         pass_filenames: false
+        stages: [pre-push]
+        always_run: true
       - id: xmllint
         name: xmllint
         entry: xmllint --noout
@@ -37,9 +46,14 @@ repos:
         types: [xml]
 
 # Notes:
-# 1. Order: uv-lock → ruff-format → ruff-check → pyright → pytest → xmllint
+# 1. Order: uv-lock → ruff-format → ruff-check → pyright → pytest-fast → xmllint
+#    (pytest-full runs only on pre-push, after all the above re-run on push)
 # 2. `uv-lock` keeps uv.lock in sync with pyproject.toml
 # 3. Python tools run via `uv run` (single version source: pyproject.toml)
 # 4. `ruff-format` precedes `ruff-check` so linting validates formatted code
 # 5. `--exit-non-zero-on-fix` blocks commits on ruff auto-fixes, review first
 # 6. `pass_filenames: false` on Python hooks runs on entire codebase
+# 7. pytest is split by stage: `pytest-fast` skips firecrawl-marked tests on
+#    pre-commit (free, fast); `pytest-full` runs the entire suite on pre-push.
+#    Install the pre-push hook once with:
+#        uv run pre-commit install --hook-type pre-push

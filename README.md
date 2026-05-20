@@ -26,7 +26,7 @@ Available collections in this repo:
 | 📦 [`shiny/`](shiny/) | 📄 [`shiny/INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](tailwind/) | 📄 [`tailwind/INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`tailwindplus/INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](uv/) | 📄 [`uv/INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-01-16 | [Official](https://docs.astral.sh/uv/) |
+| 📦 [`uv/`](uv/) | 📄 [`uv/INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](vercel/) | 📄 [`vercel/INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](vitest/) | 📄 [`vitest/INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](zustand/) | 📄 [`zustand/INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
@@ -45,7 +45,7 @@ Available collections in this repo:
 git clone https://github.com/michellepace/docs-for-ai.git
 cd docs-for-ai
 
-# 3. Get free FireCrawl API key
+# 3. Get free FireCrawl API key (Only GitHub sources are downloaded directly)
 # Visit: https://www.firecrawl.dev/app/api-keys
 
 # 4. Add to your shell profile
@@ -93,8 +93,10 @@ Assume tailwind was not already a collection in this repo:
 
 ## 🏗️ How This Repo Works
 
-**Workflow:** Python script scrapes URL → writes .md file → creates INDEX.xml entry with `PLACEHOLDER` description → Claude Code generates semantic description.
+**Workflow:** Python script fetches from source URL → writes .md file → creates INDEX.xml entry with `PLACEHOLDER` description → Claude Code generates semantic description.
 The `/curate-doc` command always regenerates the description, whereas `/rescrape-docs` only regenerates descriptions for files with content changes.
+
+**Source routing:** If the source URL is on GitHub, a direct fetch is used instead of FireCrawl.
 
 **Directory Structure:**
 
@@ -122,15 +124,11 @@ uv/
 </docs_index>
 ```
 
-Scripts use FireCrawl Python SDK. MCP server also configured ([.mcp.json](.mcp.json), [.claude/settings.json](.claude/settings.json)).
+Scripts use the FireCrawl Python SDK for general web sources and Python stdlib (`urllib.request`) for GitHub raw markdown.
 
 ---
 
 ## 👉 Notes to Improve later
-
-### Old Idea
-
-Instead of crawling, rather go to GitHub and automate downloading and index creation. Docs are much cleaner than crawling. Keep .mdx files as-is; do not convert to .md. Trade-off: bulk downloads bloat the index; curating individually keeps focus.
 
 ### New Idea (2026.01.16) — use `llms.txt` + direct fetch
 
@@ -144,3 +142,11 @@ Instruction given to Claude Code and successfully run on `uv/` directory to upda
 </div>
 
 Adding this as a note for later to refactor to this method. (The screenshot mentions `curl` but we used Python's `urllib.request`.)
+
+### New Idea (2026.05.20) — Drop Redundant Collections
+
+Next.js already comes with its docs installed and indexed.
+
+There's a claude-code-guide agent now too.
+
+Lefthook has https://lefthook.dev/llms.txt

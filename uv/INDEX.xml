@@ -119,6 +119,13 @@
     <scraped_at>2026-05-19</scraped_at>
   </source>
   <source>
+    <title>Environment variables</title>
+    <description>Reference for environment variables uv defines (`UV_*` covering cache, concurrency, indexes, Python installation, publishing, builds) and externally defined variables it respects (`PATH`, proxies, `XDG_*`, `AWS_*`, SSL certs, CI markers).</description>
+    <source_url>https://docs.astral.sh/uv/reference/environment/index.md</source_url>
+    <local_file>environment-variables.md</local_file>
+    <scraped_at>2026-05-19</scraped_at>
+  </source>
+  <source>
     <title>The uv build backend</title>
     <description>uv's native build backend for transforming source trees into distributions, covering configuration, module discovery, namespace packages, stub packages, and file inclusion/exclusion patterns for source distributions and wheels.</description>
     <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/build-backend.md</source_url>
@@ -172,6 +179,20 @@
     <description>Dependency caching by source type (registry, URL, Git, local), cache invalidation with `--refresh`/`--reinstall`, `tool.uv.cache-keys` for dynamic metadata, `uv cache clean`/`prune`, CI caching strategies, cache directory configuration.</description>
     <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/cache.md</source_url>
     <local_file>concepts-cache.md</local_file>
+    <scraped_at>2026-05-19</scraped_at>
+  </source>
+  <source>
+    <title>Storage</title>
+    <description>uv storage directories: cache, persistent data, configuration, temporary, executable — XDG on Unix, Known Folder on Windows. Lists `UV_PYTHON_INSTALL_DIR`, `UV_TOOL_DIR`, `UV_PROJECT_ENVIRONMENT` env vars and paths for Python versions, tools, `.venv`.</description>
+    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/reference/storage.md</source_url>
+    <local_file>reference-storage.md</local_file>
+    <scraped_at>2026-05-19</scraped_at>
+  </source>
+  <source>
+    <title>Using uv with Dependabot</title>
+    <description>Guide to configuring Dependabot for uv projects: enabling automated `uv.lock` updates via `package-ecosystem: "uv"` in `dependabot.yml`, scheduling intervals, and pairing `exclude-newer` with the `cooldown` option.</description>
+    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/dependabot.md</source_url>
+    <local_file>guides-integration-dependabot.md</local_file>
     <scraped_at>2026-05-19</scraped_at>
   </source>
 </docs_index>

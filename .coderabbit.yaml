@@ -1,0 +1,20 @@
+reviews:
+  # "!" EXCLUDE from reviews
+  path_filters:
+    - "!biome/**"
+    - "!claudecode/**"
+    - "!claudeplat/**"
+    - "!clerk/**"
+    - "!convex/**"
+    - "!lefthook/**"
+    - "!marimo/**"
+    - "!nextjs/**"
+    - "!playwright/**"
+    - "!shadcn/**"
+    - "!shiny/**"
+    - "!tailwind/**"
+    - "!tailwindplus/**"
+    - "!uv/**"
+    - "!vercel/**"
+    - "!vitest/**"
+    - "!zustand/**"

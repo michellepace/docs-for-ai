@@ -5,7 +5,8 @@ import tempfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-# Import functions directly for unit testing
+import pytest
+
 from scripts.sync_index import (
     _get_changed_markdown_files,
     _restore_unchanged_descriptions,
@@ -53,12 +54,11 @@ class TestSyncIndexToFilesystem:
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
 
-            # Create 2 actual .md files
             (tmp_path / "doc-a.md").write_text("# Doc A")
             (tmp_path / "doc-b.md").write_text("# Doc B")
             (tmp_path / "README.md").write_text("# Collection")
 
-            # Create INDEX.xml with 4 sources (2 valid, 2 stale)
+            # 4 sources: 2 valid, 2 missing from filesystem (stale).
             sources = [
                 {
                     "title": "Doc A",
@@ -88,22 +88,18 @@ class TestSyncIndexToFilesystem:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, sources)
 
-            # Run sync
             md_files = get_markdown_files(tmp_path)
             valid_pairs, orphans, removed_count = _sync_index_to_filesystem(
                 index_path, md_files
             )
 
-            # Verify: 2 stale sources removed
             assert removed_count == 2
             assert len(valid_pairs) == 2
             assert ("doc-a.md", "https://example.com/a") in valid_pairs
             assert ("doc-b.md", "https://example.com/b") in valid_pairs
 
-            # Verify: No orphaned .md files (all are in INDEX)
             assert len(orphans) == 0
 
-            # Verify: INDEX.xml written with only 2 sources
             descriptions = get_descriptions_from_index(index_path)
             assert len(descriptions) == 2
             assert "doc-a.md" in descriptions
@@ -116,15 +112,12 @@ class TestSyncIndexToFilesystem:
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
 
-            # Create 3 .md files including README
             (tmp_path / "doc-a.md").write_text("# Doc A")
             (tmp_path / "doc-b.md").write_text("# Doc B")
             (tmp_path / "README.md").write_text("# Collection")
 
-            # Get markdown files
             md_files = get_markdown_files(tmp_path)
 
-            # Verify: README.md excluded
             assert len(md_files) == 2
             assert "doc-a.md" in md_files
             assert "doc-b.md" in md_files
@@ -175,10 +168,8 @@ class TestDescriptionRestorationUnit:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # No files changed
             changed_files = set()
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -215,10 +206,8 @@ class TestDescriptionRestorationUnit:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # File changed
             changed_files = {"doc-a.md"}
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -268,7 +257,6 @@ class TestDescriptionRestorationUnit:
             # Two changed, two unchanged
             changed_files = {"doc-a.md", "doc-c.md"}
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -297,15 +285,12 @@ class TestDescriptionRestorationUnit:
             backup_path = tmp_path / "INDEX.xml.backup"
             create_index_xml(backup_path, backup_sources)
 
-            # Current also PLACEHOLDER
             current_sources = backup_sources.copy()
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            # No changes
             changed_files = set()
 
-            # Restore
             restored = _restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
@@ -316,8 +301,9 @@ class TestDescriptionRestorationUnit:
 
 
 class TestIntegration:
-    """Integration test with real git and scraping."""
+    """Integration tests using real git (scraping real or mocked)."""
 
+    @pytest.mark.firecrawl
     def test_full_rescrape_workflow(self) -> None:
         """Full end-to-end workflow with real git and scraping."""
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -325,7 +311,7 @@ class TestIntegration:
             collection_dir = tmp_path / "test_collection"
             collection_dir.mkdir()
 
-            # Initialize git repo
+            # Initialise git repo
             for cmd in [
                 ["git", "init"],
                 ["git", "config", "user.email", "test@example.com"],
@@ -383,22 +369,21 @@ class TestIntegration:
 
             descriptions = get_descriptions_from_index(index_path)
 
-            # Get actual filename from INDEX.xml (may have changed due to title change)
+            # Filename may differ from the seeded 'updating-state.md' if the real
+            # scrape produced a different title-slug.
             assert len(descriptions) == 1, "Should have exactly one source"
             actual_filename = next(iter(descriptions.keys()))
 
-            # Check if git detected changes in any .md file
             md_files_changed = [
                 line
                 for line in git_status.stdout.split("\n")
                 if line.endswith(".md") and not line.endswith("README.md")
             ]
 
-            # Verify correct behavior based on whether content changed
+            # Verify correct behaviour based on whether content changed
             if md_files_changed:
                 # Content changed → description is PLACEHOLDER
                 assert descriptions[actual_filename] == "PLACEHOLDER"
-                # Verify restoration message in output
                 assert "✅ Restored (.md whitespace-only changes)|0" in result.stdout
             else:
                 # Content unchanged (cache returned same) → description restored
@@ -406,7 +391,6 @@ class TestIntegration:
                     descriptions[actual_filename]
                     == "Original description for updating state"
                 )
-                # Verify restoration message in output
                 assert "✅ Restored (.md whitespace-only changes)|1" in result.stdout
 
     def test_whitespace_only_changes_restore_description(self) -> None:
@@ -416,7 +400,7 @@ class TestIntegration:
             collection_dir = tmp_path / "test_collection"
             collection_dir.mkdir()
 
-            # Initialize git repo
+            # Initialise git repo
             for cmd in [
                 ["git", "init"],
                 ["git", "config", "user.email", "test@example.com"],
@@ -436,7 +420,6 @@ class TestIntegration:
             index_path = collection_dir / "INDEX.xml"
             create_index_xml(index_path, sources)
 
-            # Create markdown file with specific content
             md_file = collection_dir / "test-doc.md"
             md_file.write_text("# Test Document\n\nSome content here.\n")
 
@@ -490,7 +473,7 @@ class TestIntegration:
                 index_path, backup_path, changed_files
             )
 
-            # Verify description was RESTORED (not left as PLACEHOLDER)
+            # Description must be RESTORED (whitespace-only diff), not PLACEHOLDER.
             descriptions = get_descriptions_from_index(index_path)
             expected_desc = "Original description that should be restored"
             assert descriptions["test-doc.md"] == expected_desc, (

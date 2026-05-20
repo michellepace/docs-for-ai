@@ -5,7 +5,9 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-# Test URL constant - valid documentation page for integration tests
+import pytest
+
+# Real Zustand page; used by integration tests that exercise the FireCrawl path.
 TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
 
 
@@ -26,54 +28,64 @@ def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
 
 
 class TestInputValidation:
-    """Fast tests for argument and URL validation (no API calls)."""
+    """Fast tests for argument, URL, and directory-state validation (no API calls)."""
 
     def test_requires_both_directory_and_url_arguments(self) -> None:
-        """Script requires both directory and URL arguments.
-
-        Fails when either is missing.
-        """
-        # Test with no args
+        """Argparse exits with usage code (2) when required args are missing."""
         exit_code, output = run_script()
         assert exit_code == 2
         assert "required" in output
 
     def test_fails_when_url_is_invalid(self) -> None:
-        """Script rejects malformed URLs with INVALID_URL error.
-
-        Error message includes the invalid URL.
-        """
+        """Script rejects malformed URLs with INVALID_URL error."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             exit_code, output = run_script(tmp_dir, "horse-donkey-cow")
 
             assert exit_code != 0
             assert "❌ Error: INVALID_URL|horse-donkey-cow" in output
 
+    def test_nonempty_noncollection_directory_fails(self) -> None:
+        """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            invalid_dir = tmp_path / "not_a_collection"
 
+            invalid_dir.mkdir()
+            (invalid_dir / "some_file.txt").write_text("random content")
+
+            exit_code, output = run_script(str(invalid_dir), TEST_URL)
+
+            assert exit_code != 0
+            assert (
+                "❌ Error: INVALID_COLLECTION|"
+                "Directory non-empty and missing INDEX.xml. "
+                "Rejected to prevent inadvertent file overwrites|"
+            ) in output
+
+
+@pytest.mark.firecrawl
 class TestDirectoryScenarios:
     """Integration tests for different directory states (requires API)."""
 
     def test_nonexistent_directory_creates_new_collection(self) -> None:
-        """Nonexistent directory is created with README, INDEX.xml, scraped document."""
+        """Nonexistent target path is created (not just initialised in place)."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             new_dir = tmp_path / "new_collection"
 
             exit_code, output = run_script(str(new_dir), TEST_URL)
 
-            # Assert success and file paths in output
             assert exit_code == 0
 
             readme_path = new_dir / "README.md"
             index_path = new_dir / "INDEX.xml"
 
-            # Assert creation messages appear in output
             assert f"✅ Created curation readme|{readme_path}|" in output
             assert f"✅ Created curation index|{index_path}|" in output
             assert readme_path.exists()
             assert index_path.exists()
 
-            # Check that a markdown file was created (dynamic filename from real scrape)
+            # Filename is dynamic (derived from real scrape title); cannot hard-code.
             md_files = [
                 f
                 for f in new_dir.iterdir()
@@ -86,7 +98,7 @@ class TestDirectoryScenarios:
             assert "🎉 Curation Success!|" in output
 
     def test_empty_directory_creates_new_collection(self) -> None:
-        """Empty directory is initialized with README, INDEX.xml, and scraped document."""
+        """Empty existing directory is initialised as a fresh collection."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             empty_dir = tmp_path / "empty_collection"
@@ -95,7 +107,6 @@ class TestDirectoryScenarios:
 
             exit_code, output = run_script(str(empty_dir), TEST_URL)
 
-            # Assert success and file paths in output
             assert exit_code == 0
 
             readme_path = empty_dir / "README.md"
@@ -107,7 +118,7 @@ class TestDirectoryScenarios:
             assert readme_path.exists()
             assert index_path.exists()
 
-            # Check that a markdown file was created (dynamic filename from real scrape)
+            # Filename is dynamic (derived from real scrape title); cannot hard-code.
             md_files = [
                 f
                 for f in empty_dir.iterdir()
@@ -131,10 +142,9 @@ class TestDirectoryScenarios:
 
             exit_code, output = run_script(str(existing_dir), TEST_URL)
 
-            # Assert success - only source added to INDEX.xml (no README created)
             assert exit_code == 0
 
-            # Check that a markdown file was created (dynamic filename from real scrape)
+            # Filename is dynamic (derived from real scrape title); cannot hard-code.
             md_files = [
                 f
                 for f in existing_dir.iterdir()
@@ -145,31 +155,10 @@ class TestDirectoryScenarios:
             assert "✅ Added index source|" in output
             assert "🎉 Curation Success!|" in output
 
-            # README should NOT be created
             readme_path = existing_dir / "README.md"
             assert not readme_path.exists()
-            # Check that README creation message is not in output
             readme_created_count = output.count("README.md")
             assert readme_created_count == 0
-
-    def test_nonempty_noncollection_directory_fails(self) -> None:
-        """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp_path = Path(tmp_dir)
-            invalid_dir = tmp_path / "not_a_collection"
-
-            invalid_dir.mkdir()
-            (invalid_dir / "some_file.txt").write_text("random content")
-
-            exit_code, output = run_script(str(invalid_dir), TEST_URL)
-
-            # Assert failure
-            assert exit_code != 0
-            assert (
-                "❌ Error: INVALID_COLLECTION|"
-                "Directory non-empty and missing INDEX.xml. "
-                "Rejected to prevent inadvertent file overwrites|"
-            ) in output
 
     def test_curating_same_url_twice_updates_existing_source(self) -> None:
         """Curating the same URL twice should update existing source, not fail.
@@ -180,33 +169,31 @@ class TestDirectoryScenarios:
             tmp_path = Path(tmp_dir)
             collection_dir = tmp_path / "test_collection"
 
-            # First add - should succeed
             exit_code1, output1 = run_script(str(collection_dir), TEST_URL)
             assert exit_code1 == 0
             assert "✅ Added index source|" in output1
-            # Pattern matching only - first scrape (add)
+            # Add-path success message
             assert (
                 "🎉 Curation Success!|scraped, created and indexed new document|"
                 in output1
             )
 
-            # Second add with same URL - should UPDATE (not fail)
+            # Re-curating the SAME URL must UPDATE, not error.
             exit_code2, output2 = run_script(str(collection_dir), TEST_URL)
-            assert exit_code2 == 0  # Should succeed
+            assert exit_code2 == 0
             assert "✅ Updated index source|" in output2
-            # Pattern matching only - second scrape (update)
+            # Update-path success message
             assert (
                 "🎉 Curation Success!|scraped, overwrote and re-indexed document|"
                 in output2
             )
 
-            # Verify INDEX.xml has only ONE source entry (not two)
             index_path = collection_dir / "INDEX.xml"
             index_content = index_path.read_text()
             source_count = index_content.count("<source>")
             assert source_count == 1, f"Expected 1 source, found {source_count}"
 
-            # Third add with trailing slash variant - should ALSO UPDATE
+            # Trailing-slash variant must hit the same UPDATE path.
             url_variant = (
                 TEST_URL + "/" if not TEST_URL.endswith("/") else TEST_URL.rstrip("/")
             )
@@ -222,11 +209,12 @@ class TestDirectoryScenarios:
             )
 
 
+@pytest.mark.firecrawl
 class TestOutputContent:
     """Integration tests validating generated file content (requires API)."""
 
     def test_index_xml_structure_and_content(self) -> None:
-        """INDEX.xml includes all source fields and correct XML structure."""
+        """New <source> entry uses PLACEHOLDER descrip (filled by sync_index later)."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             new_dir = tmp_path / "test_collection"
@@ -238,7 +226,6 @@ class TestOutputContent:
             index_path = new_dir / "INDEX.xml"
             index_content = index_path.read_text()
 
-            # Assert XML structure and content based on TEST_URL
             today = date.today().isoformat()
 
             assert index_content.startswith("<docs_index>")
@@ -252,7 +239,7 @@ class TestOutputContent:
             assert index_content.endswith("</docs_index>")
 
     def test_readme_md_contains_required_content(self) -> None:
-        """README.md includes collection heading, index link, and source site URL."""
+        """Generated README links to INDEX.xml and back to the upstream source site."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             new_dir = tmp_path / "test_collection"
@@ -264,7 +251,6 @@ class TestOutputContent:
             readme_path = new_dir / "README.md"
             readme_content = readme_path.read_text()
 
-            # Assert required content
             assert "# test_collection Documentation" in readme_content
             assert "Curated docs for targeted AI context.\n" in readme_content
             assert "- Curation Index: [INDEX.xml](INDEX.xml)\n" in readme_content

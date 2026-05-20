@@ -87,3 +87,12 @@ max-statements = 50
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
+
+# =================================
+# Pytest Configuration
+# =================================
+[tool.pytest.ini_options]
+markers = [
+    "firecrawl: hits FireCrawl API (paid, network)",
+]
+

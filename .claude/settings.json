@@ -13,9 +13,6 @@
       "Bash(npx markdownlint-cli2 *)",
       "Bash(pre-commit run *)",
       "Bash(pwd)",
-      "Bash(pyright)",
-      "Bash(ruff check *)",
-      "Bash(ruff format)",
       "Bash(tail *)",
       "Bash(test *)",
       "Bash(uv *)",
@@ -26,15 +23,24 @@
       "Read(**/.envrc)"
     ]
   },
+  "enabledPlugins": {
+    "git-utils@my-claude-marketplace": true,
+    "claude-code-utils@my-claude-marketplace": false,
+    "superpowers@claude-plugins-official": true,
+    "playground@claude-plugins-official": false
+  },
   "extraKnownMarketplaces": {
     "my-claude-marketplace": {
       "source": {
         "source": "github",
         "repo": "michellepace/my-claude-marketplace"
       }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
     }
-  },
-  "enabledPlugins": {
-    "git-utils@my-claude-marketplace": true
   }
 }

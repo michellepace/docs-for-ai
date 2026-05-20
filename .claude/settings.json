@@ -26,7 +26,7 @@
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,
     "claude-code-utils@my-claude-marketplace": false,
-    "superpowers@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": false,
     "playground@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {

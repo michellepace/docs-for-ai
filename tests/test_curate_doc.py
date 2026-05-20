@@ -44,6 +44,17 @@ class TestInputValidation:
             assert exit_code != 0
             assert "❌ Error: INVALID_URL|horse-donkey-cow" in output
 
+    def test_fails_when_source_url_is_uv_docs_site(self) -> None:
+        """Uv hosted-docs URLs are rejected."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            exit_code, output = run_script(
+                tmp_dir, "https://docs.astral.sh/uv/guides/install-python/"
+            )
+
+            assert exit_code != 0
+            assert "❌ Error: USE_RAW_GITHUB|" in output
+            assert "uv/INDEX.xml" in output
+
     def test_nonempty_noncollection_directory_fails(self) -> None:
         """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -173,20 +184,14 @@ class TestDirectoryScenarios:
             assert exit_code1 == 0
             assert "✅ Added index source|" in output1
             # Add-path success message
-            assert (
-                "🎉 Curation Success!|scraped, created and indexed new document|"
-                in output1
-            )
+            assert "🎉 Curation Success!|created and indexed new document|" in output1
 
             # Re-curating the SAME URL must UPDATE, not error.
             exit_code2, output2 = run_script(str(collection_dir), TEST_URL)
             assert exit_code2 == 0
             assert "✅ Updated index source|" in output2
             # Update-path success message
-            assert (
-                "🎉 Curation Success!|scraped, overwrote and re-indexed document|"
-                in output2
-            )
+            assert "🎉 Curation Success!|overwrote and re-indexed document|" in output2
 
             index_path = collection_dir / "INDEX.xml"
             index_content = index_path.read_text()
@@ -207,6 +212,96 @@ class TestDirectoryScenarios:
             assert source_count == 1, (
                 f"Expected 1 source after slash variant, found {source_count}"
             )
+
+
+GH_RAW = (
+    "https://raw.githubusercontent.com/astral-sh/uv/main/"
+    "docs/getting-started/first-steps.md"
+)
+GH_BLOB = "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
+GH_404 = (
+    "https://raw.githubusercontent.com/astral-sh/uv/main/docs/zzz-does-not-exist-xyz.md"
+)
+GH_NON_MD = "https://github.com/astral-sh/uv/blob/main/pyproject.toml"
+
+
+class TestGithubSourcePath:
+    """Integration tests for GitHub raw-source routing (real network)."""
+
+    @pytest.mark.github
+    def test_raw_url_curates_into_collection(self) -> None:
+        """Raw GitHub URL is detected, fetched, and routed end-to-end into INDEX + .md."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            new_dir = Path(tmp_dir) / "uv"
+            exit_code, output = run_script(str(new_dir), GH_RAW)
+
+            assert exit_code == 0
+            assert "✅ Detected GitHub source|" in output
+            assert "✅ Fetched raw markdown|" in output
+            assert "🎉 Curation Success!|" in output
+
+            doc = new_dir / "getting-started-first-steps.md"
+            assert doc.exists()
+            assert doc.read_text().strip() != ""
+
+            index = (new_dir / "INDEX.xml").read_text()
+            assert f"<source_url>{GH_RAW}</source_url>" in index
+            assert "<local_file>getting-started-first-steps.md</local_file>" in index
+            assert "<description>PLACEHOLDER</description>" in index
+
+    @pytest.mark.github
+    def test_blob_url_stored_normalised_to_raw(self) -> None:
+        """Blob URL is normalised to raw URL before being stored in INDEX."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            new_dir = Path(tmp_dir) / "uv"
+            exit_code, _ = run_script(str(new_dir), GH_BLOB)
+
+            assert exit_code == 0
+            index = (new_dir / "INDEX.xml").read_text()
+            assert f"<source_url>{GH_RAW}</source_url>" in index
+
+    @pytest.mark.github
+    def test_404_fails_without_mutation(self) -> None:
+        """404 URL exits non-zero with GITHUB_NOT_FOUND and leaves no files."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            new_dir = Path(tmp_dir) / "uv"
+            exit_code, output = run_script(str(new_dir), GH_404)
+
+            assert exit_code != 0
+            assert "❌ Error: GITHUB_NOT_FOUND|" in output
+            md_files = list(new_dir.glob("*.md")) if new_dir.exists() else []
+            assert md_files == []
+
+    def test_non_md_blob_rejected_before_fetch(self) -> None:
+        """Non-markdown blob exits non-zero with UNSUPPORTED_GITHUB before any fetch."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            new_dir = Path(tmp_dir) / "uv"
+            exit_code, output = run_script(str(new_dir), GH_NON_MD)
+
+            assert exit_code != 0
+            assert "❌ Error: UNSUPPORTED_GITHUB|" in output
+
+    def test_filename_collision_is_rejected(self) -> None:
+        """Same filename + different URL is rejected (not silently overwritten)."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            coll = Path(tmp_dir) / "uv"
+            coll.mkdir()
+            (coll / "getting-started-first-steps.md").write_text("# Old\n")
+            (coll / "INDEX.xml").write_text(
+                "<docs_index>\n"
+                "  <source>\n"
+                "    <title>Old</title>\n"
+                "    <description>PLACEHOLDER</description>\n"
+                "    <source_url>https://example.com/other</source_url>\n"
+                "    <local_file>getting-started-first-steps.md</local_file>\n"
+                "    <scraped_at>2026-05-19</scraped_at>\n"
+                "  </source>\n"
+                "</docs_index>\n"
+            )
+            exit_code, output = run_script(str(coll), GH_RAW)
+
+            assert exit_code != 0
+            assert "❌ Error: FILENAME_COLLISION|" in output
 
 
 @pytest.mark.firecrawl

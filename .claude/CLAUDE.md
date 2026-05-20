@@ -40,6 +40,9 @@ uv run pyright                    # Type checking
 uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run all hooks manually
 
-# Markdown (config in .markdownlint-cli2.yaml)
+# Run Non-Network Tests (pyproject.toml)
+uv run pytest -m "not firecrawl and not github"
+
+# Markdown (.markdownlint-cli2.yaml)
 npx markdownlint-cli2 --fix "filename.md"  # Lint and auto-fix
 ```

@@ -174,10 +174,11 @@ def _get_changed_markdown_files(collection_dir: Path) -> set[str]:
     # Use --numstat with -w: only returns files with non-whitespace changes
     # Output format: "additions deletions filename"
     result = subprocess.run(
-        [git_path, "diff", "--numstat", "-w", "--", f"{collection_dir}/"],
+        [git_path, "diff", "--numstat", "-w", "--", "."],
         capture_output=True,
         text=True,
         check=False,
+        cwd=collection_dir,
     )
 
     # numstat format has 3 tab-separated fields: additions, deletions, filepath

@@ -1,6 +1,6 @@
 """Add or update documentation in collection directories.
 
-Routes each source URL to either GitHub raw fetch (``github_source``) or
+Routes each source URL to either GitHub raw fetch (`github_source`) or
 FireCrawl scrape, then maintains INDEX.xml, filenames, and cleanup.
 """
 
@@ -29,9 +29,9 @@ def _normalise_directory_path(dir_path_str: str) -> Path:
 
 
 def _format_path_for_display(path: Path) -> str:
-    """Format path as a project-relative string, e.g. ``vite/INDEX.xml``.
+    """Format path as a project-relative string, e.g. `vite/INDEX.xml`.
 
-    Falls back to ``str(path)`` for paths outside the project root.
+    Falls back to `str(path)` for paths outside the project root.
     """
     try:
         absolute_path = path.resolve()
@@ -138,10 +138,10 @@ def _create_index_xml(dir_path: Path) -> None:
 def _add_or_update_source_in_index(
     dir_path: Path, title: str, source_url: str, local_file: str
 ) -> tuple[bool, Path | None]:
-    """Add or replace the source for ``source_url`` in INDEX.xml.
+    """Add or replace the source for `source_url` in INDEX.xml.
 
-    Returns ``(is_update, old_file_path)`` where ``old_file_path`` is the
-    previous markdown file to delete only when the filename changed; ``None``
+    Returns `(is_update, old_file_path)` where `old_file_path` is the
+    previous markdown file to delete only when the filename changed; `None`
     otherwise.
     """
     index_path = dir_path / "INDEX.xml"
@@ -194,7 +194,7 @@ def _add_or_update_source_in_index(
 
 
 def _cleanup_old_file(old_file_path: Path | None) -> None:
-    """Delete the previous markdown file when the filename changed (no-op if ``None``)."""
+    """Delete the previous markdown file when the filename changed (no-op if `None`)."""
     if old_file_path:
         old_file_path.unlink(missing_ok=True)
         print(f"🗑️ Removed old file|{_format_path_for_display(old_file_path)}|")
@@ -217,7 +217,7 @@ def _resolve_firecrawl_filename(dir_path: Path, title: str, source_url: str) -> 
 def _reject_github_filename_collision(
     index_path: Path, filename: str, source_url: str
 ) -> None:
-    """Exit if ``filename`` is already mapped to a different source in INDEX.
+    """Exit if `filename` is already mapped to a different source in INDEX.
 
     Prevents a cross-repo GitHub collision silently overwriting another
     source's markdown within the same collection.
@@ -271,10 +271,10 @@ def _extract_metadata(result: Document) -> dict:
 
 
 def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
-    """Make one Firecrawl scrape call and return ``{markdown, metadata}``.
+    """Make one Firecrawl scrape call and return `{markdown, metadata}`.
 
-    Exits with ``NO_CONTENT`` if the response has no markdown. Rate-limit,
-    API, network, and unexpected errors propagate to ``_scrape_with_firecrawl``.
+    Exits with `NO_CONTENT` if the response has no markdown. Rate-limit,
+    API, network, and unexpected errors propagate to `_scrape_with_firecrawl`.
     """
     result = firecrawl.scrape(
         url,
@@ -298,9 +298,9 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
 def _scrape_with_firecrawl(url: str, max_attempts: int = 2) -> dict:
     """Scrape URL using Firecrawl Python SDK with automatic retry on rate limits.
 
-    Retries on ``RateLimitError`` for the retry-after duration plus a 2-second
-    safety buffer. ``max_attempts`` is initial + retries (default ``2`` = 1
-    initial + 1 retry). Exits via ``sys.exit(1)`` on rate-limit exhaustion or
+    Retries on `RateLimitError` for the retry-after duration plus a 2-second
+    safety buffer. `max_attempts` is initial + retries (default `2` = 1
+    initial + 1 retry). Exits via `sys.exit(1)` on rate-limit exhaustion or
     any other API, network, or unexpected error.
     """
     firecrawl = _get_firecrawl_client()

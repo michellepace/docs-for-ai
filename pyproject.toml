@@ -94,5 +94,5 @@ max-complexity = 10
 [tool.pytest.ini_options]
 markers = [
     "firecrawl: hits FireCrawl API (paid, network)",
+    "github: hits raw.githubusercontent.com (free, network)",
 ]
-

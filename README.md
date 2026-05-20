@@ -45,7 +45,7 @@ Available collections in this repo:
 git clone https://github.com/michellepace/docs-for-ai.git
 cd docs-for-ai
 
-# 3. Get free FireCrawl API key (Only Github sources downloaded directly)
+# 3. Get free FireCrawl API key (Only GitHub sources are downloaded directly)
 # Visit: https://www.firecrawl.dev/app/api-keys
 
 # 4. Add to your shell profile
@@ -96,7 +96,7 @@ Assume tailwind was not already a collection in this repo:
 **Workflow:** Python script fetches from source URL → writes .md file → creates INDEX.xml entry with `PLACEHOLDER` description → Claude Code generates semantic description.
 The `/curate-doc` command always regenerates the description, whereas `/rescrape-docs` only regenerates descriptions for files with content changes.
 
-**Source routing:** If the source URL is on GitHub, direct fetch used and not Firecrawl.
+**Source routing:** If the source URL is on GitHub, a direct fetch is used instead of FireCrawl.
 
 **Directory Structure:**
 
@@ -145,7 +145,7 @@ Adding this as a note for later to refactor to this method. (The screenshot ment
 
 ### New Idea (2026.05.20) — Drop Redundant Collections
 
-Next.js alread comes with its docs installed and indexed.
+Next.js already comes with its docs installed and indexed.
 
 There's a claude-code-guide agent now too.
 

@@ -1,5 +1,5 @@
 ---
-argument-hint: <collection-dir>
+argument-hint: <collection>
 description: Re-scrape all docs in collection and regenerate descriptions
 allowed-tools: Read, Write, Bash(find:*), Bash(uv run:*), Bash(uv run:scripts/sync_index.py:*), Bash(uv run:scripts/update_index_descriptions.py:*)
 ---

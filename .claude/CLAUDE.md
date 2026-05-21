@@ -7,15 +7,39 @@ Documentation collections scraped via FireCrawl Python SDK. INDEX.xml maps markd
 Documentation is organised by tool/framework in collection directories:
 
 ```text
-<tool-name>/
+<collection>/
 ├── INDEX.xml       # Structured index for targeted doc retrieval
 ├── README.md       # Directory overview
-└── *.md            # Documentation markdown files
+└── *.md            # Curated doc files
 ```
+
+Workflow is driven by slash commands in `.claude/commands/`:
+
+- `/curate-doc <collection> <url>` — curate a source URL into a collection
+- `/ask-docs <collection> <question>` — query a collection to answer a question
+- `/improve-index-xml <collection>` — refine INDEX.xml descriptions for semantic search
+- `/rescrape-docs <collection>` — re-scrape all docs & regenerate descriptions
+
+## Code Design Principles
+
+TDD-driven — write the test first; let testability shape the design.
+
+- **Pure functions preferred** — no side effects in business logic
+- **Single responsibility** — one module, one purpose (one script, one job)
+- **Layer separation** — CLI entry point → core logic → I/O
+- **Handle errors at boundaries** — catch exceptions in the CLI layer, not in core logic
+
+## TDD Development
+
+Write a failing test (red) → code → pass (green).
+
+- Write the test first; one test drives one behaviour
+- Use pytest's `tmp_path` fixture instead of creating real files
+- Use focused, descriptive test names
 
 ## Development Workflow (Python 3.14)
 
-**Package Management:** [uv](https://docs.astral.sh/uv/)
+**Package Management:** `https://docs.astral.sh/uv/`
 
 **Strict Rules:**
 

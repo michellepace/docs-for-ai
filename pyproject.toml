@@ -24,32 +24,29 @@ dev = [
 # Pyright Type Checking
 # =================================
 [tool.pyright]
-# Type Checker is needed as Ruff is only a linter: https://docs.astral.sh/ruff/faq/
-# For Cursor (Cursor Pyright extension), for VSCode (Microsoft Pylance)
-# Cursor Pyright forks BasedPyright, some lint rules overlap with Ruff, causes dupe errors
+# Type checker — Ruff only lints, doesn't type-check.
+# In VSCode, Pylance reads this config (Pylance bundles Pyright).
+# The CLI `uv run pyright` reads the same config.
 
-typeCheckingMode = "standard" # Cursor Pyright default
+typeCheckingMode = "standard"
 pythonVersion = "3.14"
 
-# Disable Basedpyright rules that duplicate Ruff
-reportUnusedImport = false      # Ruff F401 handles it
-reportUnusedVariable = false    # Ruff F841 handles it
-reportDuplicateImport = false   # Ruff F811 handles it
+# Silence rules Ruff already reports these
+reportUnusedImport = false      # Ruff F401
+reportUnusedVariable = false    # Ruff F841
+reportDuplicateImport = false   # Ruff F811
 
 
 # =================================
 # Ruff Linter Configuration
 # =================================
 [tool.ruff]
-# Strictest ruff settings
 line-length = 90
 target-version = "py314"
 
 [tool.ruff.lint]
-# Enable all available rules
-select = ["ALL"]
-# Only ignore rules that are incompatible or overly pedantic
-ignore = [
+select = ["ALL"]    # All rules (strictest)
+ignore = [  # Ignore rules that are incompatible or overly pedantic
     "D100",    # Missing docstring in public module
     "D104",    # Missing docstring in public package
     "D203",    # 1 blank line required before class docstring (conflicts with D211)

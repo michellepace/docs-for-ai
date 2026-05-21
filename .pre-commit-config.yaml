@@ -6,31 +6,41 @@ repos:
 
   - repo: local
     hooks:
-      - id: ruff-format
-        name: ruff format
-        entry: uv run ruff format
+      - id: xmllint
+        name: xmllint
+        entry: xmllint --noout
         language: system
-        types: [python]
-        pass_filenames: false
+        types: [xml]
+
       - id: ruff-check
         name: ruff check
         entry: uv run ruff check --fix --exit-non-zero-on-fix
         language: system
-        types: [python]
+        types_or: [python, toml]
         pass_filenames: false
+
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, toml]
+        pass_filenames: false
+
       - id: pyright
         name: pyright
         entry: uv run pyright
         language: system
-        types: [python]
+        types_or: [python, toml]
         pass_filenames: false
+
       - id: pytest-fast
-        name: pytest (excluding firecrawl)
+        name: pytest (excluding firecrawl tests)
         entry: uv run pytest -m "not firecrawl"
         language: system
-        types: [python]
+        types_or: [python, toml]
         pass_filenames: false
         stages: [pre-commit]
+
       - id: pytest-full
         name: pytest (full suite)
         entry: uv run pytest
@@ -39,21 +49,11 @@ repos:
         pass_filenames: false
         stages: [pre-push]
         always_run: true
-      - id: xmllint
-        name: xmllint
-        entry: xmllint --noout
-        language: system
-        types: [xml]
 
 # Notes:
-# 1. Order: uv-lock → ruff-format → ruff-check → pyright → pytest-fast → xmllint
-#    (pytest-full runs only on pre-push, after all the above re-run on push)
-# 2. `uv-lock` keeps uv.lock in sync with pyproject.toml
-# 3. Python tools run via `uv run` (single version source: pyproject.toml)
-# 4. `ruff-format` precedes `ruff-check` so linting validates formatted code
-# 5. `--exit-non-zero-on-fix` blocks commits on ruff auto-fixes, review first
-# 6. `pass_filenames: false` on Python hooks runs on entire codebase
-# 7. pytest is split by stage: `pytest-fast` skips firecrawl-marked tests on
-#    pre-commit (free, fast); `pytest-full` runs the entire suite on pre-push.
-#    Install the pre-push hook once with:
-#        uv run pre-commit install --hook-type pre-push
+# 1. pre-commit excludes Firecrawl tests; pre-push runs the full suite
+# 2. `pass_filenames: false` runs each Python hook over the whole codebase
+# 3. `types_or: [python, toml]`: (python) .py; (toml) pyproject.toml AND uv.lock
+# 4. `uv-lock` keeps uv.lock in sync with pyproject.toml
+# 5. `--exit-non-zero-on-fix` blocks commits on ruff auto-fixes — review first
+# 6. Install the pre-push hook once: uv run pre-commit install --hook-type pre-push

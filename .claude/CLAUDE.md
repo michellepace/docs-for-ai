@@ -64,7 +64,7 @@ uv run pyright                    # Type checking
 uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run all hooks manually
 
-# Run Non-Network Tests (pyproject.toml)
+# Run Non-Network Tests (markers in pyproject.toml)
 uv run pytest -m "not firecrawl and not github"
 
 # Markdown (.markdownlint-cli2.yaml)

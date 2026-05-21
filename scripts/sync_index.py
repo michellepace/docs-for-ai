@@ -45,11 +45,11 @@ def sync_index_to_filesystem(
             removed_count += 1
             continue
 
-        local_file = local_file_elem.text
-        source_url = source_url_elem.text
+        local_file = (local_file_elem.text or "").strip()
+        source_url = (source_url_elem.text or "").strip()
 
-        # Remove if text is missing, or the markdown file doesn't exist
-        if local_file is None or source_url is None or local_file not in md_files:
+        # Remove if text is blank, or the markdown file doesn't exist
+        if not local_file or not source_url or local_file not in md_files:
             root.remove(source)
             removed_count += 1
         else:

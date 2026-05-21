@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.curate_doc import resolve_filename
+from scripts.curate_doc import filename_from_url, resolve_filename
 
 # Real Zustand page; used by integration tests that exercise the FireCrawl path.
 TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
@@ -29,6 +29,45 @@ def _write_index(index_path: Path, entries: list[tuple[str, str, str]]) -> None:
         for title, url, local_file in entries
     )
     index_path.write_text(f"<docs_index>\n{sources}\n</docs_index>\n")
+
+
+class TestFilenameFromUrl:
+    """Offline unit tests for the FireCrawl URL-path filename derivation."""
+
+    @pytest.mark.parametrize(
+        ("url", "expected"),
+        [
+            ("https://clerk.com/docs/guides/users/inviting", "guides-users-inviting.md"),
+            ("https://vercel.com/docs/monorepos", "monorepos.md"),
+            ("https://vercel.com/docs/monorepos.md", "monorepos.md"),
+            ("https://biomejs.dev/guides/configure-biome/", "guides-configure-biome.md"),
+            ("https://docs.convex.dev/auth/convex-auth", "auth-convex-auth.md"),
+        ],
+    )
+    def test_derives_expected_name(self, url: str, expected: str) -> None:
+        """Path drives the name; a `docs` segment (and its prefix) is dropped."""
+        assert filename_from_url(url) == expected
+
+    @pytest.mark.parametrize(
+        ("url", "expected"),
+        [
+            ("https://site.com/Getting_Started", "getting-started.md"),
+            ("https://site.com/guide.html", "guide-html.md"),
+            ("https://site.com/docs/v2.0/api", "v2-0-api.md"),
+            ("https://site.com/docs/guide?v=2#frag", "guide.md"),
+            ("https://example.com", "index.md"),
+        ],
+    )
+    def test_sanitises_messy_url_paths(self, url: str, expected: str) -> None:
+        """Uppercase, underscores, dots, and query/fragment reduce to a valid slug.
+
+        Only a `.md` extension is stripped; an empty path falls back to index.md.
+        """
+        assert filename_from_url(url) == expected
+
+    def test_bare_docs_root_falls_back_to_index(self) -> None:
+        """A docs root with nothing after `docs` falls back to index.md."""
+        assert filename_from_url("https://example.com/docs/") == "index.md"
 
 
 class TestResolveFilename:
@@ -103,12 +142,12 @@ class TestResolveFilename:
             )
             assert result == "foo.md"
 
-    def test_different_titles_same_slug_get_suffixed(self) -> None:
-        """Distinct titles that slugify identically must not collide.
+    def test_different_urls_same_candidate_get_suffixed(self) -> None:
+        """Distinct sources whose URL paths yield the same candidate must not collide.
 
-        Existing title "Foo Bar" → foo-bar.md. New URL with title "Foo-Bar"
-        slugifies the same; resolver must return foo-bar-2.md, not silently
-        accept foo-bar.md (which title-based counting misses).
+        Two different sites can both produce foo-bar.md (e.g. `.../foo-bar`).
+        The resolver must return foo-bar-2.md for the second, not silently
+        reuse foo-bar.md and overwrite the first source's file.
         """
         with tempfile.TemporaryDirectory() as tmp_dir:
             index_path = Path(tmp_dir) / "INDEX.xml"
@@ -297,14 +336,10 @@ class TestDirectoryScenarios:
             assert readme_path.exists()
             assert index_path.exists()
 
-            # Filename is dynamic (derived from real scrape title); cannot hard-code.
-            md_files = [
-                f
-                for f in new_dir.iterdir()
-                if f.suffix == ".md" and f.name != "README.md"
-            ]
-            assert len(md_files) == 1
-            assert md_files[0].name in output
+            # Filename is deterministic from the URL path.
+            doc = new_dir / "learn-guides-updating-state.md"
+            assert doc.exists()
+            assert doc.name in output
 
             assert "✅ Added index source|" in output
             assert "🎉 Curation Success!|" in output
@@ -324,13 +359,8 @@ class TestDirectoryScenarios:
 
             assert exit_code == 0
 
-            # Filename is dynamic (derived from real scrape title); cannot hard-code.
-            md_files = [
-                f
-                for f in existing_dir.iterdir()
-                if f.suffix == ".md" and f.name not in ["README.md", "existing_file.md"]
-            ]
-            assert len(md_files) == 1
+            # Filename is deterministic from the URL path.
+            assert (existing_dir / "learn-guides-updating-state.md").exists()
 
             assert "✅ Added index source|" in output
             assert "🎉 Curation Success!|" in output
@@ -503,7 +533,10 @@ class TestOutputContent:
             assert "<title>Updating state - Zustand</title>\n" in index_content
             assert "<description>PLACEHOLDER</description>\n" in index_content
             assert f"<source_url>{TEST_URL}</source_url>\n" in index_content
-            assert "<local_file>updating-state-zustand.md</local_file>\n" in index_content
+            assert (
+                "<local_file>learn-guides-updating-state.md</local_file>\n"
+                in index_content
+            )
             assert f"<scraped_at>{today}</scraped_at>\n" in index_content
             assert "</source>\n" in index_content
             assert index_content.endswith("</docs_index>")

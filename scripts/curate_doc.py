@@ -84,12 +84,20 @@ def _validate_directory_for_collection(dir_path: Path, index_path: Path) -> None
         sys.exit(1)
 
 
-def _slugify_title(title: str) -> str:
-    """Convert title to filename-safe slug."""
-    slug = title.lower()
-    slug = re.sub(r"[^\w\s-]", "", slug)
-    slug = re.sub(r"[-\s]+", "-", slug)
-    return slug.strip("-")
+def filename_from_url(url: str) -> str:
+    """Derive a `.md` filename from a (non-GitHub) doc URL path.
+
+    Drops everything up to and including a `docs` path segment, strips a
+    trailing `.md`, then lowercases and sanitises the remainder into a
+    hyphen-joined slug. A bare docs root falls back to `index.md`.
+    """
+    segments = [s for s in urlparse(url).path.strip("/").split("/") if s]
+    if segments and segments[-1].endswith(".md"):
+        segments[-1] = segments[-1][:-3]
+    if "docs" in segments:
+        segments = segments[segments.index("docs") + 1 :]
+    slug = re.sub(r"[^a-z0-9]+", "-", "-".join(segments).lower()).strip("-")
+    return f"{slug or 'index'}.md"
 
 
 def _create_readme(dir_path: Path, source_site_url: str) -> None:
@@ -379,7 +387,7 @@ def main() -> None:
         content = scraped_doc["markdown"]
         print(f"✅ Scraped content|({len(content):,} characters)|")
         title = scraped_doc["metadata"].get("title", "Untitled")
-        candidate = f"{_slugify_title(title)}.md"
+        candidate = filename_from_url(source_url)
 
     # scheme + netloc for the README's curation-source link
     parsed_url = urlparse(source_url)

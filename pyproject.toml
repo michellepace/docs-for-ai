@@ -28,13 +28,18 @@ dev = [
 # In VSCode, Pylance reads this config (Pylance bundles Pyright).
 # The CLI `uv run pyright` reads the same config.
 
-typeCheckingMode = "standard"
+typeCheckingMode = "strict"
 pythonVersion = "3.14"
 
 # Silence rules Ruff already reports these
 reportUnusedImport = false      # Ruff F401
 reportUnusedVariable = false    # Ruff F841
 reportDuplicateImport = false   # Ruff F811
+
+# firecrawl is fully type-annotated but ships no py.typed marker (PEP 561), so
+# strict mode flags every import. useLibraryCodeForTypes (on by default) still
+# reads its real types, so silencing this advisory loses nothing.
+reportMissingTypeStubs = false
 
 
 # =================================

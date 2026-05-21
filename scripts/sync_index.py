@@ -13,7 +13,7 @@ def get_markdown_files(collection_dir: Path) -> set[str]:
     return {file.name for file in collection_dir.glob("*.md") if file.name != "README.md"}
 
 
-def _sync_index_to_filesystem(
+def sync_index_to_filesystem(
     index_path: Path, md_files: set[str]
 ) -> tuple[list[tuple[str, str]], list[str], int]:
     """Remove invalid sources from INDEX.xml, write cleaned file, return results.
@@ -31,8 +31,8 @@ def _sync_index_to_filesystem(
     tree = ET.parse(index_path)
     root = tree.getroot()
 
-    valid_pairs = []
-    indexed_files = set()
+    valid_pairs: list[tuple[str, str]] = []
+    indexed_files: set[str] = set()
     removed_count = 0
 
     # Process each source entry
@@ -48,8 +48,8 @@ def _sync_index_to_filesystem(
         local_file = local_file_elem.text
         source_url = source_url_elem.text
 
-        # Remove if markdown file doesn't exist
-        if local_file not in md_files:
+        # Remove if text is missing, or the markdown file doesn't exist
+        if local_file is None or source_url is None or local_file not in md_files:
             root.remove(source)
             removed_count += 1
         else:
@@ -161,7 +161,7 @@ def _backup_index_xml(index_path: Path) -> Path:
     return backup_path
 
 
-def _get_changed_markdown_files(collection_dir: Path) -> set[str]:
+def get_changed_markdown_files(collection_dir: Path) -> set[str]:
     """Get set of changed .md filenames with non-whitespace changes.
 
     Uses git diff --numstat -w which only shows files with actual content changes,
@@ -184,7 +184,7 @@ def _get_changed_markdown_files(collection_dir: Path) -> set[str]:
     # numstat format has 3 tab-separated fields: additions, deletions, filepath
     numstat_field_count = 3
 
-    changed_files = set()
+    changed_files: set[str] = set()
     for line in result.stdout.strip().split("\n"):
         if not line:
             continue
@@ -201,7 +201,7 @@ def _get_changed_markdown_files(collection_dir: Path) -> set[str]:
     return changed_files
 
 
-def _restore_unchanged_descriptions(
+def restore_unchanged_descriptions(
     index_path: Path, backup_path: Path, changed_files: set[str]
 ) -> int:
     """Restore descriptions for unchanged files from backup."""
@@ -277,7 +277,7 @@ def main() -> None:
 
     # Step 1: Sync INDEX.xml
     md_files = get_markdown_files(collection_dir)
-    valid_pairs, orphans, removed_count = _sync_index_to_filesystem(index_path, md_files)
+    valid_pairs, orphans, removed_count = sync_index_to_filesystem(index_path, md_files)
 
     print("\n## SYNC INDEX.xml (source of truth)")
     print(f"- Index sources ready to scrape|{len(valid_pairs)}")
@@ -288,7 +288,7 @@ def main() -> None:
     # Step 2: Scrape all docs
     print(f"\n## SCRAPING INDEX SOURCES ({len(valid_pairs)} total)")
     sys.stdout.flush()
-    failed_urls = []
+    failed_urls: list[str] = []
 
     for idx, (local_file, source_url) in enumerate(valid_pairs, 1):
         print(f"### 🔄 Doc {idx} of {len(valid_pairs)}: {local_file}")
@@ -306,8 +306,8 @@ def main() -> None:
     _print_git_content_changes(collection_dir)
 
     # Restore unchanged descriptions
-    changed_files = _get_changed_markdown_files(collection_dir)
-    restored_count = _restore_unchanged_descriptions(
+    changed_files = get_changed_markdown_files(collection_dir)
+    restored_count = restore_unchanged_descriptions(
         index_path, backup_path, changed_files
     )
 

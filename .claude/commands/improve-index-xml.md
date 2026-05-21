@@ -1,5 +1,5 @@
 ---
-argument-hint: <collection-dir>
+argument-hint: <collection>
 description: Improve INDEX.xml descriptions for Claude Code semantic search
 allowed-tools: Read, Glob, Grep, Bash(find:*), Bash(test:*), Bash(wc:*), Bash(cat:*), Bash(echo:*), Task, Write, Bash(uv run:scripts/update_index_descriptions.py:*)
 ---

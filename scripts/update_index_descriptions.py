@@ -21,7 +21,7 @@ def parse_descriptions_file(descriptions_path: Path) -> dict[str, str]:
     Returns:
         Dictionary mapping local_file to description text
     """
-    descriptions = {}
+    descriptions: dict[str, str] = {}
     lines = descriptions_path.read_text().strip().split("\n")
 
     i = 0

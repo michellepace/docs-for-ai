@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 from datetime import date
 from os import environ
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, TypedDict
 from urllib.parse import urlparse
 
 import github_source
@@ -21,7 +21,14 @@ from firecrawl import Firecrawl
 from firecrawl.v2.utils.error_handler import FirecrawlError, RateLimitError
 
 if TYPE_CHECKING:
-    from firecrawl.v2.types import Document
+    from firecrawl.types import Document
+
+
+class ScrapedDoc(TypedDict):
+    """Normalised result of a single scrape: markdown body plus metadata."""
+
+    markdown: str
+    metadata: dict[str, str]
 
 
 def _normalise_directory_path(dir_path_str: str) -> Path:
@@ -156,7 +163,7 @@ def _add_or_update_source_in_index(
     return is_update
 
 
-def _resolve_filename(
+def resolve_filename(
     index_path: Path,
     source_url: str,
     candidate: str,
@@ -231,7 +238,7 @@ def _parse_retry_seconds(error: RateLimitError) -> int:
     return 60
 
 
-def _extract_metadata(result: Document) -> dict:
+def _extract_metadata(result: Document) -> dict[str, str]:
     """Extract title from Firecrawl document metadata."""
     metadata = {}
     if hasattr(result, "metadata") and result.metadata:
@@ -241,7 +248,7 @@ def _extract_metadata(result: Document) -> dict:
     return metadata
 
 
-def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
+def _perform_scrape(firecrawl: Firecrawl, url: str) -> ScrapedDoc:
     """Make one Firecrawl scrape call and return `{markdown, metadata}`.
 
     Exits with `NO_CONTENT` if the response has no markdown. Rate-limit,
@@ -266,7 +273,7 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> dict:
     }
 
 
-def _scrape_with_firecrawl(url: str, max_attempts: int = 2) -> dict:
+def _scrape_with_firecrawl(url: str, max_attempts: int = 2) -> ScrapedDoc:
     """Scrape URL using Firecrawl Python SDK with automatic retry on rate limits.
 
     Retries on `RateLimitError` for the retry-after duration plus a 2-second
@@ -382,7 +389,7 @@ def main() -> None:
         _create_readme(dir_path, source_site_url)
         _create_index_xml(dir_path)
 
-    filename = _resolve_filename(
+    filename = resolve_filename(
         index_path,
         source_url,
         candidate,

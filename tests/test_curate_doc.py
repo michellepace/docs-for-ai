@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.curate_doc import _resolve_filename
+from scripts.curate_doc import resolve_filename
 
 # Real Zustand page; used by integration tests that exercise the FireCrawl path.
 TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
@@ -38,7 +38,7 @@ class TestResolveFilename:
         """No INDEX.xml → candidate is returned unchanged."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             index_path = Path(tmp_dir) / "INDEX.xml"
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/foo",
                 "foo.md",
@@ -54,7 +54,7 @@ class TestResolveFilename:
                 index_path,
                 [("Other", "https://example.com/other", "other.md")],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/foo",
                 "foo.md",
@@ -79,7 +79,7 @@ class TestResolveFilename:
                     ("Foo", "https://example.com/foo3", "foo-3.md"),
                 ],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/foo1",
                 "foo.md",
@@ -95,7 +95,7 @@ class TestResolveFilename:
                 index_path,
                 [("Foo", "https://example.com/foo", "foo.md")],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/foo/",
                 "foo.md",
@@ -116,7 +116,7 @@ class TestResolveFilename:
                 index_path,
                 [("Foo Bar", "https://example.com/a", "foo-bar.md")],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/b",
                 "foo-bar.md",
@@ -135,7 +135,7 @@ class TestResolveFilename:
                     ("Foo", "https://example.com/b", "foo-2.md"),
                 ],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/c",
                 "foo.md",
@@ -152,7 +152,7 @@ class TestResolveFilename:
                 [("Old", "https://example.com/old", "first-steps.md")],
             )
             with pytest.raises(SystemExit) as exc_info:
-                _resolve_filename(
+                resolve_filename(
                     index_path,
                     "https://example.com/new",
                     "first-steps.md",
@@ -174,7 +174,7 @@ class TestResolveFilename:
                 index_path,
                 [("Foo", "https://example.com/foo", "foo.md")],
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/foo",
                 "something-else.md",  # differs from stored "foo.md"
@@ -203,7 +203,7 @@ class TestResolveFilename:
                 "  </source>\n"
                 "</docs_index>\n"
             )
-            result = _resolve_filename(
+            result = resolve_filename(
                 index_path,
                 "https://example.com/new",
                 "good.md",  # collides with the well-formed entry

@@ -8,14 +8,14 @@ from pathlib import Path
 import pytest
 
 from scripts.sync_index import (
-    _get_changed_markdown_files,
-    _restore_unchanged_descriptions,
-    _sync_index_to_filesystem,
+    get_changed_markdown_files,
     get_markdown_files,
+    restore_unchanged_descriptions,
+    sync_index_to_filesystem,
 )
 
 
-def create_index_xml(index_path: Path, sources: list[dict]) -> None:
+def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:
     """Create INDEX.xml with given source entries."""
     root = ET.Element("docs_index")
     for source_data in sources:
@@ -35,13 +35,17 @@ def get_descriptions_from_index(index_path: Path) -> dict[str, str]:
     """Parse INDEX.xml and return {local_file: description} mapping."""
     tree = ET.parse(index_path)
     root = tree.getroot()
-    descriptions = {}
+    descriptions: dict[str, str] = {}
 
     for source in root.findall("source"):
         local_file_elem = source.find("local_file")
         desc_elem = source.find("description")
-        if local_file_elem is not None and desc_elem is not None:
-            descriptions[local_file_elem.text] = desc_elem.text
+        if local_file_elem is None or desc_elem is None:
+            continue
+        local_file = local_file_elem.text
+        description = desc_elem.text
+        if local_file is not None and description is not None:
+            descriptions[local_file] = description
 
     return descriptions
 
@@ -89,7 +93,7 @@ class TestSyncIndexToFilesystem:
             create_index_xml(index_path, sources)
 
             md_files = get_markdown_files(tmp_path)
-            valid_pairs, orphans, removed_count = _sync_index_to_filesystem(
+            valid_pairs, orphans, removed_count = sync_index_to_filesystem(
                 index_path, md_files
             )
 
@@ -168,9 +172,9 @@ class TestDescriptionRestoration:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            changed_files = set()
+            changed_files: set[str] = set()
 
-            restored = _restore_unchanged_descriptions(
+            restored = restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
 
@@ -208,7 +212,7 @@ class TestDescriptionRestoration:
 
             changed_files = {"doc-a.md"}
 
-            restored = _restore_unchanged_descriptions(
+            restored = restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
 
@@ -257,7 +261,7 @@ class TestDescriptionRestoration:
             # Two changed, two unchanged
             changed_files = {"doc-a.md", "doc-c.md"}
 
-            restored = _restore_unchanged_descriptions(
+            restored = restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
 
@@ -289,9 +293,9 @@ class TestDescriptionRestoration:
             index_path = tmp_path / "INDEX.xml"
             create_index_xml(index_path, current_sources)
 
-            changed_files = set()
+            changed_files: set[str] = set()
 
-            restored = _restore_unchanged_descriptions(
+            restored = restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
 
@@ -374,8 +378,8 @@ class TestDescriptionRestoration:
             create_index_xml(backup_path, sources)
 
             # Run the restoration function directly
-            changed_files = _get_changed_markdown_files(collection_dir)
-            restored_count = _restore_unchanged_descriptions(
+            changed_files = get_changed_markdown_files(collection_dir)
+            restored_count = restore_unchanged_descriptions(
                 index_path, backup_path, changed_files
             )
 

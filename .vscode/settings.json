@@ -11,8 +11,8 @@
     "python.terminal.activateEnvironment": false, // don't auto-activate; use `uv run`
 
     // 🐍 Ruff: Python code linting and formatting
-    // This configures HOW the IDE behaves (the WHAT to check is in pyproject.toml)
-    // NB: Cursor PyRight's WHAT to check also in pyproject.toml [tool.pyright]
+    // This configures HOW the IDE behaves
+    // NB: WHAT to check in pyproject.toml Pylance(VSCode)/Pyright(Cursor)
 
     // Ruff extension settings
     "ruff.nativeServer": "on",  // Use faster Rust-based server
@@ -21,8 +21,8 @@
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": "explicit",
-            "source.organizeImports": "explicit"
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
         }
     },
 

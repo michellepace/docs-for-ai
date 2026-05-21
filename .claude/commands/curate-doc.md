@@ -1,6 +1,6 @@
 ---
-argument-hint: <collection-dir> <source_url>
-description: Curate source URL into collection directory
+argument-hint: <collection> <source_url>
+description: Curate a source URL into a collection
 allowed-tools:
   - Read
   - Write

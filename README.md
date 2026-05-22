@@ -143,10 +143,36 @@ Instruction given to Claude Code and successfully run on `uv/` directory to upda
 
 Adding this as a note for later to refactor to this method. (The screenshot mentions `curl` but we used Python's `urllib.request`.)
 
+Lefthook has https://lefthook.dev/llms.txt
+
 ### New Idea (2026.05.20) — Drop Redundant Collections
 
 Next.js already comes with its docs installed and indexed.
 
 There's a claude-code-guide agent now too.
 
-Lefthook has https://lefthook.dev/llms.txt
+### New Idea (2026.05.22) — .md try
+
+Non-Github URL → try suffix ".md" → use that
+
+"# scheme + netloc for the README's curation-source link" need to look into that in `curate_doc.py`.
+
+Could: URL → have .md? → exist on github?
+
+### New Idea (2026.05.22) — .mdx
+
+Biome has mdx files on GitHub (1 entry in source), can't find llms.txt. Support .mdx - is just the same and .md
+
+### New Idea (2026.05.22) — "LLM routing"
+
+"Semantic search" isn't the right term. Also the examples need to be improved. Very keyword heavy.
+
+> Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question. Optimise for that, not human readability:
+
+Discriminative descriptions
+
+> Bottom line: keep the descriptions, drop the "semantic search" framing. What you want is discriminative descriptions — meaningful and keyword-anchored and written to stand apart from their neighbours — read by an LLM, not matched by vectors.
+
+### New Idea (2026.05.22) — Extrat duplicated examples
+
+Into one file in .claude/commands/

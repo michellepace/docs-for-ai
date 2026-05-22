@@ -18,7 +18,7 @@ Curating documentation into indexed collections enables targeted, efficient cont
 
 The Workflow script retrieves content from $2, writes it to a markdown file in $1/, and adds a new `<source>` entry to `$1/INDEX.xml` with a PLACEHOLDER description. **Your task:** replace PLACEHOLDER with a semantic summary after successful curation.
 
-GitHub source URLs are fetched directly as raw markdown — no scraping (FireCrawl) involved. All other URLs use FireCrawl.
+URLs ending in `.md` (including GitHub raw/blob) are fetched directly as raw markdown — no scraping (FireCrawl) involved. All other URLs use FireCrawl.
 
 ## Workflow
 
@@ -105,7 +105,7 @@ uv run scripts/curate_doc.py "$1" "$2"
 
 Script errors print actionable information. If recovery is possible, propose specific fixes but wait for explicit user approval. Proceed ONLY when script outputs `🎉 Curation Success!` - don't waste effort if the script failed.
 
-GitHub-path failures (`GITHUB_*`, `UNSUPPORTED_GITHUB`) are not FireCrawl or API-key issues — never propose `FIRECRAWL_API_KEY` fixes for them.
+Direct-fetch failures (`FETCH_*`, `UNSUPPORTED_GITHUB`, `GITHUB_FILENAME`) are not FireCrawl or API-key issues — never propose `FIRECRAWL_API_KEY` fixes for them.
 
 ### 4. Generate descriptions for PLACEHOLDER entries only
 

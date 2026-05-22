@@ -27,7 +27,7 @@ TDD-driven — write the test first; let testability shape the design.
 - **Pure functions preferred** — no side effects in business logic
 - **Single responsibility** — one module, one purpose (one script, one job)
 - **Layer separation** — CLI entry point → core logic → I/O
-- **Handle errors at boundaries** — catch exceptions in the CLI layer, not in core logic
+- **Fail loud at the I/O boundary** — print `❌ Error: TYPE|detail|url|` then `sys.exit(1)`; print `✅ ...` key progress. Slash commands key off these.
 
 ## TDD Development
 

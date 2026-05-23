@@ -45,11 +45,11 @@ def _validate_url(url: str) -> None:
 
 
 def _reject_uv_docs_url(url: str) -> None:
-    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub raw."""
+    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
     if url.startswith("https://docs.astral.sh/uv/"):
         print(
-            "❌ Error: USE_RAW_GITHUB|"
-            "Use the GitHub RAW URL for this source; "
+            "❌ Error: USE_GITHUB_BLOB|"
+            "Use the GitHub blob URL for this source; "
             "see uv/INDEX.xml for the canonical mapping|"
             f"{url}|"
         )
@@ -185,7 +185,7 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    source_url = args.source_url.rstrip("/")  # canonical form: no trailing slash
+    source_url: str = args.source_url.rstrip("/")  # canonical form: no trailing slash
     dir_path = _normalise_directory_path(args.directory)
     index_path = dir_path / "INDEX.xml"
 
@@ -197,16 +197,16 @@ def main() -> None:
 
     dir_path.mkdir(parents=True, exist_ok=True)
 
-    # Route before creating files (fail fast). GitHub is checked first: a raw
-    # GitHub URL also ends in `.md` but needs blob→raw normalisation.
+    # Route before creating files (fail fast). GitHub is checked first: a blob
+    # URL also ends in `.md`, but it is stored as blob and fetched from raw.
     if markdown_source.is_github_url(source_url):
-        source_url = markdown_source.to_raw_github_url(source_url)
+        # Exits unless this is a main/master blob .md URL; raw_url is the fetch target.
+        raw_url = markdown_source.github_blob_to_raw_url(source_url)
         print(f"✅ Detected GitHub source|{source_url}|")
-        candidate = markdown_source.filename_from_raw_github_url(
-            source_url
-        )  # exits if invalid
-        content = markdown_source.fetch_markdown(source_url)  # exits on 404/network
-        title = markdown_source.extract_title(content, source_url)
+        candidate = markdown_source.github_filename_from_blob_url(source_url)
+        content = markdown_source.fetch_markdown(raw_url)  # exits on 404/network
+        title = markdown_source.extract_title(content, raw_url)
+        # source_url stays the BLOB URL → stored verbatim in INDEX.xml
     elif markdown_source.is_md_url(source_url):
         candidate = filename_from_url(source_url)
         content = markdown_source.fetch_markdown(source_url)  # exits on 404/network
@@ -236,7 +236,7 @@ def main() -> None:
 
     is_update = _add_or_update_source_in_index(dir_path, title, source_url, filename)
 
-    # source_url is canonical (raw form for GitHub, rstripped user URL otherwise)
+    # source_url is canonical (blob form for GitHub, rstripped user URL otherwise)
     verb = "overwrote and re-indexed" if is_update else "created and indexed new"
     print(f"🎉 Curation Success!|{verb} document|{source_url}|\n")
 

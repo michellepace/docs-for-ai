@@ -8,15 +8,15 @@ import pytest
 from scripts.markdown_source import (
     extract_title,
     fetch_markdown,
-    filename_from_raw_github_url,
+    github_blob_to_raw_url,
+    github_filename_from_blob_url,
     is_github_url,
     is_md_url,
-    to_raw_github_url,
 )
 
 
 class TestIsGithubUrl:
-    """Tests for is_github_url."""
+    """Tests for is_github_url: a host-only gate (URL shape is validated elsewhere)."""
 
     @pytest.mark.parametrize(
         ("url", "expected"),
@@ -24,14 +24,14 @@ class TestIsGithubUrl:
             ("https://raw.githubusercontent.com/astral-sh/uv/main/docs/x.md", True),
             ("https://github.com/astral-sh/uv/blob/main/docs/x.md", True),
             ("https://github.com/astral-sh/uv/blob/main/README.md", True),
-            ("https://github.com/astral-sh/uv", False),
-            ("https://github.com/astral-sh/uv/tree/main/docs", False),
+            ("https://github.com/astral-sh/uv", True),
+            ("https://github.com/astral-sh/uv/tree/main/docs", True),
             ("https://docs.astral.sh/uv/reference/cli/index.md", False),
             ("https://shiny.posit.co/py/docs/overview.html", False),
         ],
     )
     def test_classifies_url(self, url: str, expected: bool) -> None:  # noqa: FBT001 — bool is the correct param type for a URL classifier test
-        """True for raw.githubusercontent.com URLs and any github.com blob path."""
+        """True for any github.com / raw.githubusercontent.com host; else False."""
         assert is_github_url(url) is expected
 
 
@@ -53,131 +53,123 @@ class TestIsMdUrl:
         assert is_md_url(url) is expected
 
 
-class TestToRawGithubUrl:
-    """Blob→raw GitHub URL normalisation."""
-
-    def test_blob_url_becomes_raw(self) -> None:
-        """github.com/.../blob/<ref>/<path> rewrites to raw.githubusercontent.com/..."""
-        url = "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
-        assert to_raw_github_url(url) == (
-            "https://raw.githubusercontent.com/astral-sh/uv/main/"
-            "docs/getting-started/first-steps.md"
-        )
-
-    def test_raw_url_passes_through_stripped(self) -> None:
-        """A raw URL passes through, trailing slash stripped."""
-        url = "https://raw.githubusercontent.com/astral-sh/uv/main/docs/x.md/"
-        assert to_raw_github_url(url) == (
-            "https://raw.githubusercontent.com/astral-sh/uv/main/docs/x.md"
-        )
-
-    def test_malformed_blob_url_fails(self, capsys: pytest.CaptureFixture[str]) -> None:
-        """Malformed blob URL exits with UNSUPPORTED_GITHUB (not a generic ValueError)."""
-        with pytest.raises(SystemExit) as exc:
-            to_raw_github_url("https://github.com/astral-sh/blob/x")
-        assert exc.value.code == 1
-        assert "UNSUPPORTED_GITHUB" in capsys.readouterr().out
-
-
-class TestFilenameFromRawGithubUrl:
-    """Filename derivation from a raw GitHub URL."""
+class TestGithubBlobToRawUrl:
+    """Blob → raw GitHub URL validation and normalisation."""
 
     @pytest.mark.parametrize(
-        ("raw_url", "expected"),
+        ("blob_url", "raw_url"),
         [
             (
+                "https://github.com/astral-sh/uv/blob/main/"
+                "docs/getting-started/first-steps.md",
                 "https://raw.githubusercontent.com/astral-sh/uv/main/"
+                "docs/getting-started/first-steps.md",
+            ),
+            (
+                "https://github.com/o/r/blob/master/docs/x.md",
+                "https://raw.githubusercontent.com/o/r/master/docs/x.md",
+            ),
+        ],
+    )
+    def test_blob_url_becomes_raw(self, blob_url: str, raw_url: str) -> None:
+        """github.com/.../blob/(main|master)/<path>.md rewrites to its raw URL."""
+        assert github_blob_to_raw_url(blob_url) == raw_url
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            "https://raw.githubusercontent.com/astral-sh/uv/main/docs/x.md",
+            "https://github.com/astral-sh/uv",
+            "https://github.com/astral-sh/uv/tree/main/docs",
+            "https://github.com/astral-sh/uv/blob/dev/docs/x.md",
+            "https://github.com/astral-sh/uv/blob/main/pyproject.toml",
+        ],
+    )
+    def test_non_blob_url_fails(
+        self, url: str, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """Raw, repo root, tree/, other branch, and non-.md all exit with GITHUB_BLOB."""
+        with pytest.raises(SystemExit) as exc:
+            github_blob_to_raw_url(url)
+        assert exc.value.code == 1
+        assert "GITHUB_BLOB" in capsys.readouterr().out
+
+
+class TestGithubFilenameFromBlobUrl:
+    """Filename derivation from a GitHub blob URL."""
+
+    @pytest.mark.parametrize(
+        ("blob_url", "expected"),
+        [
+            (
+                "https://github.com/astral-sh/uv/blob/main/"
                 "docs/getting-started/features.md",
                 "getting-started-features.md",
             ),
             (
-                "https://raw.githubusercontent.com/astral-sh/uv/main/"
+                "https://github.com/astral-sh/uv/blob/main/"
                 "docs/concepts/projects/dependencies.md",
                 "concepts-projects-dependencies.md",
             ),
             (
-                "https://raw.githubusercontent.com/o/r/main/readme.md",
+                "https://github.com/o/r/blob/main/readme.md",
                 "readme.md",
             ),
             (
-                "https://raw.githubusercontent.com/o/r/main/docs/index.md",
+                "https://github.com/o/r/blob/main/docs/index.md",
                 "index.md",
             ),
         ],
     )
-    def test_derives_expected_name(self, raw_url: str, expected: str) -> None:
+    def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
         """Path becomes hyphen-joined basename; one leading 'docs/' segment is dropped."""
-        assert filename_from_raw_github_url(raw_url) == expected
-
-    def test_non_md_source_fails(self, capsys: pytest.CaptureFixture[str]) -> None:
-        """Non-.md sources (e.g. pyproject.toml) exit with UNSUPPORTED_GITHUB."""
-        with pytest.raises(SystemExit) as exc:
-            filename_from_raw_github_url(
-                "https://raw.githubusercontent.com/o/r/main/pyproject.toml"
-            )
-        assert exc.value.code == 1
-        assert "UNSUPPORTED_GITHUB" in capsys.readouterr().out
+        assert github_filename_from_blob_url(blob_url) == expected
 
     def test_pattern_violating_name_fails(
         self, capsys: pytest.CaptureFixture[str]
     ) -> None:
         """A name breaking the filename pattern exits with GITHUB_FILENAME."""
         with pytest.raises(SystemExit) as exc:
-            filename_from_raw_github_url(
-                "https://raw.githubusercontent.com/o/r/main/docs/a_b.md"
-            )
+            github_filename_from_blob_url("https://github.com/o/r/blob/main/docs/a_b.md")
         assert exc.value.code == 1
         assert "GITHUB_FILENAME" in capsys.readouterr().out
 
 
 class TestExtractTitle:
-    """Tests for extract_title."""
+    """Tests for extract_title (frontmatter → H1 → URL-basename fallback)."""
 
-    def test_frontmatter_title_unquoted(self) -> None:
-        """Unquoted YAML frontmatter 'title:' takes precedence over the H1."""
-        content = "---\ntitle: Working on projects\n---\n# Heading\n"
-        assert extract_title(content, "x") == "Working on projects"
-
-    def test_frontmatter_title_quoted(self) -> None:
-        """Double-quoted frontmatter title is unquoted before being returned."""
-        content = '---\ntitle: "Managing dependencies"\n---\n# H\n'
-        assert extract_title(content, "x") == "Managing dependencies"
-
-    def test_frontmatter_without_title_falls_to_h1(self) -> None:
-        """Frontmatter without a 'title:' key falls through to the H1 heading."""
-        content = "---\ndescription: x\n---\n# Python versions\n"
-        assert extract_title(content, "x") == "Python versions"
-
-    def test_h1_when_no_frontmatter(self) -> None:
-        """First H1 is used when there is no frontmatter block at all."""
-        content = "# First steps\n\nbody\n"
-        assert extract_title(content, "x") == "First steps"
-
-    def test_h1_anchor_link_is_unwrapped(self) -> None:
-        """H1 of form '# [text](#anchor)' returns just 'text' (link syntax stripped)."""
-        content = "# [CLI Reference](#cli-reference)\n"
-        assert extract_title(content, "x") == "CLI Reference"
-
-    def test_fenced_hash_is_ignored(self) -> None:
-        """'#' lines inside ``` fences are skipped — only real headings count."""
-        content = "```python\n# not a heading\n```\n# Real Title\n"
-        assert extract_title(content, "x") == "Real Title"
+    @pytest.mark.parametrize(
+        ("content", "expected"),
+        [
+            ("---\ntitle: Working on projects\n---\n# Heading\n", "Working on projects"),
+            ('---\ntitle: "Managing dependencies"\n---\n# H\n', "Managing dependencies"),
+            ("---\ntitle: 'Managing dependencies'\n---\n# H\n", "Managing dependencies"),
+            ("---\ndescription: x\n---\n# Python versions\n", "Python versions"),
+            ("---\ntitle: ''\n---\n# Real Heading\n", "Real Heading"),
+            ("# First steps\n\nbody\n", "First steps"),
+            ("# [CLI Reference](#cli-reference)\n", "CLI Reference"),
+            ("```python\n# not a heading\n```\n# Real Title\n", "Real Title"),
+        ],
+        ids=[
+            "frontmatter-unquoted",
+            "frontmatter-double-quoted",
+            "frontmatter-single-quoted",
+            "no-title-key-falls-to-h1",
+            "empty-title-falls-to-h1",
+            "h1-no-frontmatter",
+            "h1-anchor-unwrapped",
+            "fenced-hash-ignored",
+        ],
+    )
+    def test_resolves_title(self, content: str, expected: str) -> None:
+        """Frontmatter title wins (quotes stripped); else first real H1."""
+        assert extract_title(content, "x") == expected
 
     def test_basename_fallback_title_cased(self) -> None:
         """No frontmatter or H1: the title comes from the URL filename, Title-Cased."""
         content = "no headings here\n"
         url = "https://raw.githubusercontent.com/o/r/main/docs/getting-started.md"
         assert extract_title(content, url) == "Getting Started"
-
-    def test_frontmatter_title_single_quoted(self) -> None:
-        """Single-quoted frontmatter title is unquoted (mirrors double-quote handling)."""
-        content = "---\ntitle: 'Managing dependencies'\n---\n# H\n"
-        assert extract_title(content, "x") == "Managing dependencies"
-
-    def test_empty_frontmatter_title_falls_through_to_h1(self) -> None:
-        """An empty frontmatter title must not win; fall through to the H1."""
-        content = "---\ntitle: ''\n---\n# Real Heading\n"
-        assert extract_title(content, "x") == "Real Heading"
 
 
 RAW_OK = (

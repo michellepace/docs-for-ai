@@ -16,6 +16,11 @@ USER_AGENT = "docs-for-ai-curate/1.0"
 FILENAME_RE = re.compile(r"^[a-z0-9-]+\.md$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
+# The one shape we accept: a blob file on main/master with a .md extension.
+GITHUB_BLOB_RE = re.compile(
+    r"^https://github\.com/([^/]+)/([^/]+)/blob/(main|master)/(.+\.md)$",
+    re.IGNORECASE,
+)
 
 
 def _fail(code: str, detail: str, url: str) -> NoReturn:
@@ -25,14 +30,8 @@ def _fail(code: str, detail: str, url: str) -> NoReturn:
 
 
 def is_github_url(url: str) -> bool:
-    """True for GitHub blob or raw URLs; False routes to FireCrawl."""
-    parsed = urlparse(url)
-    host = parsed.netloc.lower()
-    if host == "raw.githubusercontent.com":
-        return True
-    if host == "github.com":
-        return "/blob/" in parsed.path
-    return False
+    """True for any GitHub-host URL; routed to blob validation (else FireCrawl)."""
+    return urlparse(url).netloc.lower() in {"github.com", "raw.githubusercontent.com"}
 
 
 def is_md_url(url: str) -> bool:
@@ -40,38 +39,39 @@ def is_md_url(url: str) -> bool:
     return urlparse(url).path.endswith(".md")
 
 
-def to_raw_github_url(url: str) -> str:
-    """Map a `github.com/…/blob/…` URL to its `raw.githubusercontent.com` form."""
-    url = url.rstrip("/")
-    parsed = urlparse(url)
-    if parsed.netloc.lower() == "raw.githubusercontent.com":
-        return url
-    parts = parsed.path.strip("/").split("/")
-    min_segments = 5  # owner / repo / blob / ref / path…
-    if len(parts) < min_segments or parts[2] != "blob":
-        _fail("UNSUPPORTED_GITHUB", "not a github blob file URL", url)
-    owner, repo, _blob, ref, *rest = parts
-    return "https://raw.githubusercontent.com/" + "/".join([owner, repo, ref, *rest])
+def github_blob_to_raw_url(url: str) -> str:
+    """Validate a GitHub blob URL (main/master, `.md`) and return its raw URL.
 
-
-def filename_from_raw_github_url(raw_url: str) -> str:
-    """Derive a filename from RAW GitHub URL."""
-    segments = urlparse(raw_url).path.strip("/").split("/")
-    prefix_len = 3  # owner / repo / ref
-    remainder = segments[prefix_len:]
-    if not remainder or not remainder[-1].endswith(".md"):
-        _fail("UNSUPPORTED_GITHUB", "only .md sources supported", raw_url)
-    remainder = [*remainder[:-1], remainder[-1][:-3]]
-    # Avoid a redundant "docs-" filename prefix.
-    if remainder and remainder[0] == "docs":
-        remainder = remainder[1:]
-    filename = "-".join(remainder).lower() + ".md"
-    if not FILENAME_RE.match(filename):
+    Any other GitHub URL — raw, repo root, `tree/`, another branch, non-`.md` —
+    fails with one structured error and exits.
+    """
+    match = GITHUB_BLOB_RE.match(url)
+    if match is None:
         _fail(
-            "GITHUB_FILENAME",
-            f"derived '{filename}' fails ^[a-z0-9-]+\\.md$",
-            raw_url,
+            "GITHUB_BLOB",
+            "expected https://github.com/<user>/<repo>/blob/(main|master)/<path>.md",
+            url,
         )
+    owner, repo, ref, path = match.groups()
+    return f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}"
+
+
+def github_filename_from_blob_url(url: str) -> str:
+    """Derive a `.md` filename from a GitHub blob URL's path.
+
+    Drops a leading `docs/` segment, lowercases, hyphen-joins. A name that breaks
+    the filename pattern exits with GITHUB_FILENAME.
+    """
+    match = GITHUB_BLOB_RE.match(url)
+    if match is None:
+        _fail("GITHUB_BLOB", "not a github blob .md URL", url)
+    segments = match.group(4).removesuffix(".md").split("/")
+    # Avoid a redundant "docs-" filename prefix.
+    if segments and segments[0] == "docs":
+        segments = segments[1:]
+    filename = "-".join(segments).lower() + ".md"
+    if not FILENAME_RE.match(filename):
+        _fail("GITHUB_FILENAME", f"derived '{filename}' fails ^[a-z0-9-]+\\.md$", url)
     return filename
 
 

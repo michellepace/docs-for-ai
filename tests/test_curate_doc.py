@@ -17,6 +17,15 @@ from scripts.curate_doc import filename_from_url
 # Real Zustand page; used by integration tests that exercise the FireCrawl path.
 TEST_URL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
 
+# Real GitHub URLs for the validation and end-to-end network tests below.
+GH_BLOB = "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
+GH_RAW = (
+    "https://raw.githubusercontent.com/astral-sh/uv/main/"
+    "docs/getting-started/first-steps.md"
+)
+GH_404 = "https://github.com/astral-sh/uv/blob/main/docs/zzz-does-not-exist-xyz.md"
+GH_NON_MD = "https://github.com/astral-sh/uv/blob/main/pyproject.toml"
+
 
 class TestFilenameFromUrl:
     """Offline unit tests for non-GitHub URL-path filename derivation."""
@@ -91,14 +100,14 @@ class TestInputValidation:
             assert "❌ Error: INVALID_URL|horse-donkey-cow" in output
 
     def test_fails_when_source_url_is_uv_docs_site(self) -> None:
-        """A uv hosted-docs URL is rejected, pointing to the raw GitHub source."""
+        """A uv hosted-docs URL is rejected, pointing to the GitHub blob source."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             exit_code, output = run_script(
                 tmp_dir, "https://docs.astral.sh/uv/guides/install-python/"
             )
 
             assert exit_code != 0
-            assert "❌ Error: USE_RAW_GITHUB|" in output
+            assert "❌ Error: USE_GITHUB_BLOB|" in output
             assert "uv/INDEX.xml" in output
 
     def test_nonempty_noncollection_directory_fails(self) -> None:
@@ -119,6 +128,26 @@ class TestInputValidation:
                 "Rejected to prevent inadvertent file overwrites|"
             ) in output
 
+    @pytest.mark.parametrize(
+        "url",
+        [GH_RAW, GH_NON_MD],
+        ids=["raw-url", "non-md-blob"],
+    )
+    def test_github_url_rejected_before_any_fetch(self, url: str) -> None:
+        """A raw URL or non-`.md` blob exits GITHUB_BLOB before any fetch.
+
+        Rejection happens before the network, so no files are written.
+        """
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            new_dir = Path(tmp_dir) / "uv"
+            exit_code, output = run_script(str(new_dir), url)
+
+            assert exit_code != 0
+            assert "❌ Error: GITHUB_BLOB|" in output
+            assert "✅ Fetched markdown|" not in output
+            assert not (new_dir / "INDEX.xml").exists()
+            assert not (new_dir / "README.md").exists()
+
 
 class TestMarkdownDirectPath:
     """Offline test: a non-GitHub `.md` URL routes to direct fetch, not FireCrawl."""
@@ -130,6 +159,10 @@ class TestMarkdownDirectPath:
         capsys: pytest.CaptureFixture[str],
     ) -> None:
         """A `.md` URL writes its URL-derived filename; FireCrawl is never called."""
+        # The one in-process test: rather than fetching over the network we hand
+        # main() a fixed markdown string, then assert FireCrawl is never reached.
+        # This isolates the `.md` routing branch — there is no stable non-GitHub
+        # `.md` URL to point a live test at.
 
         def _fake_fetch(_url: str) -> str:
             return "# Hello\n\nbody\n"
@@ -241,9 +274,7 @@ class TestDirectoryScenarios:
             assert source_count == 1, f"Expected 1 source, found {source_count}"
 
             # Trailing-slash variant must hit the same UPDATE path.
-            url_variant = (
-                TEST_URL + "/" if not TEST_URL.endswith("/") else TEST_URL.rstrip("/")
-            )
+            url_variant = TEST_URL + "/"
             exit_code3, output3 = run_script(str(collection_dir), url_variant)
             assert exit_code3 == 0
             assert "✅ Updated index source|" in output3
@@ -256,26 +287,15 @@ class TestDirectoryScenarios:
             )
 
 
-GH_RAW = (
-    "https://raw.githubusercontent.com/astral-sh/uv/main/"
-    "docs/getting-started/first-steps.md"
-)
-GH_BLOB = "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
-GH_404 = (
-    "https://raw.githubusercontent.com/astral-sh/uv/main/docs/zzz-does-not-exist-xyz.md"
-)
-GH_NON_MD = "https://github.com/astral-sh/uv/blob/main/pyproject.toml"
-
-
 class TestGithubSourcePath:
-    """Integration tests for GitHub raw-source routing (real network)."""
+    """Real-network end-to-end tests for the GitHub blob path (curate + 404)."""
 
     @pytest.mark.github
-    def test_raw_url_curates_into_collection(self) -> None:
-        """Raw GitHub URL is detected, fetched, and routed end-to-end into INDEX + .md."""
+    def test_blob_url_curates_and_stores_blob(self) -> None:
+        """Blob URL is fetched (from raw) and stored verbatim as blob in INDEX + .md."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             new_dir = Path(tmp_dir) / "uv"
-            exit_code, output = run_script(str(new_dir), GH_RAW)
+            exit_code, output = run_script(str(new_dir), GH_BLOB)
 
             assert exit_code == 0
             assert "✅ Detected GitHub source|" in output
@@ -284,27 +304,19 @@ class TestGithubSourcePath:
 
             doc = new_dir / "getting-started-first-steps.md"
             assert doc.exists()
-            assert doc.read_text().strip() != ""
+            content = doc.read_text()
+            assert content.strip() != ""
+            assert "<!DOCTYPE html>" not in content  # raw md fetched, not the blob HTML
 
             index = (new_dir / "INDEX.xml").read_text()
-            assert f"<source_url>{GH_RAW}</source_url>" in index
+            assert f"<source_url>{GH_BLOB}</source_url>" in index
             assert "<local_file>getting-started-first-steps.md</local_file>" in index
+            assert "<title>First steps with uv</title>" in index
             assert "<description>PLACEHOLDER</description>" in index
 
     @pytest.mark.github
-    def test_blob_url_stored_normalised_to_raw(self) -> None:
-        """Blob URL is normalised to raw URL before being stored in INDEX."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            new_dir = Path(tmp_dir) / "uv"
-            exit_code, _ = run_script(str(new_dir), GH_BLOB)
-
-            assert exit_code == 0
-            index = (new_dir / "INDEX.xml").read_text()
-            assert f"<source_url>{GH_RAW}</source_url>" in index
-
-    @pytest.mark.github
     def test_404_fails_without_mutation(self) -> None:
-        """404 URL exits non-zero with FETCH_NOT_FOUND and leaves no files."""
+        """404 blob URL exits non-zero with FETCH_NOT_FOUND and leaves no files."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             new_dir = Path(tmp_dir) / "uv"
             exit_code, output = run_script(str(new_dir), GH_404)
@@ -313,18 +325,6 @@ class TestGithubSourcePath:
             assert "❌ Error: FETCH_NOT_FOUND|" in output
             md_files = list(new_dir.glob("*.md")) if new_dir.exists() else []
             assert md_files == []
-            assert not (new_dir / "INDEX.xml").exists()
-            assert not (new_dir / "README.md").exists()
-
-    def test_non_md_blob_rejected_before_fetch(self) -> None:
-        """Non-markdown blob exits non-zero with UNSUPPORTED_GITHUB before any fetch."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            new_dir = Path(tmp_dir) / "uv"
-            exit_code, output = run_script(str(new_dir), GH_NON_MD)
-
-            assert exit_code != 0
-            assert "❌ Error: UNSUPPORTED_GITHUB|" in output
-            assert "✅ Fetched markdown|" not in output
             assert not (new_dir / "INDEX.xml").exists()
             assert not (new_dir / "README.md").exists()
 

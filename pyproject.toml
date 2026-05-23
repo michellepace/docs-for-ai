@@ -101,3 +101,7 @@ markers = [
     "firecrawl: hits FireCrawl API (paid, network)",
     "github: hits raw.githubusercontent.com (free, network)",
 ]
+filterwarnings = [
+    # firecrawl-py models name a field `json`, shadowing BaseModel.json (upstream, not ours).
+    "ignore:Field name .* shadows an attribute in parent:UserWarning",
+]

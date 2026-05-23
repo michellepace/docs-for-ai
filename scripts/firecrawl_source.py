@@ -6,10 +6,21 @@ Failures use the `❌ Error: TYPE|detail|url|` print-and-exit convention.
 import re
 import sys
 import time
+import warnings
 from os import environ
 
-from firecrawl import Firecrawl
-from firecrawl.v2.utils.error_handler import FirecrawlError, RateLimitError
+# Mute upstream firecrawl pydantic field-shadow warning.
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message='Field name "json" .* shadows an attribute in parent',
+        category=UserWarning,
+    )
+    from firecrawl import Firecrawl
+    from firecrawl.v2.utils.error_handler import (
+        FirecrawlError,
+        RateLimitError,
+    )
 
 
 def _get_firecrawl_client() -> Firecrawl:

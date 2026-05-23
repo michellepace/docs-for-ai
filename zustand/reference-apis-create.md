@@ -1,10 +1,9 @@
 ---
-title: create ⚛️
+title: create
 description: How to create stores
-nav: 26
+tag: react
+nav: 21
 ---
-
-# create ⚛️
 
 `create` lets you create a React Hook with API utilities attached.
 
@@ -23,7 +22,7 @@ const useSomeStore = create(stateCreatorFn)
   - [Updating state with no store actions](#updating-state-with-no-store-actions)
   - [Subscribing to state updates](#subscribing-to-state-updates)
 - [Troubleshooting](#troubleshooting)
-  - [I’ve updated the state, but the screen doesn’t update](#ive-updated-the-state-but-the-screen-doesnt-update)
+  - [I’ve updated the state, but the screen doesn’t update](#i’ve-updated-the-state,-but-the-screen-doesn’t-update)
 
 ## Types
 
@@ -53,7 +52,7 @@ function. It should take a selector function as its only argument.
 ### Updating state based on previous state
 
 To update a state based on previous state we should use **updater functions**. Read more
-about [queueing state updates](https://react.dev/learn/queueing-a-series-of-state-updates).
+about that [here](https://react.dev/learn/queueing-a-series-of-state-updates).
 
 This example shows how you can support **updater functions** within **actions**.
 

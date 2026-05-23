@@ -1,7 +1,7 @@
 ---
 title: devtools
 description: How to time-travel debug your store
-nav: 205
+nav: 29
 ---
 
 # devtools
@@ -28,7 +28,7 @@ const nextStateCreatorFn = devtools(stateCreatorFn, devtoolsOptions)
   - [Cleanup](#cleanup)
 - [Troubleshooting](#troubleshooting)
   - [Only one store is displayed](#only-one-store-is-displayed)
-  - [Action names are labeled as 'anonymous'](#all-action-names-are-labeled-as-anonymous)
+  - [Action names are labeled as 'anonymous'](#all-action-names-are-labeled-as-'anonymous')
 
 ## Types
 
@@ -40,11 +40,9 @@ devtools<T>(stateCreatorFn: StateCreator<T, [], []>, devtoolsOptions?: DevtoolsO
 
 ### Mutator
 
-<!-- prettier-ignore-start -->
 ```ts
-['zustand/devtools', never]
+;['zustand/devtools', never]
 ```
-<!-- prettier-ignore-end -->
 
 ## Reference
 
@@ -304,6 +302,7 @@ Here's the fixed previous example
 
 ```ts
 import { create, StateCreator } from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 type BearSlice = {
   bears: number

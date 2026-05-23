@@ -1,7 +1,7 @@
 ---
 title: persist
 description: How to persist a store
-nav: 207
+nav: 28
 ---
 
 # persist
@@ -31,20 +31,18 @@ const nextStateCreatorFn = persist(stateCreatorFn, persistOptions)
 ### Signature
 
 ```ts
-persist<T, U>(stateCreatorFn: StateCreator<T, [], []>, persistOptions?: PersistOptions<T, U>): StateCreator<T, [['zustand/persist', U]], []>
+persist<T, U = T>(stateCreatorFn: StateCreator<T, [], []>, persistOptions: PersistOptions<T, U>): StateCreator<T, [['zustand/persist', U]], []>
 ```
 
 ### Mutator
 
-<!-- prettier-ignore-start -->
 ```ts
-['zustand/persist', U]
+;['zustand/persist', U]
 ```
-<!-- prettier-ignore-end -->
 
 ## Reference
 
-### `persist(stateCreatorFn)`
+### `persist(stateCreatorFn, persistOptions)`
 
 #### Parameters
 

@@ -1,11 +1,11 @@
 ---
 title: Introduction
 description: How to use Zustand
-nav: 0
+nav: 1
 ---
 
 <div class="flex justify-center mb-4">
-  <img src="../bear.jpg" alt="Logo Zustand" />
+<img src="../../bear.jpg" alt="Logo Zustand" />
 </div>
 
 A small, fast, and scalable bearbones state management solution.
@@ -53,7 +53,7 @@ const useBear = create((set) => ({
 }))
 ```
 
-## Then bind your components, and that's it
+## Then bind your components, and that's it!
 
 You can use the hook anywhere, without the need of providers.
 Select your state and the consuming component

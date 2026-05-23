@@ -1,6 +1,6 @@
 ---
 title: How to reset state
-nav: 12
+nav: 20
 ---
 
 The following pattern can be used to reset the state to its initial value.
@@ -41,5 +41,5 @@ export const create = (<T>() => {
 
 ## Demo
 
-- Basic: <https://stackblitz.com/edit/zustand-how-to-reset-state-basic>
-- Advanced: <https://stackblitz.com/edit/zustand-how-to-reset-state-advanced>
+- Basic: https://stackblitz.com/edit/zustand-how-to-reset-state-basic
+- Advanced: https://stackblitz.com/edit/zustand-how-to-reset-state-advanced

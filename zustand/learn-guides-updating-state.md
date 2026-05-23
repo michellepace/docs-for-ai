@@ -1,6 +1,6 @@
 ---
 title: Updating state
-nav: 2
+nav: 4
 ---
 
 ## Flat updates
@@ -23,7 +23,7 @@ type Action = {
 }
 
 // Create your store, which includes both state and (optionally) actions
-const usePersonStore = create<State & Action>((set) => ({
+const usePersonStore = create<State & Action>()((set) => ({
   firstName: '',
   lastName: '',
   updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
@@ -112,7 +112,7 @@ take a look at an example:
     set(produce((state: State) => { ++state.deep.nested.obj.count })),
 ```
 
-What a reduction! Please take note of the [gotchas listed here](../integrations/immer-middleware.md).
+What a reduction! Please take note of the [gotchas listed here](../../reference/integrations/immer-middleware.md).
 
 ### With optics-ts
 
@@ -138,4 +138,4 @@ Both ramda and optics-ts also work with types.
 
 ### Demo
 
-<https://stackblitz.com/edit/vitejs-vite-j6bjdygu>
+https://stackblitz.com/edit/vitejs-vite-j6bjdygu

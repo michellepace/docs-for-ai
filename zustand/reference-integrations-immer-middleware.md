@@ -1,9 +1,7 @@
 ---
 title: Immer middleware
-nav: 18
+nav: 35
 ---
-
-# Immer middleware
 
 The [Immer](https://github.com/immerjs/immer) middleware enables you
 to use immutable state in a more convenient way.
@@ -21,7 +19,7 @@ npm install immer
 
 ## Usage
 
-(Notice the extra parentheses after the type parameter as mentioned in the [Advanced Typescript Guide](../guides/advanced-typescript.md)).
+(Notice the extra parentheses after the type parameter as mentioned in the [Advanced Typescript Guide](../../learn/guides/advanced-typescript.md)).
 
 Updating simple states
 
@@ -127,5 +125,5 @@ Zustand will skip calling the subscriptions.
 
 ## Demos
 
-- Basic: <https://stackblitz.com/edit/vitejs-vite-3sgc4ejy>
-- Advanced: <https://stackblitz.com/edit/vitejs-vite-jxxtuyj3>
+- Basic: https://stackblitz.com/edit/vitejs-vite-3sgc4ejy
+- Advanced: https://stackblitz.com/edit/vitejs-vite-jxxtuyj3

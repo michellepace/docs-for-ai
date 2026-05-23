@@ -1,7 +1,7 @@
 ---
 title: Testing
 description: Writing Tests
-nav: 8
+nav: 18
 ---
 
 ## Setting Up a Test Environment
@@ -26,7 +26,7 @@ See these resources for test runner configuration instructions:
 **We recommend using [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro)
 to test out React components that connect to Zustand**. RTL is a simple and complete React DOM
 testing utility that encourages good testing practices. It uses ReactDOM's `render` function and
-`act` from `react-dom/tests-utils`. Furthermore, [Native Testing Library (RNTL)](https://testing-library.com/docs/react-native-testing-library/intro)
+`act` from `react-dom/test-utils`. Furthermore, [Native Testing Library (RNTL)](https://testing-library.com/docs/react-native-testing-library/intro)
 is the alternative to RTL to test out React Native components. The [Testing Library](https://testing-library.com/)
 family of tools also includes adapters for many other popular frameworks.
 
@@ -261,7 +261,7 @@ afterEach(() => {
 
 ```ts
 // setup-vitest.ts
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 vi.mock('zustand') // to make it work like Jest (auto-mocking)
 ```
@@ -352,7 +352,7 @@ export const CounterStoreProvider = ({
 }: CounterStoreProviderProps) => {
   const [store] = useState(() => createCounterStore())
   return (
-    <CounterStoreContext.Provider value={counterStoreRef.current}>
+    <CounterStoreContext.Provider value={store}>
       {children}
     </CounterStoreContext.Provider>
   )
@@ -567,7 +567,7 @@ export const CounterStoreProvider = ({
 }: CounterStoreProviderProps) => {
   const [store] = useState(() => createCounterStore())
   return (
-    <CounterStoreContext.Provider value={counterStoreRef.current}>
+    <CounterStoreContext.Provider value={store}>
       {children}
     </CounterStoreContext.Provider>
   )
@@ -737,5 +737,5 @@ const renderCounterWithContext = (store) => {
 
 ## Demos
 
-- Jest: <https://stackblitz.com/edit/jest-zustand>
-- Vitest: <https://stackblitz.com/edit/vitest-zustand>
+- Jest: https://stackblitz.com/edit/jest-zustand
+- Vitest: https://stackblitz.com/edit/vitest-zustand

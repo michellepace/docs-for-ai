@@ -1,7 +1,7 @@
 ---
 title: immer
 description: How to perform immutable updates in a store without boilerplate code
-nav: 206
+nav: 31
 ---
 
 # immer
@@ -33,11 +33,9 @@ immer<T>(stateCreatorFn: StateCreator<T, [], []>): StateCreator<T, [['zustand/im
 
 ### Mutator
 
-<!-- prettier-ignore-start -->
 ```ts
-['zustand/immer', never]
+;['zustand/immer', never]
 ```
-<!-- prettier-ignore-end -->
 
 ## Reference
 
@@ -68,9 +66,9 @@ type PersonStoreState = {
 
 type PersonStoreActions = {
   setPerson: (
-    nextPerson: (
-      person: PersonStoreState['person'],
-    ) => PersonStoreState['person'] | PersonStoreState['person'],
+    nextPerson:
+      | PersonStoreState['person']
+      | ((person: PersonStoreState['person']) => PersonStoreState['person']),
   ) => void
 }
 
@@ -167,9 +165,9 @@ type PersonStoreState = {
 
 type PersonStoreActions = {
   setPerson: (
-    nextPerson: (
-      person: PersonStoreState['person'],
-    ) => PersonStoreState['person'] | PersonStoreState['person'],
+    nextPerson:
+      | PersonStoreState['person']
+      | ((person: PersonStoreState['person']) => PersonStoreState['person']),
   ) => void
 }
 
@@ -233,3 +231,7 @@ render(personStore.getInitialState(), personStore.getInitialState())
 
 personStore.subscribe(render)
 ```
+
+## Troubleshooting
+
+TBD

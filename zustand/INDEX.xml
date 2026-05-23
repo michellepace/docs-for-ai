@@ -1,275 +1,177 @@
 <docs_index>
   <source>
-    <title>Getting Started - Introduction</title>
-    <description>Zustand quickstart: npm installation, `create` function, hook-based store API, `set` function state merging, selector patterns for component binding, no context providers, zombie child and React concurrency handling.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/getting-started/introduction.md</source_url>
-    <local_file>getting-started-introduction.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Learn</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/index.md</source_url>
+    <local_file>learn-index.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>APIs - createStore</title>
-    <description>`createStore` from `zustand/vanilla` for framework-agnostic stores: `setState`, `getState`, `getInitialState`, `subscribe` utilities, updater functions, primitives/objects/arrays updates, `replace` parameter, shallow merge, immutability patterns.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/apis/create-store.md</source_url>
-    <local_file>apis-create-store.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Tutorial: Tic-Tac-Toe</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/tutorial-tic-tac-toe.md</source_url>
+    <local_file>learn-guides-tutorial-tic-tac-toe.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>APIs - createWithEqualityFn ⚛️</title>
-    <description>`createWithEqualityFn` from `zustand/traditional` for React hooks with custom equality functions, `shallow` comparison, granular re-render control, `useSyncExternalStoreWithSelector` dependency, selectors, state updates, immutability patterns.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/apis/create-with-equality-fn.md</source_url>
-    <local_file>apis-create-with-equality-fn.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Updating state</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/updating-state.md</source_url>
+    <local_file>learn-guides-updating-state.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>APIs - create ⚛️</title>
-    <description>`create` function for React hook stores with `setState`, `getState`, `getInitialState`, `subscribe` utilities, selectors, updater functions, primitives/objects/arrays updates, external actions pattern, immutability troubleshooting.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/apis/create.md</source_url>
-    <local_file>apis-create.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Practice with no store actions</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/practice-with-no-store-actions.md</source_url>
+    <local_file>learn-guides-practice-with-no-store-actions.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>APIs - shallow</title>
-    <description>`shallow` utility from `zustand/vanilla/shallow` for top-level equality comparison: primitives, objects, Sets, Maps. Limitations with nested structures, prototype differences, `Object.is` comparison, performance optimisation.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/apis/shallow.md</source_url>
-    <local_file>apis-shallow.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Slices Pattern</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/slices-pattern.md</source_url>
+    <local_file>learn-guides-slices-pattern.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Getting Started - Comparison</title>
-    <description>Zustand versus Redux, Valtio, Jotai, Recoil: immutable versus mutable state models, single store versus atom-based patterns, selector-based render optimisation, context provider requirements, architectural trade-offs.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/getting-started/comparison.md</source_url>
-    <local_file>getting-started-comparison.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Immutable state and merging</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/immutable-state-and-merging.md</source_url>
+    <local_file>learn-guides-immutable-state-and-merging.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Advanced TypeScript Guide</title>
-    <description>Advanced TypeScript patterns: curried `create&lt;T&gt;()()` syntax, `StateCreator` typing, `StoreMutatorIdentifier`, `Mutate`, higher-kinded mutators, middleware composition, slices pattern, bounded `useStore` hooks, `ExtractState`, custom middleware authoring.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/advanced-typescript.md</source_url>
-    <local_file>guides-advanced-typescript.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Prevent rerenders with useShallow</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/prevent-rerenders-with-use-shallow.md</source_url>
+    <local_file>learn-guides-prevent-rerenders-with-use-shallow.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Auto Generating Selectors</title>
-    <description>`createSelectors` helper generating `.use` accessors for properties and actions, `WithSelectors` type, React store and vanilla `createStore` variants, `StoreApi`/`UseBoundStore` types, third-party selector libraries.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/auto-generating-selectors.md</source_url>
-    <local_file>guides-auto-generating-selectors.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Beginner TypeScript Guide</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/beginner-typescript.md</source_url>
+    <local_file>learn-guides-beginner-typescript.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Beginner TypeScript Guide</title>
-    <description>Beginner TypeScript: curried `create&lt;T&gt;()()`, interface-based state typing, selector patterns, store reset with `initialState`, `ExtractState`, `useShallow` for multiple selectors, derived state, `combine`/`devtools`/`persist` middlewares, async actions, `createWithEqualityFn`, multiple stores.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/beginner-typescript.md</source_url>
-    <local_file>guides-beginner-typescript.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Advanced TypeScript Guide</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/advanced-typescript.md</source_url>
+    <local_file>learn-guides-advanced-typescript.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Connect to state with URL</title>
-    <description>URL state synchronisation via custom `StateStorage` with `persist` middleware, `location.hash` and query parameter patterns, `createJSONStorage`, `localStorage` fallback, `window.history.replaceState`, shareable URL generation.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/connect-to-state-with-url-hash.md</source_url>
-    <local_file>guides-connect-to-state-with-url-hash.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Auto Generating Selectors</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/auto-generating-selectors.md</source_url>
+    <local_file>learn-guides-auto-generating-selectors.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Calling actions outside a React event handler in pre React 18</title>
-    <description>Pre-React 18 synchronous `setState` gotcha when calling actions outside event handlers, `unstable_batchedUpdates` wrapper from `react-dom` to prevent zombie-child effect and forced synchronous re-renders.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/event-handler-in-pre-react-18.md</source_url>
-    <local_file>guides-event-handler-in-pre-react-18.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Setup with Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/nextjs.md</source_url>
+    <local_file>learn-guides-nextjs.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Flux inspired practice</title>
-    <description>Flux/Redux-inspired best practices: single store architecture, `set`/`setState` for immutable updates, colocated actions pattern, slices for large apps, `redux` middleware with `dispatch` function and reducers.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/flux-inspired-practice.md</source_url>
-    <local_file>guides-flux-inspired-practice.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>SSR and Hydration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/ssr-and-hydration.md</source_url>
+    <local_file>learn-guides-ssr-and-hydration.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - How to reset state</title>
-    <description>Reset store state patterns using `store.getInitialState()` method, single store reset action, `storeResetFns` Set for resetting multiple stores, custom `create` wrapper with `StateCreator` typing.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/how-to-reset-state.md</source_url>
-    <local_file>guides-how-to-reset-state.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Initialize state with props</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/initialize-state-with-props.md</source_url>
+    <local_file>learn-guides-initialize-state-with-props.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Immutable state and merging</title>
-    <description>Immutable state fundamentals: `set` function automatic shallow merge at one level, nested object spread operator patterns, `replace` boolean second parameter to disable merging, like React `useState`.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/immutable-state-and-merging.md</source_url>
-    <local_file>guides-immutable-state-and-merging.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/testing.md</source_url>
+    <local_file>learn-guides-testing.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Initialize state with props</title>
-    <description>Dependency injection pattern using `createStore` with `React.createContext`, provider wrappers, `useStore` hook consumption, custom context hooks, `useStoreWithEqualityFn` for equality functions, `useShallow` memoisation.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/initialize-state-with-props.md</source_url>
-    <local_file>guides-initialize-state-with-props.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Flux inspired practice</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/flux-inspired-practice.md</source_url>
+    <local_file>learn-guides-flux-inspired-practice.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Map and Set Usage</title>
-    <description>Immutable `Map` and `Set` updates in Zustand state, creating new instances for `set()`/`delete()`/`add()`/`clear()` operations, reference-based change detection, TypeScript type hints for empty collections.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/maps-and-sets-usage.md</source_url>
-    <local_file>guides-maps-and-sets-usage.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>How to reset state</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/how-to-reset-state.md</source_url>
+    <local_file>learn-guides-how-to-reset-state.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Setup with Next.js</title>
-    <description>Next.js Zustand integration: per-request stores via `createStore`, `React.createContext` providers, SSR hydration handling, Pages Router and App Router patterns, RSC constraints, avoiding global module state.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/nextjs.md</source_url>
-    <local_file>guides-nextjs.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Reference</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/index.md</source_url>
+    <local_file>reference-index.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Practice with no store actions</title>
-    <description>Store architecture patterns: colocated actions inside `create()` versus module-level external actions using `useBoundStore.setState`, hook-free action invocation, code splitting benefits, encapsulation trade-offs.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/practice-with-no-store-actions.md</source_url>
-    <local_file>guides-practice-with-no-store-actions.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>create</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create.md</source_url>
+    <local_file>reference-apis-create.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Prevent rerenders with useShallow</title>
-    <description>Prevent unnecessary rerenders with `useShallow` from `zustand/react/shallow`, wrap selectors returning arrays or objects, shallow equality comparison versus default `Object.is` reference checks.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/prevent-rerenders-with-use-shallow.md</source_url>
-    <local_file>guides-prevent-rerenders-with-use-shallow.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>createStore</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create-store.md</source_url>
+    <local_file>reference-apis-create-store.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Slices Pattern</title>
-    <description>Slices pattern for modular stores: individual slice creators with `set`/`get`, combining slices into bounded `useBoundStore`, cross-slice updates, middleware application to combined store, TypeScript integration.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md</source_url>
-    <local_file>guides-slices-pattern.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>shallow</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/shallow.md</source_url>
+    <local_file>reference-apis-shallow.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - SSR and Hydration</title>
-    <description>React SSR fundamentals with Express server, `ReactDOMServer.renderToPipeableStream()` for streaming, `hydrateRoot()` client hydration, stateless versus stateful rendering patterns, common hydration mismatch causes and troubleshooting.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/ssr-and-hydration.md</source_url>
-    <local_file>guides-ssr-and-hydration.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>persist</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/persist.md</source_url>
+    <local_file>reference-middlewares-persist.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Testing</title>
-    <description>Jest and Vitest testing setup: `__mocks__/zustand.ts` mock file, `storeResetFns` Set for automatic state reset, `getInitialState()`, React Testing Library integration, JSDOM configuration, component and store testing patterns.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/testing.md</source_url>
-    <local_file>guides-testing.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>devtools</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/devtools.md</source_url>
+    <local_file>reference-middlewares-devtools.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Tutorial: Tic-Tac-Toe</title>
-    <description>Tic-tac-toe game tutorial with `combine` middleware, state lifting patterns, `history` array for time travel, `currentMove` tracking, immutable updates via `.slice()`, derived state computation, winner calculation.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/tutorial-tic-tac-toe.md</source_url>
-    <local_file>guides-tutorial-tic-tac-toe.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>immer</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/immer.md</source_url>
+    <local_file>reference-middlewares-immer.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Guides - Updating state</title>
-    <description>State updates using `set` function with flat shallow merge, deeply nested object handling via spread operators, Immer `produce()`, optics-ts `O.modify()`/`O.optic()`, Ramda `R.modifyPath()` utilities.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/guides/updating-state.md</source_url>
-    <local_file>guides-updating-state.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Persisting store data</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/persisting-store-data.md</source_url>
+    <local_file>reference-integrations-persisting-store-data.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
   <source>
-    <title>Hooks - useShallow ⚛️</title>
-    <description>`useShallow` hook from `zustand/react/shallow` for selector memoisation with shallow comparison, prevents unnecessary re-renders when selectors return new array or object references with structurally equal values.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/hooks/use-shallow.md</source_url>
-    <local_file>hooks-use-shallow.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Hooks - useStoreWithEqualityFn ⚛️</title>
-    <description>`useStoreWithEqualityFn` from `zustand/traditional` for vanilla stores in React with custom equality functions, requires `use-sync-external-store`, supports global stores, dynamic store factories, scoped context-based stores, `shallow` comparison.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/hooks/use-store-with-equality-fn.md</source_url>
-    <local_file>hooks-use-store-with-equality-fn.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Hooks - useStore ⚛️</title>
-    <description>`useStore` hook for vanilla `createStore` stores in React, selector functions, global stores, dynamic store factories via Map, scoped context-based stores with `createContext`/provider pattern, per-component independent state.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/hooks/use-store.md</source_url>
-    <local_file>hooks-use-store.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Integrations - Immer middleware</title>
-    <description>`immer` middleware from `zustand/middleware/immer` enables mutable syntax for immutable updates, simplifies nested object handling, requires `immer` dependency, gotchas for class objects requiring `[immerable]` symbol for subscriptions.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/integrations/immer-middleware.md</source_url>
-    <local_file>integrations-immer-middleware.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Integrations - Persisting store data</title>
-    <description>`persist` middleware with `createJSONStorage` for `localStorage`, `sessionStorage`, `AsyncStorage`, IndexedDB; `partialize`, `version`, `migrate`, `merge`, `skipHydration` options; `rehydrate`, `hasHydrated`, `onHydrate`, `onFinishHydration` API; Next.js SSR hydration mismatch patterns.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/integrations/persisting-store-data.md</source_url>
-    <local_file>integrations-persisting-store-data.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Integrations - Third-party Libraries</title>
-    <description>Third-party ecosystem: `@liveblocks/zustand` multiplayer, `zundo` undo/redo time-travel, `zustand-computed` computed states, `ngx-zustand` Angular adapter, `vue-zustand` Vue adapter, `zustand-sync-tabs` cross-tab sync, `simple-zustand-devtools` React DevTools, `zustand-forms` form management.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/integrations/third-party-libraries.md</source_url>
-    <local_file>integrations-third-party-libraries.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - combine</title>
-    <description>`combine` middleware from `zustand/middleware` merges initial state with `StateCreator` for automatic TypeScript type inference, eliminates curried `create` syntax, works with `createStore` and `create` for simplified store definitions.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/combine.md</source_url>
-    <local_file>middlewares-combine.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - devtools</title>
-    <description>`devtools` middleware for Redux DevTools Extension integration, time-travel debugging, `actionsDenylist` filtering, `anonymousActionType` naming, `store` option for custom identifiers, Slices pattern support, `devtools.cleanup()` method.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/devtools.md</source_url>
-    <local_file>middlewares-devtools.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - immer</title>
-    <description>`immer` middleware from `zustand/middleware/immer` enabling mutable syntax for immutable state updates, `StateCreator` signature, `['zustand/immer', never]` mutator type, nested object updates without spread operators.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/immer.md</source_url>
-    <local_file>middlewares-immer.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - persist</title>
-    <description>`persist` middleware for state persistence across page reloads, `localStorage`/`sessionStorage`/custom storage via `createJSONStorage`, `partialize`, `version`, `migrate`, `merge`, `skipHydration`, manual `rehydrate()` API.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/persist.md</source_url>
-    <local_file>middlewares-persist.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - redux</title>
-    <description>`redux` middleware from `zustand/middleware` providing `dispatch` method with `reducerFn` and `initialState`, action-based state updates, typed actions, switch-case reducer pattern, `['zustand/redux', A]` mutator.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/redux.md</source_url>
-    <local_file>middlewares-redux.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Middlewares - subscribeWithSelector</title>
-    <description>`subscribeWithSelector` middleware enabling selector-based `subscribe()` for partial state listening, callbacks triggered only when selected slice changes, fine-grained external state management, `['zustand/subscribeWithSelector', never]` mutator.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/middlewares/subscribe-with-selector.md</source_url>
-    <local_file>middlewares-subscribe-with-selector.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Migrations - Migrating to v4</title>
-    <description>Migration v3 to v4: TypeScript type changes for `create`, `StateCreator`, `PartialState`, `useStore`, `UseBoundStore`, `UseContextStore`, `createContext`, `combine`/`devtools`/`subscribeWithSelector`/`persist`/`redux` middleware parameters, `partialize` behaviour.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/migrations/migrating-to-v4.md</source_url>
-    <local_file>migrations-migrating-to-v4.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Migrations - How to Migrate to v5 from v4</title>
-    <description>Migration v4 to v5: dropped default exports, `createWithEqualityFn` for custom equality, `useShallow` hook, stable selector requirements, stricter `setState` types with `replace` flag, `persist` middleware changes, React 18 minimum.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/migrations/migrating-to-v5.md</source_url>
-    <local_file>migrations-migrating-to-v5.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
-  </source>
-  <source>
-    <title>Previous Versions - createContext from zustand/context</title>
-    <description>Deprecated `createContext` from `zustand/context` (v3.5-v4) for scoped stores with `Provider` and `useStore`, prop-based initialisation, migration to v4 manual context pattern with `createStore`, `useRef`, `useContext`.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/previous-versions/zustand-v3-create-context.md</source_url>
-    <local_file>previous-versions-zustand-v3-create-context.md</local_file>
-    <scraped_at>2025-11-18</scraped_at>
+    <title>Immer middleware</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/immer-middleware.md</source_url>
+    <local_file>reference-integrations-immer-middleware.md</local_file>
+    <scraped_at>2026-05-23</scraped_at>
   </source>
 </docs_index>

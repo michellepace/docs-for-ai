@@ -1,10 +1,8 @@
 ---
 title: shallow
 description: How compare simple data effectively
-nav: 27
+nav: 24
 ---
-
-# Shallow
 
 `shallow` lets you run fast checks on simple data structures. It effectively identifies changes in
 **top-level** properties when you're working with data structures that don't have nested objects or
@@ -26,7 +24,7 @@ const equal = shallow(a, b)
   - [Comparing Sets](#comparing-sets)
   - [Comparing Maps](#comparing-maps)
 - [Troubleshooting](#troubleshooting)
-  - [Comparing objects returns `false` even if they are identical.](#comparing-objects-returns-false-even-if-they-are-identical)
+  - [Comparing objects returns `false` even if they are identical](#comparing-objects-returns-false-even-if-they-are-identical)
   - [Comparing objects with different prototypes](#comparing-objects-with-different-prototypes)
 
 ## Types

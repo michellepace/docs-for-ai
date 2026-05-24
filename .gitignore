@@ -11,3 +11,6 @@ __pycache__/
 # Development tools
 .pytest_cache/
 .ruff_cache/
+
+# Claude Code worktrees
+.claude/worktrees/

@@ -1,8 +1,8 @@
-"""Add or update documentation in collection directories.
+"""Curate one source URL into a collection directory.
 
-Routes each source URL to a direct markdown fetch (`markdown_source`, for any
-`.md` URL — GitHub included) or a FireCrawl scrape, derives a filename from the
-URL path, and updates INDEX.xml. Filenames are stable across re-scrapes.
+Saves the curated doc as a `.md` file and registers it in INDEX.xml.
+URLs ending in `.md` and GitHub blobs are fetched directly.
+All other URLs are scraped via FireCrawl.
 """
 
 import argparse
@@ -11,6 +11,7 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import date
 from pathlib import Path
+from typing import NamedTuple
 from urllib.parse import urlparse
 
 import firecrawl_source
@@ -86,8 +87,10 @@ def filename_from_url(url: str) -> str:
     return f"{slug or 'index'}.md"
 
 
-def _create_readme(dir_path: Path, source_site_url: str) -> None:
-    """Create README.md for new collection with overview and source link."""
+def _create_readme(dir_path: Path, source_url: str) -> None:
+    """Create README.md for a new collection with overview and source link."""
+    parsed_url = urlparse(source_url)
+    source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
     readme_content = f"""# {dir_path.name} Documentation
 
 Curated docs for targeted AI context.
@@ -157,23 +160,52 @@ def _add_or_update_source_in_index(
     return is_update
 
 
-def main() -> None:
-    """Add or update documentation in a collection directory.
+class FetchedDoc(NamedTuple):
+    """A fetched source document: body, title, and URL-derived filename."""
 
-    Workflow:
-        1. Validate URL and directory
-        2. Route: direct fetch for `.md` URLs (GitHub or any other), else FireCrawl
-        3. Create collection structure if new (README.md, INDEX.xml)
-        4. Write the markdown file (overwriting any existing one) and add or
-           update the INDEX.xml entry keyed by source URL
+    content: str
+    title: str
+    filename: str
 
-    Filenames are derived from the URL path, so they stay stable across
-    re-scrapes even when the upstream title changes.
+
+def fetch_document(source_url: str) -> FetchedDoc:
+    """Fetch a source document, returning a `FetchedDoc`.
+
+    GitHub is checked before the generic `.md` branch because a blob URL also
+    ends in `.md`, yet must be fetched from `raw` and keep its blob URL.
     """
+    if markdown_source.is_github_url(source_url):
+        raw_url = markdown_source.github_blob_to_raw_url(source_url)
+        print(f"✅ Detected GitHub source|{source_url}|")
+        filename = markdown_source.github_filename_from_blob_url(source_url)
+        content = markdown_source.fetch_markdown(raw_url)
+        title = markdown_source.extract_title(content, raw_url)
+    elif markdown_source.is_md_url(source_url):
+        filename = filename_from_url(source_url)
+        content = markdown_source.fetch_markdown(source_url)
+        title = markdown_source.extract_title(content, source_url)
+    else:
+        content, title = firecrawl_source.scrape(source_url)
+        filename = filename_from_url(source_url)
+    return FetchedDoc(content, title, filename)
+
+
+def _write_document(dir_path: Path, doc: FetchedDoc) -> None:
+    """Write the fetched markdown to its file."""
+    file_path = dir_path / doc.filename
+    file_existed = file_path.exists()
+    file_path.write_text(doc.content)
+    if file_existed:
+        print(f"✅ Overwrote existing document|{_format_path_for_display(file_path)}|")
+    else:
+        print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
+
+
+def _parse_args() -> argparse.Namespace:
+    """Parse CLI arguments: target directory and source URL."""
     parser = argparse.ArgumentParser(
         description="Add or update documentation in a collection directory"
     )
-
     parser.add_argument(
         "directory",
         help="Documentation directory (e.g. `tailwind/`)",
@@ -182,10 +214,14 @@ def main() -> None:
         "source_url",
         help="Web URL to curate (direct `.md` fetch or FireCrawl scrape)",
     )
+    return parser.parse_args()
 
-    args = parser.parse_args()
 
-    source_url: str = args.source_url.rstrip("/")  # canonical form: no trailing slash
+def main() -> None:
+    """Curate a single source URL into a collection directory."""
+    args = _parse_args()
+
+    source_url: str = args.source_url.rstrip("/")
     dir_path = _normalise_directory_path(args.directory)
     index_path = dir_path / "INDEX.xml"
 
@@ -197,46 +233,20 @@ def main() -> None:
 
     dir_path.mkdir(parents=True, exist_ok=True)
 
-    # Route before creating files (fail fast). GitHub is checked first: a blob
-    # URL also ends in `.md`, but it is stored as blob and fetched from raw.
-    if markdown_source.is_github_url(source_url):
-        # Exits unless this is a main/master blob .md URL; raw_url is the fetch target.
-        raw_url = markdown_source.github_blob_to_raw_url(source_url)
-        print(f"✅ Detected GitHub source|{source_url}|")
-        candidate = markdown_source.github_filename_from_blob_url(source_url)
-        content = markdown_source.fetch_markdown(raw_url)  # exits on 404/network
-        title = markdown_source.extract_title(content, raw_url)
-        # source_url stays the BLOB URL → stored verbatim in INDEX.xml
-    elif markdown_source.is_md_url(source_url):
-        candidate = filename_from_url(source_url)
-        content = markdown_source.fetch_markdown(source_url)  # exits on 404/network
-        title = markdown_source.extract_title(content, source_url)
-    else:
-        content, title = firecrawl_source.scrape(source_url)
-        candidate = filename_from_url(source_url)
-
-    # scheme + netloc for the README's curation-source link
-    parsed_url = urlparse(source_url)
-    source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    # Fetch first: failures leave no partial collection.
+    doc = fetch_document(source_url)
 
     if not index_path.exists():
-        _create_readme(dir_path, source_site_url)
+        _create_readme(dir_path, source_url)
         _create_index_xml(dir_path)
 
-    # Filename is derived from the URL path
-    filename = candidate
-    file_path = dir_path / filename
+    _write_document(dir_path, doc)
 
-    file_existed = file_path.exists()
-    file_path.write_text(content)
-    if file_existed:
-        print(f"✅ Overwrote existing document|{_format_path_for_display(file_path)}|")
-    else:
-        print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
+    is_update = _add_or_update_source_in_index(
+        dir_path, doc.title, source_url, doc.filename
+    )
 
-    is_update = _add_or_update_source_in_index(dir_path, title, source_url, filename)
-
-    # source_url is canonical (blob form for GitHub, rstripped user URL otherwise)
+    # source_url is canonical (blob form for GitHub)
     verb = "overwrote and re-indexed" if is_update else "created and indexed new"
     print(f"🎉 Curation Success!|{verb} document|{source_url}|\n")
 

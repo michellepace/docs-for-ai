@@ -1,233 +1,37 @@
 <docs_index>
   <source>
     <title>Getting started with Vercel</title>
-    <description>Vercel onboarding: account creation, email/Git authentication, signup, login, framework support, preview environments, production deployments, `npm i -g vercel` CLI installation, dashboard navigation.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vercel.com/docs/getting-started-with-vercel.md</source_url>
     <local_file>getting-started-with-vercel.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 1 of 8 - Projects and deployments</title>
-    <description>Projects vs deployments concepts: projects contain multiple deployments, deployments triggered by Git commits, imports, or `vercel deploy` CLI, auto-generated URLs, monorepo support, project dashboard.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/projects-deployments</source_url>
-    <local_file>projects-and-deployments.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 2 of 8 - Use a template</title>
-    <description>Template deployment workflow: browse `/templates`, connect Git provider (GitHub/GitLab/Bitbucket), auto-clone repository, configure environment variables, `vercel.json` settings, `vercel --cwd` CLI deployment.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/template</source_url>
-    <local_file>use-a-template.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 3 of 8 - Import an existing project</title>
-    <description>Import existing Git repository: connect GitHub/GitLab/Bitbucket, framework auto-detection, configure build command, output directory, install command, environment variables, `vercel.json`, `vercel --cwd` CLI.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/import</source_url>
-    <local_file>import-an-existing-project.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 4 of 8 - Add a domain</title>
-    <description>Custom domain configuration: apex domains (`acme.com`), subdomains (`blog.acme.com`), wildcard domains (`*.acme.com`), purchasing new domains, pointing existing domains to Vercel, domain transfers.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/domains</source_url>
-    <local_file>add-a-domain.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 5 of 8 - Buy a domain</title>
-    <description>Purchasing domains via `vercel domains buy`, marketplace search, TLD selection, premium pricing, cart checkout, payment details, ICANN registrant verification, WHOIS privacy, auto-renewal, project domain configuration.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/buy-domain</source_url>
-    <local_file>buy-a-domain.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 6 of 8 - Use an existing domain</title>
-    <description>Adding existing domains via `vercel domains add`, project domain settings, apex domains with A records, subdomains with CNAME records, TXT domain verification, nameserver configuration, wildcard domain setup, `www` redirect options.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/use-existing</source_url>
-    <local_file>use-an-existing-domain.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 7 of 8 - Collaborate on Vercel</title>
-    <description>Git-connected automatic deployments, production vs preview environments, `main` branch production builds, pull request previews, deployment URLs, Comments toolbar for team feedback, preview sharing with collaborators.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/collaborate</source_url>
-    <local_file>collaborate-on-vercel.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Step 8 of 8 - Next Steps</title>
-    <description>Post-setup feature overview: Functions for serverless infrastructure, Vercel Blob and Edge Config storage, Monitoring/Web Analytics/Speed Insights observability, HTTPS and DDoS mitigation security features.</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel/next-steps</source_url>
-    <local_file>next-steps.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Using the REST API - Vercel API Docs</title>
-    <description>REST API fundamentals: `https://api.vercel.com` base URL, HTTP/2 and TLS 1.3, JSON content-type, bearer token authentication, `teamId` query parameter, data types, `until`/`limit` pagination, `X-RateLimit-*` headers, endpoint versioning.</description>
-    <source_url>https://vercel.com/docs/rest-api/reference</source_url>
-    <local_file>using-the-rest-api-vercel-api-docs.md</local_file>
-    <scraped_at>2025-10-19</scraped_at>
-  </source>
-  <source>
-    <title>Integrations - Vercel API Docs</title>
-    <description>Vercel SDK `@vercel/sdk` integration listing example: `getConfigurations` method with `view: 'account'`, accessing `slug`, `installationType`, `projects` properties, bearer token authentication pattern.</description>
-    <source_url>https://vercel.com/docs/rest-api/reference/examples/integrations</source_url>
-    <local_file>integrations-vercel-api-docs.md</local_file>
-    <scraped_at>2025-10-19</scraped_at>
-  </source>
-  <source>
-    <title>Vercel Hobby Plan</title>
-    <description>Hobby plan free tier limits: Edge Config reads/writes, CPU-hrs, GB-hrs memory, function invocations/duration, image optimisation, Speed Insights, Web Analytics. 30-day reset cycle, non-commercial use only, Pro comparison table.</description>
-    <source_url>https://vercel.com/docs/plans/hobby</source_url>
-    <local_file>vercel-hobby-plan.md</local_file>
-    <scraped_at>2025-10-20</scraped_at>
-  </source>
-  <source>
-    <title>AI SDK</title>
-    <description>AI SDK Core TypeScript toolkit: `generateText` for LLM text, `generateObject`/`streamObject` for structured JSON with Zod schemas, `tool` function for external integrations, provider abstraction (OpenAI, Anthropic), Next.js/Vue/Svelte/Node.js support.</description>
-    <source_url>https://vercel.com/docs/ai-sdk</source_url>
-    <local_file>ai-sdk.md</local_file>
-    <scraped_at>2025-10-20</scraped_at>
-  </source>
-  <source>
-    <title>Vercel Pro Plan</title>
-    <description>Legacy Pro plan pricing: $20/month per seat, team collaboration, RBAC roles (Owner, Member, Billing), monthly resource-based billing, downgrade to Hobby process, Store/Domain transfer requirements before downgrade.</description>
-    <source_url>https://vercel.com/docs/plans/pro-plan</source_url>
-    <local_file>vercel-pro-plan.md</local_file>
-    <scraped_at>2025-10-20</scraped_at>
-  </source>
-  <source>
-    <title>Spend Management</title>
-    <description>Pro plan spend controls: spend amount per billing cycle, alert thresholds (50%/75%/100%), notification types (web, email, SMS), webhook payloads with `budgetAmount`/`currentSpend`/`thresholdPercent`, project pausing/unpausing, `endOfBillingCycle` events.</description>
-    <source_url>https://vercel.com/docs/spend-management</source_url>
-    <local_file>spend-management.md</local_file>
-    <scraped_at>2025-10-20</scraped_at>
-  </source>
-  <source>
-    <title>Deploying to Vercel</title>
-    <description>Deployment methods: Git (GitHub, GitLab, Bitbucket, Azure DevOps), `vercel --prod` CLI, Deploy Hooks HTTP triggers, REST API with SHA file uploads. Dashboard for redeploying, promoting to production, viewing resources.</description>
-    <source_url>https://vercel.com/docs/deployments</source_url>
-    <local_file>deploying-to-vercel.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Environments</title>
-    <description>Three default environments: Local, Preview, Production. CLI commands `vercel link`, `vercel env pull`, `vercel --prod`, `vercel deploy --target=staging`. Custom environments for Pro/Enterprise with branch tracking and domain attachment.</description>
-    <source_url>https://vercel.com/docs/deployments/environments</source_url>
-    <local_file>environments.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>How to Build a Fullstack App with Next.js, Prisma, and Postgres</title>
-    <description>Fullstack tutorial: Next.js Pages Router, Prisma ORM with `schema.prisma`, Vercel Postgres, NextAuth.js GitHub OAuth, `@prisma/client`, `prisma db push`, `getStaticProps`/`getServerSideProps`, CRUD API routes, deployment to Vercel.</description>
-    <source_url>https://vercel.com/guides/nextjs-prisma-postgres</source_url>
-    <local_file>how-to-build-a-fullstack-app-with-nextjs-prisma-and-postgres.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>How do I generate a “sitemap.xml” for my Next.js app on Vercel?</title>
-    <description>Next.js App Router sitemap generation using `sitemap.ts` file convention, `MetadataRoute.Sitemap` type, URL array with `lastModified`, `changeFrequency`, `priority` fields, build-time XML output.</description>
-    <source_url>https://vercel.com/guides/how-do-i-generate-a-sitemap-for-my-nextjs-app-on-vercel</source_url>
-    <local_file>how-do-i-generate-a-sitemapxml-for-my-nextjs-app-on-vercel.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>How can I run end-to-end tests after my Vercel Preview Deployment?</title>
-    <description>E2E testing after Vercel preview deployments: GitHub Actions `repository_dispatch` event triggers, `deployment.succeeded` webhooks, Playwright workflow configuration, Deployment Protection bypass for automation.</description>
-    <source_url>https://vercel.com/guides/how-can-i-run-end-to-end-tests-after-my-vercel-preview-deployment</source_url>
-    <local_file>how-can-i-run-end-to-end-tests-after-my-vercel-preview-deployment.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
+    <scraped_at>2026-05-24</scraped_at>
   </source>
   <source>
     <title>Next.js on Vercel</title>
-    <description>Next.js on Vercel: ISR with `revalidate`, SSR via Vercel Functions, `loading`/`Suspense` streaming, `next/image` optimization, `next/font`, OG image generation, Middleware, Draft Mode, `@vercel/analytics`, `@vercel/speed-insights`, service integrations.</description>
-    <source_url>https://vercel.com/docs/frameworks/full-stack/nextjs</source_url>
-    <local_file>nextjs-on-vercel.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vercel.com/docs/frameworks/full-stack/nextjs.md</source_url>
+    <local_file>frameworks-full-stack-nextjs.md</local_file>
+    <scraped_at>2026-05-24</scraped_at>
+  </source>
+  <source>
+    <title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vercel.com/kb/guide/nextjs-prisma-postgres.md</source_url>
+    <local_file>kb-guide-nextjs-prisma-postgres.md</local_file>
+    <scraped_at>2026-05-24</scraped_at>
+  </source>
+  <source>
+    <title>AI SDK</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vercel.com/docs/ai-sdk.md</source_url>
+    <local_file>ai-sdk.md</local_file>
+    <scraped_at>2026-05-24</scraped_at>
   </source>
   <source>
     <title>Production checklist for launch</title>
-    <description>Production launch checklist: incident response, rollback strategies, CSP headers, WAF configuration, Deployment Protection, Log Drains, caching headers, ISR tuning, Speed Insights, Image Optimization, Fluid compute, Spend Management alerts.</description>
-    <source_url>https://vercel.com/docs/production-checklist</source_url>
-    <local_file>production-checklist-for-launch.md</local_file>
-    <scraped_at>2025-11-22</scraped_at>
-  </source>
-  <source>
-    <title>Getting started with Speed Insights</title>
-    <description>Speed Insights quickstart: enabling in dashboard, installing `@vercel/speed-insights`, adding `SpeedInsights` component to Next.js App Router `layout.tsx`, `vercel deploy`, viewing Core Web Vitals metrics in dashboard.</description>
-    <source_url>https://vercel.com/docs/speed-insights/quickstart</source_url>
-    <local_file>getting-started-with-speed-insights.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Speed Insights Configuration with @vercel/speed-insights</title>
-    <description>`@vercel/speed-insights` configuration: `sampleRate` for event sampling percentage, `beforeSend` callback for filtering/redacting data, `debug` mode, `route` for dynamic path aggregation, `endpoint` for multi-project domains, `scriptSrc` URL override.</description>
-    <source_url>https://vercel.com/docs/speed-insights/package</source_url>
-    <local_file>speed-insights-configuration-with-vercelspeed-insights.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Speed Insights Metrics</title>
-    <description>Speed Insights metrics: LCP, CLS, INP, FCP, FID, TBT, TTFB target values, Real Experience Score (RES) weighted calculation, P75/P90/P95/P99 percentiles, Virtual Experience Score (VES), score colour ranges, Lighthouse 10 criteria.</description>
-    <source_url>https://vercel.com/docs/speed-insights/metrics</source_url>
-    <local_file>speed-insights-metrics.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Getting started with Vercel Web Analytics</title>
-    <description>Vercel Web Analytics quickstart: enable in dashboard, install `@vercel/analytics` package, add `&lt;Analytics /&gt;` component to root layout, `vercel deploy`, verify `/_vercel/insights/view` requests.</description>
-    <source_url>https://vercel.com/docs/analytics/quickstart</source_url>
-    <local_file>getting-started-with-vercel-web-analytics.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Advanced Web Analytics Config with @vercel/analytics</title>
-    <description>`@vercel/analytics` configuration: `mode` prop for environment detection, `debug` logging, `beforeSend` hook with `BeforeSendEvent` for filtering/redaction, `endpoint` for multi-project domains, `scriptSrc` for custom script URLs.</description>
-    <source_url>https://vercel.com/docs/analytics/package</source_url>
-    <local_file>advanced-web-analytics-config-with-vercelanalytics.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Tracking custom events</title>
-    <description>Custom event tracking with `track()` function: client-side import from `@vercel/analytics`, server-side from `@vercel/analytics/server`, custom data properties, 255-character limits, dashboard Events panel.</description>
-    <source_url>https://vercel.com/docs/analytics/custom-events</source_url>
-    <local_file>tracking-custom-events.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Filtering Analytics</title>
-    <description>Web Analytics filtering by routes, pages, hostname, referrers, UTM parameters, country, browsers, devices, OS. Drill-downs for Referrers, Flags, Custom Events panels. Twitter/t.co resolver for link origin tracking.</description>
-    <source_url>https://vercel.com/docs/analytics/filtering</source_url>
-    <local_file>filtering-analytics.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Protection Bypass for Automation</title>
-    <description>E2E testing automation bypass with `x-vercel-protection-bypass` header, `VERCEL_AUTOMATION_BYPASS_SECRET` environment variable, `x-vercel-set-bypass-cookie` for follow-up requests, `samesitenone` SameSite configuration for iframes, Playwright config example.</description>
-    <source_url>https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation</source_url>
-    <local_file>protection-bypass-for-automation.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Deployment Protection on Vercel</title>
-    <description>Deployment Protection configuration: Standard Protection, All Deployments, production-only protection, legacy options. Protection methods: Vercel Authentication, Password Protection, Trusted IPs. `VERCEL_URL` migration patterns, Advanced Deployment Protection add-on.</description>
-    <source_url>https://vercel.com/docs/deployment-protection</source_url>
-    <local_file>deployment-protection-on-vercel.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Vercel Authentication</title>
-    <description>Vercel Authentication restricting deployment access to team members, project members, access groups. Access request workflow, approval/revocation via dashboard and API, `ssoProtection` API field, `vercel_authentication` Terraform configuration, security token scope.</description>
-    <source_url>https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication</source_url>
-    <local_file>vercel-authentication.md</local_file>
-    <scraped_at>2025-11-25</scraped_at>
-  </source>
-  <source>
-    <title>Deploying GitHub Projects with Vercel</title>
-    <description>GitHub integration: automatic deployments, preview URLs, fork protection, production rollbacks, silencing bot comments. GitHub Actions with `vercel build`/`vercel deploy --prebuilt`, `repository_dispatch` events, `VERCEL_GIT_*` environment variables, repository permission scopes.</description>
-    <source_url>https://vercel.com/docs/git/vercel-for-github</source_url>
-    <local_file>deploying-github-projects-with-vercel.md</local_file>
-    <scraped_at>2025-12-10</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vercel.com/docs/production-checklist.md</source_url>
+    <local_file>production-checklist.md</local_file>
+    <scraped_at>2026-05-24</scraped_at>
   </source>
 </docs_index>

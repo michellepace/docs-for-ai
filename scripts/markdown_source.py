@@ -7,12 +7,14 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from typing import NoReturn
-from urllib.parse import urlparse
+from pathlib import Path
+from typing import NamedTuple, NoReturn
+from urllib.parse import urlparse, urlunparse
 
 HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
+MD_ALLOWLIST_PATH = Path(__file__).parent / "md_allowlist.txt"
 FILENAME_RE = re.compile(r"^[a-z0-9-]+\.md$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
@@ -30,20 +32,68 @@ def _fail(code: str, detail: str, url: str) -> NoReturn:
 
 
 def is_github_url(url: str) -> bool:
-    """True for any GitHub-host URL; routed to blob validation (else FireCrawl)."""
+    """True if the URL is on a GitHub host; its shape is validated downstream."""
     return urlparse(url).netloc.lower() in {"github.com", "raw.githubusercontent.com"}
 
 
 def is_md_url(url: str) -> bool:
-    """True for direct `.md` URLs; False routes to FireCrawl."""
+    """True when the URL's path ends in `.md`; query and fragment are ignored."""
     return urlparse(url).path.endswith(".md")
 
 
-def github_blob_to_raw_url(url: str) -> str:
-    """Validate a GitHub blob URL (main/master, `.md`) and return its raw URL.
+def load_md_allowlist(path: Path = MD_ALLOWLIST_PATH) -> list[str]:
+    """Load non-GitHub host prefixes that serve a `.md` twin of each page.
 
-    Any other GitHub URL — raw, repo root, `tree/`, another branch, non-`.md` —
-    fails with one structured error and exits.
+    One prefix per line; blank lines and `#` comments are ignored.
+    """
+    return [
+        stripped
+        for line in path.read_text().splitlines()
+        if (stripped := line.strip()) and not stripped.startswith("#")
+    ]
+
+
+class MdRoute(NamedTuple):
+    """How to source a non-GitHub URL, and the canonical URL to record.
+
+    `fetch_url` is the direct `.md` to fetch, or None when `use_firecrawl`.
+    `canonical_url` is always query/fragment-free with no trailing `.md`.
+    """
+
+    use_firecrawl: bool
+    fetch_url: str | None
+    canonical_url: str
+
+
+def _strip_query_fragment(url: str) -> str:
+    """Drop any `?query` and `#fragment`, keeping scheme, host, and path."""
+    return urlunparse(urlparse(url)._replace(query="", fragment=""))
+
+
+def _has_no_file_suffix(url: str) -> bool:
+    """True when the URL's final path segment carries no `.` file suffix."""
+    return "." not in urlparse(url).path.rstrip("/").rsplit("/", 1)[-1]
+
+
+def resolve_md_route(url: str, prefixes: list[str]) -> MdRoute:
+    """Resolve a slash-trimmed non-GitHub URL to its fetch source and canonical URL.
+
+    `.md` URLs fetch as-is, allowlisted suffixless URLs via a `.md` twin, else FireCrawl.
+    """
+    url = _strip_query_fragment(url)
+    if is_md_url(url):
+        return MdRoute(
+            use_firecrawl=False, fetch_url=url, canonical_url=url.removesuffix(".md")
+        )
+    if _has_no_file_suffix(url) and any(f"{url}/".startswith(p) for p in prefixes):
+        return MdRoute(use_firecrawl=False, fetch_url=f"{url}.md", canonical_url=url)
+    return MdRoute(use_firecrawl=True, fetch_url=None, canonical_url=url)
+
+
+def github_blob_to_raw_url(url: str) -> str:
+    """Convert a GitHub blob `.md` URL (main/master branch) to its raw URL.
+
+    Any non-conforming GitHub URL exits with a structured GITHUB_BLOB error.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -59,8 +109,7 @@ def github_blob_to_raw_url(url: str) -> str:
 def github_filename_from_blob_url(url: str) -> str:
     """Derive a `.md` filename from a GitHub blob URL's path.
 
-    Drops a leading `docs/` segment, lowercases, hyphen-joins. A name that breaks
-    the filename pattern exits with GITHUB_FILENAME.
+    Strips a leading `docs/`, lowercases, hyphen-joins; bad names exit GITHUB_FILENAME.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -111,7 +160,7 @@ def _title_from_url(markdown_url: str) -> str:
 
 
 def extract_title(content: str, markdown_url: str) -> str:
-    """Resolve a non-empty title for the document at `markdown_url`."""
+    """Resolve a title: frontmatter, else first H1, else the URL filename."""
     return (
         _title_from_frontmatter(content)
         or _title_from_h1(content)
@@ -120,10 +169,7 @@ def extract_title(content: str, markdown_url: str) -> str:
 
 
 def fetch_markdown(markdown_url: str) -> str:
-    """Fetch markdown text from `markdown_url`; exits on 404 or network failure.
-
-    Prints `✅ Fetched markdown|…|` on success. No retry, no FireCrawl fallback.
-    """
+    """Fetch markdown text from `markdown_url`; exits on 404 or network failure."""
     # S310: doc URL is operator-supplied via the CLI
     request = urllib.request.Request(  # noqa: S310
         markdown_url, headers={"User-Agent": USER_AGENT}

@@ -71,16 +71,14 @@ def _validate_directory_for_collection(dir_path: Path, index_path: Path) -> None
         sys.exit(1)
 
 
-def filename_from_url(url: str) -> str:
-    """Derive a `.md` filename from a (non-GitHub) doc URL path.
+def filename_from_canonical_url(url: str) -> str:
+    """Derive a `.md` filename from a non-GitHub doc URL path.
 
-    Drops everything up to and including a `docs` path segment, strips a
-    trailing `.md`, then lowercases and sanitises the remainder into a
-    hyphen-joined slug. A bare docs root falls back to `index.md`.
+    Expects the canonical URL from `resolve_md_route` (no query/fragment or
+    trailing `.md`); a `docs` segment and any prefix are dropped to avoid a
+    redundant `docs-` slug.
     """
     segments = [s for s in urlparse(url).path.strip("/").split("/") if s]
-    if segments and segments[-1].endswith(".md"):
-        segments[-1] = segments[-1][:-3]
     if "docs" in segments:
         segments = segments[segments.index("docs") + 1 :]
     slug = re.sub(r"[^a-z0-9]+", "-", "-".join(segments).lower()).strip("-")
@@ -161,11 +159,12 @@ def _add_or_update_source_in_index(
 
 
 class FetchedDoc(NamedTuple):
-    """A fetched source document: body, title, and URL-derived filename."""
+    """A fetched source document: body, title, filename, and canonical URL."""
 
     content: str
     title: str
     filename: str
+    source_url: str
 
 
 def fetch_document(source_url: str) -> FetchedDoc:
@@ -180,14 +179,18 @@ def fetch_document(source_url: str) -> FetchedDoc:
         filename = markdown_source.github_filename_from_blob_url(source_url)
         content = markdown_source.fetch_markdown(raw_url)
         title = markdown_source.extract_title(content, raw_url)
-    elif markdown_source.is_md_url(source_url):
-        filename = filename_from_url(source_url)
-        content = markdown_source.fetch_markdown(source_url)
-        title = markdown_source.extract_title(content, source_url)
+        return FetchedDoc(content, title, filename, source_url)
+
+    prefixes = markdown_source.load_md_allowlist()
+    route = markdown_source.resolve_md_route(source_url, prefixes)
+    filename = filename_from_canonical_url(route.canonical_url)
+    # fetch_url is set unless we route to FireCrawl; the None check also narrows it.
+    if route.use_firecrawl or route.fetch_url is None:
+        content, title = firecrawl_source.scrape(route.canonical_url)
     else:
-        content, title = firecrawl_source.scrape(source_url)
-        filename = filename_from_url(source_url)
-    return FetchedDoc(content, title, filename)
+        content = markdown_source.fetch_markdown(route.fetch_url)
+        title = markdown_source.extract_title(content, route.fetch_url)
+    return FetchedDoc(content, title, filename, route.canonical_url)
 
 
 def _write_document(dir_path: Path, doc: FetchedDoc) -> None:
@@ -242,13 +245,14 @@ def main() -> None:
 
     _write_document(dir_path, doc)
 
+    # doc.source_url is canonical: query/fragment-free, no trailing `.md`
+    # (blob form for GitHub). The raw input is kept only for the steps above.
     is_update = _add_or_update_source_in_index(
-        dir_path, doc.title, source_url, doc.filename
+        dir_path, doc.title, doc.source_url, doc.filename
     )
 
-    # source_url is canonical (blob form for GitHub)
     verb = "overwrote and re-indexed" if is_update else "created and indexed new"
-    print(f"🎉 Curation Success!|{verb} document|{source_url}|\n")
+    print(f"🎉 Curation Success!|{verb} document|{doc.source_url}|\n")
 
 
 if __name__ == "__main__":

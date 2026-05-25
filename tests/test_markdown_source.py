@@ -1,7 +1,6 @@
-"""Tests for markdown_source.py.
+"""Tests for markdown_source.py; network tests gated by `firecrawl`/`github` markers."""
 
-Pure-helper tests are offline; TestFetchMarkdown hits the real network.
-"""
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -12,7 +11,12 @@ from scripts.markdown_source import (
     github_filename_from_blob_url,
     is_github_url,
     is_md_url,
+    load_md_allowlist,
+    resolve_md_route,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class TestIsGithubUrl:
@@ -51,6 +55,74 @@ class TestIsMdUrl:
     def test_classifies_url(self, url: str, expected: bool) -> None:  # noqa: FBT001 — bool is the correct param type for a URL classifier test
         """True only when the URL path ends in `.md`; query string is ignored."""
         assert is_md_url(url) is expected
+
+
+class TestLoadMdAllowlist:
+    """Allowlist loader: one prefix per line, ignoring blanks and `#` comments."""
+
+    def test_parses_prefixes_ignoring_comments_and_blanks(self, tmp_path: Path) -> None:
+        """Comment lines, blank lines, and surrounding whitespace are dropped."""
+        allowlist = tmp_path / "md_allowlist.txt"
+        allowlist.write_text(
+            "# a comment\n"
+            "\n"
+            "https://vercel.com/docs/\n"
+            "  https://vitest.dev/guide/  \n"
+            "\n"
+            "# trailing comment\n"
+        )
+        assert load_md_allowlist(allowlist) == [
+            "https://vercel.com/docs/",
+            "https://vitest.dev/guide/",
+        ]
+
+
+BASE = "https://vercel.com/docs"
+PREFIXES = [f"{BASE}/"]
+
+
+class TestResolveMdRoute:
+    """The non-GitHub routing decision plus the canonical URL it records."""
+
+    @pytest.mark.parametrize(
+        ("url", "expected"),
+        [
+            (f"{BASE}/storage.md", (False, f"{BASE}/storage.md", f"{BASE}/storage")),
+            (f"{BASE}/storage.md?v=2", (False, f"{BASE}/storage.md", f"{BASE}/storage")),
+            (f"{BASE}/storage", (False, f"{BASE}/storage.md", f"{BASE}/storage")),
+            (BASE, (False, f"{BASE}.md", BASE)),
+            (f"{BASE}-other", (True, None, f"{BASE}-other")),
+            (f"{BASE}/worktrees#x", (False, f"{BASE}/worktrees.md", f"{BASE}/worktrees")),
+            (f"{BASE}/page.html", (True, None, f"{BASE}/page.html")),
+            (f"{BASE}/v2.0/api", (False, f"{BASE}/v2.0/api.md", f"{BASE}/v2.0/api")),
+            ("https://x.io/docs/page", (True, None, "https://x.io/docs/page")),
+            ("https://example.com", (True, None, "https://example.com")),
+        ],
+        ids=[
+            "md-suffix-fetched-as-is",
+            "md-suffix-query-stripped",
+            "allowlisted-no-suffix-appends-md",
+            "allowlisted-section-root-appends-md",
+            "boundary-sibling-path-firecrawls",
+            "allowlisted-fragment-stripped",
+            "allowlisted-html-suffix-firecrawls",
+            "dot-in-nonfinal-segment-still-appends",
+            "non-allowlisted-no-suffix-firecrawls",
+            "bare-domain-firecrawls",
+        ],
+    )
+    def test_routes_url(self, url: str, expected: tuple[bool, str | None, str]) -> None:
+        """`.md` wins first; else allowlisted no-suffix appends; else FireCrawl.
+
+        A `MdRoute` compares equal to a plain `(use_firecrawl, fetch_url,
+        canonical_url)` tuple, so expectations read as tuples.
+        """
+        assert resolve_md_route(url, PREFIXES) == expected
+
+    def test_md_suffix_takes_precedence_over_allowlist(self) -> None:
+        """An allowlisted `.md` URL is fetched as-is, not appended."""
+        url = f"{BASE}/storage.md"
+        assert resolve_md_route(url, PREFIXES).fetch_url == url
 
 
 class TestGithubBlobToRawUrl:
@@ -122,7 +194,7 @@ class TestGithubFilenameFromBlobUrl:
         ],
     )
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
-        """Path becomes hyphen-joined basename; one leading 'docs/' segment is dropped."""
+        """Path segments are hyphen-joined; one leading 'docs/' segment is dropped."""
         assert github_filename_from_blob_url(blob_url) == expected
 
     def test_pattern_violating_name_fails(

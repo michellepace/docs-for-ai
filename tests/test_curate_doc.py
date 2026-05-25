@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from scripts import curate_doc
-from scripts.curate_doc import filename_from_url
+from scripts.curate_doc import filename_from_canonical_url
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -34,14 +34,13 @@ class TestFilenameFromUrl:
         [
             ("https://clerk.com/docs/guides/users/inviting", "guides-users-inviting.md"),
             ("https://vercel.com/docs/monorepos", "monorepos.md"),
-            ("https://vercel.com/docs/monorepos.md", "monorepos.md"),
             ("https://biomejs.dev/guides/configure-biome/", "guides-configure-biome.md"),
             ("https://docs.convex.dev/auth/convex-auth", "auth-convex-auth.md"),
         ],
     )
     def test_derives_expected_name(self, url: str, expected: str) -> None:
         """Path drives the name; a `docs` segment (and its prefix) is dropped."""
-        assert filename_from_url(url) == expected
+        assert filename_from_canonical_url(url) == expected
 
     @pytest.mark.parametrize(
         ("url", "expected"),
@@ -55,11 +54,11 @@ class TestFilenameFromUrl:
     )
     def test_sanitises_messy_url_paths(self, url: str, expected: str) -> None:
         """Uppercase, underscores, dots, query/fragment slugify; empty path → index.md."""
-        assert filename_from_url(url) == expected
+        assert filename_from_canonical_url(url) == expected
 
     def test_bare_docs_root_falls_back_to_index(self) -> None:
         """Trailing `docs/` is a dropped segment, so it yields index.md, not docs.md."""
-        assert filename_from_url("https://example.com/docs/") == "index.md"
+        assert filename_from_canonical_url("https://example.com/docs/") == "index.md"
 
 
 def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
@@ -168,11 +167,53 @@ class TestMarkdownDirectPath:
         assert doc.read_text() == "# Hello\n\nbody\n"
 
         index = (collection / "INDEX.xml").read_text()
-        assert f"<source_url>{url}</source_url>" in index
+        # Canonical source_url drops the trailing `.md` (the two spellings collapse).
+        assert "<source_url>https://example.com/docs/hello/there/hi</source_url>" in index
+        assert f"<source_url>{url}</source_url>" not in index
         assert "<local_file>hello-there-hi.md</local_file>" in index
         assert "<title>Hello</title>" in index
 
         assert "🎉 Curation Success!|" in capsys.readouterr().out
+
+
+class TestCanonicalCollapse:
+    """The `…/x` and `…/x.md` spellings of one page collapse to a single entry."""
+
+    def test_no_suffix_then_md_suffix_yields_one_source(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Allowlisted `…/storage` then `…/storage.md` updates, not duplicates."""
+        monkeypatch.setattr(
+            curate_doc.markdown_source,
+            "load_md_allowlist",
+            lambda: ["https://allowed.test/docs/"],
+        )
+
+        def _fake_fetch(_url: str) -> str:
+            return "# Storage\n\nbody\n"
+
+        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for an allowlisted/.md URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+
+        collection = tmp_path / "coll"
+        for url in (
+            "https://allowed.test/docs/storage",
+            "https://allowed.test/docs/storage.md",
+        ):
+            monkeypatch.setattr("sys.argv", ["curate_doc.py", str(collection), url])
+            curate_doc.main()
+
+        index = (collection / "INDEX.xml").read_text()
+        assert index.count("<source>") == 1
+        assert "<source_url>https://allowed.test/docs/storage</source_url>" in index
+        assert (
+            "<source_url>https://allowed.test/docs/storage.md</source_url>" not in index
+        )
 
 
 class TestFetchDocumentRouting:
@@ -222,10 +263,69 @@ class TestFetchDocumentRouting:
         monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _fake_scrape)
 
         url = "https://example.com/docs/some/page"
-        curate_doc.fetch_document(url)
+        doc = curate_doc.fetch_document(url)
 
         # The else-branch reached FireCrawl with the source URL; direct fetch raised.
         assert scraped_urls == [url]
+        # A non-allowlisted URL is stored verbatim as its own canonical.
+        assert doc.source_url == url
+
+    def test_allowlisted_no_suffix_fetches_md_twin(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """An allowlisted suffixless URL fetches `url + '.md'` and never FireCrawls."""
+        monkeypatch.setattr(
+            curate_doc.markdown_source,
+            "load_md_allowlist",
+            lambda: ["https://allowed.test/docs/"],
+        )
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "# stub\n\nbody\n"
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for an allowlisted URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+
+        url = "https://allowed.test/docs/storage"
+        doc = curate_doc.fetch_document(url)
+
+        # The free `.md` twin is fetched; canonical drops the appended suffix.
+        assert fetched_urls == [f"{url}.md"]
+        assert doc.source_url == url
+
+    def test_allowlisted_suffixed_url_routes_to_firecrawl(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """An allowlisted but suffixed (.html) URL still FireCrawls; stored as given."""
+        monkeypatch.setattr(
+            curate_doc.markdown_source,
+            "load_md_allowlist",
+            lambda: ["https://allowed.test/docs/"],
+        )
+        scraped_urls: list[str] = []
+
+        def _no_fetch(_url: str) -> str:
+            msg = "markdown fetch must not be called for a suffixed URL"
+            raise AssertionError(msg)
+
+        def _fake_scrape(url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            scraped_urls.append(url)
+            return "stub body", "stub title"
+
+        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _no_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _fake_scrape)
+
+        url = "https://allowed.test/docs/page.html"
+        doc = curate_doc.fetch_document(url)
+
+        assert scraped_urls == [url]
+        assert doc.source_url == url
 
 
 @pytest.mark.firecrawl

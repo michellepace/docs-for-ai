@@ -2,36 +2,36 @@
   <source>
     <title>Getting started with Vercel</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://vercel.com/docs/getting-started-with-vercel.md</source_url>
+    <source_url>https://vercel.com/docs/getting-started-with-vercel</source_url>
     <local_file>getting-started-with-vercel.md</local_file>
-    <scraped_at>2026-05-24</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Next.js on Vercel</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://vercel.com/docs/frameworks/full-stack/nextjs.md</source_url>
+    <source_url>https://vercel.com/docs/frameworks/full-stack/nextjs</source_url>
     <local_file>frameworks-full-stack-nextjs.md</local_file>
-    <scraped_at>2026-05-24</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://vercel.com/kb/guide/nextjs-prisma-postgres.md</source_url>
+    <source_url>https://vercel.com/kb/guide/nextjs-prisma-postgres</source_url>
     <local_file>kb-guide-nextjs-prisma-postgres.md</local_file>
-    <scraped_at>2026-05-24</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>AI SDK</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://vercel.com/docs/ai-sdk.md</source_url>
+    <source_url>https://vercel.com/docs/ai-sdk</source_url>
     <local_file>ai-sdk.md</local_file>
-    <scraped_at>2026-05-24</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Production checklist for launch</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://vercel.com/docs/production-checklist.md</source_url>
+    <source_url>https://vercel.com/docs/production-checklist</source_url>
     <local_file>production-checklist.md</local_file>
-    <scraped_at>2026-05-24</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
 </docs_index>

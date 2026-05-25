@@ -1,14 +1,14 @@
-[Skip to content](https://vitest.dev/guide/why#VPContent)
+---
+url: /guide/why.md
+---
 
-On this page
+# Why Vitest
 
-# Why Vitest [​](https://vitest.dev/guide/why\#why-vitest)
+:::tip NOTE
+Vitest is powered by Vite. While you do not need to know Vite to use Vitest, understanding Vite helps explain some of Vitest's unique advantages. To learn more about Vite, read the [Why Vite Guide](https://vitejs.dev/guide/why.html) or watch [Next generation frontend tooling with ViteJS](https://www.youtube.com/watch?v=UJypSr8IhKY) by [Evan You](https://bsky.app/profile/evanyou.me).
+:::
 
-NOTE
-
-This guide assumes that you are familiar with Vite. A good way to start learning more is to read the [Why Vite Guide](https://vitejs.dev/guide/why), and [Next generation frontend tooling with ViteJS](https://www.youtube.com/watch?v=UJypSr8IhKY), a stream where [Evan You](https://bsky.app/profile/evanyou.me) did a demo explaining the main concepts.
-
-## The Need for a Vite Native Test Runner [​](https://vitest.dev/guide/why\#the-need-for-a-vite-native-test-runner)
+## The Need for a Vite Native Test Runner
 
 Vite's out-of-the-box support for common web patterns, features like glob imports and SSR primitives, and its many plugins and integrations are fostering a vibrant ecosystem. Its dev and build story are key to its success. For docs, there are several SSG-based alternatives powered by Vite. Vite's Unit Testing story hasn't been clear though. Existing options like [Jest](https://jestjs.io/) were created in a different context. There is a lot of duplication between Jest and Vite, forcing users to configure two different pipelines.
 
@@ -18,8 +18,8 @@ Given Jest's massive adoption, Vitest provides a compatible API that allows you 
 
 **Vitest aims to position itself as the Test Runner of choice for Vite projects, and as a solid alternative even for projects not using Vite.**
 
-Continue reading in the [Getting Started Guide](https://vitest.dev/guide/)
+Continue reading in the [Getting Started Guide](./index)
 
-## How is Vitest Different from X? [​](https://vitest.dev/guide/why\#how-is-vitest-different-from-x)
+## How is Vitest Different from X?
 
-You can check out the [Comparisons](https://vitest.dev/guide/comparisons) section for more details on how Vitest differs from other similar tools.
+You can check out the [Comparisons](./comparisons) section for more details on how Vitest differs from other similar tools.

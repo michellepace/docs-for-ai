@@ -1,5 +1,5 @@
 ---
-title: In-Source Testing | Guide
+url: /guide/in-source.md
 ---
 
 # In-Source Testing
@@ -48,7 +48,7 @@ export default defineConfig({
 Then you can start to test!
 
 ```bash
-npx vitest
+$ npx vitest
 ```
 
 ## Production Build
@@ -160,8 +160,8 @@ Reference to [`examples/in-source-test`](https://github.com/vitest-dev/vitest/tr
 
 This feature could be useful for:
 
-- Unit testing for small-scoped functions or utilities
-- Prototyping
-- Inline Assertion
+* Unit testing for small-scoped functions or utilities
+* Prototyping
+* Inline Assertion
 
 It's recommended to **use separate test files instead** for more complex tests like components or E2E testing.

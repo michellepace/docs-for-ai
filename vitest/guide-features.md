@@ -1,25 +1,23 @@
 ---
-title: Features | Guide
-outline: deep
+url: /guide/features.md
 ---
 
 # Features
 
-<FeaturesList class="!gap-1 text-lg" />
-
-<div h-2 />
-<CourseLink href="https://vueschool.io/lessons/your-first-test?friend=vueuse">Learn how to write your first test by Video</CourseLink>
+::: tip
+This page is a high-level overview of Vitest's capabilities. If you're new to Vitest, we recommend reading the [Learn](/guide/learn/writing-tests) tutorial first for a hands-on introduction.
+:::
 
 ## Shared Config between Test, Dev and Build
 
 Vite's config, transformers, resolvers, and plugins. Use the same setup from your app to run the tests.
 
-Learn more at [Configuring Vitest](/guide/#configuring-vitest).
+Learn more at [Configuring Vitest](/config/).
 
 ## Watch Mode
 
 ```bash
-vitest
+$ vitest
 ```
 
 When you modify your source code or the test files, Vitest smartly searches the module graph and only reruns the related tests, just like how HMR works in Vite!
@@ -35,7 +33,7 @@ Out-of-the-box ES Module / TypeScript / JSX support / PostCSS
 ## Threads
 
 By default Vitest runs test files in [multiple processes](/guide/parallelism) using [`node:child_process`](https://nodejs.org/api/child_process.html), allowing tests to run simultaneously. If you want to speed up your test suite even further, consider enabling `--pool=threads` to run tests using [`node:worker_threads`](https://nodejs.org/api/worker_threads.html) (beware that some packages might not work with this setup).
-To run tests in a single thread or process, see [`fileParallelism`](/config/#fileParallelism).
+To run tests in a single thread or process, see [`fileParallelism`](/config/fileparallelism).
 
 Vitest also isolates each file's environment so env mutations in one file don't affect others. Isolation can be disabled by passing `--no-isolate` to the CLI (trading correctness for run performance).
 
@@ -73,7 +71,7 @@ describe.concurrent('suite', () => {
 })
 ```
 
-You can also use `.skip`, `.only`, and `.todo` with concurrent suites and tests. Read more in the [API Reference](/api/#test-concurrent).
+You can also use `.skip`, `.only`, and `.todo` with concurrent suites and tests. Read more in the [API Reference](/api/test#test-concurrent).
 
 ::: warning
 When running concurrent tests, Snapshots and Assertions must use `expect` from the local [Test Context](/guide/test-context) to ensure the right test is detected.
@@ -98,11 +96,11 @@ Learn more at [Snapshot](/guide/snapshot).
 
 [Chai](https://www.chaijs.com/) is built-in for assertions with [Jest `expect`](https://jestjs.io/docs/expect)-compatible APIs.
 
-Notice that if you are using third-party libraries that add matchers, setting [`test.globals`](/config/#globals) to `true` will provide better compatibility.
+Notice that if you are using third-party libraries that add matchers, setting [`test.globals`](/config/globals) to `true` will provide better compatibility.
 
 ## Mocking
 
-[Tinyspy](https://github.com/tinylibs/tinyspy) is built-in for mocking with `jest`-compatible APIs on `vi` object.
+Vitest provides `jest`-compatible APIs on `vi` object.
 
 ```ts
 import { expect, vi } from 'vitest'
@@ -126,11 +124,11 @@ Vitest supports both [happy-dom](https://github.com/capricorn86/happy-dom) or [j
 ::: code-group
 
 ```bash [happy-dom]
-npm i -D happy-dom
+$ npm i -D happy-dom
 ```
 
 ```bash [jsdom]
-npm i -D jsdom
+$ npm i -D jsdom
 ```
 
 :::
@@ -189,9 +187,9 @@ if (import.meta.vitest) {
 
 Learn more at [In-source testing](/guide/in-source).
 
-## Benchmarking <Badge type="warning">Experimental</Badge> {#benchmarking}
+## Benchmarking Experimental {#benchmarking}
 
-You can run benchmark tests with [`bench`](/api/#bench) function via [Tinybench](https://github.com/tinylibs/tinybench) to compare performance results.
+You can run benchmark tests with [`bench`](/api/test#bench) function via [Tinybench](https://github.com/tinylibs/tinybench) to compare performance results.
 
 ```ts [sort.bench.ts]
 import { bench, describe } from 'vitest'
@@ -213,10 +211,7 @@ describe('sort', () => {
 })
 ```
 
-<img alt="Benchmark report" img-dark src="https://github.com/vitest-dev/vitest/assets/4232207/6f0383ea-38ba-4f14-8a05-ab243afea01d">
-<img alt="Benchmark report" img-light src="https://github.com/vitest-dev/vitest/assets/4232207/efbcb427-ecf1-4882-88de-210cd73415f6">
-
-## Type Testing <Badge type="warning">Experimental</Badge> {#type-testing}
+## Type Testing Experimental {#type-testing}
 
 You can [write tests](/guide/testing-types) to catch type regressions. Vitest comes with [`expect-type`](https://github.com/mmkal/expect-type) package to provide you with a similar and easy to understand API.
 
@@ -294,7 +289,7 @@ window.addEventListener('unhandledrejection', () => {
 
 :::
 
-Alternatively, you can also ignore reported errors with a [`dangerouslyIgnoreUnhandledErrors`](/config/#dangerouslyignoreunhandlederrors) option. Vitest will still report them, but they won't affect the test result (exit code won't be changed).
+Alternatively, you can also ignore reported errors with a [`dangerouslyIgnoreUnhandledErrors`](/config/dangerouslyignoreunhandlederrors) option. Vitest will still report them, but they won't affect the test result (exit code won't be changed).
 
 If you need to test that error was not caught, you can create a test that looks like this:
 

@@ -1,6 +1,5 @@
 ---
-title: Browser Mode | Guide
-outline: deep
+url: /guide/browser.md
 ---
 
 # Browser Mode {#browser-mode}
@@ -10,9 +9,6 @@ This page provides information about the browser mode feature in the Vitest API,
 ::: tip
 If you are looking for documentation for `expect`, `vi` or any general API like test projects or type testing, refer to the ["Getting Started" guide](/guide/).
 :::
-
-<img alt="Vitest UI" img-light src="/ui-browser-1-light.png">
-<img alt="Vitest UI" img-dark src="/ui-browser-1-dark.png">
 
 ## Installation
 
@@ -65,13 +61,13 @@ bun add -D vitest @vitest/browser-preview
 :::
 
 ::: warning
-However, to run tests in CI you need to install either [`playwright`](https://npmjs.com/package/playwright) or [`webdriverio`](https://www.npmjs.com/package/webdriverio). We also recommend switching to either one of them for testing locally instead of using the default `preview` provider since it relies on simulating events instead of using Chrome DevTools Protocol.
+However, to run tests in CI you need to install either [`playwright`](https://npmx.dev/package/playwright) or [`webdriverio`](https://npmx.dev/package/webdriverio). We also recommend switching to either one of them for testing locally instead of using the default `preview` provider since it relies on simulating events instead of using Chrome DevTools Protocol.
 
 If you don't already use one of these tools, we recommend starting with Playwright because it supports parallel execution, which makes your tests run faster.
 
 ::: tabs key:provider
-== Playwright
-[Playwright](https://npmjs.com/package/playwright) is a framework for Web Testing and Automation.
+\== Playwright
+[Playwright](https://npmx.dev/package/playwright) is a framework for Web Testing and Automation.
 
 ::: code-group
 
@@ -91,9 +87,9 @@ pnpm add -D vitest @vitest/browser-playwright
 bun add -D vitest @vitest/browser-playwright
 ```
 
-== WebdriverIO
+\== WebdriverIO
 
-[WebdriverIO](https://www.npmjs.com/package/webdriverio) allows you to run tests locally using the WebDriver protocol.
+[WebdriverIO](https://npmx.dev/package/webdriverio) allows you to run tests locally using the WebDriver protocol.
 
 ::: code-group
 
@@ -138,9 +134,9 @@ export default defineConfig({
 ```
 
 ::: info
-Vitest assigns port `63315` to avoid conflicts with the development server, allowing you to run both in parallel. You can change that with the [`browser.api`](/config/#browser-api) option.
+Vitest assigns port `63315` to avoid conflicts with the development server, allowing you to run both in parallel. You can change that with the [`browser.api`](/config/browser/api) option.
 
-The CLI does not prints the Vite server URL automatically. You can press "b" to print the URL when running in watch mode.
+The CLI does not print the Vite server URL automatically. You can press "b" to print the URL when running in watch mode.
 :::
 
 If you have not used Vite before, make sure you have your framework's plugin installed and specified in the config. Some frameworks might require extra configuration to work - check their Vite related documentation to be sure.
@@ -314,15 +310,15 @@ export default defineConfig({
 
 The browser option in Vitest depends on the provider. Vitest will fail, if you pass `--browser` and don't specify its name in the config file. Available options:
 
-- `webdriverio` supports these browsers:
-  - `firefox`
-  - `chrome`
-  - `edge`
-  - `safari`
-- `playwright` supports these browsers:
-  - `firefox`
-  - `webkit`
-  - `chromium`
+* `webdriverio` supports these browsers:
+  * `firefox`
+  * `chrome`
+  * `edge`
+  * `safari`
+* `playwright` supports these browsers:
+  * `firefox`
+  * `webkit`
+  * `chromium`
 
 ## Browser Compatibility
 
@@ -330,10 +326,10 @@ Vitest uses [Vite dev server](https://vitejs.dev/guide/#browser-support) to run 
 
 By default, Vite targets browsers which support the native [ES Modules](https://caniuse.com/es6-module), native [ESM dynamic import](https://caniuse.com/es6-module-dynamic-import), and [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta). On top of that, we utilize [`BroadcastChannel`](https://caniuse.com/?search=BroadcastChannel) to communicate between iframes:
 
-- Chrome >=87
-- Firefox >=78
-- Safari >=15.4
-- Edge >=88
+* Chrome >=87
+* Firefox >=78
+* Safari >=15.4
+* Edge >=88
 
 ## Running Tests
 
@@ -355,7 +351,7 @@ npx vitest --browser.headless
 Since Vitest 3.2, if you don't have the `browser` option in your config but specify the `--browser` flag, Vitest will fail because it can't assume that config is meant for the browser and not Node.js tests.
 :::
 
-By default, Vitest will automatically open the browser UI for development. Your tests will run inside an iframe in the center. You can configure the viewport by selecting the preferred dimensions, calling `page.viewport` inside the test, or setting default values in [the config](/config/#browser-viewport).
+By default, Vitest will automatically open the browser UI for development. Your tests will run inside an iframe in the center. You can configure the viewport by selecting the preferred dimensions, calling `page.viewport` inside the test, or setting default values in [the config](/config/browser/viewport).
 
 ## Headless
 
@@ -389,7 +385,7 @@ npx vitest --browser.headless
 In this case, Vitest will run in headless mode using the Chrome browser.
 
 ::: warning
-Headless mode is not available by default. You need to use either [`playwright`](https://npmjs.com/package/playwright) or [`webdriverio`](https://www.npmjs.com/package/webdriverio) providers to enable this feature.
+Headless mode is not available by default. You need to use either [`playwright`](https://npmx.dev/package/playwright) or [`webdriverio`](https://npmx.dev/package/webdriverio) providers to enable this feature.
 :::
 
 ## Examples
@@ -420,15 +416,16 @@ test('properly handles form inputs', async () => {
 
 However, Vitest also provides packages to render components for several popular frameworks out of the box:
 
-- [`vitest-browser-vue`](https://github.com/vitest-dev/vitest-browser-vue) to render [vue](https://vuejs.org) components
-- [`vitest-browser-svelte`](https://github.com/vitest-dev/vitest-browser-svelte) to render [svelte](https://svelte.dev) components
-- [`vitest-browser-react`](https://github.com/vitest-dev/vitest-browser-react) to render [react](https://react.dev) components
+* [`vitest-browser-vue`](https://github.com/vitest-dev/vitest-browser-vue) to render [vue](https://vuejs.org) components
+* [`vitest-browser-svelte`](https://github.com/vitest-dev/vitest-browser-svelte) to render [svelte](https://svelte.dev) components
+* [`vitest-browser-react`](https://github.com/vitest-dev/vitest-browser-react) to render [react](https://react.dev) components
+* [`vitest-browser-angular`](https://github.com/vitest-community/vitest-browser-angular) to render [Angular](https://angular.dev) components
 
 Community packages are available for other frameworks:
 
-- [`vitest-browser-lit`](https://github.com/EskiMojo14/vitest-browser-lit) to render [lit](https://lit.dev) components
-- [`vitest-browser-preact`](https://github.com/JoviDeCroock/vitest-browser-preact) to render [preact](https://preactjs.com) components
-- [`vitest-browser-qwik`](https://github.com/kunai-consulting/vitest-browser-qwik) to render [qwik](https://qwik.dev) components
+* [`vitest-browser-lit`](https://github.com/EskiMojo14/vitest-browser-lit) to render [lit](https://lit.dev) components
+* [`vitest-browser-preact`](https://github.com/JoviDeCroock/vitest-browser-preact) to render [preact](https://preactjs.com) components
+* [`vitest-browser-qwik`](https://github.com/QwikDev/vitest-browser-qwik) to render [qwik](https://qwik.dev) components
 
 If your framework is not represented, feel free to create your own package - it is a simple wrapper around the framework renderer and `page.elementLocator` API. We will add a link to it on this page. Make sure it has a name starting with `vitest-browser-`.
 
@@ -562,8 +559,8 @@ Vitest doesn't support all frameworks out of the box, but you can use external t
 
 For unsupported frameworks, we recommend using `testing-library` packages:
 
-- [`@solidjs/testing-library`](https://testing-library.com/docs/solid-testing-library/intro) to render [solid](https://www.solidjs.com) components
-- [`@marko/testing-library`](https://testing-library.com/docs/marko-testing-library/intro) to render [marko](https://markojs.com) components
+* [`@solidjs/testing-library`](https://testing-library.com/docs/solid-testing-library/intro) to render [solid](https://www.solidjs.com) components
+* [`@marko/testing-library`](https://testing-library.com/docs/marko-testing-library/intro) to render [marko](https://markojs.com) components
 
 You can also see more examples in [`browser-examples`](https://github.com/vitest-tests/browser-examples) repository.
 
@@ -626,7 +623,7 @@ test('renders a message', async () => {
 
 When using Vitest Browser, it's important to note that thread blocking dialogs like `alert` or `confirm` cannot be used natively. This is because they block the web page, which means Vitest cannot continue communicating with the page, causing the execution to hang.
 
-In such situations, Vitest provides default mocks with default returned values for these APIs. This ensures that if the user accidentally uses synchronous popup web APIs, the execution would not hang. However, it's still recommended for the user to mock these web APIs for better experience. Read more in [Mocking](/guide/mocking).
+In such situations, Vitest provides default mocks with default returned values for these APIs. This ensures that if the user accidentally uses synchronous popup web APIs, the execution would not hang. However, it's still recommended for the user to mock these web APIs for a better experience. Read more in [Mocking](/guide/mocking).
 
 ### Spying on Module Exports
 
@@ -652,7 +649,7 @@ vi.mocked(module.method).mockImplementation(() => {
 })
 ```
 
-However, the only way to mock exported _variables_ is to export a method that will change the internal value:
+However, the only way to mock exported *variables* is to export a method that will change the internal value:
 
 ::: code-group
 

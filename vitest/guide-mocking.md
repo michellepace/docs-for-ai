@@ -1,11 +1,14 @@
 ---
-title: Mocking | Guide
-outline: false
+url: /guide/mocking.md
 ---
 
 # Mocking
 
-When writing tests it's only a matter of time before you need to create a "fake" version of an internal — or external — service. This is commonly referred to as **mocking**. Vitest provides utility functions to help you out through its `vi` helper. You can import it from `vitest` or access it globally if [`global` configuration](/config/#globals) is enabled.
+::: tip
+New to mocking? Start with the [Mock Functions](/guide/learn/mock-functions) tutorial for a hands-on introduction to `vi.fn`, `vi.spyOn`, and `vi.mock`.
+:::
+
+When writing tests it's only a matter of time before you need to create a "fake" version of an internal — or external — service. This is commonly referred to as **mocking**. Vitest provides utility functions to help you out through its `vi` helper. You can import it from `vitest` or access it globally if [`global` configuration](/config/globals) is enabled.
 
 ::: warning
 Always remember to clear or restore mocks before or after each test run to undo mock state changes between runs! See [`mockReset`](/api/mock#mockreset) docs for more info.
@@ -15,14 +18,14 @@ If you are not familiar with `vi.fn`, `vi.mock` or `vi.spyOn` methods, check the
 
 Vitest has a comprehensive list of guides regarding mocking:
 
-- [Mocking Classes](/guide/mocking/classes.md)
-- [Mocking Dates](/guide/mocking/dates.md)
-- [Mocking the File System](/guide/mocking/file-system.md)
-- [Mocking Functions](/guide/mocking/functions.md)
-- [Mocking Globals](/guide/mocking/globals.md)
-- [Mocking Modules](/guide/mocking/modules.md)
-- [Mocking Requests](/guide/mocking/requests.md)
-- [Mocking Timers](/guide/mocking/timers.md)
+* [Mocking Classes](/guide/mocking/classes.md)
+* [Mocking Dates](/guide/mocking/dates.md)
+* [Mocking the File System](/guide/mocking/file-system.md)
+* [Mocking Functions](/guide/mocking/functions.md)
+* [Mocking Globals](/guide/mocking/globals.md)
+* [Mocking Modules](/guide/mocking/modules.md)
+* [Mocking Requests](/guide/mocking/requests.md)
+* [Mocking Timers](/guide/mocking/timers.md)
 
 For a simpler and quicker way to get started with mocking, you can check the Cheat Sheet below.
 
@@ -168,7 +171,7 @@ mocked() // is a spy function
 ```
 
 ::: warning
-Don't forget that this only [mocks _external_ access](#mocking-pitfalls). In this example, if `original` calls `mocked` internally, it will always call the function defined in the module, not in the mock factory.
+Don't forget that this only [mocks *external* access](/guide/mocking/modules#mocking-modules-pitfalls). In this example, if `original` calls `mocked` internally, it will always call the function defined in the module, not in the mock factory.
 :::
 
 ### Mock the current date
@@ -188,7 +191,7 @@ vi.useRealTimers()
 
 ### Mock a global variable
 
-You can set global variable by assigning a value to `globalThis` or using [`vi.stubGlobal`](/api/vi#vi-stubglobal) helper. When using `vi.stubGlobal`, it will **not** automatically reset between different tests, unless you enable [`unstubGlobals`](/config/#unstubglobals) config option or call [`vi.unstubAllGlobals`](/api/vi#vi-unstuballglobals).
+You can set global variable by assigning a value to `globalThis` or using [`vi.stubGlobal`](/api/vi#vi-stubglobal) helper. When using `vi.stubGlobal`, it will **not** automatically reset between different tests, unless you enable [`unstubGlobals`](/config/unstubglobals) config option or call [`vi.unstubAllGlobals`](/api/vi#vi-unstuballglobals).
 
 ```ts
 vi.stubGlobal('__VERSION__', '1.0.0')
@@ -200,7 +203,7 @@ expect(__VERSION__).toBe('1.0.0')
 1. To change environmental variable, you can just assign a new value to it.
 
 ::: warning
-The environmental variable value will **_not_** automatically reset between different tests.
+The environmental variable value will ***not*** automatically reset between different tests.
 :::
 
 ```ts
@@ -219,7 +222,7 @@ it('changes value', () => {
 })
 ```
 
-2. If you want to automatically reset the value(s), you can use the `vi.stubEnv` helper with the [`unstubEnvs`](/config/#unstubenvs) config option enabled (or call [`vi.unstubAllEnvs`](/api/vi#vi-unstuballenvs) manually in a `beforeEach` hook):
+2. If you want to automatically reset the value(s), you can use the `vi.stubEnv` helper with the [`unstubEnvs`](/config/unstubenvs) config option enabled (or call [`vi.unstubAllEnvs`](/api/vi#vi-unstuballenvs) manually in a `beforeEach` hook):
 
 ```ts
 import { expect, it, vi } from 'vitest'

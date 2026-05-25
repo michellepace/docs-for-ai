@@ -1,6 +1,5 @@
 ---
-title: Component Testing | Guide
-outline: deep
+url: /guide/browser/component-testing.md
 ---
 
 # Component Testing
@@ -13,10 +12,10 @@ Vitest provides comprehensive support for component testing across multiple fram
 
 Component testing sits between unit tests and end-to-end tests, offering several advantages:
 
-- **Faster feedback** - Test individual components without loading entire applications
-- **Isolated testing** - Focus on component behavior without external dependencies
-- **Better debugging** - Easier to pinpoint issues in specific components
-- **Comprehensive coverage** - Test edge cases and error states more easily
+* **Faster feedback** - Test individual components without loading entire applications
+* **Isolated testing** - Focus on component behavior without external dependencies
+* **Better debugging** - Easier to pinpoint issues in specific components
+* **Comprehensive coverage** - Test edge cases and error states more easily
 
 ## Browser Mode for Component Testing
 
@@ -29,14 +28,14 @@ Browser Mode is the recommended approach for component testing because it provid
 ::: tip
 Browser Mode catches issues that DOM simulation libraries might miss, including:
 
-- CSS layout and styling problems
-- Real browser API behavior
-- Accurate event handling and propagation
-- Proper focus management and accessibility features
+* CSS layout and styling problems
+* Real browser API behavior
+* Accurate event handling and propagation
+* Proper focus management and accessibility features
 
 :::
 
-### Purpose of this Guide
+### Purpose of This Guide
 
 This guide focuses specifically on **component testing patterns and best practices** using Vitest's capabilities. While many examples use Browser Mode (as it's the recommended approach), the focus here is on component-specific testing strategies rather than browser configuration details.
 
@@ -46,10 +45,10 @@ For detailed browser setup, configuration options, and advanced browser features
 
 Good component tests focus on **behavior and user experience** rather than implementation details:
 
-- **Test the contract** - How components receive inputs (props) and produce outputs (events, renders)
-- **Test user interactions** - Clicks, form submissions, keyboard navigation
-- **Test edge cases** - Error states, loading states, empty states
-- **Avoid testing internals** - State variables, private methods, CSS classes
+* **Test the contract** - How components receive inputs (props) and produce outputs (events, renders)
+* **Test user interactions** - Clicks, form submissions, keyboard navigation
+* **Test edge cases** - Error states, loading states, empty states
+* **Avoid testing internals** - State variables, private methods, CSS classes
 
 ### Component Testing Hierarchy
 
@@ -124,13 +123,13 @@ test('ProductList filters and displays products correctly', async () => {
 
 ## Testing Library Integration
 
-While Vitest provides official packages for popular frameworks ([`vitest-browser-vue`](https://www.npmjs.com/package/vitest-browser-vue), [`vitest-browser-react`](https://www.npmjs.com/package/vitest-browser-react), [`vitest-browser-svelte`](https://www.npmjs.com/package/vitest-browser-svelte)), you can integrate with [Testing Library](https://testing-library.com/) for frameworks not yet officially supported.
+While Vitest provides official packages for popular frameworks ([`vitest-browser-vue`](https://npmx.dev/package/vitest-browser-vue), [`vitest-browser-react`](https://npmx.dev/package/vitest-browser-react), [`vitest-browser-svelte`](https://npmx.dev/package/vitest-browser-svelte)), you can integrate with [Testing Library](https://testing-library.com/) for frameworks not yet officially supported.
 
 ### When to Use Testing Library
 
-- Your framework doesn't have an official Vitest browser package yet
-- You're migrating existing tests that use Testing Library
-- You prefer Testing Library's API for specific testing scenarios
+* Your framework doesn't have an official Vitest browser package yet
+* You're migrating existing tests that use Testing Library
+* You prefer Testing Library's API for specific testing scenarios
 
 ### Integration Pattern
 
@@ -167,10 +166,10 @@ test('Solid component handles user interaction', async () => {
 
 Popular Testing Library packages that work well with Vitest:
 
-- [`@testing-library/solid`](https://github.com/solidjs/solid-testing-library) - For Solid.js
-- [`@marko/testing-library`](https://testing-library.com/docs/marko-testing-library/intro) - For Marko
-- [`@testing-library/svelte`](https://testing-library.com/docs/svelte-testing-library/intro) - Alternative to [`vitest-browser-svelte`](https://www.npmjs.com/package/vitest-browser-svelte)
-- [`@testing-library/vue`](https://testing-library.com/docs/vue-testing-library/intro) - Alternative to [`vitest-browser-vue`](https://www.npmjs.com/package/vitest-browser-vue)
+* [`@testing-library/solid`](https://github.com/solidjs/solid-testing-library) - For Solid.js
+* [`@marko/testing-library`](https://testing-library.com/docs/marko-testing-library/intro) - For Marko
+* [`@testing-library/svelte`](https://testing-library.com/docs/svelte-testing-library/intro) - Alternative to [`vitest-browser-svelte`](https://npmx.dev/package/vitest-browser-svelte)
+* [`@testing-library/vue`](https://testing-library.com/docs/vue-testing-library/intro) - Alternative to [`vitest-browser-vue`](https://npmx.dev/package/vitest-browser-vue)
 
 ::: tip Migration Path
 If your framework gets official Vitest support later, you can gradually migrate by replacing Testing Library's `render` function while keeping most of your test logic intact.
@@ -456,11 +455,11 @@ test('Modal component is accessible', async () => {
 
 Browser Mode runs tests in real browsers, giving you access to full developer tools. When tests fail, you can:
 
-- **Open browser dev tools** during test execution (F12 or right-click → Inspect)
-- **Set breakpoints** in your test code or component code
-- **Inspect the DOM** to see the actual rendered output
-- **Check console errors** for JavaScript errors or warnings
-- **Monitor network requests** to debug API calls
+* **Open browser dev tools** during test execution (F12 or right-click → Inspect)
+* **Set breakpoints** in your test code or component code
+* **Inspect the DOM** to see the actual rendered output
+* **Check console errors** for JavaScript errors or warnings
+* **Monitor network requests** to debug API calls
 
 For headful mode debugging, add `headless: false` to your browser config temporarily.
 
@@ -489,9 +488,9 @@ When components don't render as expected, investigate systematically:
 
 **Use Vitest's browser UI:**
 
-- Run tests with browser mode enabled
-- Open the browser URL shown in the terminal to see tests running
-- Visual inspection helps identify CSS issues, layout problems, or missing elements
+* Run tests with browser mode enabled
+* Open the browser URL shown in the terminal to see tests running
+* Visual inspection helps identify CSS issues, layout problems, or missing elements
 
 **Test element queries:**
 
@@ -575,13 +574,13 @@ import { render } from 'vitest-browser-react' // [!code ++]
 
 ### Key Differences
 
-- Use `await expect.element()` instead of `expect()` for DOM assertions
-- Use `vitest/browser` for user interactions instead of `@testing-library/user-event`
-- Browser Mode provides real browser environment for accurate testing
+* Use `await expect.element()` instead of `expect()` for DOM assertions
+* Use `vitest/browser` for user interactions instead of `@testing-library/user-event`
+* Browser Mode provides real browser environment for accurate testing
 
 ## Learn More
 
-- [Browser Mode Documentation](/guide/browser/)
-- [Assertion API](/api/browser/assertions)
-- [Interactivity API](/api/browser/interactivity)
-- [Example Repository](https://github.com/vitest-tests/browser-examples)
+* [Browser Mode Documentation](/guide/browser/)
+* [Assertion API](/api/browser/assertions)
+* [Interactivity API](/api/browser/interactivity)
+* [Example Repository](https://github.com/vitest-tests/browser-examples)

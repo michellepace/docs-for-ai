@@ -16,18 +16,31 @@ convex/sendMessage.ts
 
 ```
 import { mutation } from "./_generated/server";
+
 import { v } from "convex/values";
 
+
+
 export default mutation({
+
   args: {
+
     body: v.string(),
+
     author: v.string(),
+
   },
+
   // Convex knows that the argument type is `{body: string, author: string}`.
+
   handler: async (ctx, args) => {
+
     const { body, author } = args;
+
     await ctx.db.insert("messages", { body, author });
+
   },
+
 });
 ```
 
@@ -38,13 +51,22 @@ convex/sendMessage.ts
 ```
 import { internalMutation } from "./_generated/server";
 
+
+
 export default internalMutation({
+
   // To convert this function from JavaScript to
+
   // TypeScript you annotate the type of the arguments object.
+
   handler: async (ctx, args: { body: string; author: string }) => {
+
     const { body, author } = args;
+
     await ctx.db.insert("messages", { body, author });
+
   },
+
 });
 ```
 
@@ -67,18 +89,26 @@ convex/messages.ts
 ```
 import { query } from "./_generated/server";
 
+
+
 export const list = query({
+
   args: {},
+
   // The inferred return type of `handler` is now `Promise<Doc<"messages">[]>`
+
   handler: (ctx) => {
+
     return ctx.db.query("messages").collect();
+
   },
+
 });
 ```
 
 ## Type annotating server-side helpers[​](#type-annotating-server-side-helpers "Direct link to Type annotating server-side helpers")
 
-When you want to reuse logic across Convex functions you'll want to define helper TypeScript functions, and these might need some of the provided context, to access the database, authentication and any other Convex feature.
+When you want to reuse logic across Convex functions you'll want to define helper functions, and these might need some of the provided context, to access the database, authentication and any other Convex feature.
 
 Convex generates types corresponding to documents and IDs in your database, `Doc` and `Id`, as well as `QueryCtx`, `MutationCtx` and `ActionCtx` types based on your schema and declared Convex functions:
 
@@ -86,30 +116,55 @@ convex/helpers.ts
 
 ```
 // Types based on your schema
+
 import { Doc, Id } from "./_generated/dataModel";
+
 // Types based on your schema and declared functions
+
 import {
+
   QueryCtx,
+
   MutationCtx,
+
   ActionCtx,
+
   DatabaseReader,
+
   DatabaseWriter,
+
 } from "./_generated/server";
+
 // Types that don't depend on schema or function
+
 import {
+
   Auth,
+
   StorageReader,
+
   StorageWriter,
+
   StorageActionWriter,
+
 } from "convex/server";
 
+
+
 // Note that a `MutationCtx` also satisfies the `QueryCtx` interface
+
 export function myReadHelper(ctx: QueryCtx, id: Id<"channels">) {
+
   /* ... */
+
 }
 
+
+
 export function myActionHelper(ctx: ActionCtx, doc: Doc<"messages">) {
+
   /* ... */
+
 }
 ```
 
@@ -122,14 +177,24 @@ convex/helpers.ts
 ```
 import { Infer, v } from "convex/values";
 
+
+
 export const courseValidator = v.union(
+
   v.literal("appetizer"),
+
   v.literal("main"),
+
   v.literal("dessert"),
+
 );
 
+
+
 // The corresponding type can be used in server or client-side helpers:
+
 export type Course = Infer<typeof courseValidator>;
+
 // is inferred as `'appetizer' | 'main' | 'dessert'`
 ```
 
@@ -141,16 +206,27 @@ convex/helpers.ts
 
 ```
 import { MutationCtx } from "./_generated/server";
+
 import { WithoutSystemFields } from "convex/server";
+
 import { Doc } from "./_generated/dataModel";
 
+
+
 export async function insertMessageHelper(
+
   ctx: MutationCtx,
+
   values: WithoutSystemFields<Doc<"messages">>,
+
 ) {
+
   // ...
+
   await ctx.db.insert("messages", values);
+
   // ...
+
 }
 ```
 
@@ -158,7 +234,7 @@ export async function insertMessageHelper(
 
 All Convex JavaScript clients, including React hooks like [`useQuery`](/api/modules/react.md#usequery) and [`useMutation`](/api/modules/react.md#usemutation) provide end to end type safety by ensuring that arguments and return values match the corresponding Convex functions declarations. For React, install and configure TypeScript so you can write your React components in `.tsx` files instead of `.jsx` files.
 
-Follow our [React](/quickstart/react.md) or [Next.js](/quickstart/nextjs.md) quickstart to get started with Convex and TypeScript.
+Follow our [React](/quickstart/react.md) or [Next.js](/quickstart/nextjs.md) quickstart to get started with Convex.
 
 ### Type annotating client-side code[​](#type-annotating-client-side-code "Direct link to Type annotating client-side code")
 
@@ -169,12 +245,20 @@ src/App.tsx
 ```
 import { Doc, Id } from "../convex/_generated/dataModel";
 
+
+
 function Channel(props: { channelId: Id<"channels"> }) {
+
   // ...
+
 }
 
+
+
 function MessagesView(props: { message: Doc<"messages"> }) {
+
   // ...
+
 }
 ```
 
@@ -190,21 +274,37 @@ src/Components.tsx
 
 ```
 import { FunctionReturnType } from "convex/server";
+
 import { UsePaginatedQueryReturnType } from "convex/react";
+
 import { api } from "../convex/_generated/api";
 
+
+
 export function MyHelperComponent(props: {
+
   data: FunctionReturnType<typeof api.myFunctions.getSomething>;
+
 }) {
+
   // ...
+
 }
 
+
+
 export function MyPaginationHelperComponent(props: {
+
   paginatedData: UsePaginatedQueryReturnType<
+
     typeof api.myFunctions.getSomethingPaginated
+
   >;
+
 }) {
+
   // ...
+
 }
 ```
 

@@ -6,45 +6,80 @@ The [`convex-test`](https://www.npmjs.com/package/convex-test) library provides 
 
 convex/posts.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { describe, it, expect } from "vitest";
+
 import { api, internal } from "./_generated/api";
+
 import schema from "./schema";
 
+
+
 describe("posts.list", () => {
+
   it("returns empty array when no posts exist", async () => {
+
     const t = convexTest(schema, modules);
+
+
 
     // Initially, there are no posts, so `list` returns an empty array
+
     const posts = await t.query(api.posts.list);
+
     expect(posts).toEqual([]);
+
   });
+
+
 
   it("returns all posts ordered by creation time when there are posts", async () => {
+
     const t = convexTest(schema, modules);
 
+
+
     // Create some posts
+
     await t.mutation(internal.posts.add, {
+
       title: "First Post",
+
       content: "This is the first post",
+
       author: "Alice",
-    });
-    await t.mutation(internal.posts.add, {
-      title: "Second Post",
-      content: "This is the second post",
-      author: "Bob",
+
     });
 
+    await t.mutation(internal.posts.add, {
+
+      title: "Second Post",
+
+      content: "This is the second post",
+
+      author: "Bob",
+
+    });
+
+
+
     // `list` returns all posts ordered by creation time
+
     const posts = await t.query(api.posts.list);
+
     expect(posts).toHaveLength(2);
+
     expect(posts[0].title).toBe("Second Post");
+
     expect(posts[1].title).toBe("First Post");
+
   });
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -69,16 +104,21 @@ You can see more examples in the [test suite](https://github.com/get-convex/conv
 
    ```
    "scripts": {
+
      "test": "vitest",
+
      "test:once": "vitest run",
+
      "test:debug": "vitest --inspect-brk --no-file-parallelism",
+
      "test:coverage": "vitest run --coverage --coverage.reporter=text",
+
    }
    ```
 
 3. Configure Vitest
 
-   Add `vitest.config.ts` file to configure the test environment to better match the Convex runtime, and to inline the test library for better dependency tracking.
+   Add `vitest.config.ts` file to configure the test environment to better match the Convex runtime.
 
    If your Convex functions are in a directory other than `convex`
 
@@ -88,12 +128,13 @@ You can see more examples in the [test suite](https://github.com/get-convex/conv
 
    src/convex/test.setup.ts
 
-   TS
-
    ```
    /// <reference types="vite/client" />
+
    export const modules = import.meta.glob(
+
      "./**/!(*.*.*)*.*s"
+
    );
    ```
 
@@ -103,56 +144,131 @@ You can see more examples in the [test suite](https://github.com/get-convex/conv
 
    src/convex/messages.test.ts
 
-   TS
-
    ```
    import { convexTest } from "convex-test";
+
    import { test } from "vitest";
+
    import schema from "./schema";
+
    import { modules } from "./test.setup";
 
+
+
    test("some behavior", async () => {
+
      const t = convexTest(schema, modules);
+
      // use `t`...
+
    });
    ```
 
    Set up multiple test environments (e.g. Convex + frontend)
 
-   If you want to use Vitest to test both your Convex functions and your React frontend, you might want to use multiple Vitest environments depending on the test file location via [environmentMatchGlobs](https://vitest.dev/config/#environmentmatchglobs):
+   If you want to use Vitest to test both your Convex functions and your React frontend:
+
+   * With Vitest 4, use the [`projects`](https://vitest.dev/guide/projects) array to define separate configurations per environment:
 
    vitest.config.ts
-
-   TS
 
    ```
    import { defineConfig } from "vitest/config";
 
+
+
    export default defineConfig({
+
      test: {
-       environmentMatchGlobs: [
-         // all tests in convex/ will run in edge-runtime
-         ["convex/**", "edge-runtime"],
-         // all other tests use jsdom
-         ["**", "jsdom"],
+
+       projects: [
+
+         {
+
+           extends: true,
+
+           test: {
+
+             name: "convex",
+
+             include: ["convex/**/*.test.{ts,js}"],
+
+             environment: "edge-runtime",
+
+           },
+
+         },
+
+         {
+
+           extends: true,
+
+           test: {
+
+             name: "frontend",
+
+             include: ["**/*.test.{ts,tsx,js,jsx}"],
+
+             exclude: ["convex/**"],
+
+             environment: "jsdom",
+
+           },
+
+         },
+
        ],
-       server: { deps: { inline: ["convex-test"] } },
+
      },
+
+   });
+   ```
+
+   * With Vitest 3, use [`environmentMatchGlobs`](https://v3.vitest.dev/config/#environmentmatchglobs):
+
+   vitest.config.ts
+
+   ```
+   import { defineConfig } from "vitest/config";
+
+
+
+   export default defineConfig({
+
+     test: {
+
+       environmentMatchGlobs: [
+
+         // all tests in convex/ will run in edge-runtime
+
+         ["convex/**", "edge-runtime"],
+
+         // all other tests use jsdom
+
+         ["**", "jsdom"],
+
+       ],
+
+     },
+
    });
    ```
 
    vitest.config.ts
 
-   TS
-
    ```
    import { defineConfig } from "vitest/config";
 
+
+
    export default defineConfig({
+
      test: {
+
        environment: "edge-runtime",
-       server: { deps: { inline: ["convex-test"] } },
+
      },
+
    });
    ```
 
@@ -164,23 +280,35 @@ You can see more examples in the [test suite](https://github.com/get-convex/conv
 
    convex/messages.test.ts
 
-   TS
-
    ```
    import { convexTest } from "convex-test";
+
    import { expect, test } from "vitest";
+
    import { api } from "./_generated/api";
+
    import schema from "./schema";
 
+
+
    test("sending messages", async () => {
+
      const t = convexTest(schema);
+
      await t.mutation(api.messages.send, { body: "Hi!", author: "Sarah" });
+
      await t.mutation(api.messages.send, { body: "Hey!", author: "Tom" });
+
      const messages = await t.query(api.messages.list);
+
      expect(messages).toMatchObject([
+
        { body: "Hi!", author: "Sarah" },
+
        { body: "Hey!", author: "Tom" }
+
      ]);
+
    });
    ```
 
@@ -204,20 +332,25 @@ If your project uses a [schema](/database/schemas.md) you should pass it to the 
 
 convex/myFunctions.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { test } from "vitest";
+
 import schema from "./schema";
 
+
+
 test("some behavior", async () => {
+
   const t = convexTest(schema);
+
   // use `t`...
+
 });
 ```
 
-Passing in the schema is required for the tests to correctly implement schema validation and for correct typing of `t.run`
+Passing in the schema is required for the tests to correctly implement schema validation and for correct typing of [`t.run`](#modify-data-outside-of-functions).
 
 If you don't have a schema, call `convexTest()` with no argument.
 
@@ -227,21 +360,31 @@ Your test can call public and internal Convex [functions](/functions.md) in your
 
 convex/myFunctions.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { test } from "vitest";
+
 import { api, internal } from "./_generated/api";
 
+
+
 test("functions", async () => {
+
   const t = convexTest();
+
   const x = await t.query(api.myFunctions.myQuery, { a: 1, b: 2 });
+
   const y = await t.query(internal.myFunctions.internalQuery, { a: 1, b: 2 });
+
   const z = await t.mutation(api.myFunctions.mutateSomething, { a: 1, b: 2 });
+
   const w = await t.mutation(internal.myFunctions.mutateSomething, { a: 1 });
+
   const u = await t.action(api.myFunctions.doSomething, { a: 1, b: 2 });
+
   const v = await t.action(internal.myFunctions.internalAction, { a: 1, b: 2 });
+
 });
 ```
 
@@ -251,23 +394,70 @@ Sometimes you might want to directly [write](/database/writing-data.md) to the m
 
 convex/tasks.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test } from "vitest";
+
 import schema from "./schema";
 
+
+
 test("functions", async () => {
+
   const t = convexTest(schema, modules);
+
   const firstTask = await t.run(async (ctx) => {
+
     await ctx.db.insert("tasks", { text: "Eat breakfast" });
+
     return await ctx.db.query("tasks").first();
+
   });
+
   expect(firstTask).toMatchObject({ text: "Eat breakfast" });
+
 });
 
+
+
 const modules = import.meta.glob("./**/*.ts");
+```
+
+### Test helper functions with inline queries, mutations, and actions[​](#test-helper-functions-with-inline-queries-mutations-and-actions "Direct link to Test helper functions with inline queries, mutations, and actions")
+
+Often your code will have helper functions that take in `QueryCtx`, `MutationCtx`, and `ActionCtx` as an argument. With version `0.0.42` and later, you can pass an inline function to `t.query`, `t.mutation`, and `t.action`, similar to `t.run`, but with a `ctx` argument matching the function type.
+
+```
+test("helper functions", async () => {
+
+  const t = convexTest();
+
+  const threadId = await t.mutation(async (ctx) => {
+
+    const threadId = await ctx.db.insert("threads", {});
+
+    // insertThreadMessage takes a MutationCtx argument.
+
+    await insertThreadMessage(ctx, threadId, "Hello");
+
+    return threadId;
+
+  });
+
+
+
+  const text = await t.action(async (ctx) => {
+
+    // searchForMessages takes an ActionCtx argument.
+
+    const messages = await searchForMessages(ctx, threadId);
+
+    const response = await promptLLM(ctx, threadId, messages);
+
+  });
+
+});
 ```
 
 ### HTTP actions[​](#http-actions "Direct link to HTTP actions")
@@ -276,18 +466,26 @@ Your test can call [HTTP actions](/functions/http-actions.md) registered by your
 
 convex/http.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test } from "vitest";
+
 import schema from "./schema";
 
+
+
 test("functions", async () => {
+
   const t = convexTest(schema, modules);
+
   const response = await t.fetch("/some/path", { method: "POST" });
+
   expect(response.status).toBe(200);
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -300,48 +498,86 @@ One advantage of using a mock implementation running purely in JavaScript is tha
 
 convex/scheduling.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test, vi } from "vitest";
+
 import { api } from "./_generated/api";
+
 import schema from "./schema";
 
+
+
 test("mutation scheduling action", async () => {
+
   // Enable fake timers
+
   vi.useFakeTimers();
+
+
 
   const t = convexTest(schema, modules);
 
+
+
   // Call a function that schedules a mutation or action
+
   const scheduledFunctionId = await t.mutation(
+
     api.scheduler.mutationSchedulingAction,
+
     { delayMs: 10000 },
+
   );
 
+
+
   // Advance the mocked time
+
   vi.advanceTimersByTime(5000);
 
+
+
   // Advance the mocked time past the scheduled time of the function
+
   vi.advanceTimersByTime(6000);
 
+
+
   // Or run all currently pending timers
+
   vi.runAllTimers();
 
+
+
   // At this point the scheduled function will be `inProgress`,
+
   // now wait for it to finish
+
   await t.finishInProgressScheduledFunctions();
 
+
+
   // Assert that the scheduled function succeeded or failed
+
   const scheduledFunctionStatus = await t.run(async (ctx) => {
+
     return await ctx.db.system.get("_scheduled_functions", scheduledFunctionId);
+
   });
+
   expect(scheduledFunctionStatus).toMatchObject({ state: { kind: "success" } });
 
+
+
   // Reset to normal `setTimeout` etc. implementation
+
   vi.useRealTimers();
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -350,37 +586,64 @@ If you have a chain of several scheduled functions, for example a mutation that 
 
 convex/chainedScheduling.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test, vi } from "vitest";
+
 import { api } from "./_generated/api";
+
 import schema from "./schema";
 
+
+
 test("mutation scheduling action scheduling action", async () => {
+
   // Enable fake timers
+
   vi.useFakeTimers();
+
+
 
   const t = convexTest(schema, modules);
 
+
+
   // Call a function that schedules a mutation or action
+
   await t.mutation(api.scheduler.mutationSchedulingActionSchedulingAction);
 
+
+
   // Wait for all scheduled functions, repeatedly
+
   // advancing time and waiting for currently in-progress
+
   // functions to finish
+
   await t.finishAllScheduledFunctions(vi.runAllTimers);
 
+
+
   // Assert the resulting state after all scheduled functions finished
+
   const createdTask = await t.run(async (ctx) => {
+
     return await ctx.db.query("tasks").first();
+
   });
+
   expect(createdTask).toMatchObject({ author: "AI" });
 
+
+
   // Reset to normal `setTimeout` etc. implementation
+
   vi.useRealTimers();
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -393,27 +656,44 @@ To test functions which depend on the current [authenticated](/auth.md) user ide
 
 convex/tasks.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test } from "vitest";
+
 import { api } from "./_generated/api";
+
 import schema from "./schema";
 
+
+
 test("authenticated functions", async () => {
+
   const t = convexTest(schema, modules);
 
+
+
   const asSarah = t.withIdentity({ name: "Sarah" });
+
   await asSarah.mutation(api.tasks.create, { text: "Add tests" });
 
+
+
   const sarahsTasks = await asSarah.query(api.tasks.list);
+
   expect(sarahsTasks).toMatchObject([{ text: "Add tests" }]);
 
+
+
   const asLee = t.withIdentity({ name: "Lee" });
+
   const leesTasks = await asLee.query(api.tasks.list);
+
   expect(leesTasks).toEqual([]);
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -432,20 +712,30 @@ To assert that a function throws, use [`.rejects.toThrowError()`](https://vitest
 
 convex/messages.test.ts
 
-TS
-
 ```
 import { convexTest } from "convex-test";
+
 import { expect, test } from "vitest";
+
 import { api } from "./_generated/api";
+
 import schema from "./schema";
 
+
+
 test("messages validation", async () => {
+
   const t = convexTest(schema, modules);
+
   await expect(async () => {
+
     await t.mutation(api.messages.send, { body: "", author: "James" });
+
   }).rejects.toThrowError("Empty message body is not allowed");
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -456,27 +746,44 @@ You can use Vitest's [vi.stubGlobal](https://vitest.dev/guide/mocking.html#globa
 
 convex/ai.test.ts
 
-TS
-
 ```
 import { expect, test, vi } from "vitest";
+
 import { api } from "./_generated/api";
+
 import schema from "./schema";
+
 import { convexTest } from "convex-test";
 
+
+
 test("ai", async () => {
+
   const t = convexTest(schema, modules);
 
+
+
   vi.stubGlobal(
+
     "fetch",
+
     vi.fn(async () => ({ text: async () => "I am the overlord" }) as Response),
+
   );
 
+
+
   const reply = await t.action(api.messages.sendAIMessage, { prompt: "hello" });
+
   expect(reply).toEqual("I am the overlord");
 
+
+
   vi.unstubAllGlobals();
+
 });
+
+
 
 const modules = import.meta.glob("./**/*.ts");
 ```
@@ -485,11 +792,7 @@ const modules = import.meta.glob("./**/*.ts");
 
 You can get a printout of the code coverage provided by your tests. Besides answering the question "how much of my code is covered by tests" it is also helpful to check that your test is actually exercising the code that you want it to exercise.
 
-Run `npm run test:coverage`
-
-``
-
-. It will ask you to install a required dependency the first time you run it.
+Run `npm run test:coverage`. It will ask you to install a required dependency the first time you run it.
 
 ![example coverage printout](/screenshots/testing_coverage.png)
 
@@ -497,11 +800,7 @@ Run `npm run test:coverage`
 
 You can attach a debugger to the running tests. Read the Vitest [Debugging docs](https://vitest.dev/guide/debugging.html) and then use
 
-`npm run test:debug`
-
-``
-
-.
+`npm run test:debug`.
 
 ## Limitations[​](#limitations "Direct link to Limitations")
 

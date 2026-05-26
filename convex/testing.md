@@ -31,7 +31,7 @@ Manually run a function in dev to quickly see if things are working:
 
 ### Preview deployments[​](#preview-deployments "Direct link to Preview deployments")
 
-[Use preview deployments](/production/hosting/preview-deployments.md) to get early feedback from your team for your in-progress features.
+[Use preview deployments](/production/multiple-deployments.md#preview) to get early feedback from your team for your in-progress features.
 
 ### Staging environment[​](#staging-environment "Direct link to Staging environment")
 

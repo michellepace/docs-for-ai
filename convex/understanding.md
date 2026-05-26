@@ -20,7 +20,7 @@ The Convex database is reactive. Whenever any data on which a query depends chan
 
 Convex is a "document-relational" database. "Document" means you put JSON-like nested objects into your database. "Relational" means you have tables with relations, like `tasks` assigned to a `user` using IDs to reference documents in other tables.
 
-The Convex cloud offering runs on top of Amazon RDS using MySQL as its persistence layer. The Open Source version uses SQLite, Postgres and MySQL. The database is ACID-compliant and uses [serializable isolation and optimistic concurrency control](/database/advanced/occ.md). All that to say, Convex provides the strictest possible transactional guarantees, and you never see inconsistent data.
+The Convex cloud offering runs on top of PlanetScale using MySQL as its persistence layer. The Open Source version uses SQLite, Postgres and MySQL. The database is ACID-compliant and uses [serializable isolation and optimistic concurrency control](/database/advanced/occ.md). All that to say, Convex provides the strictest possible transactional guarantees, and you never see inconsistent data.
 
 ## Server functions[​](#server-functions "Direct link to Server functions")
 
@@ -32,25 +32,45 @@ convex/tasks.ts
 
 ```
 // A Convex query function
+
 export const getAllOpenTasks = query({
+
   args: {},
+
   handler: async (ctx, args) => {
+
     // Query the database to get all items that are not completed
+
     const tasks = await ctx.db
+
       .query("tasks")
+
       .withIndex("by_completed", (q) => q.eq("completed", false))
+
       .collect();
+
     return tasks;
+
   },
+
 });
 
+
+
 // A Convex mutation function
+
 export const setTaskCompleted = mutation({
+
   args: { taskId: v.id("tasks"), completed: v.boolean() },
+
   handler: async (ctx, { taskId, completed }) => {
+
     // Update the database using TypeScript
+
     await ctx.db.patch("tasks", taskId, { completed });
+
   },
+
 });
 ```
 
@@ -72,12 +92,19 @@ Convex client libraries keep your frontend synced with the results of your serve
 
 ```
 // In your React component
+
 import { useQuery } from "convex/react";
+
 import { api } from "../convex/_generated/api";
 
+
+
 export function TaskList() {
+
   const data = useQuery(api.tasks.getAllOpenTasks);
+
   return data ?? "Loading...";
+
 }
 ```
 
@@ -97,15 +124,25 @@ convex/tasks.ts
 
 ```
 export const getAllOpenTasks = query({
+
   args: {},
+
   handler: async (ctx, args) => {
+
     // Query the database to get all items that are not completed
+
     const tasks = await ctx.db
+
       .query("tasks")
+
       .withIndex("by_completed", (q) => q.eq("completed", false))
+
       .collect();
+
     return tasks;
+
   },
+
 });
 ```
 
@@ -123,8 +160,11 @@ In this case the initial result looks like this (1):
 
 ```
 [
+
   { _id: "e4g", title: "Grocery shopping", complete: false },
+
   { _id: "u9v", title: "Plant new flowers", complete: false },
+
 ];
 ```
 
@@ -132,7 +172,9 @@ Then you use a mutation to mark an item as completed (2). Convex then reruns the
 
 ```
 [
+
   { _id: "e4g", title: "Grocery shopping", complete: false },
+
 ];
 ```
 
@@ -166,6 +208,8 @@ Convex is designed around a small set of composable abstractions with strong gua
 Together, these features mean AI can focus on your business logic while Convex's guarantees prevent common failure modes.
 
 ## Learn more[​](#learn-more "Direct link to Learn more")
+
+[YouTube video player](https://www.youtube.com/embed/3d29eKJ2Vws)
 
 If you are intrigued about the details of how Convex pulls this all off, you can read Convex co-founder Sujay's excellent [How Convex Works](https://stack.convex.dev/how-convex-works) blog post.
 

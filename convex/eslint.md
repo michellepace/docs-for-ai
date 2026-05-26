@@ -1,6 +1,6 @@
 # ESLint rules
 
-ESLint rules for Convex functions enforce best practices. Let us know if there's a rule you would find helpful!
+The Convex ESLint plugin provides linter rules that enforce best practices for Convex functions. Let us know if there's a rule you would find helpful!
 
 ## Setup[​](#setup "Direct link to Setup")
 
@@ -15,12 +15,20 @@ and add this to your `eslint.config.js` file:
 ```
 import { defineConfig } from "eslint/config";
 
+
+
 import convexPlugin from "@convex-dev/eslint-plugin";
 
+
+
 export default defineConfig([
+
   // Other configurations
 
+
+
   ...convexPlugin.configs.recommended,
+
 ]);
 ```
 
@@ -36,12 +44,19 @@ In `.eslintrc.js`, add:
 
 ```
 module.exports =
+
   extends: [
+
     // Other configurations
+
     "plugin:@typescript-eslint/recommended",
+
     "plugin:@convex-dev/recommended",
+
   ],
+
   ignorePatterns: ["node_modules/", "dist/", "build/"],
+
 };
 ```
 
@@ -53,24 +68,43 @@ If you’re [customizing the Convex directory location](/production/project-conf
 
 ```
 // eslint.config.js
+
 import { defineConfig } from "eslint/config";
+
+
 
 import convexPlugin from "@convex-dev/eslint-plugin";
 
+
+
 const recommendedConfig = convexPlugin.configs.recommended[0];
+
 const recommendedRules = recommendedConfig.rules;
 
+
+
 export default defineConfig([
+
   // Other configurations go here...
 
+
+
   // Custom configuration with modified directory pattern
+
   {
+
     files: ["**/src/convex/**/*.ts"],
+
     plugins: {
+
       "@convex-dev": convexPlugin,
+
     },
+
     rules: recommendedRules,
+
   },
+
 ]);
 ```
 
@@ -80,11 +114,17 @@ For `next lint` to run ESLint on your `convex` directory you need to add that di
 
 ```
 const nextConfig: NextConfig = {
+
   /* other options here */
 
+
+
   eslint: {
+
     dirs: ["pages", "app", "components", "lib", "src", "convex"],
+
   },
+
 };
 ```
 
@@ -95,7 +135,9 @@ const nextConfig: NextConfig = {
 | [`@convex-dev/no-old-registered-function-syntax`](#no-old-registered-function-syntax)<br />Prefer object syntax for registered functions | ✅          | 🔧           |
 | [`@convex-dev/require-argument-validators`](#require-argument-validators)<br />Require argument validators for Convex functions          | ✅          | 🔧           |
 | [`@convex-dev/explicit-table-ids`](#explicit-table-ids)<br />Require explicit table names in database operations                         | ✅          | 🔧           |
+| [`@convex-dev/no-filter-in-query`](#no-filter-in-query)<br />Warn on `.filter()` in database queries (inefficient)                       | ✅          |              |
 | [`@convex-dev/import-wrong-runtime`](#import-wrong-runtime)<br />Prevent Convex runtime files from importing from Node runtime files     |             |              |
+| [`@convex-dev/no-collect-in-query`](#no-collect-in-query)<br />Prefer `.take()` / `.paginate()` over `.collect()` in queries             |             |              |
 
 ### no-old-registered-function-syntax[​](#no-old-registered-function-syntax "Direct link to no-old-registered-function-syntax")
 
@@ -105,17 +147,29 @@ Convex queries, mutations, and actions can be defined with a single function or 
 
 ```
 // ✅ Allowed by this rule:
+
 export const list = query({
+
   handler: async (ctx) => {
+
     const data = await ctx.db.query("messages").collect();
+
     ...
+
   },
+
 });
 
+
+
 // ❌ Not allowed by this rule:
+
 export const list = query(async (ctx) => {
+
   const data = await ctx.db.query("messages").collect();
+
   ...
+
 });
 ```
 
@@ -127,34 +181,63 @@ Convex queries, mutations, and actions can validate their arguments before begin
 
 ```
 // ✅ Allowed by this rule:
+
 export const list = query({
+
   args: {},
+
   handler: async (ctx) => {
+
     ...
+
   },
+
 });
+
+
 
 // ✅ Allowed by this rule:
+
 export const list = query({
+
   args: { channel: v.id('channel') },
+
   handler: async (ctx, { channel }) => {
+
     ...
+
   },
+
 });
+
+
 
 // ❌ Not allowed with option { ignoreUnusedArguments: false } (default)
+
 // ✅ Allowed with option { ignoreUnusedArguments: true }
+
 export const list = query({
+
   handler: async (ctx) => {
+
     ...
+
   },
+
 });
 
+
+
 // ❌ Not allowed by this rule:
+
 export const list = query({
+
   handler: async (ctx, { channel }: { channel: Id<"channel"> }) => {
+
     ...
+
   },
+
 });
 ```
 
@@ -163,20 +246,36 @@ This rule can be customized to tolerate functions that don’t define an argumen
 ```
 // eslint.config.js
 
+
+
 export default defineConfig([
+
   // Your other rules…
 
+
+
   {
+
     files: ["**/convex/**/*.ts"],
+
     rules: {
+
       "@convex-dev/require-args-validator": [
+
         "error",
+
         {
+
           ignoreUnusedArguments: true,
+
         },
+
       ],
+
     },
+
   },
+
 ]);
 ```
 
@@ -193,21 +292,40 @@ This rule helps migrate code from the old implicit format to the new explicit fo
 ```
 const messageId: Id<"messages"> = "123" as Id<"messages">;
 
+
+
 // ✅ Allowed by this rule:
+
 const message = await ctx.db.get("messages", messageId);
+
 await ctx.db.patch("messages", messageId, { text: "updated" });
+
 await ctx.db.replace("messages", messageId, {
+
   text: "replaced",
+
   author: "Alice",
+
 });
+
 await ctx.db.delete("messages", messageId);
 
+
+
 // ❌ Not allowed by this rule:
+
 const message = await ctx.db.get(messageId);
+
 await ctx.db.patch(messageId, { text: "updated" });
+
 await ctx.db.replace(messageId, { text: "replaced", author: "Alice" });
+
 await ctx.db.delete(messageId);
 ```
+
+typescript-eslint required
+
+In order for this rule to work, [typescript-eslint](https://typescript-eslint.io) must be set up in your ESLint configuration. If typescript-eslint is installed and the rule doesn’t seem to work, please make sure that [type-aware linting](https://typescript-eslint.io/troubleshooting/typed-linting/) is enabled.
 
 Note that if you’re not using ESLint, you can alternatively use the `@convex-dev/codemod` CLI tool to automatically migrate to the new format:
 
@@ -216,6 +334,48 @@ npx @convex-dev/codemod@latest explicit-ids
 ```
 
 [Learn more on news.convex.dev →](https://news.convex.dev/db-table-name/)
+
+### no-filter-in-query[​](#no-filter-in-query "Direct link to no-filter-in-query")
+
+Warn when using `.filter()` in database queries.
+
+Convex supports filtering queries with the `.filter()` method, but it is inefficient because the database will read all the documents, and only then filter out the documents that don’t match the filter.
+
+Try replacing the call to `.filter()` with a call to `.withIndex()` if possible. This is especially important if the number of documents you’re filtering on is large (1000+) or unbounded.
+
+Instead, you can use [indexes](/database/reading-data/indexes/.md) so that the database only needs to read the relevant documents.
+
+See [*Indexes and Query Performance*](/database/reading-data/indexes/indexes-and-query-perf.md) to learn more, and [*Using TypeScript to Write Complex Query Filters*](https://stack.convex.dev/complex-filters-in-convex) for more advanced filtering strategies.
+
+```
+// ❌ This looks through all the books, and then collects the ones authored by Jane Austen
+
+const books = await ctx.db
+
+  .query("books")
+
+  .filter((q) => q.eq(q.field("author"), "Jane Austen"))
+
+  .collect();
+
+
+
+// ✅ This only reads the books authored by Jane Austen
+
+const austenBooks = await ctx.db
+
+  .query("books")
+
+  .withIndex("by_author", (q) => q.eq("author", "Jane Austen"))
+
+  .collect();
+```
+
+If it is not possible to replace `.filter()` in your query, you can silence this warning with:
+
+```
+// eslint-disable-next-line @convex-dev/no-filter-in-query
+```
 
 ### import-wrong-runtime[​](#import-wrong-runtime "Direct link to import-wrong-runtime")
 
@@ -226,9 +386,35 @@ This rule is experimental. Please let us know if you find it helpful!
 ```
 // In a file that doesn’t use `"use node"`:
 
+
+
 // ✅ Allowed by this rule:
+
 import { someFunction } from "./someOtherFile"; // where someOtherFile doesn't use `"use node"`
 
+
+
 // ❌ Not allowed by this rule:
+
 import { someFunction } from "./someNodeFile"; // where someNodeFile uses `"use node"`
+```
+
+### no-collect-in-query[​](#no-collect-in-query "Direct link to no-collect-in-query")
+
+Prefer `.take()` / `.paginate()` over `.collect()` in queries.
+
+typescript-eslint required
+
+In order for this rule to work, [typescript-eslint](https://typescript-eslint.io) must be set up in your ESLint configuration. If typescript-eslint is installed and the rule doesn’t seem to work, please make sure that [type-aware linting](https://typescript-eslint.io/troubleshooting/typed-linting/) is enabled.
+
+You should avoid using `.collect()` in queries that can return a large number of documents at once. In these queries, using `.collect()` can lead to excessive bandwidth usage and mutation conflicts, and the query can also fail if it reaches the [Convex query limits](/production/state/limits.md#transactions).
+
+Prefer `.take(N)` if you only need the first *N* results, or `.paginate()` if you want to page through results.
+
+If you know the query will always return a small number of results, you can disable this rule for that line with:
+
+```
+// eslint-disable-next-line @convex-dev/no-collect-in-query
+
+const results = await ctx.db.query("roles").collect();
 ```

@@ -1,11 +1,10 @@
 # dataModel.d.ts
 
-> [!WARNING]
-> **This code is generated**
->
-> These exports are not directly available in the `convex` package!
->
-> Instead you must run `npx convex dev` to create `convex/_generated/dataModel.d.ts`.
+This code is generated
+
+These exports are not directly available in the `convex` package!
+
+Instead you must run `npx convex dev` to create `convex/_generated/dataModel.d.ts`.
 
 Generated data model types.
 
@@ -27,8 +26,8 @@ The type of a document stored in Convex.
 
 #### Type parameters[​](#type-parameters "Direct link to Type parameters")
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
+| Name        | Type                                | Description                                             |
+| ----------- | ----------------------------------- | ------------------------------------------------------- |
 | `TableName` | extends [`TableNames`](#tablenames) | A string literal type of the table name (like "users"). |
 
 ***
@@ -47,8 +46,8 @@ This is an alias of [`GenericId`](/api/modules/values.md#genericid) that is type
 
 #### Type parameters[​](#type-parameters-1 "Direct link to Type parameters")
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
+| Name        | Type                                | Description                                             |
+| ----------- | ----------------------------------- | ------------------------------------------------------- |
 | `TableName` | extends [`TableNames`](#tablenames) | A string literal type of the table name (like "users"). |
 
 ***

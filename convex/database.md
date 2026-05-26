@@ -22,7 +22,9 @@ Each table springs into existence as soon as you add the first document to it.
 
 ```
 // `friends` table doesn't exist.
+
 await ctx.db.insert("friends", { name: "Jamie" });
+
 // Now it does, and it has one document.
 ```
 
@@ -36,7 +38,9 @@ These are all valid Convex documents:
 
 ```
 {}
+
 {"name": "Jamie"}
+
 {"name": {"first": "Ari", "second": "Cole"}, "age": 60}
 ```
 
@@ -44,18 +48,33 @@ They can also contain references to other documents in other tables. See [Data T
 
 ## Schemas[​](#schemas "Direct link to Schemas")
 
-Though optional, schemas ensure that your data looks exactly how you want. For a simple chat app, the schema will look like this:
+Though optional, schemas ensure that your data looks exactly how you want. For a simple chat app, the schema could look like this:
 
 ```
 import { defineSchema, defineTable } from "convex/server";
+
 import { v } from "convex/values";
 
-// @snippet start schema
+
+
 export default defineSchema({
+
   messages: defineTable({
+
     author: v.id("users"),
+
     body: v.string(),
+
   }),
+
+  users: defineTable({
+
+    name: v.string(),
+
+    userName: v.string(),
+
+  }),
+
 });
 ```
 

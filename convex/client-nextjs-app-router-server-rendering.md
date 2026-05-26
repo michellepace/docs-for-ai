@@ -20,18 +20,25 @@ In a [Server Component](https://nextjs.org/docs/app/building-your-application/re
 
 app/TasksWrapper.tsx
 
-TS
-
 ```
 import { preloadQuery } from "convex/nextjs";
+
 import { api } from "@/convex/_generated/api";
+
 import { Tasks } from "./Tasks";
 
+
+
 export async function TasksWrapper() {
+
   const preloadedTasks = await preloadQuery(api.tasks.list, {
+
     list: "default",
+
   });
+
   return <Tasks preloadedTasks={preloadedTasks} />;
+
 }
 ```
 
@@ -39,20 +46,29 @@ In a [Client Component](https://nextjs.org/docs/app/building-your-application/re
 
 app/TasksWrapper.tsx
 
-TS
-
 ```
 "use client";
 
+
+
 import { Preloaded, usePreloadedQuery } from "convex/react";
+
 import { api } from "@/convex/_generated/api";
 
+
+
 export function Tasks(props: {
+
   preloadedTasks: Preloaded<typeof api.tasks.list>;
+
 }) {
+
   const tasks = usePreloadedQuery(props.preloadedTasks);
+
   // render `tasks`...
+
   return <div>...</div>;
+
 }
 ```
 
@@ -74,16 +90,21 @@ If you need Convex data on the server, you can load data from Convex in your [Se
 
 app/StaticTasks.tsx
 
-TS
-
 ```
 import { fetchQuery } from "convex/nextjs";
+
 import { api } from "@/convex/_generated/api";
 
+
+
 export async function StaticTasks() {
+
   const tasks = await fetchQuery(api.tasks.list, { list: "default" });
+
   // render `tasks`...
+
   return <div>...</div>;
+
 }
 ```
 
@@ -97,25 +118,39 @@ Here's an example inline Server Action calling a Convex mutation:
 
 app/example/page.tsx
 
-TS
-
 ```
 import { api } from "@/convex/_generated/api";
+
 import { fetchMutation, fetchQuery } from "convex/nextjs";
+
 import { revalidatePath } from "next/cache";
 
+
+
 export default async function PureServerPage() {
+
   const tasks = await fetchQuery(api.tasks.list, { list: "default" });
+
   async function createTask(formData: FormData) {
+
     "use server";
 
+
+
     await fetchMutation(api.tasks.create, {
+
       text: formData.get("text") as string,
+
     });
+
     revalidatePath("/example");
+
   }
+
   // render tasks and task creation form
+
   return <form action={createTask}>...</form>;
+
 }
 ```
 
@@ -123,20 +158,29 @@ Here's an example Route Handler calling a Convex mutation:
 
 app/api/route.ts
 
-TS
-
 ```
 import { NextResponse } from "next/server";
+
 // Hack for TypeScript before 5.2
+
 const Response = NextResponse;
 
+
+
 import { api } from "@/convex/_generated/api";
+
 import { fetchMutation } from "convex/nextjs";
 
+
+
 export async function POST(request: Request) {
+
   const args = await request.json();
+
   await fetchMutation(api.tasks.create, { text: args.text });
+
   return Response.json({ success: true });
+
 }
 ```
 
@@ -146,21 +190,31 @@ To make authenticated requests to Convex during server rendering, pass a JWT tok
 
 app/TasksWrapper.tsx
 
-TS
-
 ```
 import { preloadQuery } from "convex/nextjs";
+
 import { api } from "@/convex/_generated/api";
+
 import { Tasks } from "./Tasks";
 
+
+
 export async function TasksWrapper() {
+
   const token = await getAuthToken();
+
   const preloadedTasks = await preloadQuery(
+
     api.tasks.list,
+
     { list: "default" },
+
     { token },
+
   );
+
   return <Tasks preloadedTasks={preloadedTasks} />;
+
 }
 ```
 
@@ -171,28 +225,35 @@ The implementation of `getAuthToken` depends on your authentication provider.
 
 app/auth.ts
 
-TS
-
 ```
 import { auth } from "@clerk/nextjs/server";
 
+
+
 export async function getAuthToken() {
-  return (await (await auth()).getToken({ template: "convex" })) ?? undefined;
+
+  return (await (await auth()).getToken()) ?? undefined;
+
 }
 ```
 
 app/auth.ts
 
-TS
-
 ```
 // You'll need v4.3 or later of @auth0/nextjs-auth0
+
 import { getSession } from '@auth0/nextjs-auth0';
 
+
+
 export async function getAuthToken() {
+
   const session = await getSession();
+
   const idToken = session.tokenSet.idToken;
+
   return idToken;
+
 }
 ```
 

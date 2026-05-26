@@ -36,39 +36,63 @@ The simplest way to add user authentication to your Next.js app is to follow our
 
 app/ConvexClientProvider.tsx
 
-TS
-
 ```
 "use client";
 
+
+
 import { Auth0Provider } from "@auth0/auth0-react";
+
 import { ConvexReactClient } from "convex/react";
+
 import { ConvexProviderWithAuth0 } from "convex/react-auth0";
+
 import { ReactNode } from "react";
+
+
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
+
+
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
+
   return (
+
     <Auth0Provider
+
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
+
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
+
       authorizationParams={{
+
         redirect_uri:
+
           typeof window === "undefined" ? undefined : window.location.origin,
+
       }}
+
       useRefreshTokens={true}
+
       cacheLocation="localstorage"
+
     >
+
       <ConvexProviderWithAuth0 client={convex}>
+
         {children}
+
       </ConvexProviderWithAuth0>
+
     </Auth0Provider>
+
   );
+
 }
 ```
 
-Custom loading and logged out views can be built with the helper `Authenticated`, `Unauthenticated` and `AuthLoading` components from `convex/react`, see the [Convex Next.js demo](https://github.com/get-convex/convex-demos/tree/main/nextjs-pages-router/pages/_app.tsx) for an example.
+Custom loading and logged out views can be built with the helper `Authenticated`, `Unauthenticated`, `AuthLoading` and `AuthRefreshing` components from `convex/react`, see the [Convex Next.js demo](https://github.com/get-convex/convex-demos/tree/main/nextjs-pages-router/pages/_app.tsx) for an example.
 
 If only some routes of your app require login, the same helpers can be used directly in page components that do require login instead of being shared between all pages from `app/ConvexClientProvider.tsx`. Share a single [ConvexReactClient](/api/classes/react.ConvexReactClient.md) instance between pages to avoid needing to reconnect to Convex on client-side page navigation.
 
@@ -84,9 +108,7 @@ For an example of using Convex and with Next.js 15, run
 
 **`npm create convex@latest -- -t nextjs-clerk`**
 
-**``**
-
-Otherwise, follow the [Clerk Next.js quickstart](https://clerk.com/docs/quickstarts/nextjs), a guide from Clerk that includes steps for adding `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to the .env.local file. In Next.js 15, the `<ClerkProvider>` component imported from the `@clerk/nextjs` v6 package functions as both a client and a server context provider so you probably won't need the `ClerkProvider` from `@clerk/clerk-react`.
+Otherwise, follow the [Clerk Next.js quickstart](https://clerk.com/docs/quickstarts/nextjs), a guide from Clerk that includes steps for adding `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to the .env.local file. In Next.js 15, the `<ClerkProvider>` component imported from the `@clerk/nextjs` package functions as both a client and a server context provider so you probably won't need the `ClerkProvider` from `@clerk/react`.
 
 #### Auth0[​](#auth0 "Direct link to Auth0")
 

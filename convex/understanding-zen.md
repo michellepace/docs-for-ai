@@ -1,5 +1,7 @@
 # The Zen of Convex
 
+[YouTube video player](https://www.youtube.com/embed/dyEWQ9s2ji4?si=ce-M8pt6EWDZ8tfd)
+
 Convex is an opinionated framework, with every element designed to pull developers into [the pit of success](https://blog.codinghorror.com/falling-into-the-pit-of-success/).
 
 The Zen of Convex is a set of guidelines & best practices developers have discovered that keep their projects falling into this wonderful pit.

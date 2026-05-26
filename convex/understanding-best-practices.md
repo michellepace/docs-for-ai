@@ -24,30 +24,45 @@ Read through the [indexes documentation](/database/reading-data/indexes/indexes-
 
 convex/messages.ts
 
-TS
-
 ```
 // ❌
+
 const tomsMessages = ctx.db
+
   .query("messages")
+
   .filter((q) => q.eq(q.field("author"), "Tom"))
+
   .collect();
+
+
 
 // ✅
+
 // Option 1: Use an index
+
 const tomsMessages = await ctx.db
+
   .query("messages")
+
   .withIndex("by_author", (q) => q.eq("author", "Tom"))
+
   .collect();
 
+
+
 // Option 2: Filter in code
+
 const allMessages = await ctx.db.query("messages").collect();
+
 const tomsMessages = allMessages.filter((m) => m.author === "Tom");
 ```
 
 ### How?[​](#how-1 "Direct link to How?")
 
 Search for `.filter` in your Convex codebase — a regex like `\.filter\(\(?q` will probably find all the ones on database queries.
+
+You can also check automatically that your functions don’t use `.filter` with the [`@convex-dev/no-filter-in-query` ESLint rule](/eslint.md#no-filter-in-query).
 
 Decide whether they should be replaced with a `.withIndex` condition — per [this section](/understanding/best-practices/.md#only-use-collect-with-a-small-number-of-results), if you are filtering over a large (1000+) or potentially unbounded number of documents, you should use an index. If not using a `.withIndex` / `.withSearchIndex` condition, consider replacing them with a filter in code for more readability and flexibility.
 
@@ -71,19 +86,27 @@ If there's a chance the number of results is large (say 1000+ documents), you sh
 
 convex/movies.ts
 
-TS
-
 ```
 // ❌ -- potentially unbounded
+
 const allMovies = await ctx.db.query("movies").collect();
+
 const moviesByDirector = allMovies.filter(
+
   (m) => m.director === "Steven Spielberg",
+
 );
 
+
+
 // ✅ -- small number of results, so `collect` is fine
+
 const moviesByDirector = await ctx.db
+
   .query("movies")
+
   .withIndex("by_director", (q) => q.eq("director", "Steven Spielberg"))
+
   .collect();
 ```
 
@@ -91,20 +114,29 @@ const moviesByDirector = await ctx.db
 
 convex/movies.ts
 
-TS
-
 ```
 // ❌ -- potentially unbounded
+
 const watchedMovies = await ctx.db
+
   .query("watchedMovies")
+
   .withIndex("by_user", (q) => q.eq("user", "Tom"))
+
   .collect();
 
+
+
 // ✅ -- using pagination, showing recently watched movies first
+
 const watchedMovies = await ctx.db
+
   .query("watchedMovies")
+
   .withIndex("by_user", (q) => q.eq("user", "Tom"))
+
   .order("desc")
+
   .paginate(paginationOptions);
 ```
 
@@ -112,34 +144,53 @@ const watchedMovies = await ctx.db
 
 convex/movies.ts
 
-TS
-
 ```
 // ❌ -- potentially unbounded
+
 const watchedMovies = await ctx.db
+
   .query("watchedMovies")
+
   .withIndex("by_user", (q) => q.eq("user", "Tom"))
+
   .collect();
+
 const numberOfWatchedMovies = watchedMovies.length;
 
+
+
 // ✅ -- Show "99+" instead of needing to load all documents
+
 const watchedMovies = await ctx.db
+
   .query("watchedMovies")
+
   .withIndex("by_user", (q) => q.eq("user", "Tom"))
+
   .take(100);
+
 const numberOfWatchedMovies =
+
   watchedMovies.length === 100 ? "99+" : watchedMovies.length.toString();
 
+
+
 // ✅ -- Denormalize the number of watched movies in a separate table
+
 const watchedMoviesCount = await ctx.db
+
   .query("watchedMoviesCount")
+
   .withIndex("by_user", (q) => q.eq("user", "Tom"))
+
   .unique();
 ```
 
 ### How?[​](#how-2 "Direct link to How?")
 
 Search for `.collect` in your Convex codebase (a regex like `\.collect\(` will probably find these). And think through whether the number of results is small. This function health page in the dashboard can also help surface these.
+
+You can also check automatically that `.collect()` is avoided by enabling the [`@convex-dev/no-collect-in-query` ESLint rule](/eslint.md#no-collect-in-query).
 
 The [aggregate component](https://www.npmjs.com/package/@convex-dev/aggregate) or [database triggers](https://stack.convex.dev/triggers) can be helpful patterns for denormalizing data.
 
@@ -155,34 +206,57 @@ Indexes like `by_foo` and `by_foo_and_bar` are usually redundant (you only need 
 
 convex/teams.ts
 
-TS
-
 ```
 // ❌
+
 const allTeamMembers = await ctx.db
+
   .query("teamMembers")
+
   .withIndex("by_team", (q) => q.eq("team", teamId))
+
   .collect();
+
 const currentUserId = /* get current user id from `ctx.auth` */
+
 const currentTeamMember = await ctx.db
+
   .query("teamMembers")
+
   .withIndex("by_team_and_user", (q) =>
+
     q.eq("team", teamId).eq("user", currentUserId),
+
   )
+
   .unique();
 
+
+
 // ✅
+
 // Just don't include a condition on `user` when querying for results on `team`
+
 const allTeamMembers = await ctx.db
+
   .query("teamMembers")
+
   .withIndex("by_team_and_user", (q) => q.eq("team", teamId))
+
   .collect();
+
 const currentUserId = /* get current user id from `ctx.auth` */
+
 const currentTeamMember = await ctx.db
+
   .query("teamMembers")
+
   .withIndex("by_team_and_user", (q) =>
+
     q.eq("team", teamId).eq("user", currentUserId),
+
   )
+
   .unique();
 ```
 
@@ -206,41 +280,71 @@ Public functions can be called by anyone, including potentially malicious attack
 
 convex/movies.ts
 
-TS
-
 ```
 // ❌ -- `id` and `update` are not validated, so a client could pass
+
 //       any Convex value (the type at runtime could mismatch the
+
 //       TypeScript type). In particular, `update` could contain
+
 //       fields other than `title` and `director`.
+
 export const updateMovie = mutation({
+
   handler: async (
+
     ctx,
+
     {
+
       id,
+
       update,
+
     }: {
+
       id: Id<"movies">;
+
       update: Pick<Doc<"movies">, "title" | "director">;
+
     },
+
   ) => {
+
     await ctx.db.patch("movies", id, update);
+
   },
+
 });
 
+
+
 // ✅ -- This can only be called with an ID from the movies table,
+
 //       and an `update` object with only the `title`/`director` fields
+
 export const updateMovie = mutation({
+
   args: {
+
     id: v.id("movies"),
+
     update: v.object({
+
       title: v.string(),
+
       director: v.string(),
+
     }),
+
   },
+
   handler: async (ctx, { id, update }) => {
+
     await ctx.db.patch("movies", id, update);
+
   },
+
 });
 ```
 
@@ -268,99 +372,187 @@ Access control checks should either use `ctx.auth.getUserIdentity()` or a functi
 
 convex/teams.ts
 
-TS
-
 ```
 // ❌ -- no checks! anyone can update any team if they get the ID
+
 export const updateTeam = mutation({
+
   args: {
+
     id: v.id("teams"),
+
     update: v.object({
+
       name: v.optional(v.string()),
+
       owner: v.optional(v.id("users")),
+
     }),
+
   },
+
   handler: async (ctx, { id, update }) => {
+
     await ctx.db.patch("teams", id, update);
+
   },
+
 });
+
+
 
 // ❌ -- checks access, but uses `email` which could be spoofed
+
 export const updateTeam = mutation({
+
   args: {
+
     id: v.id("teams"),
+
     update: v.object({
+
       name: v.optional(v.string()),
+
       owner: v.optional(v.id("users")),
+
     }),
+
     email: v.string(),
+
   },
+
   handler: async (ctx, { id, update, email }) => {
+
     const teamMembers = /* load team members */
+
     if (!teamMembers.some((m) => m.email === email)) {
+
       throw new Error("Unauthorized");
+
     }
+
     await ctx.db.patch("teams", id, update);
+
   },
+
 });
+
+
 
 // ✅ -- checks access, and uses `ctx.auth`, which cannot be spoofed
+
 export const updateTeam = mutation({
+
   args: {
+
     id: v.id("teams"),
+
     update: v.object({
+
       name: v.optional(v.string()),
+
       owner: v.optional(v.id("users")),
+
     }),
+
   },
+
   handler: async (ctx, { id, update }) => {
+
     const user = await ctx.auth.getUserIdentity();
+
     if (user === null) {
+
       throw new Error("Unauthorized");
+
     }
+
     const isTeamMember = /* check if user is a member of the team */
+
     if (!isTeamMember) {
+
       throw new Error("Unauthorized");
+
     }
+
     await ctx.db.patch("teams", id, update);
+
   },
+
 });
+
+
 
 // ✅ -- separate functions which have different access control
+
 export const setTeamOwner = mutation({
+
   args: {
+
     id: v.id("teams"),
+
     owner: v.id("users"),
+
   },
+
   handler: async (ctx, { id, owner }) => {
+
     const user = await ctx.auth.getUserIdentity();
+
     if (user === null) {
+
       throw new Error("Unauthorized");
+
     }
+
     const isTeamOwner = /* check if user is the owner of the team */
+
     if (!isTeamOwner) {
+
       throw new Error("Unauthorized");
+
     }
+
     await ctx.db.patch("teams", id, { owner: owner });
+
   },
+
 });
 
+
+
 export const setTeamName = mutation({
+
   args: {
+
     id: v.id("teams"),
+
     name: v.string(),
+
   },
+
   handler: async (ctx, { id, name }) => {
+
     const user = await ctx.auth.getUserIdentity();
+
     if (user === null) {
+
       throw new Error("Unauthorized");
+
     }
+
     const isTeamMember = /* check if user is a member of the team */
+
     if (!isTeamMember) {
+
       throw new Error("Unauthorized");
+
     }
+
     await ctx.db.patch("teams", id, { name: name });
+
   },
+
 });
 ```
 
@@ -390,67 +582,123 @@ Alternatively, make sure that `api` from `_generated/api.ts` is never used in yo
 
 convex/teams.ts
 
-TS
-
 ```
 // ❌ -- using `api`
+
 export const sendMessage = mutation({
+
   args: {
+
     body: v.string(),
+
     author: v.string(),
+
   },
+
   handler: async (ctx, { body, author }) => {
+
     // add message to the database
+
   },
+
 });
 
+
+
 // crons.ts
+
 crons.daily(
+
   "send daily reminder",
+
   { hourUTC: 17, minuteUTC: 30 },
+
   api.messages.sendMessage,
+
   { author: "System", body: "Share your daily update!" },
+
 );
 
+
+
 // ✅ Using `internal`
+
 import { MutationCtx } from './_generated/server';
+
 async function sendMessageHelper(
+
   ctx: MutationCtx,
+
   args: { body: string; author: string },
+
 ) {
+
   // add message to the database
+
 }
 
+
+
 export const sendMessage = mutation({
+
   args: {
+
     body: v.string(),
+
   },
+
   handler: async (ctx, { body }) => {
+
     const user = await ctx.auth.getUserIdentity();
+
     if (user === null) {
+
       throw new Error("Unauthorized");
+
     }
+
     await sendMessageHelper(ctx, { body, author: user.name ?? "Anonymous" });
+
   },
+
 });
+
+
 
 export const sendInternalMessage = internalMutation({
+
   args: {
+
     body: v.string(),
+
     // don't need to worry about `author` being spoofed since this is an internal function
+
     author: v.string(),
+
   },
+
   handler: async (ctx, { body, author }) => {
+
     await sendMessageHelper(ctx, { body, author });
+
   },
+
 });
 
+
+
 // crons.ts
+
 crons.daily(
+
   "send daily reminder",
+
   { hourUTC: 17, minuteUTC: 30 },
+
   internal.messages.sendInternalMessage,
+
   { author: "System", body: "Share your daily update!" },
+
 );
 ```
 
@@ -472,57 +720,93 @@ See the [TypeScript page](/understanding/best-practices/typescript.md) for usefu
 
 convex/users.ts
 
-TS
-
 ```
 export const getCurrentUser = query({
+
   args: {},
+
   handler: async (ctx) => {
+
     const userIdentity = await ctx.auth.getUserIdentity();
+
     if (userIdentity === null) {
+
       throw new Error("Unauthorized");
+
     }
+
     const user = /* query ctx.db to load the user */
+
     const userSettings = /* load other documents related to the user */
+
     return { user, settings: userSettings };
+
   },
+
 });
 ```
 
 convex/conversations.ts
 
-TS
-
 ```
 export const listMessages = query({
+
   args: {
+
     conversationId: v.id("conversations"),
+
   },
+
   handler: async (ctx, { conversationId }) => {
+
     const user = await ctx.runQuery(api.users.getCurrentUser);
+
     const conversation = await ctx.db.get("conversations", conversationId);
+
     if (conversation === null || !conversation.members.includes(user._id)) {
+
       throw new Error("Unauthorized");
+
     }
+
     const messages = /* query ctx.db to load the messages */
+
     return messages;
+
   },
+
 });
 
+
+
 export const summarizeConversation = action({
+
   args: {
+
     conversationId: v.id("conversations"),
+
   },
+
   handler: async (ctx, { conversationId }) => {
+
     const messages = await ctx.runQuery(api.conversations.listMessages, {
+
       conversationId,
+
     });
+
     const summary = /* call some external service to summarize the conversation */
+
     await ctx.runMutation(api.conversations.addSummary, {
+
       conversationId,
+
       summary,
+
     });
+
   },
+
 });
 ```
 
@@ -530,114 +814,197 @@ export const summarizeConversation = action({
 
 convex/model/users.ts
 
-TS
-
 ```
 import { QueryCtx } from '../_generated/server';
 
+
+
 export async function getCurrentUser(ctx: QueryCtx) {
+
   const userIdentity = await ctx.auth.getUserIdentity();
+
   if (userIdentity === null) {
+
     throw new Error("Unauthorized");
+
   }
+
   const user = /* query ctx.db to load the user */
+
   const userSettings = /* load other documents related to the user */
+
   return { user, settings: userSettings };
+
 }
 ```
 
 convex/model/conversations.ts
 
-TS
-
 ```
 import { QueryCtx, MutationCtx } from '../_generated/server';
+
 import * as Users from './users';
 
+
+
 export async function ensureHasAccess(
+
   ctx: QueryCtx,
+
   { conversationId }: { conversationId: Id<"conversations"> },
+
 ) {
+
   const user = await Users.getCurrentUser(ctx);
+
   const conversation = await ctx.db.get("conversations", conversationId);
+
   if (conversation === null || !conversation.members.includes(user._id)) {
+
     throw new Error("Unauthorized");
+
   }
+
   return conversation;
+
 }
+
+
 
 export async function listMessages(
+
   ctx: QueryCtx,
+
   { conversationId }: { conversationId: Id<"conversations"> },
+
 ) {
+
   await ensureHasAccess(ctx, { conversationId });
+
   const messages = /* query ctx.db to load the messages */
+
   return messages;
+
 }
+
+
 
 export async function addSummary(
+
   ctx: MutationCtx,
+
   {
+
     conversationId,
+
     summary,
+
   }: { conversationId: Id<"conversations">; summary: string },
+
 ) {
+
   await ensureHasAccess(ctx, { conversationId });
+
   await ctx.db.patch("conversations", conversationId, { summary });
+
 }
 
+
+
 export async function generateSummary(
+
   messages: Doc<"messages">[],
+
   conversationId: Id<"conversations">,
+
 ) {
+
   const summary = /* call some external service to summarize the conversation */
+
   return summary;
+
 }
 ```
 
 convex/conversations.ts
 
-TS
-
 ```
 import * as Conversations from './model/conversations';
 
+
+
 export const addSummary = internalMutation({
+
   args: {
+
     conversationId: v.id("conversations"),
+
     summary: v.string(),
+
   },
+
   handler: async (ctx, { conversationId, summary }) => {
+
     await Conversations.addSummary(ctx, { conversationId, summary });
+
   },
+
 });
+
+
 
 export const listMessages = internalQuery({
+
   args: {
+
     conversationId: v.id("conversations"),
+
   },
+
   handler: async (ctx, { conversationId }) => {
+
     return Conversations.listMessages(ctx, { conversationId });
+
   },
+
 });
 
+
+
 export const summarizeConversation = action({
+
   args: {
+
     conversationId: v.id("conversations"),
+
   },
+
   handler: async (ctx, { conversationId }) => {
+
     const messages = await ctx.runQuery(internal.conversations.listMessages, {
+
       conversationId,
+
     });
+
     const summary = await Conversations.generateSummary(
+
       messages,
+
       conversationId,
+
     );
+
     await ctx.runMutation(internal.conversations.addSummary, {
+
       conversationId,
+
       summary,
+
     });
+
   },
+
 });
 ```
 
@@ -651,62 +1018,93 @@ Calling `runAction` has more overhead than calling a plain TypeScript function. 
 
 convex/scrape.ts
 
-TS
-
 ```
 // ❌ -- using `runAction`
+
 export const scrapeWebsite = action({
+
   args: {
+
     siteMapUrl: v.string(),
+
   },
+
   handler: async (ctx, { siteMapUrl }) => {
+
     const siteMap = await fetch(siteMapUrl);
+
     const pages = /* parse the site map */
+
     await Promise.all(
+
       pages.map((page) =>
+
         ctx.runAction(internal.scrape.scrapeSinglePage, { url: page }),
+
       ),
+
     );
+
   },
+
 });
 ```
 
 convex/model/scrape.ts
 
-TS
-
 ```
 import { ActionCtx } from '../_generated/server';
 
+
+
 // ✅ -- using a plain TypeScript function
+
 export async function scrapeSinglePage(
+
   ctx: ActionCtx,
+
   { url }: { url: string },
+
 ) {
+
   const page = await fetch(url);
+
   const text = /* parse the page */
+
   await ctx.runMutation(internal.scrape.addPage, { url, text });
+
 }
 ```
 
 convex/scrape.ts
 
-TS
-
 ```
 import * as Scrape from './model/scrape';
 
+
+
 export const scrapeWebsite = action({
+
   args: {
+
     siteMapUrl: v.string(),
+
   },
+
   handler: async (ctx, { siteMapUrl }) => {
+
     const siteMap = await fetch(siteMapUrl);
+
     const pages = /* parse the site map */
+
     await Promise.all(
+
       pages.map((page) => Scrape.scrapeSinglePage(ctx, { url: page })),
+
     );
+
   },
+
 });
 ```
 
@@ -728,46 +1126,71 @@ Audit your calls to `ctx.runQuery` and `ctx.runMutation` in actions. If you see 
 
 convex/teams.ts
 
-TS
-
 ```
 // ❌ -- this assertion could fail if the team changed between running the two queries
+
 const team = await ctx.runQuery(internal.teams.getTeam, { teamId });
+
 const teamOwner = await ctx.runQuery(internal.teams.getTeamOwner, { teamId });
+
 assert(team.owner === teamOwner._id);
 ```
 
 convex/teams.ts
 
-TS
-
 ```
 import * as Teams from './model/teams';
+
 import * as Users from './model/users';
 
+
+
 export const sendBillingReminder = action({
+
   args: {
+
     teamId: v.id("teams"),
+
   },
+
   handler: async (ctx, { teamId }) => {
+
     // ✅ -- this will always pass
+
     const teamAndOwner = await ctx.runQuery(internal.teams.getTeamAndOwner, {
+
       teamId,
+
     });
+
     assert(teamAndOwner.team.owner === teamAndOwner.owner._id);
+
     // send a billing reminder email to the owner
+
   },
+
 });
 
+
+
 export const getTeamAndOwner = internalQuery({
+
   args: {
+
     teamId: v.id("teams"),
+
   },
+
   handler: async (ctx, { teamId }) => {
+
     const team = await Teams.load(ctx, { teamId });
+
     const owner = await Users.load(ctx, { userId: team.owner });
+
     return { team, owner };
+
   },
+
 });
 ```
 
@@ -775,60 +1198,99 @@ export const getTeamAndOwner = internalQuery({
 
 convex/teams.ts
 
-TS
-
 ```
 import * as Users from './model/users';
 
+
+
 export const importTeams = action({
+
   args: {
+
     teamId: v.id("teams"),
+
   },
+
   handler: async (ctx, { teamId }) => {
+
     // Fetch team members from an external API
+
     const teamMembers = await fetchTeamMemberData(teamId);
 
+
+
     // ❌ This will run a separate mutation for inserting each user,
+
     // which means you lose transaction guarantees like atomicity.
+
     for (const member of teamMembers) {
+
       await ctx.runMutation(internal.teams.insertUser, member);
+
     }
+
   },
+
 });
+
 export const insertUser = internalMutation({
+
   args: { name: v.string(), email: v.string() },
+
   handler: async (ctx, { name, email }) => {
+
     await Users.insert(ctx, { name, email });
+
   },
+
 });
 ```
 
 convex/teams.ts
 
-TS
-
 ```
 import * as Users from './model/users';
 
+
+
 export const importTeams = action({
+
   args: {
+
     teamId: v.id("teams"),
+
   },
+
   handler: async (ctx, { teamId }) => {
+
     // Fetch team members from an external API
+
     const teamMembers = await fetchTeamMemberData(teamId);
 
+
+
     // ✅ This action runs a single mutation that inserts all users in the same transaction.
+
     await ctx.runMutation(internal.teams.insertUsers, teamMembers);
+
   },
+
 });
+
 export const insertUsers = internalMutation({
+
   args: { users: v.array(v.object({ name: v.string(), email: v.string() })) },
+
   handler: async (ctx, { users }) => {
+
     for (const { name, email } of users) {
+
       await Users.insert(ctx, { name, email });
+
     }
+
   },
+
 });
 ```
 
@@ -855,27 +1317,43 @@ Audit your calls to `ctx.runQuery` and `ctx.runMutation` in queries and mutation
 
 convex/messages.ts
 
-TS
-
 ```
 export const trySendMessage = mutation({
+
   args: {
+
     body: v.string(),
+
     author: v.string(),
+
   },
+
   handler: async (ctx, { body, author }) => {
+
     try {
+
       await ctx.runMutation(internal.messages.sendMessage, { body, author });
+
     } catch (e) {
+
       // Record the failure, but rollback any writes from `sendMessage`
+
       await ctx.db.insert("failures", {
+
         kind: "MessageFailed",
+
         body,
+
         author,
+
         error: `Error: ${e}`,
+
       });
+
     }
+
   },
+
 });
 ```
 
@@ -889,27 +1367,43 @@ Since version 1.31.0 of the `convex` NPM package, the `ctx.db` functions accept 
 
 convex/movies.ts
 
-TS
-
 ```
 // ❌
+
 await ctx.db.get(movieId);
+
 await ctx.db.patch(movieId, { title: "Whiplash" });
+
 await ctx.db.replace(movieId, {
+
   title: "Whiplash",
+
   director: "Damien Chazelle",
+
   votes: 0,
+
 });
+
 await ctx.db.delete(movieId);
 
+
+
 // ✅            vvvvvvvv
+
 await ctx.db.get("movies", movieId);
+
 await ctx.db.patch("movies", movieId, { title: "Whiplash" });
+
 await ctx.db.replace("movies", movieId, {
+
   title: "Whiplash",
+
   director: "Damien Chazelle",
+
   votes: 0,
+
 });
+
 await ctx.db.delete("movies", movieId);
 ```
 
@@ -922,3 +1416,49 @@ You can also check automatically that a table name argument is passed with the [
 You can migrate existing code automatically by using the autofix in the ESLint rule, or with the `@convex-dev/codemod` standalone tool.
 
 [Learn more on news.convex.dev →](https://news.convex.dev/db-table-name/)
+
+## Don’t use `Date.now()` in queries[​](#date-in-queries "Direct link to date-in-queries")
+
+### Why?[​](#why-12 "Direct link to Why?")
+
+When you subscribe to a query, Convex [will automatically run it again](/realtime.md) if the data that it accesses in the database change. The query is not re-run when `Date.now()` changes, because it wouldn’t be desirable to re-run a query every millisecond. So, if your query depends on the current time, it might return stale results.
+
+Also, using `Date.now()` in a query can cause the Convex query cache to be invalidated more frequently than necessary. In general, Convex will automatically re-use Convex query results if the query is called with the same arguments. However, when using `Date.now()` in a query, the query cache will be invalidated frequently in order to avoid showing results that are too old. This will unnecessarily increase the work that the database has to do.
+
+### Example[​](#example-6 "Direct link to Example")
+
+convex/posts.ts
+
+```
+// ❌
+
+const releasedPosts = await ctx.db
+
+  .query("posts")
+
+  .withIndex("by_released_at", (q) => q.lte("releasedAt", Date.now()))
+
+  .take(100);
+
+
+
+// ✅
+
+const releasedPosts = await ctx.db
+
+  .query("posts")
+
+  // `isReleased` is set to `true` by a scheduled function after `releasedAt` is reached
+
+  .withIndex("by_is_released", (q) => q.eq("isReleased", true))
+
+  .take(100);
+```
+
+### How?[​](#how-11 "Direct link to How?")
+
+Search for usages of `Date.now()` in your Convex queries, or in functions that are called from a Convex query.
+
+If you want to compare the current time with a timestamp stored in a database document, consider adding a coarser field to the document that you update from a [scheduled function](/scheduling/scheduled-functions.md) (see the example above). This way, the query cache is only invalidated explicitly when data changes.
+
+Alternatively, you can pass in the target time in as an explicit argument from the client. For best caching results, the client should avoid changing this argument frequently, for instance by rounding the time down to the most recent minute, so all client requests within that minute use the same arguments.

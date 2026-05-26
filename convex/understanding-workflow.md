@@ -54,19 +54,33 @@ convex/tasks.ts
 
 ```
 import { query } from "./_generated/server";
+
 import { v } from "convex/values";
 
+
+
 // Return the last 100 tasks in a given task list.
+
 export const getTaskList = query({
+
   args: { taskListId: v.id("taskLists") },
+
   handler: async (ctx, args) => {
+
     const tasks = await ctx.db
+
       .query("tasks")
+
       .withIndex("taskListId", (q) => q.eq("taskListId", args.taskListId))
+
       .order("desc")
+
       .take(100);
+
     return tasks;
+
   },
+
 });
 ```
 
@@ -88,11 +102,17 @@ src/App.tsx
 
 ```
 import { useQuery } from "convex/react";
+
 import { api } from "../convex/_generated/api";
 
+
+
 export function App() {
+
   const data = useQuery(api.tasks.getTaskList);
+
   return data ?? "Loading...";
+
 }
 ```
 

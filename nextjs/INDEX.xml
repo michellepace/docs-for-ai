@@ -1,282 +1,254 @@
 <docs_index>
   <source>
-    <title>Next.js 16 Release Notes| Next.js</title>
-    <description>Next.js 16 release notes: Cache Components with `use cache` directive, `cacheComponents` config, Turbopack stable default bundler, `proxy.ts` replacing `middleware.ts`, React Compiler, `revalidateTag()` with cacheLife, `updateTag()`, `refresh()`, React 19.2 features, breaking changes.</description>
-    <source_url>https://nextjs.org/blog/next-16</source_url>
-    <local_file>nextjs-16-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Next.js 16.1 Release Notes | Next.js</title>
-    <description>Next.js 16.1 release notes: stable Turbopack file system caching for `next dev`, experimental bundle analyser via `next experimental-analyze`, `--inspect` debugging flag, improved `serverExternalPackages` transitive dependency handling, `next upgrade` command, 20MB smaller installs.</description>
-    <source_url>https://nextjs.org/blog/next-16-1</source_url>
-    <local_file>nextjs-161-nextjs.md</local_file>
-    <scraped_at>2025-12-25</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Image Optimization | Next.js</title>
-    <description>`next/image` component for automatic size optimisation, WebP format, lazy loading, blur placeholders, local images with automatic dimensions, remote images requiring `width`/`height` props, `remotePatterns` security configuration, `fill` property, layout shift prevention.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/images</source_url>
-    <local_file>getting-started-image-optimization-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Project Structure | Next.js</title>
-    <description>File and folder conventions: `app`, `pages`, `public`, `src` directories, routing files (`layout`, `page`, `loading`, `error`, `route`), dynamic routes `[slug]`, route groups `(group)`, private folders `_folder`, parallel routes `@slot`, metadata files.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/project-structure</source_url>
-    <local_file>getting-started-project-structure-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Installation | Next.js</title>
-    <description>`create-next-app` CLI setup, manual installation with `next@latest`, `package.json` scripts (`next dev`, `next build`, `next start`), `app/layout.tsx` root layout, `app/page.tsx`, TypeScript config, ESLint/Biome linting, `baseUrl`/`paths` import aliases.</description>
+    <title>Installation</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/installation</source_url>
-    <local_file>getting-started-installation-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
+    <local_file>app-getting-started-installation.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Configuration: TypeScript | Next.js</title>
-    <description>TypeScript IDE plugin, `next.config.ts` type-checking, statically typed links with `typedRoutes`, `Route` type, environment variable IntelliSense with `typedEnv`, `PageProps`/`LayoutProps` helpers, custom `tsconfigPath`, `ignoreBuildErrors` option.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/config/typescript</source_url>
-    <local_file>configuration-typescript-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
+    <title>Project structure and organization</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/project-structure</source_url>
+    <local_file>app-getting-started-project-structure.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Getting Started: Layouts and Pages | Next.js</title>
-    <description>File-system routing with `page.tsx` and `layout.tsx` files, nested routes, dynamic segments `[slug]`, root layout, `children` prop nesting, `searchParams` prop, `useSearchParams` hook, `&lt;Link&gt;` component, `PageProps` and `LayoutProps` type helpers.</description>
+    <title>Layouts and Pages</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/layouts-and-pages</source_url>
-    <local_file>getting-started-layouts-and-pages-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
+    <local_file>app-getting-started-layouts-and-pages.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Testing: Vitest | Next.js</title>
-    <description>Vitest unit testing setup with `vitest.config.mts`, `@vitejs/plugin-react`, `jsdom` environment, React Testing Library, `vite-tsconfig-paths` for path aliases, `__tests__` folder conventions, watch mode, async Server Component limitations.</description>
-    <source_url>https://nextjs.org/docs/app/guides/testing/vitest</source_url>
-    <local_file>testing-vitest-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Testing: Playwright | Next.js</title>
-    <description>Playwright E2E testing setup with `playwright.config.ts`, `npm init playwright`, navigation tests, `page.goto`, `page.click`, `webServer` feature, CI headless mode, multi-browser simulation.</description>
-    <source_url>https://nextjs.org/docs/app/guides/testing/playwright</source_url>
-    <local_file>testing-playwright-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Guides: Testing | Next.js</title>
-    <description>Testing types including unit testing, component testing, integration testing, E2E testing, snapshot testing, async Server Component recommendations, setup guides for Cypress, Jest, Playwright, Vitest.</description>
-    <source_url>https://nextjs.org/docs/app/guides/testing</source_url>
-    <local_file>guides-testing-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Testing: Jest | Next.js</title>
-    <description>Jest setup with `next/jest` transformer, `jest.config.ts`, `jest-environment-jsdom`, React Testing Library, `@testing-library/jest-dom` matchers, `moduleNameMapper` for path aliases, snapshot testing, async Server Component limitations.</description>
-    <source_url>https://nextjs.org/docs/app/guides/testing/jest</source_url>
-    <local_file>testing-jest-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>API Reference: Turbopack | Next.js</title>
-    <description>Turbopack Rust-based incremental bundler: unified graph, lazy bundling, `--webpack` fallback flag, SWC transforms, CSS Modules, Sass, PostCSS, Fast Refresh, `resolveAlias`, `resolveExtensions`, webpack loader support, filesystem cache, trace generation.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/turbopack</source_url>
-    <local_file>api-reference-turbopack-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Configuration: next.config.js | Next.js</title>
-    <description>`next.config.js`/`next.config.ts` setup, ESM via `next.config.mjs`, async functions, phase-based config with `PHASE_DEVELOPMENT_SERVER`, `unstable_getResponseFromNextConfig` unit testing, comprehensive config options index including headers, redirects, rewrites, images.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js</source_url>
-    <local_file>configuration-nextconfigjs-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>next.config.js: serverComponentsHmrCache | Next.js</title>
-    <description>Experimental `serverComponentsHmrCache` option in `next.config.js` to cache `fetch` responses across HMR refreshes in development, reducing API costs; opt-out by setting to `false`.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/serverComponentsHmrCache</source_url>
-    <local_file>nextconfigjs-servercomponentshmrcache-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Updating Data | Next.js</title>
-    <description>Server Functions and Server Actions with `'use server'` directive, `&lt;form action&gt;` and `formAction` props, `FormData` handling, event handlers, `useActionState` pending state, `revalidatePath`, `revalidateTag`, `refresh`, `redirect`, `cookies` API, `useEffect` invocation.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/updating-data</source_url>
-    <local_file>getting-started-updating-data-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Functions: generateMetadata | Next.js</title>
-    <description>Static `metadata` object and `generateMetadata` function for dynamic SEO. Title templates (`default`, `template`, `absolute`), `description`, `openGraph`, `twitter` cards, `robots`, `icons`, `metadataBase`, `alternates`, `verification`, streaming metadata, metadata merging behaviour.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/functions/generate-metadata</source_url>
-    <local_file>functions-generatemetadata-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>File-system conventions: Metadata Files | Next.js</title>
-    <description>Metadata file conventions for `favicon.ico`, `icon`, `apple-icon`, `manifest.json`, `opengraph-image`, `twitter-image`, `robots.txt`, `sitemap.xml`. Static files or dynamic code variants, automatic serving with hashes, head element updates.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/metadata</source_url>
-    <local_file>file-system-conventions-metadata-files-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Font Optimization | Next.js</title>
-    <description>Using `next/font` module for automatic font optimisation with built-in self-hosting, Google fonts via `next/font/google`, local fonts via `next/font/local`, variable fonts, weight specification, `className` application, and preventing layout shift.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/fonts</source_url>
-    <local_file>getting-started-font-optimization-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Components: Font | Next.js</title>
-    <description>`next/font/google` and `next/font/local` API reference: `src`, `weight`, `style`, `subsets`, `axes`, `display`, `preload`, `fallback`, `adjustFontFallback`, `variable`, `declarations` options. Tailwind CSS integration, `className`/`style`/CSS variable application, font definitions file pattern, preloading behaviour.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/components/font</source_url>
-    <local_file>components-font-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Fonts | Next.js</title>
-    <description>Automatic font optimization via `next/font` with self-hosting, zero layout shift, Google Font integration supporting variable fonts, local font imports from single or multiple files, `className` application, eliminating external requests.</description>
-    <source_url>https://nextjs.org/docs/pages/getting-started/fonts</source_url>
-    <local_file>getting-started-fonts-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Missing Suspense boundary with useSearchParams | Next.js</title>
-    <description>`useSearchParams()` without Suspense causes CSR bailout. Fixes: wrap in `Suspense`, use `connection()` for dynamic rendering, pass `searchParams` from Server Components with `use()`, `--debug-prerender` flag for stack traces.</description>
-    <source_url>https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout</source_url>
-    <local_file>missing-suspense-boundary-with-usesearchparams-nextjs.md</local_file>
-    <scraped_at>2025-12-10</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Cache Components | Next.js</title>
-    <description>Cache Components for Partial Prerendering: static HTML shell, `&lt;Suspense&gt;` streaming, `use cache` directive, `cacheLife`/`cacheTag` functions, runtime data (`cookies`, `headers`, `searchParams`), `connection()`, React `&lt;Activity&gt;` navigation, route segment config migration.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/cache-components</source_url>
-    <local_file>getting-started-cache-components-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Linking and Navigating | Next.js</title>
-    <description>`&lt;Link&gt;` component prefetching, static vs dynamic server rendering, streaming with `loading.tsx` and `&lt;Suspense&gt;`, client-side transitions, `useLinkStatus` for slow networks, `generateStaticParams`, hydration optimisation, `window.history.pushState`/`replaceState` integration.</description>
+    <title>Linking and Navigating</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/linking-and-navigating</source_url>
-    <local_file>getting-started-linking-and-navigating-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
+    <local_file>app-getting-started-linking-and-navigating.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Getting Started: Caching and Revalidating | Next.js</title>
-    <description>Caching and revalidation APIs: `fetch` with `force-cache` and `next.revalidate`, `cacheTag` with `use cache` directive, `revalidateTag` stale-while-revalidate semantics, `updateTag` for Server Actions, `revalidatePath`, legacy `unstable_cache`.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/caching-and-revalidating</source_url>
-    <local_file>getting-started-caching-and-revalidating-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Guides: Caching | Next.js</title>
-    <description>Four caching layers: Request Memoization, Data Cache, Full Route Cache, Router Cache. Static vs dynamic rendering, time-based and on-demand revalidation, `revalidatePath`/`revalidateTag`, `generateStaticParams`, React `cache` function, cache interactions.</description>
-    <source_url>https://nextjs.org/docs/app/guides/caching</source_url>
-    <local_file>guides-caching-nextjs.md</local_file>
-    <scraped_at>2025-12-02</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Proxy | Next.js</title>
-    <description>Proxy (formerly Middleware) for pre-request code execution, `proxy.ts` file convention, `NextRequest`/`NextResponse` APIs, rewrites, redirects, header modifications, `config.matcher` path matching, modular organisation patterns.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/proxy</source_url>
-    <local_file>getting-started-proxy-nextjs.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Fetching Data | Next.js</title>
-    <description>Data fetching in Server Components via `fetch`, ORMs, databases; Client Components with React `use` hook, SWR; streaming via `loading.js` and `&lt;Suspense&gt;`; request memoization, Data Cache, sequential, parallel, and preload patterns.</description>
-    <source_url>https://nextjs.org/docs/app/getting-started/fetching-data</source_url>
-    <local_file>getting-started-fetching-data-nextjs.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>File-system conventions: loading.js | Next.js</title>
-    <description>`loading.js` special file for instant loading states via React Suspense, fallback UI during streaming, navigation prefetching, interruptible routing, SEO with `generateMetadata`, status codes, browser buffering limits, manual Suspense boundaries.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/loading</source_url>
-    <local_file>file-system-conventions-loadingjs-nextjs.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Uncached data was accessed outside of `&lt;Suspense&gt;` | Next.js</title>
-    <description>Blocking route error when uncached data accessed outside `&lt;Suspense&gt;` with `cacheComponents` enabled. Fixes: `use cache` directive, `&lt;Suspense&gt;` boundaries, `headers`/`cookies`/`params`/`searchParams` handling, `cacheLife` short-lived cache patterns.</description>
-    <source_url>https://nextjs.org/docs/messages/blocking-route</source_url>
-    <local_file>uncached-data-was-accessed-outside-of-suspense-nextjs.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Guides: Production | Next.js</title>
-    <description>Production checklist: automatic optimisations (Server Components, code-splitting, prefetching, static rendering, caching), layouts, `&lt;Link&gt;`, error handling, dynamic APIs, data fetching patterns, `&lt;Image&gt;`, `&lt;Script&gt;`, security, Metadata API, Core Web Vitals, bundle analysis.</description>
-    <source_url>https://nextjs.org/docs/app/guides/production-checklist</source_url>
-    <local_file>guides-production-nextjs.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Directives: use client | Next.js</title>
-    <description>`'use client'` directive declaring client-side entry points for interactive UI with `useState`, `onClick` handlers, browser APIs. Defines client-server boundary, serializable props requirement, nesting within Server Components.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-client</source_url>
-    <local_file>directives-use-client-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Directives: use server | Next.js</title>
-    <description>`'use server'` directive for Server Functions callable from Client Components. File-level and inline syntax, database mutations, `formData` handling, `revalidatePath`, authentication patterns, and security for sensitive operations.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-server</source_url>
-    <local_file>directives-use-server-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Directives: use cache | Next.js</title>
-    <description>`'use cache'` directive marking routes, components, functions as cacheable. `cacheComponents` config, cache key serialisation, `cacheLife` profiles, `cacheTag`/`updateTag`/`revalidateTag`, pass-through patterns, `children` slots, build timeout troubleshooting.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache</source_url>
-    <local_file>directives-use-cache-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Directives: use cache: private | Next.js</title>
-    <description>`'use cache: private'` directive for browser-only caching with `cookies()`, `headers()`, `searchParams` access inside cached scope. `cacheLife` stale time, compliance requirements, no server storage, runtime prefetching.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-private</source_url>
-    <local_file>directives-use-cache-private-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Directives: use cache: remote | Next.js</title>
-    <description>`'use cache: remote'` directive for shared remote caching across serverless instances, `cacheComponents` config, `cacheHandlers` setup, cache key strategies, nesting rules, runtime data patterns, rate-limit and backend protection use cases.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-remote</source_url>
-    <local_file>directives-use-cache-remote-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started: Server and Client Components | Next.js</title>
-    <description>Server vs Client Components: `'use client'` directive, `useState`, `useEffect`, `onClick` handlers, browser APIs, RSC Payload, hydration, context providers, `ThemeContext`, `children` prop composition, `server-only` package, serializable props.</description>
+    <title>Server and Client Components</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/server-and-client-components</source_url>
-    <local_file>getting-started-server-and-client-components-nextjs.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <local_file>app-getting-started-server-and-client-components.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>next.config.js: redirects | Next.js</title>
-    <description>`redirects` config in `next.config.js`: `source`/`destination` patterns, `:slug` parameters, wildcard `*`/regex matching, `has`/`missing` for header/cookie/query conditions, `basePath` integration, i18n locales, 307/308 status codes.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects</source_url>
-    <local_file>nextconfigjs-redirects-nextjs.md</local_file>
-    <scraped_at>2026-01-08</scraped_at>
+    <title>Fetching Data</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/fetching-data</source_url>
+    <local_file>app-getting-started-fetching-data.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Functions: permanentRedirect | Next.js</title>
-    <description>`permanentRedirect()` function from `next/navigation` for 308 permanent redirects in Server Components, Client Components, Route Handlers, Server Actions. `path`/`type` parameters, `NEXT_REDIRECT` error, TypeScript `never` return type.</description>
-    <source_url>https://nextjs.org/docs/app/api-reference/functions/permanentRedirect</source_url>
-    <local_file>functions-permanentredirect-nextjs.md</local_file>
-    <scraped_at>2026-01-08</scraped_at>
+    <title>Caching</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/caching</source_url>
+    <local_file>app-getting-started-caching.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Functions: redirect | Next.js</title>
-    <description>`redirect()` function from `next/navigation` for URL redirection in Server Components, Client Components, Route Handlers, Server Actions. `path`/`type` parameters, `RedirectType.push`/`replace`, 307/303 status codes, streaming meta tag insertion.</description>
+    <title>Font Optimization</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/fonts</source_url>
+    <local_file>app-getting-started-fonts.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Image Optimization</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/images</source_url>
+    <local_file>app-getting-started-images.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Proxy</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/getting-started/proxy</source_url>
+    <local_file>app-getting-started-proxy.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Caching and Revalidating (Previous Model)</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/caching-without-cache-components</source_url>
+    <local_file>app-guides-caching-without-cache-components.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How to optimize your Next.js application for production</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/production-checklist</source_url>
+    <local_file>app-guides-production-checklist.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/testing</source_url>
+    <local_file>app-guides-testing.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How to set up Jest with Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/testing/jest</source_url>
+    <local_file>app-guides-testing-jest.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How to set up Playwright with Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/testing/playwright</source_url>
+    <local_file>app-guides-testing-playwright.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How to set up Vitest with Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/guides/testing/vitest</source_url>
+    <local_file>app-guides-testing-vitest.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>use cache</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache</source_url>
+    <local_file>app-api-reference-directives-use-cache.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>use cache: private</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-private</source_url>
+    <local_file>app-api-reference-directives-use-cache-private.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>use cache: remote</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-remote</source_url>
+    <local_file>app-api-reference-directives-use-cache-remote.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>use client</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-client</source_url>
+    <local_file>app-api-reference-directives-use-client.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>use server</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/directives/use-server</source_url>
+    <local_file>app-api-reference-directives-use-server.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>generateMetadata</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/functions/generate-metadata</source_url>
+    <local_file>app-api-reference-functions-generate-metadata.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>redirect</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/redirect</source_url>
-    <local_file>functions-redirect-nextjs.md</local_file>
-    <scraped_at>2026-01-08</scraped_at>
+    <local_file>app-api-reference-functions-redirect.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>next.config.js: devIndicators | Next.js</title>
-    <description>`devIndicators` next.config.js option for on-screen development indicator showing route context. Position configuration (`bottom-right`, `bottom-left`, `top-right`, `top-left`), disabling indicator, troubleshooting static vs dynamic route marking, `next build --debug` output symbols.</description>
+    <title>permanentRedirect</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/functions/permanentRedirect</source_url>
+    <local_file>app-api-reference-functions-permanentredirect.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>loading.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/loading</source_url>
+    <local_file>app-api-reference-file-conventions-loading.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Metadata Files API Reference</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/metadata</source_url>
+    <local_file>app-api-reference-file-conventions-metadata.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Font Module</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/components/font</source_url>
+    <local_file>app-api-reference-components-font.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>TypeScript</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/config/typescript</source_url>
+    <local_file>app-api-reference-config-typescript.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>next.config.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js</source_url>
+    <local_file>app-api-reference-config-next-config-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>devIndicators</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/devIndicators</source_url>
-    <local_file>nextconfigjs-devindicators-nextjs.md</local_file>
-    <scraped_at>2026-01-17</scraped_at>
+    <local_file>app-api-reference-config-next-config-js-devindicators.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>redirects</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects</source_url>
+    <local_file>app-api-reference-config-next-config-js-redirects.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>serverComponentsHmrCache</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/serverComponentsHmrCache</source_url>
+    <local_file>app-api-reference-config-next-config-js-servercomponentshmrcache.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Turbopack</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/turbopack</source_url>
+    <local_file>app-api-reference-turbopack.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Uncached data was accessed outside of `&lt;Suspense&gt;`</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/messages/blocking-route</source_url>
+    <local_file>messages-blocking-route.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Missing Suspense boundary with useSearchParams</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout</source_url>
+    <local_file>messages-missing-suspense-with-csr-bailout.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How to use fonts</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://nextjs.org/docs/pages/getting-started/fonts</source_url>
+    <local_file>pages-getting-started-fonts.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

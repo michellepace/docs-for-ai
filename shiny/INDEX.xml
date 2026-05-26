@@ -3,252 +3,252 @@
     <title>Cloud hosting – Shiny for Python</title>
     <description>Cloud deployment options including Posit Connect Cloud for GitHub deployment, shinyapps.io via rsconnect-python, and Hugging Face Spaces with templated integration for NLP models and hosted applications.</description>
     <source_url>https://shiny.posit.co/py/get-started/deploy-cloud.html</source_url>
-    <local_file>cloud-hosting-shiny-for-python.md</local_file>
+    <local_file>py-get-started-deploy-cloud-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Overview – Shiny for Python</title>
     <description>Comprehensive introduction covering input/output basics, component gallery including plots, tables, and widgets, layout options for sidebars and multi-page arrangements, transparent reactivity for minimal re-rendering, starter templates via `shiny create`, and extensible foundation using web standards.</description>
     <source_url>https://shiny.posit.co/py/docs/overview.html</source_url>
-    <local_file>overview-shiny-for-python.md</local_file>
+    <local_file>overview-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>User interfaces – Shiny for Python</title>
     <description>Dashboard UI components and layouts including cards, value boxes, sidebar layouts, multi-column grids, fillable pages, tooltips, popovers, and full-screen capabilities.</description>
     <source_url>https://shiny.posit.co/py/docs/user-interfaces.html</source_url>
-    <local_file>user-interfaces-shiny-for-python.md</local_file>
+    <local_file>user-interfaces-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Get inspired – Shiny for Python</title>
     <description>Generative AI examples including coding assistants, enhanced dashboards with natural language to SQL via querychat and sidebot, guided exploration apps, streaming markdown for workout plans and image descriptions.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-inspiration.html</source_url>
-    <local_file>get-inspired-shiny-for-python.md</local_file>
+    <local_file>genai-inspiration-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Chatbots – Shiny for Python</title>
     <description>Building LLM-powered chatbots using `Chat()` component with chatlas, covering templates for multiple providers, startup messages, bookmarking, layout options, theming, custom icons, input suggestions, interactive messages, non-blocking streams, error handling, and message history management.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-chatbots.html</source_url>
-    <local_file>chatbots-shiny-for-python.md</local_file>
+    <local_file>genai-chatbots-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Streaming – Shiny for Python</title>
     <description>`MarkdownStream()` component for streaming LLM responses using chatlas with multiple providers, content APIs for starting/appending content, interactive elements, card layouts, non-blocking extended tasks, stream cancellation, and error handling.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-stream.html</source_url>
-    <local_file>streaming-shiny-for-python.md</local_file>
+    <local_file>genai-stream-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Tool calling – Shiny for Python</title>
     <description>Equipping LLMs with tools via chatlas `register_tool`, displaying tool calls in `Chat()` UI, combining tools with reactivity to update inputs and manage state, custom tool displays by subclassing `ContentToolResult`.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-tools.html</source_url>
-    <local_file>tool-calling-shiny-for-python.md</local_file>
+    <local_file>genai-tools-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Structured data – Shiny for Python</title>
     <description>Extracting structured data from unstructured text and images using chatlas `extract_data_async` with pydantic `BaseModel` schemas, editable `DataGrid` results for manual correction, and populating inputs from extracted data.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-structured-data.html</source_url>
-    <local_file>structured-data-shiny-for-python.md</local_file>
+    <local_file>genai-structured-data-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>RAG – Shiny for Python</title>
     <description>Retrieval-Augmented Generation for providing LLMs with private or latest information, comparing system prompts versus tool calling versus RAG, implementing document similarity search with embedding models and cosine similarity, and scaling with vector databases like duckdb, MotherDuck, Pinecone, and Weaviate.</description>
     <source_url>https://shiny.posit.co/py/docs/genai-rag.html</source_url>
-    <local_file>rag-shiny-for-python.md</local_file>
+    <local_file>genai-rag-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Jupyter Widgets – Shiny for Python</title>
     <description>Integrating ipywidgets via shinywidgets package, rendering with `@render_widget` and specialised decorators for altair, bokeh, plotly, accessing widget objects and traits, efficient updates via reactive trait modification, responding to user input with `reactive_read()` and event callbacks, layout arrangements, and troubleshooting.</description>
     <source_url>https://shiny.posit.co/py/docs/jupyter-widgets.html</source_url>
-    <local_file>jupyter-widgets-shiny-for-python.md</local_file>
+    <local_file>jupyter-widgets-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Dynamic UI – Shiny for Python</title>
     <description>Programmatically updating UI with conditional panels using JavaScript conditions, updating input choices/values from server, and @render.ui for server-side dynamic UI generation.</description>
     <source_url>https://shiny.posit.co/py/docs/ui-dynamic.html</source_url>
-    <local_file>dynamic-ui-shiny-for-python.md</local_file>
+    <local_file>ui-dynamic-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>UI as HTML – Shiny for Python</title>
     <description>Creating HTML with `ui.markdown()`, `ui.HTML()`, and tag functions, `Tag` object methods for attributes and children, `head_content()` for meta tags, `HTMLDependency()` for loading frameworks once, `TagList` for collections, and custom HTML-like objects.</description>
     <source_url>https://shiny.posit.co/py/docs/ui-html.html</source_url>
-    <local_file>ui-as-html-shiny-for-python.md</local_file>
+    <local_file>ui-html-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Customizing UI – Shiny for Python</title>
     <description>UI customisation techniques including shinyswatch themes, custom CSS via strings or files, inline styles, Bootstrap utility classes, CSS variables, custom fonts from Google Fonts or local sources, serving static assets, and distributing styles via HTMLDependency.</description>
     <source_url>https://shiny.posit.co/py/docs/ui-customize.html</source_url>
-    <local_file>customizing-ui-shiny-for-python.md</local_file>
+    <local_file>ui-customize-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Foundations – Shiny for Python</title>
     <description>Reactive programming foundations including @reactive.calc for shared calculations, @reactive.effect for side effects, reactive.value for maintaining state, reactive dependencies, invalidation patterns, and preventing infinite loops.</description>
     <source_url>https://shiny.posit.co/py/docs/reactive-foundations.html</source_url>
-    <local_file>foundations-shiny-for-python.md</local_file>
+    <local_file>reactive-foundations-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Mutable objects – Shiny for Python</title>
     <description>Mutability issues in reactive programming, solutions including copy-on-assignment with .copy(), copy-on-update with list comprehensions and operators, immutable data structures via tuples and pyrsistent, preventing reactive invalidation failures and leaky changes.</description>
     <source_url>https://shiny.posit.co/py/docs/reactive-mutable.html</source_url>
-    <local_file>mutable-objects-shiny-for-python.md</local_file>
+    <local_file>reactive-mutable-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Express vs. Core – Shiny for Python</title>
     <description>Comparison of Express and Core syntaxes covering import statements, UI/server organisation, implicit versus explicit output placement, and container components as context managers versus nested function calls, with advantages of each approach.</description>
     <source_url>https://shiny.posit.co/py/docs/express-vs-core.html</source_url>
-    <local_file>express-vs-core-shiny-for-python.md</local_file>
+    <local_file>express-vs-core-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Choosing a syntax – Shiny for Python</title>
     <description>Guidelines for choosing between Express and Core syntaxes covering maintainability, feature sets including modules and dynamic UI, maturity considerations, and familiarity for R users with comparative dashboard examples.</description>
     <source_url>https://shiny.posit.co/py/docs/express-or-core.html</source_url>
-    <local_file>choosing-a-syntax-shiny-for-python.md</local_file>
+    <local_file>express-or-core-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Express in depth – Shiny for Python</title>
     <description>Advanced Express features including interactive mode execution, @expressify decorator for UI-generating functions, ui.hold() context manager for collecting UI into variables, @render.express for reactive rendering, shared objects across sessions, and session management patterns.</description>
     <source_url>https://shiny.posit.co/py/docs/express-in-depth.html</source_url>
-    <local_file>express-in-depth-shiny-for-python.md</local_file>
+    <local_file>express-in-depth-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Transition to Core – Shiny for Python</title>
     <description>Translating Express apps to Core by replacing imports, creating `App()` object with `app_ui` and server function, adding `ui.output_*()` containers, converting context managers to pure functions, and moving render/reactive logic.</description>
     <source_url>https://shiny.posit.co/py/docs/express-to-core.html</source_url>
-    <local_file>transition-to-core-shiny-for-python.md</local_file>
+    <local_file>express-to-core-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Shiny Modules – Shiny for Python</title>
     <description>Organizing large applications using modules with `@module` decorator (Express) or `@module.ui`/`@module.server` (Core), namespace encapsulation for UI and server logic, unique IDs, composable components, and passing parameters to modules.</description>
     <source_url>https://shiny.posit.co/py/docs/modules.html</source_url>
-    <local_file>shiny-modules-shiny-for-python.md</local_file>
+    <local_file>modules-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Unit testing – Shiny for Python</title>
     <description>Unit testing with pytest framework, separating business logic from reactive logic for testability, writing test functions with assert statements, pytest naming conventions, running tests, and interpreting test results.</description>
     <source_url>https://shiny.posit.co/py/docs/unit-testing.html</source_url>
-    <local_file>unit-testing-shiny-for-python.md</local_file>
+    <local_file>unit-testing-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>End-to-End Testing Your App – Shiny for Python</title>
     <description>End-to-end testing using Playwright and pytest, covering test setup, controller abstractions for Shiny components, ShinyAppProc fixtures, generating tests with `shiny add test` via Anthropic or OpenAI, running tests, and troubleshooting common issues.</description>
     <source_url>https://shiny.posit.co/py/docs/end-to-end-testing.html</source_url>
-    <local_file>end-to-end-testing-your-app-shiny-for-python.md</local_file>
+    <local_file>end-to-end-testing-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Non-blocking operations – Shiny for Python</title>
     <description>Async/await in reactive contexts blocks by design, ExtendedTask with @reactive.extended_task decorator for true non-blocking operations, ui.bind_task_button integration, result() state handling, task cancellation, ThreadPoolExecutor and ProcessPoolExecutor for background execution.</description>
     <source_url>https://shiny.posit.co/py/docs/nonblocking.html</source_url>
-    <local_file>non-blocking-operations-shiny-for-python.md</local_file>
+    <local_file>nonblocking-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Routing – Shiny for Python</title>
     <description>Extending Shiny applications built on Starlette web server framework, adding custom routes using `Mount` to combine Shiny apps with other Starlette applications like `StaticFiles`, and deployment via uvicorn.</description>
     <source_url>https://shiny.posit.co/py/docs/routing.html</source_url>
-    <local_file>routing-shiny-for-python.md</local_file>
+    <local_file>routing-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Shiny Components – Shiny for Python</title>
     <description>Component reference covering input widgets (buttons, sliders, selects, dates, files), output displays (plots, tables, grids, images, maps), and user feedback (chat, modals, notifications, progress bars, tooltips).</description>
     <source_url>https://shiny.posit.co/py/components</source_url>
-    <local_file>shiny-components-shiny-for-python.md</local_file>
+    <local_file>py-components.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Shiny Layouts – Shiny for Python</title>
     <description>Overview of layout options including navbars for navigation, sidebars for inputs/outputs, tabs and accordions, panels and cards for content areas, and grid/column arrangements for responsive layouts.</description>
     <source_url>https://shiny.posit.co/py/layouts</source_url>
-    <local_file>shiny-layouts-shiny-for-python.md</local_file>
+    <local_file>py-layouts.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Shiny for Python – Shiny Templates</title>
     <description>Collection of starter templates including basic apps, generative AI chatbots, dashboards with sidebars and value boxes, streaming updates with reactive file reading, and data entry forms.</description>
     <source_url>https://shiny.posit.co/py/templates</source_url>
-    <local_file>shiny-for-python-shiny-templates.md</local_file>
+    <local_file>py-templates.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Welcome – Shiny for Python</title>
     <description>Introduction to Shiny for Python emphasising pure Python development, reactive framework, AI integration capabilities, extensibility, deployment options, open source community, templates and gallery examples.</description>
     <source_url>https://shiny.posit.co/py/get-started</source_url>
-    <local_file>welcome-shiny-for-python.md</local_file>
+    <local_file>py-get-started.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>What is Shiny? – Shiny for Python</title>
     <description>Introduction to Shiny's reactive framework for building interactive dashboards in pure Python, batteries-included components and layouts, automatic output updates, starter templates via `shiny create`, and extensibility through web standards and custom components.</description>
     <source_url>https://shiny.posit.co/py/get-started/what-is-shiny.html</source_url>
-    <local_file>what-is-shiny-shiny-for-python.md</local_file>
+    <local_file>py-get-started-what-is-shiny-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Installation – Shiny for Python</title>
     <description>Installing Shiny via `pip`, `conda`, or `uv` with virtual environment setup using `venv`, `conda`, or `uv venv`, upgrading packages, development versions, Positron and VS Code IDE configuration with Shiny extension, and type checking setup with Pyright.</description>
     <source_url>https://shiny.posit.co/py/get-started/install.html</source_url>
-    <local_file>installation-shiny-for-python.md</local_file>
+    <local_file>py-get-started-install-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Create and Run – Shiny for Python</title>
     <description>Creating Shiny apps with `shiny create` CLI command and starter templates, running apps via Positron or VS Code with the Shiny extension, command-line execution using `shiny run` with auto-reload and browser launch flags, and debugging mode setup.</description>
     <source_url>https://shiny.posit.co/py/get-started/create-run.html</source_url>
-    <local_file>create-and-run-shiny-for-python.md</local_file>
+    <local_file>py-get-started-create-run-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Debug, troubleshoot, &amp; help – Shiny for Python</title>
     <description>Debugging techniques including Positron and VS Code debugger with breakpoints, Shiny debug mode for tracing server-browser communication, manual breakpoints with `breakpoint()`, print statements, handling common errors, and help resources via Posit Community, Discord, and Stack Overflow.</description>
     <source_url>https://shiny.posit.co/py/get-started/debug.html</source_url>
-    <local_file>debug-troubleshoot-help-shiny-for-python.md</local_file>
+    <local_file>py-get-started-debug-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Patterns – Shiny for Python</title>
     <description>Advanced reactive patterns including `@reactive.event` and `isolate` for event-driven execution, `req` for conditional execution, `invalidate_later` for scheduled updates, `@reactive.file_reader` for monitoring files, and `@reactive.poll` for conditional polling.</description>
     <source_url>https://shiny.posit.co/py/docs/reactive-patterns.html</source_url>
-    <local_file>patterns-shiny-for-python.md</local_file>
+    <local_file>reactive-patterns-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>Module Communication – Shiny for Python</title>
     <description>Module communication patterns including non-reactive arguments, passing multiple UI elements via *args, passing reactive objects between modules, callback functions for state modification, returning reactive objects from modules, multiple returns via tuples and namedtuples, and mixing Express and Core syntax modules.</description>
     <source_url>https://shiny.posit.co/py/docs/module-communication.html</source_url>
-    <local_file>module-communication-shiny-for-python.md</local_file>
+    <local_file>module-communication-html.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>index – Shiny for Python</title>
     <description>Shiny Express API reference covering input components, output renderers, layout tools, navigation panels, Chat and MarkdownStream interfaces, reactive programming decorators, reusable code utilities, update functions, display messages, modules, and UI panels.</description>
     <source_url>https://shiny.posit.co/py/api/express</source_url>
-    <local_file>express-api-shiny-for-python.md</local_file>
+    <local_file>py-api-express.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
   <source>
     <title>index – Shiny for Python</title>
     <description>Playwright-based testing API with controllers for UI components, inputs, outputs, navigation, chat interfaces, file operations, expect assertions, pytest fixtures, and ShinyAppProc for running test apps.</description>
     <source_url>https://shiny.posit.co/py/api/testing</source_url>
-    <local_file>testing-api-shiny-for-python.md</local_file>
+    <local_file>py-api-testing.md</local_file>
     <scraped_at>2025-11-02</scraped_at>
   </source>
 </docs_index>

@@ -1,373 +1,177 @@
 <docs_index>
   <source>
-    <title>Claude Code on Amazon Bedrock</title>
-    <description>Learn about configuring Claude Code through Amazon Bedrock, including setup, IAM configuration, and troubleshooting.</description>
-    <source_url>https://code.claude.com/docs/en/amazon-bedrock.md</source_url>
-    <local_file>amazon-bedrock.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Agent SDK overview</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/agent-sdk/overview</source_url>
+    <local_file>en-agent-sdk-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Track team usage with analytics</title>
-    <description>View Claude Code usage metrics, track adoption, and measure engineering velocity in the analytics dashboard.</description>
-    <source_url>https://code.claude.com/docs/en/analytics.md</source_url>
-    <local_file>analytics.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Agent SDK reference - Python</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
+    <local_file>en-agent-sdk-python.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Authentication</title>
-    <description>Learn how to configure user authentication and credential management for Claude Code in your organization.</description>
-    <source_url>https://code.claude.com/docs/en/authentication.md</source_url>
-    <local_file>authentication.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Agent SDK reference - TypeScript</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/agent-sdk/typescript</source_url>
+    <local_file>en-agent-sdk-typescript.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Best Practices for Claude Code</title>
-    <description>Tips and patterns for getting the most out of Claude Code, from configuring your environment to scaling across parallel sessions.</description>
-    <source_url>https://code.claude.com/docs/en/best-practices.md</source_url>
-    <local_file>best-practices.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Checkpointing</title>
-    <description>Automatically track and rewind Claude's edits to quickly recover from unwanted changes.</description>
-    <source_url>https://code.claude.com/docs/en/checkpointing.md</source_url>
-    <local_file>checkpointing.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Best practices for Claude Code</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/best-practices</source_url>
+    <local_file>en-best-practices.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Use Claude Code with Chrome (beta)</title>
-    <description>Connect Claude Code to your Chrome browser to test web apps, debug with console logs, automate form filling, and extract data from web pages.</description>
-    <source_url>https://code.claude.com/docs/en/chrome.md</source_url>
-    <local_file>chrome.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code on the web</title>
-    <description>Run Claude Code tasks asynchronously on secure cloud infrastructure</description>
-    <source_url>https://code.claude.com/docs/en/claude-code-on-the-web.md</source_url>
-    <local_file>claude-code-on-the-web.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/chrome</source_url>
+    <local_file>en-chrome.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>CLI reference</title>
-    <description>Complete reference for Claude Code command-line interface, including commands and flags.</description>
-    <source_url>https://code.claude.com/docs/en/cli-reference.md</source_url>
-    <local_file>cli-reference.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/cli-reference</source_url>
+    <local_file>en-cli-reference.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Common workflows</title>
-    <description>Step-by-step guides for exploring codebases, fixing bugs, refactoring, testing, and other everyday tasks with Claude Code.</description>
-    <source_url>https://code.claude.com/docs/en/common-workflows.md</source_url>
-    <local_file>common-workflows.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Manage costs effectively</title>
-    <description>Track token usage, set team spend limits, and reduce Claude Code costs with context management, model selection, extended thinking settings, and preprocessing hooks.</description>
-    <source_url>https://code.claude.com/docs/en/costs.md</source_url>
-    <local_file>costs.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Data usage</title>
-    <description>Learn about Anthropic's data usage policies for Claude</description>
-    <source_url>https://code.claude.com/docs/en/data-usage.md</source_url>
-    <local_file>data-usage.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code on desktop</title>
-    <description>Run Claude Code tasks locally or on secure cloud infrastructure with the Claude desktop app</description>
-    <source_url>https://code.claude.com/docs/en/desktop.md</source_url>
-    <local_file>desktop.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Development containers</title>
-    <description>Learn about the Claude Code development container for teams that need consistent, secure environments.</description>
-    <source_url>https://code.claude.com/docs/en/devcontainer.md</source_url>
-    <local_file>devcontainer.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Discover and install prebuilt plugins through marketplaces</title>
-    <description>Find and install plugins from marketplaces to extend Claude Code with new commands, agents, and capabilities.</description>
-    <source_url>https://code.claude.com/docs/en/discover-plugins.md</source_url>
-    <local_file>discover-plugins.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/common-workflows</source_url>
+    <local_file>en-common-workflows.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Extend Claude Code</title>
-    <description>Understand when to use CLAUDE.md, Skills, subagents, hooks, MCP, and plugins.</description>
-    <source_url>https://code.claude.com/docs/en/features-overview.md</source_url>
-    <local_file>features-overview.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code GitHub Actions</title>
-    <description>Learn about integrating Claude Code into your development workflow with Claude Code GitHub Actions</description>
-    <source_url>https://code.claude.com/docs/en/github-actions.md</source_url>
-    <local_file>github-actions.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code GitLab CI/CD</title>
-    <description>Learn about integrating Claude Code into your development workflow with GitLab CI/CD</description>
-    <source_url>https://code.claude.com/docs/en/gitlab-ci-cd.md</source_url>
-    <local_file>gitlab-ci-cd.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code on Google Vertex AI</title>
-    <description>Learn about configuring Claude Code through Google Vertex AI, including setup, IAM configuration, and troubleshooting.</description>
-    <source_url>https://code.claude.com/docs/en/google-vertex-ai.md</source_url>
-    <local_file>google-vertex-ai.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/features-overview</source_url>
+    <local_file>en-features-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Run Claude Code programmatically</title>
-    <description>Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.</description>
-    <source_url>https://code.claude.com/docs/en/headless.md</source_url>
-    <local_file>headless.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Hooks reference</title>
-    <description>Reference for Claude Code hook events, configuration schema, JSON input/output formats, exit codes, async hooks, prompt hooks, and MCP tool hooks.</description>
-    <source_url>https://code.claude.com/docs/en/hooks.md</source_url>
-    <local_file>hooks.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/headless</source_url>
+    <local_file>en-headless.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Automate workflows with hooks</title>
-    <description>Run shell commands automatically when Claude Code edits files, finishes tasks, or needs input. Format code, send notifications, validate commands, and enforce project rules.</description>
-    <source_url>https://code.claude.com/docs/en/hooks-guide.md</source_url>
-    <local_file>hooks-guide.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/hooks-guide</source_url>
+    <local_file>en-hooks-guide.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Hooks reference</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/hooks</source_url>
+    <local_file>en-hooks.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>How Claude Code works</title>
-    <description>Understand the agentic loop, built-in tools, and how Claude Code interacts with your project.</description>
-    <source_url>https://code.claude.com/docs/en/how-claude-code-works.md</source_url>
-    <local_file>how-claude-code-works.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Interactive mode</title>
-    <description>Complete reference for keyboard shortcuts, input modes, and interactive features in Claude Code sessions.</description>
-    <source_url>https://code.claude.com/docs/en/interactive-mode.md</source_url>
-    <local_file>interactive-mode.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>JetBrains IDEs</title>
-    <description>Use Claude Code with JetBrains IDEs including IntelliJ, PyCharm, WebStorm, and more</description>
-    <source_url>https://code.claude.com/docs/en/jetbrains.md</source_url>
-    <local_file>jetbrains.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/how-claude-code-works</source_url>
+    <local_file>en-how-claude-code-works.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Customize keyboard shortcuts</title>
-    <description>Customize keyboard shortcuts in Claude Code with a keybindings configuration file.</description>
-    <source_url>https://code.claude.com/docs/en/keybindings.md</source_url>
-    <local_file>keybindings.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/keybindings</source_url>
+    <local_file>en-keybindings.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Legal and compliance</title>
-    <description>Legal agreements, compliance certifications, and security information for Claude Code.</description>
-    <source_url>https://code.claude.com/docs/en/legal-and-compliance.md</source_url>
-    <local_file>legal-and-compliance.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>LLM gateway configuration</title>
-    <description>Learn how to configure Claude Code to work with LLM gateway solutions. Covers gateway requirements, authentication configuration, model selection, and provider-specific endpoint setup.</description>
-    <source_url>https://code.claude.com/docs/en/llm-gateway.md</source_url>
-    <local_file>llm-gateway.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Connect Claude Code to tools via MCP</title>
-    <description>Learn how to connect Claude Code to your tools with the Model Context Protocol.</description>
-    <source_url>https://code.claude.com/docs/en/mcp.md</source_url>
-    <local_file>mcp.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Manage Claude's memory</title>
-    <description>Learn how to manage Claude Code's memory across sessions with different memory locations and best practices.</description>
-    <source_url>https://code.claude.com/docs/en/memory.md</source_url>
-    <local_file>memory.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code on Microsoft Foundry</title>
-    <description>Learn about configuring Claude Code through Microsoft Foundry, including setup, configuration, and troubleshooting.</description>
-    <source_url>https://code.claude.com/docs/en/microsoft-foundry.md</source_url>
-    <local_file>microsoft-foundry.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Model configuration</title>
-    <description>Learn about the Claude Code model configuration, including model aliases like `opusplan`</description>
-    <source_url>https://code.claude.com/docs/en/model-config.md</source_url>
-    <local_file>model-config.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Monitoring</title>
-    <description>Learn how to enable and configure OpenTelemetry for Claude Code.</description>
-    <source_url>https://code.claude.com/docs/en/monitoring-usage.md</source_url>
-    <local_file>monitoring-usage.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Enterprise network configuration</title>
-    <description>Configure Claude Code for enterprise environments with proxy servers, custom Certificate Authorities (CA), and mutual Transport Layer Security (mTLS) authentication.</description>
-    <source_url>https://code.claude.com/docs/en/network-config.md</source_url>
-    <local_file>network-config.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>How Claude remembers your project</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/memory</source_url>
+    <local_file>en-memory.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Output styles</title>
-    <description>Adapt Claude Code for uses beyond software engineering</description>
-    <source_url>https://code.claude.com/docs/en/output-styles.md</source_url>
-    <local_file>output-styles.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Claude Code overview</title>
-    <description>Learn about Claude Code, Anthropic's agentic coding tool that works in your terminal, IDE, desktop app, and browser to help you turn ideas into code faster than ever before.</description>
-    <source_url>https://code.claude.com/docs/en/overview.md</source_url>
-    <local_file>overview.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/output-styles</source_url>
+    <local_file>en-output-styles.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Configure permissions</title>
-    <description>Control what Claude Code can access and do with fine-grained permission rules, modes, and managed policies.</description>
-    <source_url>https://code.claude.com/docs/en/permissions.md</source_url>
-    <local_file>permissions.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/permissions</source_url>
+    <local_file>en-permissions.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Create and distribute a plugin marketplace</title>
-    <description>Build and host plugin marketplaces to distribute Claude Code extensions across teams and communities.</description>
-    <source_url>https://code.claude.com/docs/en/plugin-marketplaces.md</source_url>
-    <local_file>plugin-marketplaces.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Create plugins</title>
-    <description>Create custom plugins to extend Claude Code with skills, agents, hooks, and MCP servers.</description>
-    <source_url>https://code.claude.com/docs/en/plugins.md</source_url>
-    <local_file>plugins.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/plugin-marketplaces</source_url>
+    <local_file>en-plugin-marketplaces.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Plugins reference</title>
-    <description>Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.</description>
-    <source_url>https://code.claude.com/docs/en/plugins-reference.md</source_url>
-    <local_file>plugins-reference.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
+    <local_file>en-plugins-reference.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Quickstart</title>
-    <description>Welcome to Claude Code!</description>
-    <source_url>https://code.claude.com/docs/en/quickstart.md</source_url>
-    <local_file>quickstart.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Sandboxing</title>
-    <description>Learn how Claude Code's sandboxed bash tool provides filesystem and network isolation for safer, more autonomous agent execution.</description>
-    <source_url>https://code.claude.com/docs/en/sandboxing.md</source_url>
-    <local_file>sandboxing.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Security</title>
-    <description>Learn about Claude Code's security safeguards and best practices for safe usage.</description>
-    <source_url>https://code.claude.com/docs/en/security.md</source_url>
-    <local_file>security.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Create plugins</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/plugins</source_url>
+    <local_file>en-plugins.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Claude Code settings</title>
-    <description>Configure Claude Code with global and project-level settings, and environment variables.</description>
-    <source_url>https://code.claude.com/docs/en/settings.md</source_url>
-    <local_file>settings.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Set up Claude Code</title>
-    <description>Install, authenticate, and start using Claude Code on your development machine.</description>
-    <source_url>https://code.claude.com/docs/en/setup.md</source_url>
-    <local_file>setup.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/settings</source_url>
+    <local_file>en-settings.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
-    <description>Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom slash commands.</description>
-    <source_url>https://code.claude.com/docs/en/skills.md</source_url>
-    <local_file>skills.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/skills</source_url>
+    <local_file>en-skills.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Claude Code in Slack</title>
-    <description>Delegate coding tasks directly from your Slack workspace</description>
-    <source_url>https://code.claude.com/docs/en/slack.md</source_url>
-    <local_file>slack.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Status line configuration</title>
-    <description>Create a custom status line for Claude Code to display contextual information</description>
-    <source_url>https://code.claude.com/docs/en/statusline.md</source_url>
-    <local_file>statusline.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Customize your status line</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/statusline</source_url>
+    <local_file>en-statusline.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Create custom subagents</title>
-    <description>Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.</description>
-    <source_url>https://code.claude.com/docs/en/sub-agents.md</source_url>
-    <local_file>sub-agents.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
+    <local_file>en-sub-agents.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Optimize your terminal setup</title>
-    <description>Claude Code works best when your terminal is properly configured. Follow these guidelines to optimize your experience.</description>
-    <source_url>https://code.claude.com/docs/en/terminal-config.md</source_url>
-    <local_file>terminal-config.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Enterprise deployment overview</title>
-    <description>Learn how Claude Code can integrate with various third-party services and infrastructure to meet enterprise deployment requirements.</description>
-    <source_url>https://code.claude.com/docs/en/third-party-integrations.md</source_url>
-    <local_file>third-party-integrations.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Troubleshooting</title>
-    <description>Discover solutions to common issues with Claude Code installation and usage.</description>
-    <source_url>https://code.claude.com/docs/en/troubleshooting.md</source_url>
-    <local_file>troubleshooting.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <title>Configure your terminal for Claude Code</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/terminal-config</source_url>
+    <local_file>en-terminal-config.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Use Claude Code in VS Code</title>
-    <description>Install and configure the Claude Code extension for VS Code. Get AI coding assistance with inline diffs, @-mentions, plan review, and keyboard shortcuts.</description>
-    <source_url>https://code.claude.com/docs/en/vs-code.md</source_url>
-    <local_file>vs-code.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
-  </source>
-  <source>
-    <title>Skill authoring best practices</title>
-    <description>Practical guidance for writing effective Skills, including conciseness principles, naming conventions, progressive disclosure patterns, workflow checklists, feedback loops, evaluation-driven development, and common patterns.</description>
-    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md</source_url>
-    <local_file>agent-skills-best-practices.md</local_file>
-    <scraped_at>2026-02-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://code.claude.com/docs/en/vs-code</source_url>
+    <local_file>en-vs-code.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

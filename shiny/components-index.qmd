@@ -1,0 +1,140 @@
+---
+pagetitle: "Shiny Components"
+anchor-sections: false
+sidebar: false
+pagedescription: Inputs, outputs and more, to make your data interactive on every device.
+toc: false
+page-layout: article
+resources:
+  - _partials/animation.lottie
+format:
+  html:
+    css:
+      - _partials/components.css
+      - _partials/components-list.css
+    code-overflow: wrap
+listing:
+  - id: input
+    type: grid
+    template: _partials/components-list.ejs
+    contents:
+      - inputs/*/*.qmd
+  - id: output
+    type: grid
+    template: _partials/components-list.ejs
+    contents:
+      - outputs/*/*.qmd
+  - id: display-message
+    type: grid
+    template: _partials/components-list.ejs
+    contents:
+      - display-messages/*/*.qmd
+  - id: layout
+    type: grid
+    template: _partials/components-list.ejs
+    contents:
+      - layout/*/*.qmd
+---
+
+
+<!-- Begin Hero area -->
+:::::::: {.column-screen-inset .mx-auto style="max-width: 1300px;"}
+:::::: {.grid .hero-area .my-md-0 .my-5}
+:::: {.g-col-md-7 .g-col-12 .pe-0 .pe-md-5 .my-auto}
+
+<h2 class="display-3 fw-bold">Shiny Components</h2>
+
+::: {.h5}
+Inputs, outputs and display messages to make your data interactive on every device.
+Add these components to [Shiny Layouts](/layouts/index.qmd) to give your app a navbar, sidebar, cards and more.
+:::
+
+::::
+
+:::: {.g-col-md-5 .g-col-10 .g-start-4 .components-hero-img-container}
+
+<div class="ps-4 pt-5 components-hero-img" >
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+<dotlottie-player src="_partials/animation.lottie" background="transparent" speed="1" style="width: 100%; height: auto;" autoplay></dotlottie-player>
+</div>
+
+::::
+
+::::::
+::::::::
+<!-- End Hero area -->
+
+<!-- Begin List area -->
+:::::::: {.column-screen-inset .mx-auto style="max-width: 1300px;"}
+:::::: {.grid .list-section #inputs}
+
+:::: {.g-col-xl-3 .g-col-12}
+::: {.sticky-xl-top .pt-4}
+
+<h2 class="mt-4"> <i class="bi bi-sliders indigo"></i> Inputs </h2>
+
+Inputs allow users to interact with the webpage by clicking a button, entering text, selecting an option, and more.
+
+:::
+::::
+:::: {.g-col-xl-9 .g-col-12 .pt-3 .pt-xl-5 .ps-0 .ps-xl-5 .ms-0 .ms-xl-4}
+::: {#input .grid}
+:::
+
+::::
+
+::::::
+:::::: {.grid .list-section style="margin-top: -1px;" #outputs}
+:::: {.g-col-xl-3 .g-col-12}
+
+::: {.sticky-xl-top .pt-4}
+
+<h2 class="mt-4"> <i class="bi bi-bar-chart-line-fill indigo"></i> Outputs </h2>
+
+Outputs create a spot on the webpage to display results from the server, such as text, tables, plots, and more.
+
+:::
+::::
+:::: {.g-col-xl-9 .g-col-12 .pt-3 .pt-xl-5 .ps-0 .ps-xl-5 .ms-0 .ms-xl-4}
+::: {#output .grid}
+:::
+
+::::
+
+::::::
+:::::: {.grid .list-section style="margin-top: -1px;" #display-messages}
+:::: {.g-col-xl-3 .g-col-12}
+::: {.sticky-xl-top .pt-4}
+
+<h2 class="mt-4"> <i class="bi bi-chat-dots-fill indigo"></i> Display Messages </h2>
+
+Provide feedback to your user with notifications, progress bars, and confirmation modals.
+
+:::
+::::
+:::: {.g-col-xl-9 .g-col-12 .pt-3 .pt-xl-5 .ps-0 .ps-xl-5 .ms-0 .ms-xl-4}
+::: {#display-message .grid}
+:::
+
+::::
+
+::::::
+:::::: {.grid .list-section style="margin-top: -1px;" #layouts}
+:::: {.g-col-xl-3 .g-col-12}
+::: {.sticky-xl-top .pt-4}
+
+<h2 class="mt-4"> <i class="bi bi-layout-text-window-reverse indigo"></i> Layout </h2>
+
+Organize and structure your app's content with cards and other layout components.
+
+:::
+::::
+:::: {.g-col-xl-9 .g-col-12 .pt-3 .pt-xl-5 .ps-0 .ps-xl-5 .ms-0 .ms-xl-4}
+::: {#layout .grid}
+:::
+
+::::
+
+::::::
+::::::::
+<!-- End List area -->

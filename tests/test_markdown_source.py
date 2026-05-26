@@ -141,10 +141,22 @@ class TestGithubBlobToRawUrl:
                 "https://github.com/o/r/blob/master/docs/x.md",
                 "https://raw.githubusercontent.com/o/r/master/docs/x.md",
             ),
+            (
+                "https://github.com/biomejs/website/blob/main/"
+                "src/content/docs/guides/getting-started.mdx",
+                "https://raw.githubusercontent.com/biomejs/website/main/"
+                "src/content/docs/guides/getting-started.mdx",
+            ),
+            (
+                "https://github.com/posit-dev/py-shiny-site/blob/main/"
+                "get-started/deploy-cloud.qmd",
+                "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+                "get-started/deploy-cloud.qmd",
+            ),
         ],
     )
     def test_blob_url_becomes_raw(self, blob_url: str, raw_url: str) -> None:
-        """github.com/.../blob/(main|master)/<path>.md rewrites to its raw URL."""
+        """github.com/.../blob/(main|master)/<path>.(md|mdx|qmd) rewrites to raw."""
         assert github_blob_to_raw_url(blob_url) == raw_url
 
     @pytest.mark.parametrize(
@@ -155,12 +167,13 @@ class TestGithubBlobToRawUrl:
             "https://github.com/astral-sh/uv/tree/main/docs",
             "https://github.com/astral-sh/uv/blob/dev/docs/x.md",
             "https://github.com/astral-sh/uv/blob/main/pyproject.toml",
+            "https://github.com/astral-sh/uv/blob/main/docs/x.rst",
         ],
     )
     def test_non_blob_url_fails(
         self, url: str, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        """Raw, repo root, tree/, other branch, and non-.md all exit with GITHUB_BLOB."""
+        """Raw, repo root, tree/, other branch, unsupported ext all exit GITHUB_BLOB."""
         with pytest.raises(SystemExit) as exc:
             github_blob_to_raw_url(url)
         assert exc.value.code == 1
@@ -191,10 +204,20 @@ class TestGithubFilenameFromBlobUrl:
                 "https://github.com/o/r/blob/main/docs/index.md",
                 "index.md",
             ),
+            (
+                "https://github.com/biomejs/website/blob/main/"
+                "src/content/docs/guides/getting-started.mdx",
+                "src-content-docs-guides-getting-started.mdx",
+            ),
+            (
+                "https://github.com/posit-dev/py-shiny-site/blob/main/"
+                "get-started/deploy-cloud.qmd",
+                "get-started-deploy-cloud.qmd",
+            ),
         ],
     )
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
-        """Path segments are hyphen-joined; one leading 'docs/' segment is dropped."""
+        """Hyphen-joined path; one leading 'docs/' dropped; source extension kept."""
         assert github_filename_from_blob_url(blob_url) == expected
 
     def test_pattern_violating_name_fails(

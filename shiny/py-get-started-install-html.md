@@ -1,28 +1,28 @@
 Shiny for Python can be installed can be installed via `pip` or `conda`.
 
-- pip
-- conda
-- uv
+- [pip](https://shiny.posit.co/py/get-started/install.html)
+- [conda](https://shiny.posit.co/py/get-started/install.html)
+- [uv](https://shiny.posit.co/py/get-started/install.html)
 
 Before installing you may want to upgrade `pip` and install `wheel`. This will help with making your installations faster and less error-prone.
 
-```bash
+```
 pip install --upgrade pip wheel
 ```
 
 Next, install `shiny` from PyPI.
 
-```bash
+```
 pip install shiny
 ```
 
 If you already have `shiny` installed, and you want to upgrade the `shiny` packages, you will need to use the `--upgrade` flag.
 
-```bash
+```
 pip install --upgrade shiny htmltools
 ```
 
-Virtual environments
+NoteVirtual environments
 
 When building Shiny applications, especially in a production environment, it is best practice to use a virtual environment.
 
@@ -36,7 +36,7 @@ Python already comes with a mechanism to create virtual environments with [venv]
 
 Suppose you want to create a new Shiny app named `myapp`:
 
-```bash
+```
 # Create and move into your shiny application directory
 mkdir myapp
 cd myapp
@@ -55,11 +55,11 @@ pip install shiny
 
 You are now ready to start building your app! All packages you install (e.g., `shiny`, `pandas`, `plotly`, etc) will now stay inside `.venv`, scoped to just this project. You can save a list of all the packages you want for this project in a `requirements.txt` file.
 
-Development versions
+NoteDevelopment versions
 
 If you want to install the development versions, you can do so with:
 
-```bash
+```
 pip install https://github.com/posit-dev/py-htmltools/tarball/main
 pip install https://github.com/posit-dev/py-shiny/tarball/main
 ```
@@ -72,11 +72,11 @@ conda install -c conda-forge shiny
 
 If you already have `shiny` installed, and you want to upgrade the `shiny` package you will use the `conda update` command.
 
-```bash
+```
 conda update -c conda-forge shiny
 ```
 
-Conda Virtual environments
+NoteConda Virtual environments
 
 When building Shiny applications, especially in a production environment, it is best practice to use a virtual environment.
 
@@ -90,7 +90,7 @@ You can also use `conda` to create virtual environments.
 
 Unlike some other tools, you don’t need to be inside a specific folder when you create a `conda` environment. Conda environments are managed separately and can be used from anywhere on your system once they are created.
 
-```bash
+```
 # Create a conda environment named 'shiny' install the shiny package with latest python
 conda create --name shiny -c conda-forge shiny python
 
@@ -102,17 +102,17 @@ conda activate shiny
 
 You can install `shiny` using `uv pip`
 
-```bash
+```
 uv pip install shiny
 ```
 
 If you already have `shiny` installed, and you want to upgrade the `shiny` packages, you will need to use the `--upgrade` flag.
 
-```bash
+```
 uv pip install --upgrade shiny htmltools
 ```
 
-Virtual environments
+NoteVirtual environments
 
 When building Shiny applications, especially in a production environment, it is best practice to use a virtual environment.
 
@@ -124,7 +124,7 @@ Why use a virtual environment?
 
 You can also use `uv` to create virtual environments with `uv venv` to create a Python `.venv` directory.
 
-```bash
+```
 # Create and move into your shiny application directory
 mkdir myapp
 cd myapp
@@ -160,11 +160,11 @@ For [Visual Studio Code](https://code.visualstudio.com/), you will need the [Pyt
 
 If [type checking is important to you](https://john-tucker.medium.com/type-checking-python-306ad8339da1), in addition to installing the [Python VSCode extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python), you may want to do some additional configuration for a smooth experience with types in Shiny. See the tip below for more details.
 
-Type checking
+TipType checking
 
 We recommend the following settings in your project’s `.vscode/settings.json` file:
 
-```python
+```
 {
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.diagnosticSeverityOverrides": {
@@ -175,7 +175,7 @@ We recommend the following settings in your project’s `.vscode/settings.json` 
 
 or alternatively, if your project keeps these settings in `pyrightconfig.json`:
 
-```json
+```
 {
   "typeCheckingMode": "basic",
   "reportUnusedFunction":  "none",
@@ -184,7 +184,7 @@ or alternatively, if your project keeps these settings in `pyrightconfig.json`:
 
 The `basic` type checking mode will flag many potential problems in your code, but it does require an understanding of type hints in Python. This is the mode that is used by the [Shinylive](https://shinylive.io/) examples editor. If you want to make even greater use of type checking, you can use `strict` mode:
 
-```bash
+```
    "python.analysis.typeCheckingMode": "strict"
 ```
 
@@ -192,7 +192,7 @@ In the above configuration, we also disable the `reportUnusedFunction` diagnosti
 
 You can also modify these settings on a per-file basis with comments at the top of the file. For example, you might have something like this at the top of your `app.py`:
 
-```python
+```
 # pyright: strict
 # pyright: reportUnusedFunction=false
 ```

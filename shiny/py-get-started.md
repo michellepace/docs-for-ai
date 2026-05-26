@@ -94,9 +94,9 @@ Check out the [Shiny Gallery](https://shiny.posit.co/py/gallery/) for inspiratio
 
 [View source](https://github.com/robertgv/aws-community-builders-dashboard "View source code")
 
-[**Identify Outliers**](https://connect.posit.cloud/skaltman/content/01922aab-06e0-fc8f-8958-30dd67f9af51)
+[**Identify Outliers**](https://skaltman-outliers-app-db-python.share.connect.posit.cloud/)
 
-[View app](https://connect.posit.cloud/skaltman/content/01922aab-06e0-fc8f-8958-30dd67f9af51)
+[View app](https://skaltman-outliers-app-db-python.share.connect.posit.cloud/)
 
 [View source](https://github.com/skaltman/outliers-app-db-python "View source code")
 

@@ -25,6 +25,22 @@ URL_GH_BLOB_404 = (
     "https://github.com/astral-sh/uv/blob/main/docs/zzz-does-not-exist-xyz.md"
 )
 
+URL_GH_BLOB_MDX = (
+    "https://github.com/biomejs/website/blob/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_RAW_MDX = (
+    "https://raw.githubusercontent.com/biomejs/website/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_BLOB_QMD = (
+    "https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd"
+)
+URL_GH_RAW_QMD = (
+    "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+    "get-started/deploy-cloud.qmd"
+)
+
 
 class TestFilenameFromUrl:
     """Offline unit tests for non-GitHub URL-path filename derivation."""
@@ -244,6 +260,40 @@ class TestFetchDocumentRouting:
         assert fetched_urls == [URL_GH_RAW]
         assert doc.filename == "getting-started-first-steps.md"
         assert "✅ Detected GitHub source|" in capsys.readouterr().out
+
+    @pytest.mark.parametrize(
+        ("blob_url", "raw_url", "filename"),
+        [
+            (
+                URL_GH_BLOB_MDX,
+                URL_GH_RAW_MDX,
+                "src-content-docs-guides-getting-started.mdx",
+            ),
+            (URL_GH_BLOB_QMD, URL_GH_RAW_QMD, "get-started-deploy-cloud.qmd"),
+        ],
+        ids=["mdx", "qmd"],
+    )
+    def test_github_blob_preserves_mdx_qmd_extension(
+        self,
+        blob_url: str,
+        raw_url: str,
+        filename: str,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """A GitHub `.mdx`/`.qmd` blob fetches from raw and keeps its extension."""
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "# stub\n\nbody\n"
+
+        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+
+        doc = curate_doc.fetch_document(blob_url)
+
+        assert fetched_urls == [raw_url]
+        assert doc.filename == filename
+        assert doc.source_url == blob_url
 
     def test_non_md_url_routes_to_firecrawl(
         self, monkeypatch: pytest.MonkeyPatch

@@ -1,93 +1,93 @@
 <docs_index>
   <source>
-    <title>Getting Started | Biome</title>
-    <description>Installation via npm/pnpm/bun/deno/yarn, `biome init` for `biome.json`, CLI commands `format`, `lint`, `check` with `--write`, editor extensions (VS Code, IntelliJ, Zed), `biome ci` for CI pipelines, ESLint/Prettier migration.</description>
-    <source_url>https://biomejs.dev/guides/getting-started</source_url>
-    <local_file>getting-started-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Configure Biome</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/configure-biome.mdx</source_url>
+    <local_file>src-content-docs-guides-configure-biome.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Configure Biome | Biome</title>
-    <description>`biome.json`/`biome.jsonc` structure, `formatter.enabled`/`linter.enabled`/`assist.enabled` toggles, language overrides (`javascript.formatter`, `json.formatter`), auto-discovery resolution, `files.includes` glob patterns with `!`/`!!` negation syntax, tool-specific includes, VCS integration, well-known JSON files.</description>
-    <source_url>https://biomejs.dev/guides/configure-biome</source_url>
-    <local_file>configure-biome-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>First-party extensions</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/editors/first-party-extensions.mdx</source_url>
+    <local_file>src-content-docs-guides-editors-first-party-extensions.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>First-party extensions | Biome</title>
-    <description>Official editor integrations for VS Code, IntelliJ, and Zed: marketplace installation, format-on-save setup, `Format Document With` command palette configuration, default formatter selection.</description>
-    <source_url>https://biomejs.dev/guides/editors/first-party-extensions</source_url>
-    <local_file>first-party-extensions-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Format all files</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/getting-started.mdx</source_url>
+    <local_file>src-content-docs-guides-getting-started.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>VS Code extension | Biome</title>
-    <description>VS Code extension: single-root/multi-root workspaces, `Format Document`, `Format Selection`, `editor.formatOnSave`, `source.fixAll.biome`, `source.organizeImports.biome`, settings `biome.enabled`, `biome.lsp.bin`, `biome.requireConfiguration`, `biome.configurationPath`, LSP trace troubleshooting, 2.x migration.</description>
-    <source_url>https://biomejs.dev/reference/vscode</source_url>
-    <local_file>vs-code-extension-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Integrate Biome with your VCS</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/integrate-in-vcs.mdx</source_url>
+    <local_file>src-content-docs-guides-integrate-in-vcs.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Integrate Biome with your VCS | Biome</title>
-    <description>Git VCS integration: `vcs.enabled`, `vcs.clientKind`, `vcs.useIgnoreFile` for `.gitignore`/`.ignore` files, `--changed` with `vcs.defaultBranch` or `--since`, `--staged` option for processing staged files before commits.</description>
-    <source_url>https://biomejs.dev/guides/integrate-in-vcs</source_url>
-    <local_file>integrate-biome-with-your-vcs-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Language support</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/internals/language-support.mdx</source_url>
+    <local_file>src-content-docs-internals-language-support.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Continuous Integration | Biome</title>
-    <description>CI setup: `biome ci` vs `biome check` (no `--write`, GitHub annotations), `biomejs/setup-biome` GitHub Action, `reviewdog-action-biome` third-party, GitLab CI with `--reporter=gitlab` code quality reports.</description>
-    <source_url>https://biomejs.dev/recipes/continuous-integration</source_url>
-    <local_file>continuous-integration-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Philosophy</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/internals/philosophy.mdx</source_url>
+    <local_file>src-content-docs-internals-philosophy.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Git Hooks | Biome</title>
-    <description>Git hooks: Lefthook `pre-commit`/`pre-push` with `stage_fixed`, Husky with lint-staged/git-format-staged, pre-commit framework hooks (`biome-ci`, `biome-check`, `biome-format`, `biome-lint`), `--staged`, `--no-errors-on-unmatched`, shell scripts.</description>
-    <source_url>https://biomejs.dev/recipes/git-hooks</source_url>
-    <local_file>git-hooks-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Linter</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/linter/index.mdx</source_url>
+    <local_file>src-content-docs-linter-index.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Philosophy | Biome</title>
-    <description>Project ethos: clear expectations, public decision communication, helpful error messages with fixes, specific errors, API optimisation, code documentation, verbose naming, inclusive terminology, generic client support, unambiguous terminal output.</description>
-    <source_url>https://biomejs.dev/internals/philosophy</source_url>
-    <local_file>philosophy-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>useSortedClasses</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/linter/rules/use-sorted-classes.mdx</source_url>
+    <local_file>src-content-docs-linter-rules-use-sorted-classes.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Language support | Biome</title>
-    <description>Language support matrix: JavaScript (ES2024), TypeScript (5.6), JSX, TSX, JSON, JSONC (`allowComments`, `allowTrailingCommas`), HTML, Vue/Svelte/Astro (experimental), CSS, GraphQL, GritQL. Parsing, formatting, linting, plugin support status.</description>
-    <source_url>https://biomejs.dev/internals/language-support</source_url>
-    <local_file>language-support-biome.mdx</local_file>
-    <scraped_at>2025-11-04</scraped_at>
+    <title>Continuous Integration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/recipes/continuous-integration.mdx</source_url>
+    <local_file>src-content-docs-recipes-continuous-integration.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Configuration | Biome</title>
-    <description>Complete `biome.json` schema reference: `$schema`, `extends`, `root`, `files.includes`/`maxSize`, `vcs` settings, `linter.rules` groups, `formatter` options (`indentStyle`, `lineWidth`), `javascript`/`json`/`css`/`graphql`/`html` language settings, `overrides` patterns, glob syntax.</description>
+    <title>Git Hooks</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/recipes/git-hooks.mdx</source_url>
+    <local_file>src-content-docs-recipes-git-hooks.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Configuration</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/configuration.mdx</source_url>
-    <local_file>configuration-biome.mdx</local_file>
-    <scraped_at>2025-11-20</scraped_at>
+    <local_file>src-content-docs-reference-configuration.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Reporters | Biome</title>
-    <description>CLI `--reporter` formats: `summary`, `json`, `json-pretty`, `github` (workflow annotations), `junit` XML, `checkstyle` XML, `rdjson`. Controls diagnostic and violation output for CI/CD integration.</description>
-    <source_url>https://biomejs.dev/reference/reporters</source_url>
-    <local_file>reporters-biome.mdx</local_file>
-    <scraped_at>2025-11-22</scraped_at>
+    <title>Reporters</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/reporters.mdx</source_url>
+    <local_file>src-content-docs-reference-reporters.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>useSortedClasses | Biome</title>
-    <description>Nursery rule `useSortedClasses` for Tailwind CSS utility class sorting. Configure `attributes` and `functions` options for `clsx`/`cva`/`tw` template literals. Unsafe fix, uses default Tailwind algorithm.</description>
-    <source_url>https://biomejs.dev/linter/rules/use-sorted-classes</source_url>
-    <local_file>usesortedclasses-biome.md</local_file>
-    <scraped_at>2026-01-04</scraped_at>
-  </source>
-  <source>
-    <title>Linter | Biome</title>
-    <description>Configuring `biome.json` linter: enable/disable rules, severity levels (`off`/`on`/`error`/`warn`/`info`), rule groups (`a11y`, `style`, `suspicious`), domains, safe/unsafe fixes, `--write` `--skip` `--only` flags, LSP integration, ESLint migration.</description>
-    <source_url>https://biomejs.dev/linter</source_url>
-    <local_file>linter-biome.md</local_file>
-    <scraped_at>2026-01-04</scraped_at>
+    <title>VS Code extension</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/vscode.mdx</source_url>
+    <local_file>src-content-docs-reference-vscode.mdx</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

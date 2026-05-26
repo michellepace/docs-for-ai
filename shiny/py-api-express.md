@@ -22,15 +22,29 @@ Gather user input.
 | [express.ui.input\_date\_range](https://shiny.posit.co/py/api/express/express.ui.input_date_range.html#shiny.express.ui.input_date_range) | Creates a pair of text inputs which, when clicked on, bring up calendars that the user can click on to select dates. |
 | [express.ui.input\_checkbox](https://shiny.posit.co/py/api/express/express.ui.input_checkbox.html#shiny.express.ui.input_checkbox) | Create a checkbox that can be used to specify logical values. |
 | [express.ui.input\_checkbox\_group](https://shiny.posit.co/py/api/express/express.ui.input_checkbox_group.html#shiny.express.ui.input_checkbox_group) | Create a group of checkboxes that can be used to toggle multiple choices independently. |
-| [express.ui.input\_switch](https://shiny.posit.co/py/api/express/express.ui.input_switch.html#shiny.express.ui.input_switch) | Create a switch that can be used to specify logical values. Similar to [input\_checkbox](https://shiny.posit.co/py/api/core/ui.input_checkbox.html#shiny.ui.input_checkbox), but implies to the user that the change will take effect immediately. |
+| [express.ui.input\_switch](https://shiny.posit.co/py/api/express/express.ui.input_switch.html#shiny.express.ui.input_switch) | Create a switch that can be used to specify logical values. Similar to [`input_checkbox`](https://shiny.posit.co/py/api/core/ui.input_checkbox.html#shiny.ui.input_checkbox), but implies to the user that the change will take effect immediately. |
 | [express.ui.input\_radio\_buttons](https://shiny.posit.co/py/api/express/express.ui.input_radio_buttons.html#shiny.express.ui.input_radio_buttons) | Create a set of radio buttons used to select an item from a list. |
 | [express.ui.input\_numeric](https://shiny.posit.co/py/api/express/express.ui.input_numeric.html#shiny.express.ui.input_numeric) | Create an input control for entry of numeric values. |
 | [express.ui.input\_text](https://shiny.posit.co/py/api/express/express.ui.input_text.html#shiny.express.ui.input_text) | Create an input control for entry of text values. |
 | [express.ui.input\_text\_area](https://shiny.posit.co/py/api/express/express.ui.input_text_area.html#shiny.express.ui.input_text_area) | Create a textarea input control for entry of unstructured text values. |
+| [express.ui.input\_submit\_textarea](https://shiny.posit.co/py/api/express/express.ui.input_submit_textarea.html#shiny.express.ui.input_submit_textarea) | Create a textarea input control with explicit submission. |
+| [express.ui.input\_code\_editor](https://shiny.posit.co/py/api/express/express.ui.input_code_editor.html#shiny.express.ui.input_code_editor) | Create a code editor input. |
 | [express.ui.input\_password](https://shiny.posit.co/py/api/express/express.ui.input_password.html#shiny.express.ui.input_password) | Create an password control for entry of passwords. |
 | [express.ui.input\_action\_button](https://shiny.posit.co/py/api/express/express.ui.input_action_button.html#shiny.express.ui.input_action_button) | Creates an action button whose value is initially zero, and increments by one each time it is pressed. |
 | [express.ui.input\_action\_link](https://shiny.posit.co/py/api/express/express.ui.input_action_link.html#shiny.express.ui.input_action_link) | Creates a link whose value is initially zero, and increments by one each time it is pressed. |
 | [express.ui.input\_task\_button](https://shiny.posit.co/py/api/express/express.ui.input_task_button.html#shiny.express.ui.input_task_button) | Creates a button for launching longer-running operations. |
+
+## Toolbar [Anchor](https://shiny.posit.co/py/api/express/\#toolbar)
+
+Create compact toolbars with buttons and inputs for use in headers, footers, and other small spaces.
+
+|     |     |
+| --- | --- |
+| [express.ui.toolbar](https://shiny.posit.co/py/api/express/express.ui.toolbar.html#shiny.express.ui.toolbar) | Create a toolbar container. |
+| [express.ui.toolbar\_input\_button](https://shiny.posit.co/py/api/express/express.ui.toolbar_input_button.html#shiny.express.ui.toolbar_input_button) | Create a toolbar button input. |
+| [express.ui.toolbar\_input\_select](https://shiny.posit.co/py/api/express/express.ui.toolbar_input_select.html#shiny.express.ui.toolbar_input_select) | Create a toolbar select input. |
+| [express.ui.toolbar\_divider](https://shiny.posit.co/py/api/express/express.ui.toolbar_divider.html#shiny.express.ui.toolbar_divider) | Create a visual divider for toolbars. |
+| [express.ui.toolbar\_spacer](https://shiny.posit.co/py/api/express/express.ui.toolbar_spacer.html#shiny.express.ui.toolbar_spacer) | Create a spacer for toolbars. |
 
 ## Output components [Anchor](https://shiny.posit.co/py/api/express/\#output-components)
 
@@ -40,9 +54,9 @@ Reactively render output.
 | --- | --- |
 | [express.render.plot](https://shiny.posit.co/py/api/express/express.render.plot.html#shiny.express.render.plot) | Reactively render a plot object as an HTML image. |
 | [express.render.table](https://shiny.posit.co/py/api/express/express.render.table.html#shiny.express.render.table) | Reactively render a pandas `DataFrame` object (or similar) as a basic HTML table. |
-| [express.render.DataTable](https://shiny.posit.co/py/api/express/express.render.DataTable.html#shiny.express.render.DataTable) | Holds the data and options for a [data\_frame](https://shiny.posit.co/py/api/core/render.data_frame.html#shiny.render.data_frame) output, for a spreadsheet-like view. |
+| [express.render.DataTable](https://shiny.posit.co/py/api/express/express.render.DataTable.html#shiny.express.render.DataTable) | Holds the data and options for a [`data_frame`](https://shiny.posit.co/py/api/core/render.data_frame.html#shiny.render.data_frame) output, for a spreadsheet-like view. |
 | [express.render.data\_frame](https://shiny.posit.co/py/api/express/express.render.data_frame.html#shiny.express.render.data_frame) | Decorator for a function that returns a [pandas](https://pandas.pydata.org/), [polars](https://pola.rs/), or eager [`narwhals`](https://narwhals-dev.github.io/narwhals/) compatible `DataFrame` object to render as an interactive table or grid. Features fast virtualized scrolling, sorting, filtering, and row selection (single or multiple). |
-| [express.render.DataGrid](https://shiny.posit.co/py/api/express/express.render.DataGrid.html#shiny.express.render.DataGrid) | Holds the data and options for a [data\_frame](https://shiny.posit.co/py/api/core/render.data_frame.html#shiny.render.data_frame) output, for a spreadsheet-like view. |
+| [express.render.DataGrid](https://shiny.posit.co/py/api/express/express.render.DataGrid.html#shiny.express.render.DataGrid) | Holds the data and options for a [`data_frame`](https://shiny.posit.co/py/api/core/render.data_frame.html#shiny.render.data_frame) output, for a spreadsheet-like view. |
 | [express.render.text](https://shiny.posit.co/py/api/express/express.render.text.html#shiny.express.render.text) | Reactively render text. |
 | [express.render.ui](https://shiny.posit.co/py/api/express/express.render.ui.html#shiny.express.render.ui) | Reactively render HTML content. |
 | [express.render.download](https://shiny.posit.co/py/api/express/express.render.download.html#shiny.express.render.download) | Decorator to register a function to handle a download. |
@@ -122,7 +136,7 @@ Create reactive functions and dependencies.
 | [reactive.event](https://shiny.posit.co/py/api/express/reactive.event.html#shiny.reactive.event) | Mark a function to react only when an “event” occurs. |
 | [reactive.isolate](https://shiny.posit.co/py/api/express/reactive.isolate.html#shiny.reactive.isolate) | Create a non-reactive scope within a reactive scope. |
 | [reactive.invalidate\_later](https://shiny.posit.co/py/api/express/reactive.invalidate_later.html#shiny.reactive.invalidate_later) | Scheduled Invalidation |
-| [reactive.extended\_task](https://shiny.posit.co/py/api/express/reactive.extended_task.html#shiny.reactive.extended_task) | Decorator to mark an async function as a slow computation. This will cause the function to be run in a background asyncio task, and the results will be available via the [ExtendedTask](https://shiny.posit.co/py/api/core/ExtendedTask.html#shiny.reactive.ExtendedTask) object returned by the decorator. |
+| [reactive.extended\_task](https://shiny.posit.co/py/api/express/reactive.extended_task.html#shiny.reactive.extended_task) | Decorator to mark an async function as a slow computation. This will cause the function to be run in a background asyncio task, and the results will be available via the [`ExtendedTask`](https://shiny.posit.co/py/api/core/ExtendedTask.html#shiny.reactive.ExtendedTask) object returned by the decorator. |
 | [reactive.flush](https://shiny.posit.co/py/api/express/reactive.flush.html#shiny.reactive.flush) | Run any pending invalidations (i.e., flush the reactive environment). |
 | [reactive.poll](https://shiny.posit.co/py/api/express/reactive.poll.html#shiny.reactive.poll) | Create a reactive polling object. |
 | [reactive.file\_reader](https://shiny.posit.co/py/api/express/reactive.file_reader.html#shiny.reactive.file_reader) | Create a reactive file reader. |
@@ -157,10 +171,14 @@ Programmatically update input values.
 | [express.ui.update\_numeric](https://shiny.posit.co/py/api/express/express.ui.update_numeric.html#shiny.express.ui.update_numeric) | Change the value of a number input on the client. |
 | [express.ui.update\_text](https://shiny.posit.co/py/api/express/express.ui.update_text.html#shiny.express.ui.update_text) | Change the value of a text input on the client. |
 | [express.ui.update\_text\_area](https://shiny.posit.co/py/api/express/express.ui.update_text_area.html#shiny.express.ui.update_text_area) | Change the value of a text input on the client. |
+| [express.ui.update\_submit\_textarea](https://shiny.posit.co/py/api/express/express.ui.update_submit_textarea.html#shiny.express.ui.update_submit_textarea) | Update a submit textarea input on the client. |
+| [express.ui.update\_code\_editor](https://shiny.posit.co/py/api/express/express.ui.update_code_editor.html#shiny.express.ui.update_code_editor) | Update a code editor input on the client. |
 | [express.ui.update\_navset](https://shiny.posit.co/py/api/express/express.ui.update_navset.html#shiny.express.ui.update_navset) | Change the value of a navs container on the client. |
 | [express.ui.update\_action\_button](https://shiny.posit.co/py/api/express/express.ui.update_action_button.html#shiny.express.ui.update_action_button) | Change the label and/or icon of an action button on the client. |
 | [express.ui.update\_action\_link](https://shiny.posit.co/py/api/express/express.ui.update_action_link.html#shiny.express.ui.update_action_link) | Change the label and/or icon of an action link on the client. |
 | [express.ui.update\_task\_button](https://shiny.posit.co/py/api/express/express.ui.update_task_button.html#shiny.express.ui.update_task_button) | Change the state of a task button on the client. |
+| [express.ui.update\_toolbar\_input\_button](https://shiny.posit.co/py/api/express/express.ui.update_toolbar_input_button.html#shiny.express.ui.update_toolbar_input_button) | Update a toolbar button input on the client. |
+| [express.ui.update\_toolbar\_input\_select](https://shiny.posit.co/py/api/express/express.ui.update_toolbar_input_select.html#shiny.express.ui.update_toolbar_input_select) | Update a toolbar select input on the client. |
 
 ## Update UI Layouts [Anchor](https://shiny.posit.co/py/api/express/\#update-ui-layouts)
 
@@ -172,7 +190,7 @@ Programmatically update input values.
 | [express.ui.update\_accordion](https://shiny.posit.co/py/api/express/express.ui.update_accordion.html#shiny.express.ui.update_accordion) | Dynamically set accordions’ states. |
 | [express.ui.update\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.update_accordion_panel.html#shiny.express.ui.update_accordion_panel) | Dynamically update accordion panel contents. |
 | [express.ui.insert\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.insert_accordion_panel.html#shiny.express.ui.insert_accordion_panel) | Insert an accordion panel into an existing accordion. |
-| [express.ui.remove\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.remove_accordion_panel.html#shiny.express.ui.remove_accordion_panel) | Remove an [accordion\_panel](https://shiny.posit.co/py/api/core/ui.accordion_panel.html#shiny.ui.accordion_panel). |
+| [express.ui.remove\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.remove_accordion_panel.html#shiny.express.ui.remove_accordion_panel) | Remove an [`accordion_panel`](https://shiny.posit.co/py/api/core/ui.accordion_panel.html#shiny.ui.accordion_panel). |
 
 ## Display messages [Anchor](https://shiny.posit.co/py/api/express/\#display-messages)
 
@@ -183,10 +201,14 @@ Display messages to the user.
 | [express.ui.help\_text](https://shiny.posit.co/py/api/express/express.ui.help_text.html#shiny.express.ui.help_text) | Create a help text element |
 | [express.ui.notification\_show](https://shiny.posit.co/py/api/express/express.ui.notification_show.html#shiny.express.ui.notification_show) | Show a notification to the user. |
 | [express.ui.notification\_remove](https://shiny.posit.co/py/api/express/express.ui.notification_remove.html#shiny.express.ui.notification_remove) | Remove a notification. |
+| [express.ui.toast](https://shiny.posit.co/py/api/express/express.ui.toast.html#shiny.express.ui.toast) | Create a toast notification object. |
+| [express.ui.toast\_header](https://shiny.posit.co/py/api/express/express.ui.toast_header.html#shiny.express.ui.toast_header) | Create a structured toast header. |
+| [express.ui.show\_toast](https://shiny.posit.co/py/api/express/express.ui.show_toast.html#shiny.express.ui.show_toast) | Display a toast notification. |
+| [express.ui.hide\_toast](https://shiny.posit.co/py/api/express/express.ui.hide_toast.html#shiny.express.ui.hide_toast) | Programmatically hide a toast notification. |
 | [express.ui.modal](https://shiny.posit.co/py/api/express/express.ui.modal.html#shiny.express.ui.modal) | Creates the UI for a modal dialog, using Bootstrap’s modal class. |
 | [express.ui.modal\_show](https://shiny.posit.co/py/api/express/express.ui.modal_show.html#shiny.express.ui.modal_show) | Show a modal dialog. |
 | [express.ui.modal\_remove](https://shiny.posit.co/py/api/express/express.ui.modal_remove.html#shiny.express.ui.modal_remove) | Remove a modal dialog box. |
-| [express.ui.modal\_button](https://shiny.posit.co/py/api/express/express.ui.modal_button.html#shiny.express.ui.modal_button) | Creates a button that will dismiss a [modal](https://shiny.posit.co/py/api/core/ui.modal.html#shiny.ui.modal). |
+| [express.ui.modal\_button](https://shiny.posit.co/py/api/express/express.ui.modal_button.html#shiny.express.ui.modal_button) | Creates a button that will dismiss a [`modal`](https://shiny.posit.co/py/api/core/ui.modal.html#shiny.ui.modal). |
 | [express.ui.Progress](https://shiny.posit.co/py/api/express/express.ui.Progress.html#shiny.express.ui.Progress) | Initialize a progress bar. |
 
 ## Modules [Anchor](https://shiny.posit.co/py/api/express/\#modules)

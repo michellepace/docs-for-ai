@@ -1,0 +1,111 @@
+---
+title: Dynamic UI
+---
+
+It's often useful to programmatically update the UI based on user input or other server-side state.
+Shiny provides several mechanisms for doing this, including conditional UI, updating inputs, and dynamic UI.
+Amongst these [dynamic UI](#dynamic-ui) is the most general and powerful, but also comes with the most overhead.
+
+
+### Conditional UI
+
+The most basic way to create dynamic UIs is by conditionally hiding a UI element on the client side.
+`ui.panel_conditional()` enables this by showing/hiding UI based on a JavaScript condition.
+This condition can reference input values, and can be used to make any sort of UI conditional.
+
+```{shinylive-python}
+#| standalone: true
+#| components: [editor, viewer]
+#| layout: vertical
+#| viewerHeight: 100
+
+from shiny.express import ui
+
+ui.input_radio_buttons("display", None, ["hidden", "shown"], inline=True)
+
+# The 1st string is a JavaScript condition, and the child UI is shown if it's truthy
+# NOTE: JS input values are read via `input[id]`, not `input[id]()`
+with ui.panel_conditional("input.display === 'shown'"):
+    "Hidden content"
+```
+
+
+### Updating inputs
+
+In addition to hiding elements on the client side, you can also update input elements from the server. This is used in cases where you want to change on part of an input without regenerating it entirely. For example you might want to change `ui.input_select` choices when a user takes a particular action.
+
+```{shinylive-python}
+#| standalone: true
+#| components: [editor, viewer]
+#| layout: vertical
+#| viewerHeight: 200
+
+from shiny import reactive
+from shiny.express import input, ui
+
+CHOICES = {
+  "lower": ["a", "b", "c"],
+  "upper": ["A", "B", "C"]
+}
+
+ui.input_switch("uppercase", "Uppercase choices", value=False)
+ui.input_selectize("x", None, choices=CHOICES["lower"])
+
+@reactive.effect
+def _():
+    choices = "upper" if input.uppercase() else "lower"
+    ui.update_selectize("x", choices=CHOICES[choices])
+```
+
+
+### Dynamic UI {#dynamic-ui}
+
+Finally, `@render.ui` lets you generate UI element(s) entirely on the server, which is an extremely flexible way to dynamically generate UIs.
+This is the most general mechanism for dynamic UI, but also comes with the most overhead.
+
+```{shinylive-python}
+#| standalone: true
+#| components: [editor, viewer]
+#| layout: vertical
+#| viewerHeight: 250
+from shiny.express import input, render, ui
+
+ui.input_text("message", "Message", value="Hello, world!")
+
+ui.input_checkbox_group(
+  "styles", "Styles",
+  choices=["Bold", "Italic"],
+  selected=["Bold"],
+  inline=True
+)
+
+@render.ui
+def result():
+    x = input.message()
+    if "Bold" in input.styles():
+        x = ui.strong(x)
+    if "Italic" in input.styles():
+        x = ui.em(x)
+    return x
+```
+
+
+::: callout-warning
+## Render UI vs display
+
+Shiny Express code that works via side-effects needs to be used with `@render.express`, not `@render.ui`. See [this section](express-in-depth.qmd#reactive-displays) to learn more.
+:::
+
+::: callout-tip
+
+Anything that's statically renderable can also be rendered dynamically (e.g.,
+`ui.markdown()`, `ui.HTML()`, `ui.div()`, inputs, outputs, etc).
+:::
+
+
+::: callout-warning
+## Dynamic UI vs. updating inputs vs. conditional UI
+
+Dynamic UI is a more general mechanism than the updating inputs and conditional UI patterns, and can be used to update any UI component(s) (not just inputs).
+However, updating inputs is more efficient than dynamic UI, and should be preferred where possible.
+:::

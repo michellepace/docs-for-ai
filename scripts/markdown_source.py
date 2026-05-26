@@ -1,6 +1,7 @@
-"""Direct raw-markdown fetch for `.md` sources; GitHub blob/raw normalised first.
+"""Direct raw fetch for documentation sources; GitHub blob/raw normalised first.
 
-Failures use the `❌ Error: TYPE|detail|url|` print-and-exit convention.
+GitHub blobs may be `.md`, `.mdx`, or `.qmd`; other hosts use `.md`. Failures use
+the `❌ Error: TYPE|detail|url|` print-and-exit convention.
 """
 
 import re
@@ -15,12 +16,13 @@ HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
 MD_ALLOWLIST_PATH = Path(__file__).parent / "md_allowlist.txt"
-FILENAME_RE = re.compile(r"^[a-z0-9-]+\.md$")
+FILENAME_RE = re.compile(r"^[a-z0-9-]+\.(?:md|mdx|qmd)$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
-# The one shape we accept: a blob file on main/master with a .md extension.
+# Accepted shapes: a blob file on main/master ending in .md/.mdx/.qmd.
+# Groups: owner, repo, ref, path-without-extension, extension.
 GITHUB_BLOB_RE = re.compile(
-    r"^https://github\.com/([^/]+)/([^/]+)/blob/(main|master)/(.+\.md)$",
+    r"^https://github\.com/([^/]+)/([^/]+)/blob/(main|master)/(.+)\.(md|mdx|qmd)$",
     re.IGNORECASE,
 )
 
@@ -91,7 +93,7 @@ def resolve_md_route(url: str, prefixes: list[str]) -> MdRoute:
 
 
 def github_blob_to_raw_url(url: str) -> str:
-    """Convert a GitHub blob `.md` URL (main/master branch) to its raw URL.
+    """Convert a GitHub blob `.md`/`.mdx`/`.qmd` URL (main/master) to its raw URL.
 
     Any non-conforming GitHub URL exits with a structured GITHUB_BLOB error.
     """
@@ -99,28 +101,33 @@ def github_blob_to_raw_url(url: str) -> str:
     if match is None:
         _fail(
             "GITHUB_BLOB",
-            "expected https://github.com/<user>/<repo>/blob/(main|master)/<path>.md",
+            "expected https://github.com/<user>/<repo>/blob/(main|master)/"
+            "<path>.(md|mdx|qmd)",
             url,
         )
-    owner, repo, ref, path = match.groups()
-    return f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}"
+    owner, repo, ref, path, ext = match.groups()
+    return f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}.{ext}"
 
 
 def github_filename_from_blob_url(url: str) -> str:
-    """Derive a `.md` filename from a GitHub blob URL's path.
+    """Derive a filename from a GitHub blob URL's path, keeping its extension.
 
     Strips a leading `docs/`, lowercases, hyphen-joins; bad names exit GITHUB_FILENAME.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
-        _fail("GITHUB_BLOB", "not a github blob .md URL", url)
-    segments = match.group(4).removesuffix(".md").split("/")
+        _fail("GITHUB_BLOB", "not a github blob .md/.mdx/.qmd URL", url)
+    segments = match.group(4).split("/")
     # Avoid a redundant "docs-" filename prefix.
     if segments and segments[0] == "docs":
         segments = segments[1:]
-    filename = "-".join(segments).lower() + ".md"
+    filename = "-".join(segments).lower() + "." + match.group(5).lower()
     if not FILENAME_RE.match(filename):
-        _fail("GITHUB_FILENAME", f"derived '{filename}' fails ^[a-z0-9-]+\\.md$", url)
+        _fail(
+            "GITHUB_FILENAME",
+            f"derived '{filename}' fails ^[a-z0-9-]+\\.(?:md|mdx|qmd)$",
+            url,
+        )
     return filename
 
 
@@ -155,7 +162,8 @@ def _title_from_h1(content: str) -> str | None:
 
 def _title_from_url(markdown_url: str) -> str:
     """A human-readable fallback title derived from the URL's filename."""
-    basename = urlparse(markdown_url).path.rsplit("/", 1)[-1].removesuffix(".md")
+    basename = urlparse(markdown_url).path.rsplit("/", 1)[-1]
+    basename = re.sub(r"\.(?:md|mdx|qmd)$", "", basename, flags=re.IGNORECASE)
     return " ".join(w.capitalize() for w in basename.split("-")) or "Untitled"
 
 

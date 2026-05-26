@@ -145,24 +145,6 @@ Adding this as a note for later to refactor to this method. (The screenshot ment
 
 Lefthook has https://lefthook.dev/llms.txt
 
-### New Idea (2026.05.20) — Drop Redundant Collections
-
-Next.js already comes with its docs installed and indexed.
-
-There's a claude-code-guide agent now too.
-
-### New Idea (2026.05.22) — .md try
-
-Non-Github URL → try suffix ".md" → use that
-
-"# scheme + netloc for the README's curation-source link" need to look into that in `curate_doc.py`.
-
-Could: URL → have .md? → exist on github?
-
-### New Idea (2026.05.22) — .mdx
-
-Biome has mdx files on GitHub (1 entry in source), can't find llms.txt. Support .mdx - is just the same and .md
-
 ### New Idea (2026.05.22) — "LLM routing"
 
 "Semantic search" isn't the right term. Also the examples need to be improved. Very keyword heavy.

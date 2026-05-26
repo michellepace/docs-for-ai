@@ -1,8 +1,8 @@
 """Curate one source URL into a collection directory.
 
-Saves the curated doc as a `.md` file and registers it in INDEX.xml.
-URLs ending in `.md` and GitHub blobs are fetched directly.
-All other URLs are scraped via FireCrawl.
+Saves the curated doc as a file and registers it in INDEX.xml. URLs ending in
+`.md` and GitHub blobs (`.md`/`.mdx`/`.qmd`, extension preserved) are fetched
+directly. All other URLs are scraped via FireCrawl.
 """
 
 import argparse
@@ -215,7 +215,10 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "source_url",
-        help="Web URL to curate (direct `.md` fetch or FireCrawl scrape)",
+        help=(
+            "Web URL to curate (direct `.md` fetch, GitHub `.md`/`.mdx`/`.qmd` "
+            "blob, or FireCrawl scrape)"
+        ),
     )
     return parser.parse_args()
 

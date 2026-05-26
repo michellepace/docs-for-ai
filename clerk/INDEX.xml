@@ -1,261 +1,254 @@
 <docs_index>
   <source>
-    <title>How Clerk works</title>
-    <description>Clerk architecture: Frontend API (FAPI), Backend API (BAPI), abstraction levels (prebuilt components, Clerk Elements, custom flows), hybrid authentication with `__client` and `__session` cookies, 60-second token refresh, handshake flow for SSR.</description>
-    <source_url>https://clerk.com/docs/guides/how-clerk-works/overview</source_url>
-    <local_file>how-clerk-works.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Clerk: Core concepts</title>
-    <description>Integration options: Account Portal, prebuilt components, custom API flows. Key SDK objects: `Clerk`, `Client`, `Session`, `User`, `Organization`, `SignIn`, `SignUp`. Session tokens as JWTs for backend authentication.</description>
+    <title>Core concepts</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/getting-started/core-concepts</source_url>
-    <local_file>next-steps-core-concepts.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>getting-started-core-concepts.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>SDK Reference: Clerk Next.js SDK</title>
-    <description>`@clerk/nextjs` SDK overview: `clerkMiddleware()` integration, React hooks (`useUser()`, `useAuth()`, `useOrganization()`, billing hooks), App Router helpers (`auth()`, `currentUser()`), Pages Router helpers (`getAuth()`, `buildClerkProps()`), `clerkClient` backend API, `Auth` object.</description>
-    <source_url>https://clerk.com/docs/reference/nextjs/overview</source_url>
-    <local_file>sdk-reference-clerk-nextjs-sdk.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Next.js Quickstart (App Router)</title>
-    <description>Next.js App Router quickstart: `@clerk/nextjs` installation, `clerkMiddleware()` in `middleware.ts`, `&lt;ClerkProvider&gt;` wrapper, prebuilt components `&lt;SignInButton&gt;`, `&lt;SignUpButton&gt;`, `&lt;SignedIn&gt;`, `&lt;SignedOut&gt;`, `&lt;UserButton&gt;` for authentication UI.</description>
-    <source_url>https://clerk.com/docs/nextjs/getting-started/quickstart</source_url>
-    <local_file>nextjs-quickstart-app-router.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Development: Clerk environment variables</title>
-    <description>Environment variables reference: `CLERK_SIGN_IN_URL`, `CLERK_SIGN_UP_URL`, `CLERK_SIGN_IN_FORCE_REDIRECT_URL`, `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `CLERK_JWT_KEY`, satellite domain settings, webhook signing secrets, telemetry options, Next.js `NEXT_PUBLIC_` variants.</description>
-    <source_url>https://clerk.com/docs/guides/development/clerk-environment-variables</source_url>
-    <local_file>development-clerk-environment-variables.md</local_file>
-    <scraped_at>2025-12-11</scraped_at>
-  </source>
-  <source>
-    <title>Development: Install Clerk with shadcn/ui CLI</title>
-    <description>shadcn/ui CLI Clerk integration: `npx shadcn@latest add @clerk/nextjs-quickstart` for complete setup, individual `@clerk/nextjs-sign-in-page`, `@clerk/nextjs-sign-up-page`, `@clerk/nextjs-waitlist-page` packages, `&lt;ClerkProvider&gt;` component, middleware installation.</description>
-    <source_url>https://clerk.com/docs/guides/development/shadcn-cli</source_url>
-    <local_file>development-install-clerk-with-shadcnui-cli.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Authentication flows: Sign-up and sign-in options</title>
-    <description>Email verification codes/links, phone/SMS OTP with SMS allowlists, username, password, passkeys with WebAuthn domain restrictions, SSO OAuth and Enterprise connections, Web3 MetaMask/Coinbase/OKX wallets, MFA TOTP/SMS/backup codes, user restrictions.</description>
+    <title>Sign-up and sign-in options</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/configure/auth-strategies/sign-up-sign-in-options</source_url>
-    <local_file>authentication-flows-sign-up-and-sign-in-options.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>guides-configure-auth-strategies-sign-up-sign-in-options.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Authentication flows: Customize your redirect URLs</title>
-    <description>Post-authentication redirect configuration using environment variables `CLERK_SIGN_IN_FORCE_REDIRECT_URL`, `CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` and component props `fallbackRedirectUrl`, `forceRedirectUrl`, `signInFallbackRedirectUrl`, `signUpForceRedirectUrl` on `&lt;SignIn&gt;`, `&lt;SignUp&gt;`, `&lt;ClerkProvider&gt;`, `&lt;RedirectToSignIn&gt;`.</description>
+    <title>shadcn/ui</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/customizing-clerk/elements/examples/shadcn-ui</source_url>
+    <local_file>guides-customizing-clerk-elements-examples-shadcn-ui.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Localization prop (experimental)</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/customizing-clerk/localization</source_url>
+    <local_file>guides-customizing-clerk-localization.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Clerk environment variables</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/development/clerk-environment-variables</source_url>
+    <local_file>guides-development-clerk-environment-variables.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Customize your redirect URLs</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/customize-redirect-urls</source_url>
-    <local_file>authentication-flows-customize-your-redirect-urls.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>guides-development-customize-redirect-urls.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Securing your app: Legal compliance</title>
-    <description>Dashboard setting for requiring express consent to terms of service or privacy policy during sign-up via `&lt;SignUp&gt;` component or Account Portal checkbox.</description>
-    <source_url>https://clerk.com/docs/authentication/configuration/legal-compliance</source_url>
-    <local_file>securing-your-app-legal-compliance.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
+    <title>Install Clerk with shadcn/ui CLI</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/development/shadcn-cli</source_url>
+    <local_file>guides-development-shadcn-cli.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Session management: Session tokens</title>
-    <description>Session token JWT default claims `azp`, `exp`, `fva`, `iat`, `iss`, `sid`, `sub`. Organisation claim `o` with role/permission bitmask `o.fpm`. Actor claim `act` for impersonation. 4KB cookie limits, custom claims.</description>
+    <title>Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/development/testing/overview</source_url>
+    <local_file>guides-development-testing-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Testing with Playwright</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/development/testing/playwright/overview</source_url>
+    <local_file>guides-development-testing-playwright-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Test emails and phones</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/development/testing/test-emails-and-phones</source_url>
+    <local_file>guides-development-testing-test-emails-and-phones.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>How Clerk works</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/how-clerk-works/overview</source_url>
+    <local_file>guides-how-clerk-works-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Legal compliance</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/guides/secure/legal-compliance</source_url>
+    <local_file>guides-secure-legal-compliance.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Session tokens</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/sessions/session-tokens</source_url>
-    <local_file>session-management-session-tokens.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>guides-sessions-session-tokens.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>User management: Users</title>
-    <description>`User` object with identifiers (email, phone, username), `publicMetadata`, `privateMetadata`. Dashboard and programmatic management. Frontend components `&lt;UserButton&gt;`, `&lt;UserProfile&gt;` and React hooks. Backend SDK `clerkClient` methods `createUser()`, `getUser()`, `deleteUser()`.</description>
+    <title>Users</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/users/managing</source_url>
-    <local_file>user-management-users.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>guides-users-managing.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Read session and user data in your Next.js app with Clerk</title>
-    <description>Next.js session and user data helpers. App Router: `auth()`, `currentUser()`. Pages Router: `getAuth()`, `clerkClient()`, `buildClerkProps()`. Client hooks `useAuth()` for session state and `useUser()` for `User` object. Route protection patterns.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/users/reading</source_url>
-    <local_file>read-session-and-user-data-in-your-nextjs-app-with-clerk.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Component Reference</title>
-    <description>Clerk component library: authentication (`&lt;SignIn /&gt;`, `&lt;SignUp /&gt;`), user (`&lt;UserButton /&gt;`, `&lt;UserProfile /&gt;`), organisation, billing (`&lt;PricingTable /&gt;`), control (`&lt;SignedIn /&gt;`, `&lt;Protect /&gt;`), unstyled buttons, redirect components, and `appearance` customisation.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/overview</source_url>
-    <local_file>component-reference.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>&lt;SignIn /&gt; component</title>
-    <description>`&lt;SignIn /&gt;` component reference: `fallbackRedirectUrl`, `forceRedirectUrl` redirect props, `routing` strategies, `oauthFlow` modes, `initialValues` prefilling, `transferable` sign-ins, `waitlistUrl`, `withSignUp` unified flow, and `appearance` styling.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-in</source_url>
-    <local_file>signin-component.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>&lt;SignUp /&gt; component</title>
-    <description>`&lt;SignUp /&gt;` component reference: `fallbackRedirectUrl`, `forceRedirectUrl` redirect props, `routing` strategies, `oauthFlow` modes, `initialValues` prefilling, `unsafeMetadata` for custom user data, `signInUrl` linking, and `appearance` styling.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-up</source_url>
-    <local_file>signup-component.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>&lt;GoogleOneTap /&gt; component</title>
-    <description>`&lt;GoogleOneTap /&gt;` component for Google One Tap authentication: `signInForceRedirectUrl`, `signUpForceRedirectUrl` props, `itpSupport` for Safari/iOS, `fedCmSupport` for FedCM API, `cancelOnTapOutside`, and known limitations.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/google-one-tap</source_url>
-    <local_file>googleonetap-component.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>&lt;UserButton /&gt; component</title>
-    <description>`&lt;UserButton /&gt;` component rendering avatar dropdown menu: `userProfileMode` (modal/navigation), `afterSwitchSessionUrl` for multi-session, `showName`, `userProfileProps`, `signInUrl`, custom menu actions via `UserButton.Action` and `UserButton.Link`.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-button</source_url>
-    <local_file>userbutton-component.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>&lt;UserProfile /&gt; component</title>
-    <description>`&lt;UserProfile /&gt;` component for full account management UI: `routing` strategies, `path` mounting, `additionalOAuthScopes` per provider, `customPages` array, `appearance` styling, custom sidenav pages via `UserProfile.Page` and links.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-profile</source_url>
-    <local_file>userprofile-component.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>&lt;Protect&gt;</title>
-    <description>`&lt;Protect /&gt;` component for authentication and authorisation: `role`, `permission`, `plan`, `feature` props for access control, `condition` prop with `has()` function for complex logic, `fallback` UI, client-side and server-side rendering.</description>
-    <source_url>https://clerk.com/docs/nextjs/reference/components/control/protect</source_url>
-    <local_file>protect.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
-  </source>
-  <source>
-    <title>Appearance prop</title>
-    <description>`appearance` prop for styling Clerk components: `theme` baseTheme property, `layout` prop, `variables` prop, `elements` targeting with CSS classes (`cl-` prefix), Tailwind `cssLayerName` integration, CSS modules, inline styles.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/overview</source_url>
-    <local_file>appearance-prop.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Themes</title>
-    <description>`@clerk/themes` package with `dark`, `simple`, `shadcn`, `shadesOfPurple`, `neobrutalism` prebuilt themes. Apply globally via `ClerkProvider` or per-component, stack multiple themes, customise with `variables` property.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/themes</source_url>
-    <local_file>themes.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Variables prop</title>
-    <description>`variables` property for theming Clerk components: `colorPrimary`, `colorDanger`, `colorSuccess`, `colorWarning`, `colorNeutral`, `colorForeground`, `colorBackground`, `colorInput`, `colorBorder`, `fontFamily`, `fontSize`, `fontWeight`, `borderRadius`, `spacing` and CSS variable equivalents `--clerk-color-*`.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/variables</source_url>
-    <local_file>variables-prop.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Layout prop</title>
-    <description>`layout` property for `&lt;SignIn /&gt;` and `&lt;SignUp /&gt;` components: `animations` toggle, `logoImageUrl`, `logoPlacement`, `logoLinkUrl`, `socialButtonsPlacement`, `socialButtonsVariant`, `showOptionalFields`, `termsPageUrl`, `privacyPageUrl`, `helpPageUrl`, `shimmer` effects, `unsafe_disableDevelopmentModeWarnings`.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/layout</source_url>
-    <local_file>layout-prop.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>captcha prop</title>
-    <description>`captcha` property for Cloudflare Turnstile CAPTCHA widget appearance: `theme` options (`auto`, `light`, `dark`), `size` variants (`normal`, `flexible`, `compact`), `language`/locale settings via `appearance.captcha` on `ClerkProvider`.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/captcha</source_url>
-    <local_file>captcha-prop.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Customizing Clerk: Account Portal overview</title>
-    <description>Account Portal hosted pages for sign-in, sign-up, user profile, organisation profile, create organisation, waitlist. URL structure `accounts.domain.com`, `redirect_url` query parameter, fallback redirects, disabling portal, `&lt;RedirectToSignIn /&gt;` and `&lt;RedirectToSignUp /&gt;` control components.</description>
-    <source_url>https://clerk.com/docs/guides/customizing-clerk/account-portal</source_url>
-    <local_file>customizing-clerk-account-portal-overview.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
-  </source>
-  <source>
-    <title>Add custom items and links to the &lt;UserButton /&gt; component</title>
-    <description>`&lt;UserButton /&gt;` menu customisation with `&lt;UserButton.Action&gt;` for `onClick` handlers, `&lt;UserButton.Link&gt;` for `href` navigation, `&lt;UserButton.MenuItems&gt;` container, `&lt;UserButton.UserProfilePage&gt;` for custom pages, reordering `manageAccount` and `signOut`, conditional rendering with `has()` permissions.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-button</source_url>
-    <local_file>add-custom-items-and-links-to-the-userbutton-component.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
-  </source>
-  <source>
-    <title>Add custom pages and links to the &lt;UserProfile /&gt; component</title>
-    <description>Customising `&lt;UserProfile /&gt;` sidenav with `&lt;UserButton.UserProfilePage /&gt;`, `&lt;UserProfile.Page /&gt;`, `&lt;UserButton.UserProfileLink /&gt;`, `&lt;UserProfile.Link /&gt;` child components, required props (`label`, `labelIcon`, `url`, `children`), reordering default `account` and `security` routes.</description>
-    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-profile</source_url>
-    <local_file>add-custom-pages-and-links-to-the-userprofile-component.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
+    <title>Add Clerk to Next.js App Router</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/getting-started/quickstart</source_url>
+    <local_file>nextjs-getting-started-quickstart.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Add custom pages and links to the &lt;OrganizationProfile /&gt; component</title>
-    <description>Customising `&lt;OrganizationProfile /&gt;` sidenav with `&lt;OrganizationSwitcher.OrganizationProfilePage /&gt;`, `&lt;OrganizationProfile.Page /&gt;`, `&lt;OrganizationSwitcher.OrganizationProfileLink /&gt;`, `&lt;OrganizationProfile.Link /&gt;` child components, required props (`label`, `labelIcon`, `url`, `children`), reordering default `members` and `general` routes.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/organization-profile</source_url>
-    <local_file>add-custom-pages-and-links-to-the-organizationprofile-component.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
+    <local_file>nextjs-guides-customizing-clerk-adding-items-organization-profile.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Add custom items and links to the &lt;UserButton /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-button</source_url>
+    <local_file>nextjs-guides-customizing-clerk-adding-items-user-button.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Add custom pages and links to the &lt;UserProfile /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-profile</source_url>
+    <local_file>nextjs-guides-customizing-clerk-adding-items-user-profile.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>captcha prop</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/captcha</source_url>
+    <local_file>nextjs-guides-customizing-clerk-appearance-prop-captcha.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Options prop</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/options</source_url>
+    <local_file>nextjs-guides-customizing-clerk-appearance-prop-options.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Appearance prop</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/overview</source_url>
+    <local_file>nextjs-guides-customizing-clerk-appearance-prop-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Themes</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/themes</source_url>
+    <local_file>nextjs-guides-customizing-clerk-appearance-prop-themes.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Variables prop</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/variables</source_url>
+    <local_file>nextjs-guides-customizing-clerk-appearance-prop-variables.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Build your own sign-in-or-up page for your Next.js app with Clerk</title>
-    <description>Custom sign-in-or-up page using `&lt;SignIn /&gt;` component with Next.js `[[...sign-in]]` catch-all routes, `clerkMiddleware()` with `createRouteMatcher()` for public routes, `CLERK_SIGN_IN_URL` and fallback redirect environment variables.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/development/custom-sign-in-or-up-page</source_url>
-    <local_file>build-your-own-sign-in-or-up-page-for-your-nextjs-app-with-clerk.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>nextjs-guides-development-custom-sign-in-or-up-page.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Build your own sign-up page for your Next.js app with Clerk</title>
-    <description>Dedicated sign-up page using `&lt;SignUp /&gt;` component with Next.js `[[...sign-up]]` catch-all routes, `clerkMiddleware()` with `createRouteMatcher()` for public routes, `CLERK_SIGN_UP_URL` and fallback redirect environment variables.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/development/custom-sign-up-page</source_url>
-    <local_file>build-your-own-sign-up-page-for-your-nextjs-app-with-clerk.md</local_file>
-    <scraped_at>2025-12-03</scraped_at>
+    <local_file>nextjs-guides-development-custom-sign-up-page.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Customizing Clerk: shadcn/ui</title>
-    <description>Clerk Elements with shadcn/ui integration: complete sign-in and sign-up flow examples using `@clerk/elements`, `SignIn.Root`, `SignUp.Root`, `Clerk.Connection` for OAuth, `Clerk.Input type="otp"` custom render, multi-step authentication, loading states.</description>
-    <source_url>https://clerk.com/docs/guides/customizing-clerk/elements/examples/shadcn-ui</source_url>
-    <local_file>customizing-clerk-shadcnui.md</local_file>
-    <scraped_at>2025-12-09</scraped_at>
+    <title>Protect content and read user data</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/guides/users/reading</source_url>
+    <local_file>nextjs-guides-users-reading.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Development: Testing</title>
-    <description>Testing overview: fake OTP emails/phones with `+clerk_test` and 555 numbers, Backend API session token creation and refresh, Testing Tokens via `__clerk_testing_token` query parameter for bypassing bot detection, Playwright/Cypress support.</description>
-    <source_url>https://clerk.com/docs/guides/development/testing/overview</source_url>
-    <local_file>development-testing.md</local_file>
-    <scraped_at>2025-12-04</scraped_at>
+    <title>&lt;GoogleOneTap /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/google-one-tap</source_url>
+    <local_file>nextjs-reference-components-authentication-google-one-tap.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Development: Test emails and phones</title>
-    <description>Test mode OTP simulation: `+clerk_test` email subaddresses, fictional `555` phone numbers (`+1 XXX 555-0100` to `555-0199`), fixed verification code `424242`, development instance monthly limits, `useSignIn()`/`useSignUp()` code examples.</description>
-    <source_url>https://clerk.com/docs/guides/development/testing/test-emails-and-phones</source_url>
-    <local_file>development-test-emails-and-phones.md</local_file>
-    <scraped_at>2025-12-05</scraped_at>
+    <title>&lt;SignIn /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-in</source_url>
+    <local_file>nextjs-reference-components-authentication-sign-in.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Development: Testing with Playwright</title>
-    <description>Playwright E2E testing with `@clerk/testing` package: `clerkSetup()` in global setup, `setupClerkTestingToken()` for individual tests, `CLERK_PUBLISHABLE_KEY`/`CLERK_SECRET_KEY` configuration, Testing Tokens for bypassing bot detection.</description>
-    <source_url>https://clerk.com/docs/guides/development/testing/playwright/overview</source_url>
-    <local_file>development-testing-with-playwright.md</local_file>
-    <scraped_at>2025-12-04</scraped_at>
-  </source>
-  <source>
-    <title>Customizing Clerk: Localization prop (experimental)</title>
-    <description>Localising Clerk components via `ClerkProvider` `localization` prop: `@clerk/localizations` package with predefined translations (`frFR`, `enGB`, etc.), custom localisation objects, finding localisation keys, `unstable__errors` for custom error messages.</description>
-    <source_url>https://clerk.com/docs/customization/localization</source_url>
-    <local_file>customizing-clerk-localization-prop-experimental.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
+    <title>&lt;SignUp /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-up</source_url>
+    <local_file>nextjs-reference-components-authentication-sign-up.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>&lt;ClerkProvider&gt;</title>
-    <description>`&lt;ClerkProvider&gt;` component reference: session/user context, redirect props (`signInFallbackRedirectUrl`, `signUpForceRedirectUrl`), `appearance` and `localization` props, satellite app configuration, `allowedRedirectOrigins` security, CSP `nonce`, `telemetry`, Next.js `dynamic` prop.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/clerk-provider</source_url>
-    <local_file>clerkprovider.md</local_file>
-    <scraped_at>2025-12-13</scraped_at>
+    <local_file>nextjs-reference-components-clerk-provider.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>SDK Reference: User object</title>
-    <description>Frontend `User` object properties: `emailAddresses`, `phoneNumbers`, `externalAccounts`, `passkeys`, `web3Wallets`, `publicMetadata`, `unsafeMetadata`, `organizationMemberships`. Methods: `createEmailAddress()`, `createPhoneNumber()`, `createExternalAccount()`, `createPasskey()`, `createTOTP()`, `verifyTOTP()`, `createBackupCode()`, `updatePassword()`, `update()`, `setProfileImage()`.</description>
-    <source_url>https://clerk.com/docs/reference/javascript/user</source_url>
-    <local_file>sdk-reference-user-object.md</local_file>
-    <scraped_at>2025-12-14</scraped_at>
+    <title>&lt;Show&gt;</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/control/show</source_url>
+    <local_file>nextjs-reference-components-control-show.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Component Reference</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/overview</source_url>
+    <local_file>nextjs-reference-components-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>&lt;UserButton /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-button</source_url>
+    <local_file>nextjs-reference-components-user-user-button.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>&lt;UserProfile /&gt; component</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-profile</source_url>
+    <local_file>nextjs-reference-components-user-user-profile.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Clerk Next.js SDK</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/reference/nextjs/overview</source_url>
+    <local_file>reference-nextjs-overview.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>User</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://clerk.com/docs/reference/objects/user</source_url>
+    <local_file>reference-objects-user.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

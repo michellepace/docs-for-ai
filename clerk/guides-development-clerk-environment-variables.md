@@ -1,0 +1,166 @@
+# Clerk environment variables
+
+You can use environment variables to configure how your Clerk app behaves, such as where users are redirected after signing out of their account, or whether or not Clerk's telemetry should be enabled.
+
+This page is a reference for all available Clerk environment variables.
+
+## Compatibility
+
+In the frontend, Clerk's environment variables work for most popular meta-frameworks, such as Next.js.
+
+If you're building a pure React app, you should use the props on the components you're using. For example, to force users to redirect to a specific URL after signing in, you would use the `signInForceRedirectUrl` prop on [<ClerkProvider>](https://clerk.com/docs/reference/components/clerk-provider.md) rather than the `CLERK_SIGN_IN_FORCE_REDIRECT_URL` environment variable.
+
+## Sign-in and sign-up redirects
+
+Components, such as [<ClerkProvider>](https://clerk.com/docs/reference/components/clerk-provider.md), [<SignIn>](https://clerk.com/docs/reference/components/authentication/sign-in.md), and more, provide props for you to specify where users will be redirected. For example, `<ClerkProvider>` has the `signInFallbackRedirectUrl` and `signUpFallbackRedirectUrl` props.
+
+However, **it's recommended to use environment variables instead of these props whenever possible.**
+
+For the `FORCE` and `FALLBACK` variables, it's recommended to define both sign-up and sign-in variables, as some users may choose to sign up instead after attempting to sign in, and vice versa.
+
+**General**
+
+| Variable                                            | Description                                                                                                                                                                   | Example      |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+|  `NEXT_PUBLIC_CLERK_SIGN_IN_URL`                    | The full URL or path to your sign-in page. Needs to point to your primary application on the client-side. **Required for a satellite application in a development instance.** | `/sign-in`   |
+|  `NEXT_PUBLIC_CLERK_SIGN_UP_URL`                    | The full URL or path to your sign-up page. Needs to point to your primary application on the client-side. **Required for a satellite application in a development instance.** | `/sign-up`   |
+|  `NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL`     | If provided, this URL will always be redirected to after the user signs in.                                                                                                   | `/dashboard` |
+|  `NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL`     | If provided, this URL will always be redirected to after the user signs up.                                                                                                   | `/dashboard` |
+|  `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`  | The fallback URL to redirect to after the user signs in, if there's no `redirect_url` in the path already. Defaults to `/`.                                                   | `/dashboard` |
+|  `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`  | The fallback URL to redirect to after the user signs up, if there's no `redirect_url` in the path already. Defaults to `/`.                                                   | `/dashboard` |
+
+**Vite**
+
+For Vite-based frameworks, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                                   | Description                                                                                                                                                                   | Example      |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `VITE_CLERK_SIGN_IN_URL`                   | The full URL or path to your sign-in page. Needs to point to your primary application on the client-side. **Required for a satellite application in a development instance.** | `/sign-in`   |
+| `VITE_CLERK_SIGN_UP_URL`                   | The full URL or path to your sign-up page. Needs to point to your primary application on the client-side. **Required for a satellite application in a development instance.** | `/sign-up`   |
+| `VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL`    | If provided, this URL will always be redirected to after the user signs in.                                                                                                   | `/dashboard` |
+| `VITE_CLERK_SIGN_UP_FORCE_REDIRECT_URL`    | If provided, this URL will always be redirected to after the user signs up.                                                                                                   | `/dashboard` |
+| `VITE_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` | The fallback URL to redirect to after the user signs in, if there's no `redirect_url` in the path already. Defaults to `/`.                                                   | `/dashboard` |
+| `VITE_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` | The fallback URL to redirect to after the user signs up, if there's no `redirect_url` in the path already. Defaults to `/`.                                                   | `/dashboard` |
+
+## Clerk Publishable and Secret Keys
+
+To access your Clerk app in your local project, you must specify your app's Publishable Keys for use in the frontend, and Secret Keys for use in the backend.
+
+**General**
+
+| Variable                                | Description                                                                                                                                                                                                  |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`    | Your Clerk app's Publishable Key. It will be prefixed with `pk_test_` in development instances and `pk_live_` in production instances.                                                                       |
+| `CLERK_SECRET_KEY`                      | Your Clerk app's Secret Key. It will be prefixed with `sk_test_` in development instances and `sk_live_` in production instances. **Do not expose this on the frontend with a public environment variable**. |
+
+**Vite**
+
+For Vite-based frameworks, like React Router and Vue, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                     | Description                                                                                                                            |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Your Clerk app's Publishable Key. It will be prefixed with `pk_test_` in development instances and `pk_live_` in production instances. |
+
+## API and SDK configuration
+
+The following environment variables enable you to configure API and SDK behavior, such as what version of the SDK your project uses, what proxy URL you use to connect to Clerk's Frontend API, and more.
+
+**General**
+
+| Variable                              | Description                                                                                                                                                                                                                                                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `NEXT_PUBLIC_CLERK_JS_URL`           | Sets the URL that `@clerk/react` should hot-load `@clerk/clerk-js` from. `CLERK_JS` does the same but is deprecated.                                                                                                                                        |
+|  `NEXT_PUBLIC_CLERK_JS_VERSION`       | Sets the npm version for `@clerk/clerk-js`.                                                                                                                                                                                                                 |
+|  `NEXT_PUBLIC_CLERK_API_URL`          | Sets the Clerk API URL for debugging. Defaults to `"https://api.clerk.com"`                                                                                                                                                                                 |
+|  `NEXT_PUBLIC_CLERK_API_VERSION`      | Sets the version of the Clerk API to use. Defaults to `"v1"`                                                                                                                                                                                                |
+|  `NEXT_PUBLIC_CLERK_JWT_KEY`          | Sets the JWT verification key that Clerk will use to provide networkless JWT session token verification. Refer to [Manual JWT verification](https://clerk.com/docs/guides/sessions/manual-jwt-verification.md).                                             |
+|  `NEXT_PUBLIC_CLERK_FAPI`             | Sets the URL to your Clerk apps' Frontend API.                                                                                                                                                                                                              |
+|  `NEXT_PUBLIC_CLERK_PROXY_URL`        | Sets the URL for your proxy.                                                                                                                                                                                                                                |
+| `CLERK_ENCRYPTION_KEY` (Next.js only) | Sets the encryption key to securely propagate `clerkMiddleware` dynamic keys during request time. A 128-bit, pseudorandom value should be used. See [Dynamic keys](https://clerk.com/docs/reference/nextjs/clerk-middleware.md#dynamic-keys) to learn more. |
+
+**Vite**
+
+For Vite-based frameworks, like React Router and Vue, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                 | Description                                                                 |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `VITE_CLERK_JS_URL`      | Sets the URL that `@clerk/react` should hot-load `@clerk/clerk-js` from.    |
+| `VITE_CLERK_JS_VERSION`  | Sets the npm version for `@clerk/clerk-js`.                                 |
+| `VITE_CLERK_API_URL`     | Sets the Clerk API URL for debugging. Defaults to `"https://api.clerk.com"` |
+| `VITE_CLERK_API_VERSION` | Sets the version of the Clerk API to use. Defaults to `"v1"`                |
+| `VITE_CLERK_FAPI`        | Sets the URL to your Clerk app's Frontend API.                              |
+| `VITE_CLERK_PROXY_URL`   | Sets the URL for your proxy.                                                |
+
+## Satellite domains
+
+Clerk supports sharing sessions across different domains by adding one or many satellite domains to an application. See [the satellite domains guide](https://clerk.com/docs/guides/dashboard/dns-domains/satellite-domains.md) for more information.
+
+**General**
+
+| Variable                           | Description                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------- |
+|  `NEXT_PUBLIC_CLERK_DOMAIN`        | Sets your satellite application's domain. Required to share sessions across multiple domains. |
+|  `NEXT_PUBLIC_CLERK_IS_SATELLITE`  | Indicates whether or not the application is a satellite application.                          |
+
+**Vite**
+
+For Vite-based frameworks, like React Router and Vue, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                  | Description                                                                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| `VITE_CLERK_DOMAIN`       | Sets your satellite application's domain. Required to share sessions across multiple domains. |
+| `VITE_CLERK_IS_SATELLITE` | Indicates whether or not the application is a satellite application.                          |
+
+## Webhooks
+
+The following environment variable allows you to protect your webhook signing secret. It is read by Clerk's [`verifyWebhook()`](https://clerk.com/docs/reference/backend/verify-webhook.md) function.
+
+| Variable                       | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `CLERK_WEBHOOK_SIGNING_SECRET` | The signing secret for your webhook. |
+
+## Telemetry
+
+Clerk provides environment variables for opting out of telemetry data collection. See [the telemetry documentation](https://clerk.com/docs/guides/how-clerk-works/security/clerk-telemetry.md) for more information.
+
+**General**
+
+| Variable                                 | Description                                                                                                   |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+|  `NEXT_PUBLIC_CLERK_TELEMETRY_DISABLED`  | Set this to `1` to disable Clerk's telemetry data collection.                                                 |
+|  `NEXT_PUBLIC_CLERK_TELEMETRY_DEBUG`     | Set this to `1` to prevent telemetry data from being sent to Clerk. It will be logged to the console instead. |
+
+**Vite**
+
+For Vite-based frameworks, like React Router and Vue, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                        | Description                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `VITE_CLERK_TELEMETRY_DISABLED` | Set this to `1` to disable Clerk's telemetry data collection.                                                 |
+| `VITE_CLERK_TELEMETRY_DEBUG`    | Set this to `1` to prevent telemetry data from being sent to Clerk. It will be logged to the console instead. |
+
+## Deprecated
+
+The following environment variables are deprecated but still supported to avoid breaking changes. Don't use them in new projects. It is recommended to switch to using the recommended alternatives in old projects.
+
+**General**
+
+| Variable                                | Description                                                                                                                                                                                       |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL`  | Full URL or path to navigate to after successful sign up. Defaults to `/`. `CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` and `CLERK_SIGN_UP_FORCE_REDIRECT_URL` have priority and should be used instead. |
+|  `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL`  | Full URL or path to navigate to after successful sign in. Defaults to `/`. `CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` and `CLERK_SIGN_IN_FORCE_REDIRECT_URL` have priority and should be used instead. |
+
+**Vite**
+
+For Vite-based frameworks, like React Router and Vue, you must prefix environment variables that you want to expose to the client-side with `VITE_`.
+
+| Variable                       | Description                                                                                                                                                                                                 |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_CLERK_AFTER_SIGN_UP_URL` | Full URL or path to navigate to after successful sign up. Defaults to `/`. `VITE_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` and `VITE_CLERK_SIGN_UP_FORCE_REDIRECT_URL` have priority and should be used instead. |
+| `VITE_CLERK_AFTER_SIGN_IN_URL` | Full URL or path to navigate to after successful sign in. Defaults to `/`. `VITE_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` and `VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL` have priority and should be used instead. |
+
+---
+
+## Sitemap
+
+[Overview of all docs pages](https://clerk.com/docs/llms.txt)

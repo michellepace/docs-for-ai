@@ -45,6 +45,7 @@ test('get started link', async ({ page }) => {
 Add `// @ts-check` at the start of each test file when using JavaScript in VS Code to get automatic type checking.
 :::
 
+
 ## Actions
 
 ### Navigation
@@ -66,6 +67,7 @@ Playwright waits for the page to reach the load state before continuing. Learn m
 Performing actions starts with locating elements. Playwright uses [Locators API](./locators.md) for that. Locators represent a way to find element(s) on the page at any moment. Learn more about the [different types](./locators.md) of locators available.
 
 Playwright waits for the element to be [actionable](./actionability.md) before performing the action, so you don't need to wait for it to become available.
+
 
 ```js
 // Create a locator.
@@ -128,6 +130,7 @@ Playwright also includes generic matchers like `toEqual`, `toContain`, `toBeTrut
 expect(success).toBeTruthy();
 ```
 
+
 ### Test Isolation
 
 Playwright Test is based on the concept of [test fixtures](./test-fixtures.md) such as the [built in page fixture](./test-fixtures#built-in-fixtures), which is passed into your test. Pages are [isolated between tests due to the Browser Context](./browser-contexts), which is equivalent to a brand new browser profile. Every test gets a fresh environment, even when multiple tests run in a single browser.
@@ -171,3 +174,4 @@ test.describe('navigation', () => {
 - [See a trace of your tests](./trace-viewer-intro.md)
 - [Explore UI Mode](./test-ui-mode.md)
 - [Run tests on CI with GitHub Actions](./ci-intro.md)
+

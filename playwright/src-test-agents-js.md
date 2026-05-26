@@ -39,6 +39,10 @@ npx playwright init-agents --loop=vscode
 npx playwright init-agents --loop=claude
 ```
 
+```bash tab=bash-codex
+npx playwright init-agents --loop=codex
+```
+
 ```bash tab=bash-opencode
 npx playwright init-agents --loop=opencode
 ```
@@ -47,7 +51,8 @@ npx playwright init-agents --loop=opencode
 VS Code v1.105 (released October 9, 2025) is needed for the agentic experience to function properly in VS Code.
 :::
 
-Once the agents have been generated, you can use your AI tool of choice to command these agents to build Playwright Tests.
+Once the agents have been generated, you can use your AI tool of choice to command these agents to build Playwright Tests. 
+
 
 ## 🎭 Planner
 
@@ -63,9 +68,9 @@ Planner agent explores your app and produces a test plan for one or many scenari
   
 <img src={require("../images/test-agents/planner-prompt.png").src} alt="planner prompt" width="472"/>
 
-> * Notice how the `seed.spec.ts` is included in the context of the planner.
-> * Planner will run this test to execute all the initialization necessary for your test including the global setup, project dependencies and all the necessary fixtures and hooks.
-> * Planner will also use this seed test as an example of all the generated tests. Alternatively, you can mention the file name in the prompt.
+> - Notice how the `seed.spec.ts` is included in the context of the planner.
+> - Planner will run this test to execute all the initialization necessary for your test including the global setup, project dependencies and all the necessary fixtures and hooks.
+> - Planner will also use this seed test as an example of all the generated tests. Alternatively, you can mention the file name in the prompt.
 
 ```js title="Example: seed.spec.ts"
 import { test, expect } from './fixtures';
@@ -119,7 +124,6 @@ The TodoMVC application is a React-based todo list manager that demonstrates sta
 #### 1.2 Add Multiple Todos
 ...
 ```
-
 </details>
 
 ## 🎭 Generator
@@ -137,8 +141,8 @@ behavioral validation.
 
 <img src={require("../images/test-agents/generator-prompt.png").src} alt="generator prompt" width="472"/>
 
-> * Notice how the `basic-operations.md` is included in the context of the generator.
-> * This is how generator knows where to get the test plan from. Alternatively, you can mention the file name in the prompt.
+> - Notice how the `basic-operations.md` is included in the context of the generator.
+> - This is how generator knows where to get the test plan from. Alternatively, you can mention the file name in the prompt.
 
 **Output**
 
@@ -185,7 +189,6 @@ test.describe('Adding New Todos', () => {
   });
 });
 ```
-
 </details>
 
 ## 🎭 Healer
@@ -207,7 +210,7 @@ When the test fails, the healer agent:
 
 **Output**
 
-* A passing test, or a skipped test if the healer believes the that functionality is broken.
+* A passing test, or a skipped test if the healer believes that functionality is broken.
 
 ## Artifacts and Conventions
 

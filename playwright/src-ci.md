@@ -12,7 +12,6 @@ configurations for common CI providers.
 1. **Ensure CI agent can run browsers**: Use [our Docker image](./docker.md)
    in Linux agents or install your dependencies using the [CLI](./browsers#install-system-dependencies).
 1. **Install Playwright**:
-
    ```bash js
    # Install NPM packages
    npm ci
@@ -20,41 +19,33 @@ configurations for common CI providers.
    # Install Playwright browsers and dependencies
    npx playwright install --with-deps
    ```
-
    ```bash python
    pip install playwright
    playwright install --with-deps
    ```
-
    ```bash java
    mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
    ```
-
    ```bash csharp
    dotnet build
    pwsh bin/Debug/netX/playwright.ps1 install --with-deps
    ```
 
 1. **Run your tests**:
-
    ```bash js
    npx playwright test
    ```
-
    ```bash python
    pytest
    ```
-
    ```bash java
    mvn test
    ```
-
    ```bash csharp
    dotnet test
    ```
 
 ## Workers
-
 * langs: js
 
 We recommend setting [workers](./api/class-testconfig.md#test-config-workers) to "1" in CI environments to prioritize stability and reproducibility. Running tests sequentially ensures each test gets the full system resources, avoiding potential conflicts. However, if you have a powerful self-hosted CI system, you may enable [parallel](./test-parallel.md) tests. For wider parallelization, consider [sharding](./test-parallel.md#shard-tests-between-multiple-machines) - distributing tests across multiple CI jobs.
@@ -75,7 +66,6 @@ The [Command line tools](./browsers#install-system-dependencies) can be used to 
 ### GitHub Actions
 
 #### On push/pull_request
-
 * langs: js
 
 Tests will run on push or pull request on branches main/master. The [workflow](https://docs.github.com/en/actions/using-workflows/about-workflows) will install all dependencies, install Playwright and then run the tests. It will also create the HTML report.
@@ -111,7 +101,6 @@ jobs:
 ```
 
 #### On push/pull_request
-
 * langs: python, java, csharp
 
 Tests will run on push or pull request on branches main/master. The [workflow](https://docs.github.com/en/actions/using-workflows/about-workflows) will install all dependencies, install Playwright and then run the tests.
@@ -199,7 +188,6 @@ jobs:
 ```
 
 #### On push/pull_request (sharded)
-
 * langs: js
 
 GitHub Actions supports [sharding tests between multiple jobs](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs). Check out our [sharding doc](./test-sharding) to learn more about sharding and to see a [GitHub actions example](./test-sharding.md#github-actions-example) of how to configure a job to run your tests on multiple machines as well as how to merge the HTML reports.
@@ -421,7 +409,6 @@ jobs:
 ```
 
 #### Fail-Fast
-
 * langs: js
 
 Large test suites can take very long to execute. By executing a preliminary test run with the `--only-changed` flag, you can run test files that are likely to fail first.
@@ -453,7 +440,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run changed Playwright tests
-      run: npx playwright test --only-changed=$GITHUB_BASE_REF
+      run: npx playwright test --only-changed=origin/$GITHUB_BASE_REF
       if: github.event_name == 'pull_request'
     - name: Run Playwright tests
       run: npx playwright test
@@ -567,7 +554,6 @@ steps:
 ```
 
 #### Uploading playwright-report folder with Azure Pipelines
-
 * langs: js
 
 This will make the pipeline run fail if any of the playwright tests fails.
@@ -612,9 +598,7 @@ steps:
   condition: succeededOrFailed()
 
 ```
-
 Note: The JUnit reporter needs to be configured accordingly via
-
 ```js
 import { defineConfig } from '@playwright/test';
 
@@ -622,11 +606,9 @@ export default defineConfig({
   reporter: [['junit', { outputFile: 'test-results/e2e-junit-results.xml' }]],
 });
 ```
-
 in `playwright.config.ts`.
 
 #### Azure Pipelines (sharded)
-
 * langs: js
 
 ```yaml
@@ -680,6 +662,7 @@ steps:
   env:
     CI: 'true'
 ```
+
 
 #### Azure Pipelines (containerized)
 
@@ -801,10 +784,9 @@ executors:
       - image: mcr.microsoft.com/playwright/dotnet:v%%VERSION%%-noble
 ```
 
-Note: When using the docker agent definition, you are specifying the resource class of where playwright runs to the 'medium' [tier here](https://circleci.com/docs/configuration-reference?#docker-execution-environment). The default behavior of Playwright is to set the number of workers to the detected core count (2 in the case of the medium tier). Overriding the number of workers to greater than this number will cause unnecessary timeouts and failures.
+Note: When using the docker agent definition, you are specifying the resource class of where playwright runs to the 'medium' tier [here](https://circleci.com/docs/configuration-reference?#docker-execution-environment). The default behavior of Playwright is to set the number of workers to the detected core count (2 in the case of the medium tier). Overriding the number of workers to greater than this number will cause unnecessary timeouts and failures.
 
 #### Sharding in CircleCI
-
 * langs: js
 
 Sharding in CircleCI is indexed with 0 which means that you will need to override the default parallelism ENV VARS. The following example demonstrates how to run Playwright with a CircleCI Parallelism of 4 by adding 1 to the `CIRCLE_NODE_INDEX` to pass into the `--shard` cli arg.
@@ -947,7 +929,6 @@ tests:
 ```
 
 #### Sharding
-
 * langs: js
 
 GitLab CI supports [sharding tests between multiple jobs](https://docs.gitlab.com/ee/ci/jobs/job_control.html#parallelize-large-jobs) using the [parallel](https://docs.gitlab.com/ee/ci/yaml/index.html#parallel) keyword. The test job will be split into multiple smaller jobs that run in parallel. Parallel jobs are named sequentially from `job_name 1/N` to `job_name N/N`.
@@ -982,9 +963,7 @@ tests:
     - npm ci
     - npx playwright test --project=$PROJECT --shard=$SHARD
 ```
-
 ### Google Cloud Build
-
 * langs: js
 
 To run Playwright tests on Google Cloud Build, use our public Docker image ([see Dockerfile](./docker.md)).
@@ -999,7 +978,6 @@ steps:
 ```
 
 ### Drone
-
 * langs: js
 
 To run Playwright tests on Drone, use our public Docker image ([see Dockerfile](./docker.md)).
@@ -1029,7 +1007,6 @@ Playwright supports the `DEBUG` environment variable to output debug logs during
 ```bash js
 DEBUG=pw:browser npx playwright test
 ```
-
 ```bash python
 DEBUG=pw:browser pytest
 ```
@@ -1051,15 +1028,12 @@ On Linux agents, headed execution requires [Xvfb](https://en.wikipedia.org/wiki/
 ```bash js
 xvfb-run npx playwright test
 ```
-
 ```bash python
 xvfb-run pytest
 ```
-
 ```bash java
 xvfb-run mvn test
 ```
-
 ```bash csharp
 xvfb-run dotnet test
 ```

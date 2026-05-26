@@ -58,13 +58,13 @@ export default defineConfig({
 
 | Option | Description |
 | :- | :- |
-| [`property: TestConfig.forbidOnly`] | Whether to exit with an error if any tests are marked as `test.only`. Useful on CI. |
+| [`property: TestConfig.forbidOnly`] | Whether to exit with an error if any tests are marked as `test.only`. Useful on CI.|
 | [`property: TestConfig.fullyParallel`] | have all tests in all files to run in parallel. See [Parallelism](./test-parallel) and [Sharding](./test-sharding) for more details. |
 | [`property: TestConfig.projects`] | Run tests in multiple configurations or on multiple browsers |
 | [`property: TestConfig.reporter`] | Reporter to use. See [Test Reporters](/test-reporters.md) to learn more about which reporters are available. |
-| [`property: TestConfig.retries`] | The maximum number of retry attempts per test. See [Test Retries](/test-retries.md) to learn more about retries. |
+| [`property: TestConfig.retries`] | The maximum number of retry attempts per test. See [Test Retries](/test-retries.md) to learn more about retries.|
 | [`property: TestConfig.testDir`] | Directory with the test files. |
-| [`property: TestConfig.use`] | Options with `use{}` |
+| [`property: TestConfig.use`]  | Options with `use{}` |
 | [`property: TestConfig.webServer`] | To launch a server during the tests, use the `webServer` option |
 | [`property: TestConfig.workers`] | The maximum number of concurrent worker processes to use for parallelizing tests. Can also be set as percentage of logical CPU cores, e.g. `'50%'.`. See [Parallelism](./test-parallel) and [Sharding](./test-sharding) for more details. |
 
@@ -113,7 +113,7 @@ export default defineConfig({
 | Option | Description |
 | :- | :- |
 | [`property: TestConfig.globalSetup`] | Path to the global setup file. This file will be required and run before all the tests. It must export a single function. |
-| [`property: TestConfig.globalTeardown`] | Path to the global teardown file. This file will be required and run after all the tests. It must export a single function. |
+| [`property: TestConfig.globalTeardown`] |Path to the global teardown file. This file will be required and run after all the tests. It must export a single function. |
 | [`property: TestConfig.outputDir`] | Folder for test artifacts such as screenshots, videos, traces, etc. |
 | [`property: TestConfig.timeout`] | Playwright enforces a [timeout](./test-timeouts.md) for each test, 30 seconds by default. Time spent by the test function, test fixtures and beforeEach hooks is included in the test timeout. |
 
@@ -148,4 +148,5 @@ export default defineConfig({
 | :- | :- |
 | [`property: TestConfig.expect`] | [Web first assertions](./test-assertions.md) like `expect(locator).toHaveText()` have a separate timeout of 5 seconds by default. This is the maximum time the `expect()` should wait for the condition to be met. Learn more about [test and expect timeouts](./test-timeouts.md) and how to set them for a single test. |
 | [`method: PageAssertions.toHaveScreenshot#1`] | Configuration for the `expect(locator).toHaveScreenshot()` method. |
-| [`method: SnapshotAssertions.toMatchSnapshot#1`] | Configuration for the `expect(locator).toMatchSnapshot()` method. |
+| [`method: SnapshotAssertions.toMatchSnapshot#1`]| Configuration for the `expect(locator).toMatchSnapshot()` method.|
+

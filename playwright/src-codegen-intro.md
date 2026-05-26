@@ -37,12 +37,34 @@ pwsh bin/Debug/net8.0/playwright.ps1 codegen demo.playwright.dev/todomvc
 Run `codegen` and perform actions in the browser. Playwright generates code for your interactions automatically. Codegen analyzes the rendered page and recommends the best locator, prioritizing role, text, and test id locators. When multiple elements match a locator, the generator improves it to uniquely identify the target element, reducing test failures and flakiness.
 
 With the test generator you can record:
+* Actions like click or fill by interacting with the page
+* Assertions by clicking a toolbar icon, then clicking a page element to assert against. You can choose:
+  * `'assert visibility'` to assert that an element is visible
+  * `'assert text'` to assert that an element contains specific text
+  * `'assert value'` to assert that an element has a specific value
 
-- Actions like click or fill by interacting with the page
-- Assertions by clicking a toolbar icon, then clicking a page element to assert against. You can choose:
-  - `'assert visibility'` to assert that an element is visible
-  - `'assert text'` to assert that an element contains specific text
-  - `'assert value'` to assert that an element has a specific value
+######
+* langs: js
+
+![Recording a test](./images/getting-started/record-test-js.png)
+
+######
+* langs: java
+
+![recording a test](./images/getting-started/record-test-java.png)
+
+######
+* langs: python
+
+![recording a test](./images/getting-started/record-test-python.png)
+
+######
+* langs: csharp
+
+![recording a test](./images/getting-started/record-test-csharp.png)
+
+######
+* langs: js, java, python, csharp
 
 When you finish interacting with the page, press the `'record'` button to stop recording and use the `'copy'` button to copy the generated code to your editor.
 
@@ -54,11 +76,31 @@ To learn more about generating tests, check out our detailed guide on [Codegen](
 
 You can generate [locators](/locators.md) with the test generator.
 
-- Press the `'Record'` button to stop recording and the `'Pick Locator'` button will appear
-- Click the `'Pick Locator'` button and hover over elements in the browser window to see the locator highlighted underneath each element
-- Click the element you want to locate and the code for that locator will appear in the locator playground next to the Pick Locator button
-- Edit the locator in the locator playground to fine-tune it and see the matching element highlighted in the browser window
-- Use the copy button to copy the locator and paste it into your code
+* Press the `'Record'` button to stop recording and the `'Pick Locator'` button will appear
+* Click the `'Pick Locator'` button and hover over elements in the browser window to see the locator highlighted underneath each element
+* Click the element you want to locate and the code for that locator will appear in the locator playground next to the Pick Locator button
+* Edit the locator in the locator playground to fine-tune it and see the matching element highlighted in the browser window
+* Use the copy button to copy the locator and paste it into your code
+
+######
+* langs: js
+
+![picking a locator](./images/getting-started/pick-locator-js.png)
+
+######
+* langs: java
+
+![picking a locator](./images/getting-started/pick-locator-java.png)
+
+######
+* langs: python
+
+![picking a locator](./images/getting-started/pick-locator-python.png)
+
+######
+* langs: csharp
+
+![picking a locator](./images/getting-started/pick-locator-csharp.png)
 
 ### Emulation
 
@@ -66,11 +108,4 @@ You can generate tests using emulation for specific viewports, devices, color sc
 
 ## What's Next
 
-- [See a trace of your tests](https://playwright.dev/docs/trace-viewer-intro)
-
-- [Introduction](https://playwright.dev/docs/codegen-intro#introduction)
-- [Running Codegen](https://playwright.dev/docs/codegen-intro#running-codegen)
-  - [Recording a test](https://playwright.dev/docs/codegen-intro#recording-a-test)
-  - [Generating locators](https://playwright.dev/docs/codegen-intro#generating-locators)
-  - [Emulation](https://playwright.dev/docs/codegen-intro#emulation)
-- [What's Next](https://playwright.dev/docs/codegen-intro#whats-next)
+- [See a trace of your tests](./trace-viewer-intro.md)

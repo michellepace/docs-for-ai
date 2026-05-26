@@ -25,6 +25,7 @@ export default defineConfig({
 });
 ```
 
+
 | Option | Description |
 | :- | :- |
 | [`property: TestOptions.baseURL`] | Base URL used for all pages in the context. Allows navigating by using just the path, for example `page.goto('/settings')`. |
@@ -33,6 +34,7 @@ export default defineConfig({
 ### Emulation Options
 
 With Playwright you can emulate a real device such as a mobile phone or tablet. See our [guide on projects](./test-projects.md) for more info on emulating devices. You can also emulate the `"geolocation"`, `"locale"` and `"timezone"` for all tests or for a specific test as well as set the `"permissions"` to show notifications or change the `"colorScheme"`. See our [Emulation](./emulation.md) guide to learn more.
+
 
 ```js title="playwright.config.ts"
 import { defineConfig } from '@playwright/test';
@@ -116,6 +118,7 @@ export default defineConfig({
 | [`property: TestOptions.offline`] | Whether to emulate network being offline. |
 | [`property: TestOptions.proxy`] | [Proxy settings](./network.md#http-proxy) used for all pages in the test. |
 
+
 :::note
 You don't have to configure anything to mock network requests. Just define a custom [Route] that mocks the network for a browser context. See our [network mocking guide](./network.md) to learn more.
 :::
@@ -146,8 +149,9 @@ export default defineConfig({
 | Option | Description |
 | :- | :- |
 | [`property: TestOptions.screenshot`] | Capture [screenshots](./screenshots.md) of your test. Options include `'off'`, `'on'` and `'only-on-failure'` |
-| [`property: TestOptions.trace`] | Playwright can produce test traces while running the tests. Later on, you can view the trace and get detailed information about Playwright execution by opening [Trace Viewer](./trace-viewer.md). Options include: `'off'`, `'on'`, `'retain-on-failure'` and `'on-first-retry'` |
+| [`property: TestOptions.trace`] | Playwright can produce test traces while running the tests. Later on, you can view the trace and get detailed information about Playwright execution by opening [Trace Viewer](./trace-viewer.md). Options include: `'off'`, `'on'`, `'retain-on-failure'` and `'on-first-retry'`  |
 | [`property: TestOptions.video`] | Playwright can record [videos](./videos.md) for your tests. Options include: `'off'`, `'on'`, `'retain-on-failure'` and `'on-first-retry'` |
+
 
 ### Other Options
 
@@ -181,7 +185,7 @@ export default defineConfig({
 | :- | :- |
 | [`property: TestOptions.actionTimeout`] | Timeout for each Playwright action in milliseconds. Defaults to `0` (no timeout). Learn more about [timeouts](./test-timeouts.md) and how to set them for a single test. |
 | [`property: TestOptions.browserName`] | Name of the browser that runs tests. Defaults to 'chromium'. Options include `chromium`, `firefox`, or `webkit`. |
-| [`property: TestOptions.bypassCSP`] | Toggles bypassing Content-Security-Policy. Useful when CSP includes the production origin. Defaults to `false`. |
+| [`property: TestOptions.bypassCSP`] |Toggles bypassing Content-Security-Policy. Useful when CSP includes the production origin. Defaults to `false`. |
 | [`property: TestOptions.channel`] | Browser channel to use. [Learn more](./browsers.md) about different browsers and channels. |
 | [`property: TestOptions.headless`] | Whether to run the browser in headless mode meaning no browser is shown when running tests. Defaults to `true`. |
 | [`property: TestOptions.testIdAttribute`] | Changes the default [`data-testid` attribute](./locators.md#locate-by-test-id) used by Playwright locators. |
@@ -236,6 +240,7 @@ test('should inherit use options on context when using built-in browser fixture'
 ### Configuration Scopes
 
 You can configure Playwright globally, per project, or per test. For example, you can set the locale to be used globally by adding `locale` to the `use` option of the Playwright config, and then override it for a specific project using the `project` option in the config. You can also override it for a specific test by adding `test.use({})` in the test file and passing in the options.
+
 
 ```js title="playwright.config.ts"
 import { defineConfig } from '@playwright/test';

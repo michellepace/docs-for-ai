@@ -25,13 +25,13 @@ The `{ page }` argument tells Playwright Test to set up the `page` fixture and p
 
 Here is a list of the pre-defined fixtures that you are likely to use most of the time:
 
-| Fixture | Type | Description |
-| :------- | :---- | :----------- |
-| page | [Page] | Isolated page for this test run. |
-| context | [BrowserContext] | Isolated context for this test run. The `page` fixture belongs to this context as well. Learn how to [configure context](./test-configuration.md). |
-| browser | [Browser] | Browsers are shared across tests to optimise resources. Learn how to [configure browsers](./test-configuration.md). |
-| browserName | [string] | The name of the browser currently running the test. Either `chromium`, `firefox` or `webkit`. |
-| request | [APIRequestContext] | Isolated [APIRequestContext](./api/class-apirequestcontext.md) instance for this test run. |
+|Fixture    |Type               |Description                      |
+|:----------|:------------------|:--------------------------------|
+|page       |[Page]             |Isolated page for this test run. |
+|context    |[BrowserContext]   |Isolated context for this test run. The `page` fixture belongs to this context as well. Learn how to [configure context](./test-configuration.md). |
+|browser    |[Browser]          |Browsers are shared across tests to optimize resources. Learn how to [configure browsers](./test-configuration.md). |
+|browserName|[string]           |The name of the browser currently running the test. Either `chromium`, `firefox` or `webkit`.|
+|request    |[APIRequestContext]|Isolated [APIRequestContext](./api/class-apirequestcontext.md) instance for this test run.|
 
 ### Without fixtures
 
@@ -115,7 +115,6 @@ test.describe('todo tests', () => {
 ### With fixtures
 
 Fixtures have a number of advantages over before/after hooks:
-
 - Fixtures **encapsulate** setup and teardown in the same place so it is easier to write. So if you have an after hook that tears down what was created in a before hook, consider turning them into a fixture.
 - Fixtures are **reusable** between test files - you can define them once and use them in all your tests. That's how Playwright's built-in `page` fixture works. So if you have a helper function that is used in multiple tests, consider turning it into a fixture.
 - Fixtures are **on-demand** - you can define as many fixtures as you'd like, and Playwright Test will setup only the ones needed by your test and nothing else.
@@ -162,7 +161,6 @@ export class TodoPage {
   }
 }
 ```
-
   </div>
 </details>
 
@@ -356,6 +354,8 @@ Playwright Test uses [worker processes](./test-parallel.md) to run test files. S
 
 Below we'll create an `account` fixture that will be shared by all tests in the same worker, and override the `page` fixture to log in to this account for each test. To generate unique accounts, we'll use the [`property: WorkerInfo.workerIndex`] that is available to any test or fixture. Note the tuple-like syntax for the worker fixture - we have to pass `{scope: 'worker'}` so that test runner sets this fixture up once per worker.
 
+In addition to only being run once per worker, worker-scoped fixtures also get a separate timeout equal to the default test timeout. You can change it by passing the `timeout` option. See [fixture timeout](#fixture-timeout) for more details.
+
 ```js title="my-test.ts"
 import { test as base } from '@playwright/test';
 
@@ -436,7 +436,7 @@ export { expect } from '@playwright/test';
 
 ## Fixture timeout
 
-By default, the fixture inherits the timeout value of the test. However, for slow fixtures, especially [worker-scoped](#worker-scoped-fixtures) ones, it is convenient to have a separate timeout. This way you can keep the overall test timeout small, and give the slow fixture more time.
+Fixture is considered to be a part of a test, and so its setup and teardown running time counts towards the test timeout. Therefore, a slow fixture may cause test timeouts. You can set a separate larger timeout for such a fixture, and keep the overall test timeout small.
 
 ```js
 import { test as base, expect } from '@playwright/test';
@@ -452,6 +452,8 @@ test('example test', async ({ slowFixture }) => {
   // ...
 });
 ```
+
+Unlike regular test-scoped fixtures, each [worker-scoped](#worker-scoped-fixtures) fixture has its own timeout, equal to the test timeout. You can change the timeout for a worker-scoped fixture in the same way.
 
 ## Fixtures-options
 
@@ -632,10 +634,9 @@ test('no base url', async ({ page }) => {
 Each fixture has a setup and teardown phase before and after the `await use()` call in the fixture. Setup is executed before the test/hook requiring it is run, and teardown is executed when the fixture is no longer being used by the test/hook.
 
 Fixtures follow these rules to determine the execution order:
-
-- When fixture A depends on fixture B: B is always set up before A and torn down after A.
-- Non-automatic fixtures are executed lazily, only when the test/hook needs them.
-- Test-scoped fixtures are torn down after each test, while worker-scoped fixtures are only torn down when the worker process executing tests is torn down.
+* When fixture A depends on fixture B: B is always set up before A and torn down after A.
+* Non-automatic fixtures are executed lazily, only when the test/hook needs them.
+* Test-scoped fixtures are torn down after each test, while worker-scoped fixtures are only torn down when the worker process executing tests is torn down.
 
 Consider the following example:
 
@@ -690,43 +691,41 @@ test.afterAll(async () => { /* ... */ });
 ```
 
 Normally, if all tests pass and no errors are thrown, the order of execution is as following.
-
-- worker setup and `beforeAll` section:
-  - `browser` setup because it is required by `autoWorkerFixture`.
-  - `autoWorkerFixture` setup because automatic worker fixtures are always set up before anything else.
-  - `beforeAll` runs.
-- `first test` section:
-  - `autoTestFixture` setup because automatic test fixtures are always set up before test and `beforeEach` hooks.
-  - `page` setup because it is required in `beforeEach` hook.
-  - `beforeEach` runs.
-  - `first test` runs.
-  - `afterEach` runs.
-  - `page` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
-  - `autoTestFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
-- `second test` section:
-  - `autoTestFixture` setup because automatic test fixtures are always set up before test and `beforeEach` hooks.
-  - `page` setup because it is required in `beforeEach` hook.
-  - `beforeEach` runs.
-  - `workerFixture` setup because it is required by `testFixture` that is required by the `second test`.
-  - `testFixture` setup because it is required by the `second test`.
-  - `second test` runs.
-  - `afterEach` runs.
-  - `testFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
-  - `page` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
-  - `autoTestFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
-- `afterAll` and worker teardown section:
-  - `afterAll` runs.
-  - `workerFixture` teardown because it is a workers-scoped fixture and should be torn down once at the end.
-  - `autoWorkerFixture` teardown because it is a workers-scoped fixture and should be torn down once at the end.
-  - `browser` teardown because it is a workers-scoped fixture and should be torn down once at the end.
+* worker setup and `beforeAll` section:
+  * `browser` setup because it is required by `autoWorkerFixture`.
+  * `autoWorkerFixture` setup because automatic worker fixtures are always set up before anything else.
+  * `beforeAll` runs.
+* `first test` section:
+  * `autoTestFixture` setup because automatic test fixtures are always set up before test and `beforeEach` hooks.
+  * `page` setup because it is required in `beforeEach` hook.
+  * `beforeEach` runs.
+  * `first test` runs.
+  * `afterEach` runs.
+  * `page` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
+  * `autoTestFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
+* `second test` section:
+  * `autoTestFixture` setup because automatic test fixtures are always set up before test and `beforeEach` hooks.
+  * `page` setup because it is required in `beforeEach` hook.
+  * `beforeEach` runs.
+  * `workerFixture` setup because it is required by `testFixture` that is required by the `second test`.
+  * `testFixture` setup because it is required by the `second test`.
+  * `second test` runs.
+  * `afterEach` runs.
+  * `testFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
+  * `page` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
+  * `autoTestFixture` teardown because it is a test-scoped fixture and should be torn down after the test finishes.
+* `afterAll` and worker teardown section:
+  * `afterAll` runs.
+  * `workerFixture` teardown because it is a workers-scoped fixture and should be torn down once at the end.
+  * `autoWorkerFixture` teardown because it is a workers-scoped fixture and should be torn down once at the end.
+  * `browser` teardown because it is a workers-scoped fixture and should be torn down once at the end.
 
 A few observations:
-
-- `page` and `autoTestFixture` are set up and torn down for each test, as test-scoped fixtures.
-- `unusedFixture` is never set up because it is not used by any tests/hooks.
-- `testFixture` depends on `workerFixture` and triggers its setup.
-- `workerFixture` is lazily set up before the second test, but torn down once during worker shutdown, as a worker-scoped fixture.
-- `autoWorkerFixture` is set up for `beforeAll` hook, but `autoTestFixture` is not.
+* `page` and `autoTestFixture` are set up and torn down for each test, as test-scoped fixtures.
+* `unusedFixture` is never set up because it is not used by any tests/hooks.
+* `testFixture` depends on `workerFixture` and triggers its setup.
+* `workerFixture` is lazily set up before the second test, but torn down once during worker shutdown, as a worker-scoped fixture.
+* `autoWorkerFixture` is set up for `beforeAll` hook, but `autoTestFixture` is not.
 
 ## Combine custom fixtures from multiple modules
 
@@ -839,5 +838,4 @@ test('basic', async ({ }) => {
   // ...
 });
 ```
-
 Note that the fixtures will still run once per [worker process](./test-parallel.md#worker-processes), but you don't need to redeclare them in every file.

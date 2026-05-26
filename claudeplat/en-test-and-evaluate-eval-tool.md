@@ -19,7 +19,7 @@ Ensure your prompt includes at least 1-2 dynamic variables using the double brac
 
 ## Generating Prompts
 
-The Console offers a built-in [prompt generator](/docs/en/build-with-claude/prompt-engineering/prompt-generator) powered by Claude Opus 4.1:
+The Console offers a built-in [prompt generator](/docs/en/build-with-claude/prompt-engineering/prompting-tools) powered by Claude Opus 4.1:
 
 <Steps>
   <Step title="Click 'Generate Prompt'">
@@ -88,6 +88,7 @@ Here are the steps to generate the story:
 3. Describe the action, event or scene you imagined in a single, concise sentence. Focus on making the sentence cute, evocative and imaginative. For example: "A cheerful bluebird whistled a merry melody as it soared through the azure sky."
 Please keep your story to one sentence only. Aim to make that sentence as charming and engaging as possible while naturally incorporating the given color and sound.
 Write your completed one sentence story inside <story> tags.
+
 ```
 
 This structure makes it easy to vary inputs (\{\{COLOR\}\} and \{\{SOUND\}\}) and evaluate outputs consistently.

@@ -29,7 +29,7 @@ One of the most straightforward ways to reduce latency is to select the appropri
 
 For speed-critical applications, **Claude Haiku 4.5** offers the fastest response times while maintaining high intelligence:
 
-```python
+```python Python
 import anthropic
 
 client = anthropic.Anthropic()
@@ -38,10 +38,12 @@ client = anthropic.Anthropic()
 message = client.messages.create(
     model="claude-haiku-4-5",
     max_tokens=100,
-    messages=[{
-        "role": "user",
-        "content": "Summarize this customer feedback in 2 sentences: [feedback text]"
-    }]
+    messages=[
+        {
+            "role": "user",
+            "content": "Summarize this customer feedback in 2 sentences: [feedback text]",
+        }
+    ],
 )
 ```
 
@@ -53,12 +55,12 @@ Minimize the number of tokens in both your input prompt and the expected output,
 
 Here are some tips to help you optimize your prompts and outputs:
 
-- **Be clear but concise**: Aim to convey your intent clearly and concisely in the prompt. Avoid unnecessary details or redundant information, while keeping in mind that [claude lacks context](/docs/en/build-with-claude/prompt-engineering/be-clear-and-direct) on your use case and may not make the intended leaps of logic if instructions are unclear.
-- **Ask for shorter responses:**: Ask Claude directly to be concise. The Claude 3 family of models has improved steerability over previous generations. If Claude is outputting unwanted length, ask Claude to [curb its chattiness](/docs/en/build-with-claude/prompt-engineering/be-clear-and-direct).
+- **Be clear but concise**: Aim to convey your intent clearly and concisely in the prompt. Avoid unnecessary details or redundant information, while keeping in mind that [claude lacks context](/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#be-clear-and-direct) on your use case and may not make the intended leaps of logic if instructions are unclear.
+- **Ask for shorter responses:**: Ask Claude directly to be concise. The Claude 3 family of models has improved steerability over previous generations. If Claude is outputting unwanted length, ask Claude to [curb its chattiness](/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#be-clear-and-direct).
   <Tip> Due to how LLMs count [tokens](/docs/en/about-claude/glossary#tokens) instead of words, asking for an exact word count or a word count limit is not as effective a strategy as asking for paragraph or sentence count limits.</Tip>
 - **Set appropriate output limits**: Use the `max_tokens` parameter to set a hard limit on the maximum length of the generated response. This prevents Claude from generating overly long outputs.
   > **Note**: When the response reaches `max_tokens` tokens, the response will be cut off, perhaps midsentence or mid-word, so this is a blunt technique that may require post-processing and is usually most appropriate for multiple choice or short answer responses where the answer comes right at the beginning.
-- **Experiment with temperature**: The `temperature` [parameter](/docs/en/api/messages) controls the randomness of the output. Lower values (e.g., 0.2) can sometimes lead to more focused and shorter responses, while higher values (e.g., 0.8) may result in more diverse but potentially longer outputs.
+- **Experiment with temperature**: The `temperature` [parameter](/docs/en/api/messages/create) controls the randomness of the output. Lower values (e.g., 0.2) can sometimes lead to more focused and shorter responses, while higher values (e.g., 0.8) may result in more diverse but potentially longer outputs.
 
 Finding the right balance between prompt clarity, output quality, and token count may require some experimentation.
 

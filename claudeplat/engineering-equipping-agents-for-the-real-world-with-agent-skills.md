@@ -1,8 +1,14 @@
+[Engineering at Anthropic](https://www.anthropic.com/engineering)
+
+![](https://www-cdn.anthropic.com/images/4zrzovbb/website/b52f6dbff1c4323ef2371ba0ac50df994835435a-1000x1000.svg)
+
 # Equipping agents for the real world with Agent Skills
 
 Published Oct 16, 2025
 
 Claude is powerful, but real work requires procedural knowledge and organizational context. Introducing Agent Skills, a new way to build specialized agents using files and folders.
+
+_Update: We've published_ [_Agent Skills_](https://agentskills.io/) _as an open standard for cross-platform portability. (December 18, 2025)_
 
 As model capabilities improve, we can now build general-purpose agents that interact with full-fledged computing environments. [Claude Code](https://claude.com/product/claude-code), for example, can accomplish complex tasks across domains using local code execution and filesystems. But as these agents become more powerful, we need more composable, scalable, and portable ways to equip them with domain-specific expertise.
 
@@ -74,7 +80,7 @@ We recommend installing skills only from trusted sources. When installing a skil
 
 ## The future of Skills
 
-Agent Skills are [supported today](https://www.anthropic.com/news/skills) across [Claude.ai](http://claude.ai/redirect/website.v1.493ac95b-5891-4482-8c13-96d0f95a2147), Claude Code, the Claude Agent SDK, and the Claude Developer Platform.
+Agent Skills are [supported today](https://www.anthropic.com/news/skills) across [Claude.ai](http://claude.ai/redirect/website.v1.bd013161-3214-437c-b0f7-b3e391c7632b), Claude Code, the Claude Agent SDK, and the Claude Developer Platform.
 
 In the coming weeks, we’ll continue to add features that support the full lifecycle of creating, editing, discovering, sharing, and using Skills. We’re especially excited about the opportunity for Skills to help organizations and individuals share their context and workflows with Claude. We’ll also explore how Skills can complement [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers by teaching agents more complex workflows that involve external tools and software.
 
@@ -83,3 +89,15 @@ Looking further ahead, we hope to enable agents to create, edit, and evaluate Sk
 Skills are a simple concept with a correspondingly simple format. This simplicity makes it easier for organizations, developers, and end users to build customized agents and give them new capabilities.
 
 We’re excited to see what people build with Skills. Get started today by checking out our Skills [docs](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) and [cookbook](https://github.com/anthropics/claude-cookbooks/tree/main/skills).
+
+## Acknowledgements
+
+Written by Barry Zhang, Keith Lazuka, and Mahesh Murag, who all really like folders. Special thanks to the many others across Anthropic who championed, supported, and built Skills.
+
+## Get the developer newsletter
+
+Product updates, how-tos, community spotlights, and more. Delivered monthly to your inbox.
+
+Please provide your email address if you'd like to receive our monthly developer newsletter. You can unsubscribe at any time.
+
+Equipping agents for the real world with Agent Skills \ Anthropic

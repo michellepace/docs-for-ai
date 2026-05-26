@@ -1,6 +1,6 @@
-[Skip to content](https://docs.marimo.io/guides/configuration/llm_providers/#configuring-llm-providers)
+<!-- Source: https://docs.marimo.io/guides/configuration/llm_providers/ -->
 
-# Configuring LLM providers [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#configuring-llm-providers "Permanent link")
+# Configuring LLM providers
 
 Connect marimo to an LLM via the notebook Settings panel (recommended) or by editing
 `marimo.toml` directly. **Prefer going through the notebook settings menu to avoid errors with the config file.**
@@ -13,9 +13,9 @@ marimo config show
 
 The path to `marimo.toml` is printed at the top of the output.
 
-## Model configuration [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#model-configuration "Permanent link")
+## Model configuration
 
-### Model roles and routing [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#model-roles-and-routing "Permanent link")
+### Model roles and routing
 
 marimo uses three roles:
 
@@ -26,7 +26,6 @@ marimo uses three roles:
 Models are written as `provider/model`, and the provider prefix routes to the matching config section:
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "openai/gpt-4o-mini"           # Routes to OpenAI config
@@ -35,22 +34,34 @@ autocomplete_model = "ollama/codellama"     # Routes to Ollama config
 autocomplete_model = "some_other_provider/some_model" # Routes to OpenAI compatible config
 ```
 
-### Custom models [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#custom-models "Permanent link")
+### Custom models
 
 Add custom entries to the model dropdown:
 
 marimo.toml
-
 ```toml
 [ai.models]
 custom_models = ["ollama/somemodel"]
 ```
 
-## Supported providers [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#supported-providers "Permanent link")
+## Rules and Max tokens
 
-![LLM provider configuration panel](https://docs.marimo.io/_static/docs-provider-config.png)
+Add custom rules or set the maximum number of tokens that the AI model can use.
 
-Configure LLM providers in the notebook settings panel.
+marimo.toml
+```toml
+[ai]
+rules = """
+- Always use type hints; prefer polars over pandas
+"""
+max_tokens = 1000
+```
+
+## Supported providers
+
+![](https://docs.marimo.io/_static/docs-provider-config.png)
+
+*Configure LLM providers in the notebook settings panel.*
 
 You can configure the following providers:
 
@@ -64,6 +75,7 @@ You can configure the following providers:
 - Mistral
 - Ollama
 - OpenAI
+- OpenCode Go
 - OpenRouter
 - Weights & Biases
 - Together AI
@@ -72,7 +84,7 @@ You can configure the following providers:
 
 Below we describe how to connect marimo to your AI provider.
 
-### OpenAI [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#openai "Permanent link")
+### OpenAI
 
 **Requirements**
 
@@ -81,7 +93,6 @@ Below we describe how to connect marimo to your AI provider.
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "openai/gpt-4o-mini"
@@ -93,15 +104,15 @@ edit_model = "openai/gpt-4o"
 api_key = "sk-proj-..."
 ```
 
-OpenAI-compatible providers
+> **OpenAI-compatible providers**
+>
+> If your model does not start with `openai/`, it will not be routed to the OpenAI config, and likely will be routed to the OpenAI-compatible config.
 
-If your model does not start with `openai/`, it will not be routed to the OpenAI config, and likely will be routed to the OpenAI-compatible config.
+> **Reasoning models (o1, o3, etc.)**
+>
+> These models can incur higher costs due to separate reasoning tokens. Prefer smaller responses for refactors or autocompletion, and review your provider limits.
 
-Reasoning models (o1, o3, etc.)
-
-These models can incur higher costs due to separate reasoning tokens. Prefer smaller responses for refactors or autocompletion, and review your provider limits.
-
-### Anthropic [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#anthropic "Permanent link")
+### Anthropic
 
 **Requirements**
 
@@ -110,7 +121,6 @@ These models can incur higher costs due to separate reasoning tokens. Prefer sma
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "anthropic/claude-3-7-sonnet-latest" # other options: claude-3-haiku, claude-3-opus
@@ -120,7 +130,7 @@ chat_model = "anthropic/claude-3-7-sonnet-latest" # other options: claude-3-haik
 api_key = "sk-ant-..."
 ```
 
-### AWS Bedrock [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#aws-bedrock "Permanent link")
+### AWS Bedrock
 
 AWS Bedrock exposes multiple foundation models via a unified AWS API.
 
@@ -133,7 +143,6 @@ AWS Bedrock exposes multiple foundation models via a unified AWS API.
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "bedrock/anthropic.claude-3-sonnet-latest"
@@ -147,11 +156,11 @@ profile_name = "my-profile"
 
 Use `profile_name` for a non-default named profile, or rely on env vars/standard AWS resolution. For regional inference models, specify the inference profile ID (e.g., `bedrock/eu.anthropic.claude-sonnet-4-20250514-v1:0`) and corresponding region.
 
-Required AWS Bedrock permissions
+> **Required AWS Bedrock permissions**
+>
+> Ensure your IAM policy allows `bedrock:InvokeModel` and `bedrock:InvokeModelWithResponseStream` for the models you plan to use.
 
-Ensure your IAM policy allows `bedrock:InvokeModel` and `bedrock:InvokeModelWithResponseStream` for the models you plan to use.
-
-### Google AI [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#google-ai "Permanent link")
+### Google AI
 
 **Requirements**
 
@@ -159,13 +168,12 @@ Ensure your IAM policy allows `bedrock:InvokeModel` and `bedrock:InvokeModelWith
 
 You can use Google AI via two backends: **Google AI Studio** (API key) or **Google Vertex AI** (no API key required).
 
-#### Using Google AI Studio (API key) [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#using-google-ai-studio-api-key "Permanent link")
+#### Using Google AI Studio (API key)
 
 1. Sign up at [Google AI Studio](https://aistudio.google.com/app/apikey) and obtain your API key.
 2. Configure `marimo.toml` (or set these in the editor Settings):
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "google/gemini-2.5-pro"
@@ -175,33 +183,32 @@ chat_model = "google/gemini-2.5-pro"
 api_key = "AI..."
 ```
 
-#### Using Google Vertex AI (no API key required) [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#using-google-vertex-ai-no-api-key-required "Permanent link")
+#### Using Google Vertex AI (no API key required)
 
 1. Ensure you have access to a Google Cloud project with Vertex AI enabled.
-1. Set the following environment variables before starting marimo:
+2. Set the following environment variables before starting marimo:
 
-   ```bash
-   export GOOGLE_GENAI_USE_VERTEXAI=true
-   export GOOGLE_CLOUD_PROJECT='your-project-id'
-   export GOOGLE_CLOUD_LOCATION='us-central1'
-   ```
+```bash
+export GOOGLE_GENAI_USE_VERTEXAI=true
+export GOOGLE_CLOUD_PROJECT='your-project-id'
+export GOOGLE_CLOUD_LOCATION='us-central1'
+```
 
-   - `GOOGLE_GENAI_USE_VERTEXAI=true` tells the client to use Vertex AI.
-   - `GOOGLE_CLOUD_PROJECT` is your GCP project ID.
-   - `GOOGLE_CLOUD_LOCATION` is your region (e.g., `us-central1`).
+- `GOOGLE_GENAI_USE_VERTEXAI=true` tells the client to use Vertex AI.
+- `GOOGLE_CLOUD_PROJECT` is your GCP project ID.
+- `GOOGLE_CLOUD_LOCATION` is your region (e.g., `us-central1`).
 
-1. No API key is needed in your `marimo.toml` for Vertex AI.
+3. No API key is needed in your `marimo.toml` for Vertex AI.
 
 For details and advanced configuration, see the `google-genai` Python client docs: `https://googleapis.github.io/python-genai/#create-a-client`.
 
-### Azure [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#azure "Permanent link")
+### Azure
 
 There are two offerings for serving LLMs on Azure
 
 **Azure OpenAI**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "azure/gpt-4.1-mini"
@@ -215,20 +222,20 @@ The deployment name is typically the model name.
 
 **Azure AI Foundry**
 
-AI Foundry uses OpenAI-compatible models, so you can use the same configuration as OpenAI-compatible providers.
+AI Foundry uses OpenAI-compatible models. You can configure it as a custom provider:
 
 marimo.toml
-
 ```toml
 [ai.models]
-custom_models = ["custom-azure/mistral-medium"]
+custom_models = ["azure_foundry/mistral-medium"]
+chat_model = "azure_foundry/mistral-medium"
 
-[ai.open_ai_compatible]
+[ai.custom_providers.azure_foundry]
 api_key = "sk-proj-..."
 base_url = "https://<your-resource-name>.services.ai.azure.com/openai/v1"
 ```
 
-### GitHub Copilot [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#github-copilot "Permanent link")
+### GitHub Copilot
 
 Use Copilot for code refactoring or the chat panel (Copilot subscription required).
 
@@ -240,7 +247,6 @@ Use Copilot for code refactoring or the chat panel (Copilot subscription require
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "github/gpt-4o-mini"
@@ -249,18 +255,15 @@ chat_model = "github/gpt-4o-mini"
 api_key = "gho_..."
 ```
 
-My token starts with `ghp_` instead of `gho_`?
+> **My token starts withghp_instead ofgho_?**
+>
+> This usually happens when you previously authenticated `gh` by pasting a *personal* access token (`ghp_...`). However, GitHub Copilot is not available through `ghp_...`, and you will encounter errors such as:
+> > bad request: Personal Access Tokens are not supported for this endpoint
+> To resolve this issue, you could switch to an *OAuth* access token (`gho_...`):
+> 1. Re-authenticate by running `gh auth login`.
+> 2. Choose *Login with a web browser* (instead of *Paste an authentication token*) this time.
 
-This usually happens when you previously authenticated `gh` by pasting a _personal_ access token (`ghp_...`). However, GitHub Copilot is not available through `ghp_...`, and you will encounter errors such as:
-
-> bad request: Personal Access Tokens are not supported for this endpoint
-
-To resolve this issue, you could switch to an _OAuth_ access token (`gho_...`):
-
-1. Re-authenticate by running `gh auth login`.
-2. Choose _Login with a web browser_ (instead of _Paste an authentication token_) this time.
-
-### OpenRouter [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#openrouter "Permanent link")
+### OpenRouter
 
 Route to many providers through OpenRouter with a single API.
 
@@ -272,7 +275,6 @@ Route to many providers through OpenRouter with a single API.
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 # Use OpenRouter's model slugs (vendor/model). Examples:
@@ -288,7 +290,7 @@ base_url = "https://openrouter.ai/api/v1/"
 
 See available models at `https://openrouter.ai/models`. Make sure to prepend `openrouter/` to the model slug (e.g., `openrouter/deepseek/deepseek-chat`, `openrouter/meta-llama/llama-3.1-8b-instruct`).
 
-### Weights & Biases [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#weights-biases "Permanent link")
+### Weights & Biases
 
 Access hosted AI models through Weights & Biases Weave for ML development and inference.
 
@@ -300,7 +302,6 @@ Access hosted AI models through Weights & Biases Weave for ML development and in
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 # Use wandb/ prefix for Weights & Biases models. Examples:
@@ -314,7 +315,32 @@ base_url = "https://api.inference.wandb.ai/v1/"  # Optional, this is the default
 
 See available models at the [Weights & Biases documentation](https://docs.wandb.ai/inference). Make sure to prepend `wandb/` to the model name.
 
-### Local models with Ollama [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#using-ollama "Permanent link")
+### OpenCode Go
+
+Access curated open coding models tested and benchmarked for coding agents through the OpenCode Go gateway.
+
+**Requirements**
+
+- Sign in at [opencode.ai/auth](https://opencode.ai/auth), subscribe to Go, and copy your API key
+- `pip install openai` or `uv add openai` (OpenCode Go is OpenAI‑compatible)
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+# Use opencode-go/ prefix for OpenCode Go models. Examples:
+chat_model = "opencode-go/kimi-k2.6"
+edit_model = "opencode-go/qwen3.6-plus"
+
+[ai.opencode_go]
+api_key = "your-opencode-api-key"
+base_url = "https://opencode.ai/zen/go/v1/"  # Optional, this is the default
+```
+
+You can also set the `OPENCODE_API_KEY` environment variable instead of `api_key`. See available models at the [OpenCode Go documentation](https://opencode.ai/docs/go/). Make sure to prepend `opencode-go/` to the model slug.
+
+### Local models with Ollama
 
 Run open-source LLMs locally and connect via an OpenAI‑compatible API.
 
@@ -336,24 +362,23 @@ ollama pull codellama  # recommended for code generation
 ollama ls
 ```
 
-1. Start the Ollama server:
+2. Start the Ollama server:
 
-   ```bash
-   ollama serve
-   # In another terminal, run a model (optional)
-   ollama run codellama
-   ```
+```bash
+ollama serve
+# In another terminal, run a model (optional)
+ollama run codellama
+```
 
-1. Visit [http://127.0.0.1:11434](http://127.0.0.1:11434/) to confirm that the server is running.
+3. Visit [http://127.0.0.1:11434](http://127.0.0.1:11434) to confirm that the server is running.
 
-Port already in use
-
-If you get a "port already in use" error, you may need to close an existing Ollama instance. On Windows, click the up arrow in the taskbar, find the Ollama icon, and select "Quit". This is a known issue (see [Ollama Issue #3575](https://github.com/ollama/ollama/issues/3575)). Once you've closed the existing Ollama instance, you should be able to run `ollama serve` successfully.
+> **Port already in use**
+>
+> If you get a "port already in use" error, you may need to close an existing Ollama instance. On Windows, click the up arrow in the taskbar, find the Ollama icon, and select "Quit". This is a known issue (see [Ollama Issue #3575](https://github.com/ollama/ollama/issues/3575)). Once you've closed the existing Ollama instance, you should be able to run `ollama serve` successfully.
 
 **Configuration**
 
 marimo.toml
-
 ```toml
 [ai.models]
 chat_model = "ollama/llama3.1:latest"
@@ -361,31 +386,25 @@ edit_model = "ollama/codellama"
 autocomplete_model = "ollama/codellama" # or another model from `ollama ls`
 ```
 
-Important: Use the `/v1` endpoint
+> **Important: Use the/v1endpoint**
+>
+> marimo uses Ollama's OpenAI‑compatible API. Ensure your `base_url` includes `/v1`:
+> ```toml
+> [ai.ollama]
+> base_url = "http://127.0.0.1:11434/v1"  # ✅ Correct - includes /v1
+> ```
+> Common mistake:
+> ```toml
+> base_url = "http://127.0.0.1:11434"     # ❌ Will cause 404 errors
+> ```
+> If you see 404s, verify the model is installed with `ollama ls` and test the endpoint:
+> ```bash
+> curl http://127.0.0.1:11434/v1/models
+> ```
 
-marimo uses Ollama's OpenAI‑compatible API. Ensure your `base_url` includes `/v1`:
+## Custom providers
 
-```toml
-[ai.ollama]
-base_url = "http://127.0.0.1:11434/v1"  # ✅ Correct - includes /v1
-```
-
-Common mistake:
-
-```toml
-base_url = "http://127.0.0.1:11434"     # ❌ Will cause 404 errors
-```
-
-If you see 404s, verify the model is installed with `ollama ls` and test the endpoint:
-
-```bash
-curl http://127.0.0.1:11434/v1/models
-```
-
-### OpenAI-compatible providers [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#openai-compatible-providers "Permanent link")
-
-Many providers expose OpenAI-compatible endpoints. Point `base_url` at the provider and use their models.
-Common examples include [GROQ](https://console.groq.com/docs/openai), DeepSeek, xAI, Together AI, and LM Studio.
+Add multiple OpenAI-compatible providers through the Settings UI. Each custom provider gets its own configuration section and can be referenced by name in your model settings. The following section is a **non-exhaustive** list of supported providers.
 
 **Requirements**
 
@@ -393,10 +412,172 @@ Common examples include [GROQ](https://console.groq.com/docs/openai), DeepSeek, 
 - Provider OpenAI-compatible `base_url`
 - `pip install openai` or `uv add openai`
 
+**Adding a custom provider via UI (recommended)**
+
+1. Open marimo's Settings panel
+2. Navigate to **AI** → **AI Providers**
+3. Scroll to **Custom Providers** and click **Add Provider**
+4. Navigate to the **AI Models** tab and select your custom provider.
+
+[Video: https://docs.marimo.io/_static/docs-add-custom-provider.mp4](https://docs.marimo.io/_static/docs-add-custom-provider.mp4)
+
+**Configuration via marimo.toml**
+
+You can also configure custom providers directly in `marimo.toml`:
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "groq/llama-3.1-70b-versatile"
+edit_model = "together/meta-llama/Llama-3-70b-chat-hf"
+
+[ai.custom_providers.groq]
+api_key = "gsk-..."
+base_url = "https://api.groq.com/openai/v1"
+
+[ai.custom_providers.together]
+api_key = "tg-..."
+base_url = "https://api.together.xyz/v1"
+
+[ai.custom_providers.my_local_server]
+base_url = "http://localhost:8000/v1"
+```
+
+> **Use the/v1path if required by your provider**
+>
+> Some OpenAI-compatible providers expose their API under `/v1` (e.g., `https://host/v1`). If you see 404s, add `/v1` to your `base_url`.
+
+### DeepSeek
+
+Use DeepSeek via its OpenAI‑compatible API.
+
+**Requirements**
+
+- DeepSeek API key
+
 **Configuration**
 
 marimo.toml
+```toml
+[ai.models]
+chat_model = "deepseek/deepseek-chat"  # or "deepseek-reasoner"
 
+[ai.custom_providers.deepseek]
+api_key = "dsk-..."
+base_url = "https://api.deepseek.com/"
+```
+
+### xAI
+
+Use Grok models via xAI's OpenAI‑compatible API.
+
+**Requirements**
+
+- xAI API key
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "xai/grok-2-latest"
+
+[ai.custom_providers.xai]
+api_key = "xai-..."
+base_url = "https://api.x.ai/v1/"
+```
+
+### LM Studio
+
+Connect to a local model served by LM Studio's OpenAI‑compatible endpoint.
+
+**Requirements**
+
+- Install LM Studio and start its server
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "lmstudio/qwen2.5-coder-7b"
+
+[ai.custom_providers.lmstudio]
+base_url = "http://127.0.0.1:1234/v1"  # LM Studio server
+```
+
+### Mistral
+
+Use Mistral via its OpenAI‑compatible API.
+
+**Requirements**
+
+- Mistral API key
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "mistral/mistral-small-latest"  # e.g., codestral-latest, mistral-large-latest
+
+[ai.custom_providers.mistral]
+api_key = "mistral-..."
+base_url = "https://api.mistral.ai/v1/"
+```
+
+### Together AI
+
+Access multiple hosted models via Together AI's OpenAI‑compatible API.
+
+**Requirements**
+
+- Together AI API key
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "together/mistralai/Mixtral-8x7B-Instruct-v0.1"
+
+[ai.custom_providers.together]
+api_key = "tg-..."
+base_url = "https://api.together.xyz/v1/"
+```
+
+### Vercel v0
+
+Use Vercel's v0 OpenAI‑compatible models for app-oriented generation.
+
+**Requirements**
+
+- v0 API key
+
+**Configuration**
+
+marimo.toml
+```toml
+[ai.models]
+chat_model = "v0/v0-1.5-md"
+
+[ai.custom_providers.v0]
+api_key = "v0-..."
+base_url = "https://api.v0.dev/"  # Verify the endpoint in v0 docs
+```
+
+See the [LiteLLM provider list](https://litellm.vercel.app/docs/providers) for more options. For non‑compatible APIs, submit a
+[feature request](https://github.com/marimo-team/marimo/issues/new?template=feature_request.yaml).
+
+### OpenAI-compatible (legacy)
+
+> **Prefer custom providers**
+>
+> The `[ai.open_ai_compatible]` section is still supported for backward compatibility, but we recommend using **custom providers** instead, which allows you to configure multiple providers with distinct names.
+
+For a single OpenAI-compatible provider, you can use:
+
+marimo.toml
 ```toml
 [ai.models]
 chat_model = "provider-x/some-model"
@@ -406,177 +587,4 @@ api_key = "..."
 base_url = "https://api.provider-x.com/"
 ```
 
-Use the `/v1` path if required by your provider
-
-Some OpenAI-compatible providers expose their API under `/v1` (e.g., `https://host/v1`). If you see 404s, add `/v1` to your `base_url`.
-
-Using OpenAI-compatible providers
-
-[Via UI Settings](https://docs.marimo.io/guides/configuration/llm_providers/#__tabbed_1_1)[Via marimo.toml](https://docs.marimo.io/guides/configuration/llm_providers/#__tabbed_1_2)
-
-1. Open marimo's Settings panel
-2. Navigate to the AI section
-3. Enter your provider's API key in the "OpenAI-Compatible" section
-4. Set Base URL to your provider (e.g., `https://api.provider-x.com`)
-5. Set Model to your provider's model slug
-
-Add this to `marimo.toml`:
-
-```toml
-[ai.models]
-chat_model = "provider-x/some-model"
-
-[ai.open_ai_compatible]
-api_key = "px-..."
-base_url = "https://api.provider-x.com/"
-```
-
-### DeepSeek [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#deepseek "Permanent link")
-
-Use DeepSeek via its OpenAI‑compatible API.
-
-**Requirements**
-
-- DeepSeek API key
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "deepseek/deepseek-chat"  # or "deepseek-reasoner"
-
-[ai.open_ai_compatible]
-api_key = "dsk-..."
-base_url = "https://api.deepseek.com/"
-```
-
-### xAI [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#xai "Permanent link")
-
-Use Grok models via xAI's OpenAI‑compatible API.
-
-**Requirements**
-
-- xAI API key
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "xai/grok-2-latest"
-
-[ai.open_ai_compatible]
-api_key = "xai-..."
-base_url = "https://api.x.ai/v1/"
-```
-
-### LM Studio [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#lm-studio "Permanent link")
-
-Connect to a local model served by LM Studio's OpenAI‑compatible endpoint.
-
-**Requirements**
-
-- Install LM Studio and start its server
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "lmstudio/qwen2.5-coder-7b"
-
-[ai.open_ai_compatible]
-base_url = "http://127.0.0.1:1234/v1"  # LM Studio server
-```
-
-### Mistral [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#mistral "Permanent link")
-
-Use Mistral via its OpenAI‑compatible API.
-
-**Requirements**
-
-- Mistral API key
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "mistral/mistral-small-latest"  # e.g., codestral-latest, mistral-large-latest
-
-[ai.open_ai_compatible]
-api_key = "mistral-..."
-base_url = "https://api.mistral.ai/v1/"
-```
-
-### Together AI [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#together-ai "Permanent link")
-
-Access multiple hosted models via Together AI's OpenAI‑compatible API.
-
-**Requirements**
-
-- Together AI API key
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "together/mistralai/Mixtral-8x7B-Instruct-v0.1"
-
-[ai.open_ai_compatible]
-api_key = "tg-..."
-base_url = "https://api.together.xyz/v1/"
-```
-
-### Vercel v0 [¶](https://docs.marimo.io/guides/configuration/llm_providers/\#vercel-v0 "Permanent link")
-
-Use Vercel's v0 OpenAI‑compatible models for app-oriented generation.
-
-**Requirements**
-
-- v0 API key
-- `pip install openai` or `uv add openai`
-
-**Configuration**
-
-marimo.toml
-
-```toml
-[ai.models]
-chat_model = "v0/v0-1.5-md"
-
-[ai.open_ai_compatible]
-api_key = "v0-..."
-base_url = "https://api.v0.dev/"  # Verify the endpoint in v0 docs
-```
-
-See the [LiteLLM provider list](https://litellm.vercel.app/docs/providers) for more options. For non‑compatible APIs, submit a
-[feature request](https://github.com/marimo-team/marimo/issues/new?template=feature_request.yaml).
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
+Models that don't match a known provider prefix will fall back to this configuration.

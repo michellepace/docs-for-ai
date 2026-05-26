@@ -1,12 +1,12 @@
-[Skip to content](https://docs.marimo.io/guides/lint_rules/#lint-rules)
+<!-- Source: https://docs.marimo.io/guides/lint_rules/ -->
 
-# Lint Rules [¶](https://docs.marimo.io/guides/lint_rules/\#lint-rules "Permanent link")
+# Lint Rules
 
-marimo includes a comprehensive linting system that helps you write better, more reliable notebooks. The linter checks for various issues that could prevent your notebook from running correctly or cause confusion.
+marimo includes a linter that helps you write better notebooks. The linter checks for various issues that could prevent your notebook from running correctly or cause confusion.
 
-## How to Use [¶](https://docs.marimo.io/guides/lint_rules/\#how-to-use "Permanent link")
+## Usage
 
-You can run the linter using the CLI:
+Run the linter using the CLI:
 
 ```bash
 # Check all notebooks in current directory
@@ -19,11 +19,11 @@ marimo check notebook1.py notebook2.py
 marimo check --fix .
 ```
 
-## Rule Categories [¶](https://docs.marimo.io/guides/lint_rules/\#rule-categories "Permanent link")
+## Rule Categories
 
 marimo's lint rules are organized into three main categories based on their severity:
 
-### 🚨 Breaking Rules [¶](https://docs.marimo.io/guides/lint_rules/\#breaking-rules "Permanent link")
+### 🚨 Breaking Rules
 
 These errors prevent notebook execution.
 
@@ -35,15 +35,17 @@ These errors prevent notebook execution.
 | [MB004](https://docs.marimo.io/guides/lint_rules/rules/setup_cell_dependencies/) | setup-cell-dependencies | Setup cell cannot have dependencies | ❌ |
 | [MB005](https://docs.marimo.io/guides/lint_rules/rules/invalid_syntax/) | invalid-syntax | Cell contains code that throws a SyntaxError on compilation | ❌ |
 
-### ⚠️ Runtime Rules [¶](https://docs.marimo.io/guides/lint_rules/\#runtime-rules "Permanent link")
+### ⚠️ Runtime Rules
 
 These issues may cause runtime problems.
 
 | Code | Name | Description | Fixable |
 | --- | --- | --- | --- |
 | [MR001](https://docs.marimo.io/guides/lint_rules/rules/self_import/) | self-import | Importing a module with the same name as the file | ❌ |
+| [MR002](https://docs.marimo.io/guides/lint_rules/rules/branch_expression/) | branch-expression | Branch statements with output expressions that won't be displayed | ❌ |
+| [MR003](https://docs.marimo.io/guides/lint_rules/rules/reusable_definition_order/) | reusable-definition-order | Reusable definitions depending on later reusable definitions | ⚠️ |
 
-### ✨ Formatting Rules [¶](https://docs.marimo.io/guides/lint_rules/\#formatting-rules "Permanent link")
+### ✨ Formatting Rules
 
 These are style and formatting issues.
 
@@ -55,35 +57,19 @@ These are style and formatting issues.
 | [MF004](https://docs.marimo.io/guides/lint_rules/rules/empty_cells/) | empty-cells | Empty cells that can be safely removed. | ⚠️ |
 | [MF005](https://docs.marimo.io/guides/lint_rules/rules/sql_parse_error/) | sql-parse-error | SQL parsing errors during dependency analysis | ❌ |
 | [MF006](https://docs.marimo.io/guides/lint_rules/rules/misc_log_capture/) | misc-log-capture | Miscellaneous log messages during processing | ❌ |
-| [MF007](https://docs.marimo.io/guides/lint_rules/rules/markdown_indentation/) | markdown-indentation | Markdown cells in `mo.md()` should be dedented. | 🛠️ |
+| [MF007](https://docs.marimo.io/guides/lint_rules/rules/markdown_indentation/) | markdown-indentation | Markdown cells in `mo.md()` should be properly indented. | 🛠️ |
 
-## Legend [¶](https://docs.marimo.io/guides/lint_rules/\#legend "Permanent link")
+## Legend
 
 - 🛠️ = Automatically fixable with `marimo check --fix`
 - ⚠️ = Fixable with `marimo check --fix --unsafe-fixes` (may change code behavior)
 - ❌ = Not automatically fixable
 
-## Configuration [¶](https://docs.marimo.io/guides/lint_rules/\#configuration "Permanent link")
+## Configuration
 
 Most lint rules are enabled by default. You can configure the linter behavior through marimo's configuration system.
 
-## Related Documentation [¶](https://docs.marimo.io/guides/lint_rules/\#related-documentation "Permanent link")
+## Related Documentation
 
-- [Understanding Errors](https://docs.marimo.io/guides/understanding_errors/) \- Detailed explanations of common marimo errors
-- [CLI Reference](https://docs.marimo.io/cli/) \- Complete CLI documentation including `marimo check`
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
+- [Understanding Errors](https://docs.marimo.io/guides/understanding_errors/) - Detailed explanations of common marimo errors
+- [CLI Reference](https://docs.marimo.io/cli/) - Complete CLI documentation including `marimo check`

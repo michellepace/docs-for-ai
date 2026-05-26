@@ -1,8 +1,12 @@
-[Skip to content](https://docs.marimo.io/guides/configuration/html_head/#custom-html-head)
+<!-- Source: https://docs.marimo.io/guides/configuration/html_head/ -->
 
-# Custom HTML Head [¶](https://docs.marimo.io/guides/configuration/html_head/\#custom-html-head "Permanent link")
+# Custom HTML Head
 
 You can include a custom HTML head file to add additional functionality to your notebook, such as analytics, custom fonts, meta tags, or external scripts. The contents of this file will be injected into the `<head>` section of your notebook.
+
+> **Run mode only**
+>
+> Custom HTML head content is only injected in **run mode** (`marimo run`). It is not applied in edit mode. If you need custom styling in edit mode, use [`css_file`](https://docs.marimo.io/guides/configuration/theming/).
 
 To include a custom HTML head file, specify the relative file path in your app configuration. This can be done through the marimo editor UI in the notebook settings (top-right corner).
 
@@ -12,7 +16,7 @@ This will be reflected in your notebook file:
 app = marimo.App(html_head_file="head.html")
 ```
 
-## Example Use Cases [¶](https://docs.marimo.io/guides/configuration/html_head/\#example-use-cases "Permanent link")
+## Example Use Cases
 
 Here are some common use cases for custom HTML head content:
 
@@ -32,7 +36,7 @@ Here are some common use cases for custom HTML head content:
 </script>
 ```
 
-1. **Custom Fonts**
+2. **Custom Fonts**
 
 ```html
 <!-- head.html -->
@@ -41,7 +45,7 @@ Here are some common use cases for custom HTML head content:
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 ```
 
-1. **Meta Tags**
+3. **Meta Tags**
 
 ```html
 <!-- head.html -->
@@ -53,7 +57,11 @@ Here are some common use cases for custom HTML head content:
 <meta property="og:image" content="https://example.com/thumbnail.jpg" />
 ```
 
-1. **External Scripts and Libraries**
+> **OpenGraph previews**
+>
+> For common OpenGraph fields (title, description, image), you can also use notebook OpenGraph metadata in script metadata. See [OpenGraph previews](https://docs.marimo.io/guides/publishing/opengraph/).
+
+4. **External Scripts and Libraries**
 
 ```html
 <!-- head.html -->
@@ -64,19 +72,3 @@ Here are some common use cases for custom HTML head content:
 <!-- Load external CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 ```
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)

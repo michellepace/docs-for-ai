@@ -1,6 +1,6 @@
-[Skip to content](https://docs.marimo.io/guides/editor_features/watching/#using-your-own-editor)
+<!-- Source: https://docs.marimo.io/guides/editor_features/watching/ -->
 
-# Using your own editor [¶](https://docs.marimo.io/guides/editor_features/watching/\#using-your-own-editor "Permanent link")
+# Using your own editor
 
 While we recommend using the [marimo editor](https://docs.marimo.io/guides/editor_features/),
 we understand that you may prefer to use your own. marimo provides a
@@ -9,20 +9,14 @@ the marimo editor or running application. This lets you edit your notebook
 using an editor of your choice, like neovim, VSCode, Cursor, or PyCharm, and
 have the changes automatically reflected in your browser.
 
-Install watchdog for better file watching
+> **Prefer VS Code/Cursor? Try our extension!**
+>
+> This guide teaches you how to use marimo with arbitrary text editors.
+> If you use VS Code or Cursor, you might prefer using [our
+> extension](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo), which provides a first-class experience for editing and
+> running marimo notebooks.
 
-For better performance, install [watchdog](https://pypi.org/project/watchdog/).
-Without watchdog, marimo resorts to polling.
-
-Watch works best with autosave
-
-Verify your settings in `User Settings` \> `Editor` \> `Autosave` \> `Autosave enabled`
-
-## marimo's file format [¶](https://docs.marimo.io/guides/editor_features/watching/\#marimos-file-format "Permanent link")
-
-File format tutorial
-
-Run `marimo tutorial fileformat` at the command line for a full guide.
+## marimo's file format
 
 marimo stores notebooks as Python files. Cells are stored
 as functions, decorated with`@app.cell`; you can optionally give cells names in
@@ -36,12 +30,14 @@ def memorable_cell_name(auto, determined, references):  # signature denotes cell
     return computed_value                               # return denotes cell definitions
 ```
 
-Cell signature and returns
+Run `marimo tutorial fileformat` at the command line for a full guide.
 
-Don't worry about maintaining the signatures of cells and their return
-values; marimo will handle this for you.
+> **Cell signature and returns**
+>
+> Don't worry about maintaining the signatures of cells and their return
+> values; marimo will handle this for you.
 
-### Exposing functions and classes top-level [¶](https://docs.marimo.io/guides/editor_features/watching/\#exposing-functions-and-classes-top-level "Permanent link")
+### Exposing functions and classes top-level
 
 You can expose top-level functions and classes in your
 notebook, so that other Python modules can import them:
@@ -54,7 +50,7 @@ Top-level functions are added to a notebook using the `@app.function`
 decorator, and classes with `@app.class_definition`; these appear in your
 notebook as cells with just a function or class definition. These functions and
 classes must be pure, closing over only other pure functions and classes, or
-imports and constants defined in an `app.setup``with` block.
+imports and constants defined in an `app.setup` `with` block.
 
 Here is a complete example that you can copy/paste and run locally:
 
@@ -89,7 +85,7 @@ if __name__ == "__main__":
 
 For more details see the [guide on reusable functions and classes](https://docs.marimo.io/guides/reusing_functions/).
 
-### Types and autocompletion [¶](https://docs.marimo.io/guides/editor_features/watching/\#types-and-autocompletion "Permanent link")
+### Types and autocompletion
 
 Add type hints to your variables, and marimo will carry over these type hints
 to cells where these variables are used. This, combined with importing modules
@@ -132,17 +128,17 @@ if __name__ == "__main__":
     app.run()
 ```
 
-### As markdown [¶](https://docs.marimo.io/guides/editor_features/watching/\#as-markdown "Permanent link")
+### As markdown
 
-Markdown File format tutorial
-
-Run `marimo tutorial markdown-format` at the command line for a full guide.
+> **Markdown File format tutorial**
+>
+> Run `marimo tutorial markdown-format` at the command line for a full guide.
 
 marimo notebooks can also be stored as Markdown files. This is a good option
 for prose heavy text, and can be easy to navigate and edit in external editors.
 To convert a marimo notebook to markdown, use
 
-```bash
+```text
 marimo export md notebook.py -o notebook.md
 ```
 
@@ -159,7 +155,7 @@ instance `python {marimo}`, `{marimo}` or `{.marimo .python}`. The marimo
 editor uses `python {.marimo}` which is Pandoc compatible, and correctly
 processed by text highlighters.
 
-````markdown
+```markdown
 ---
 title: My Notebook
 marimo-version: 0.0.0
@@ -171,9 +167,9 @@ description: A notebook with a description
 ```python {.marimo}
 print("Hello World!")
 ```
-````
+```
 
-marimo's markdown format can be used with a [`mkdocs\\
+marimo's markdown format can be used with a [`mkdocs
 plugin`](https://github.com/marimo-team/mkdocs-marimo) and
 [`Quarto`](https://github.com/marimo-team/quarto-marimo).
 
@@ -181,9 +177,18 @@ Note that the markdown format is not as fully featured as the Python format.
 Reactive tests will not work, markdown notebooks cannot be imported or used as
 a library, and they cannot be run as scripts.
 
-## Watching for changes to your notebook [¶](https://docs.marimo.io/guides/editor_features/watching/\#watching-for-changes-to-your-notebook "Permanent link")
+## Watching for changes to your notebook
 
-### `marimo edit --watch` [¶](https://docs.marimo.io/guides/editor_features/watching/\#marimo-edit-watch "Permanent link")
+> **Install watchdog for better file watching**
+>
+> For better performance, install [watchdog](https://pypi.org/project/watchdog/).
+> Without watchdog, marimo resorts to polling.
+
+> **Watch works best with autosave**
+>
+> Verify your settings in `User Settings` > `Editor` > `Autosave` > `Autosave enabled`
+
+### `marimo edit --watch`
 
 When you run `marimo edit` with the `--watch` flag, the marimo server
 will open your notebook in the browser and watch the underlying notebook
@@ -202,30 +207,38 @@ If you want to run all affected cells automatically when you save, change the
 watcher_on_save = "autorun"
 ```
 
-### `marimo run --watch` [¶](https://docs.marimo.io/guides/editor_features/watching/\#marimo-run-watch "Permanent link")
+### `marimo run --watch`
 
 When you run `marimo run` with the `--watch` flag, whenever the file watcher
 detects a change to the notebook file, the application will be refreshed. The
 browser will trigger a page refresh to ensure your notebook starts from a fresh
 state.
 
-## Watching for changes to other modules [¶](https://docs.marimo.io/guides/editor_features/watching/\#watching-for-changes-to-other-modules "Permanent link")
+For gallery mode (`marimo run <folder> --watch`), marimo also refreshes the
+folder index on each workspace request. This means added and removed notebooks
+appear after refreshing or revisiting the gallery page.
+
+> **Security note for watched folders**
+>
+> In `marimo run <folder> --watch`, newly created notebooks in that folder
+> can appear in the gallery and execute code when opened. Only watch trusted
+> directories, and use authentication when exposing the server remotely.
+
+## Watching for changes to other modules
 
 marimo can also watch for changes to Python modules that your notebook imports,
 letting you edit auxiliary Python files in your own editor as well. Learn how
-to enable this feature in our [Module Autoreloading\\
+to enable this feature in our [Module Autoreloading
 Guide](https://docs.marimo.io/guides/editor_features/module_autoreloading/)
 
-## Watching for data changes [¶](https://docs.marimo.io/guides/editor_features/watching/\#watching-for-data-changes "Permanent link")
+## Watching for data changes
 
-Data file watching now supported!
-
-marimo now supports watching data files and automatically refreshing cells that
-depend on them using `mo.watch.file()` and `mo.watch.directory()`.
+marimo supports watching data files and automatically refreshing cells that
+depend on them using [`mo.watch.file`](https://docs.marimo.io/api/watch/#marimo.watch.file) and [`mo.watch.directory`](https://docs.marimo.io/api/watch/#marimo.watch.directory).
 
 Learn more in the [watch API documentation](https://docs.marimo.io/api/watch/).
 
-## Hot-reloading WebAssembly notebooks [¶](https://docs.marimo.io/guides/editor_features/watching/\#hot-reloading-webassembly-notebooks "Permanent link")
+## Hot-reloading WebAssembly notebooks
 
 Follow these steps to develop a notebook using your own editor while previewing
 it as a [WebAssembly notebook](https://docs.marimo.io/guides/wasm/) in the browser. This lets you take
@@ -243,19 +256,3 @@ marimo export html-wasm notebook.py -o output_dir --watch
 cd path/to/output_dir
 python -m http.server  # or a server that watches for changes
 ```
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)

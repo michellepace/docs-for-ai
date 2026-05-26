@@ -1,13 +1,13 @@
-[Skip to content](https://docs.marimo.io/guides/#guides)
+<!-- Source: https://docs.marimo.io/guides/ -->
 
-# Guides [¶](https://docs.marimo.io/guides/\#guides "Permanent link")
+# Guides
 
 These guides cover marimo's core concepts.
 
-Learn by doing!
-
-Prefer a hands-on learning experience? marimo comes packaged with interactive
-tutorials that you can launch with `marimo tutorial` at the command line.
+> **Learn by doing!**
+>
+> Prefer a hands-on learning experience? marimo comes packaged with interactive
+> tutorials that you can launch with `marimo tutorial` at the command line.
 
 | Guide | Description |
 | --- | --- |
@@ -27,11 +27,11 @@ tutorials that you can launch with `marimo tutorial` at the command line.
 | [Scripts](https://docs.marimo.io/guides/scripts/) | Running notebooks as scripts |
 | [Reusing functions and classes](https://docs.marimo.io/guides/reusing_functions/) | Importing functions and classes defined in marimo notebooks |
 | [Tests](https://docs.marimo.io/guides/testing/) | Running unit tests in notebooks |
-| [Export notebooks](https://docs.marimo.io/guides/exporting/) | Exporting notebooks to HTML, ipynb, flat scripts, and more |
-| [Cloud notebooks with molab](https://docs.marimo.io/guides/molab/) | Share links to cloud-based marimo notebooks, similar to Google Colab |
-| [Publish to the web](https://docs.marimo.io/guides/publishing/) | Edit and publish notebooks on the web |
-| [Run notebooks with WebAssembly](https://docs.marimo.io/guides/wasm/) | Create notebooks in our online playground |
-| [Deploying](https://docs.marimo.io/guides/deploying/) | Deploying marimo notebooks and apps |
+| [Export to other formats](https://docs.marimo.io/guides/exporting/) | Export notebooks to HTML, PDF, ipynb, scripts, and more |
+| [Run and share in the cloud with molab](https://docs.marimo.io/guides/molab/) | Share cloud-hosted notebooks for free, preview from GitHub, embed in webpages |
+| [Publish to the web](https://docs.marimo.io/guides/publishing/) | Publish notebooks to molab, embed in webpages, to/from GitHub, and more |
+| [Deploy notebook servers or apps](https://docs.marimo.io/guides/deploying/) | Deploy notebook servers (JupyterHub, Kubernetes) or read-only apps |
+| [WebAssembly notebooks](https://docs.marimo.io/guides/wasm/) | Run notebooks entirely in the browser with WebAssembly |
 | [Configuration](https://docs.marimo.io/guides/configuration/) | Configure various settings |
 | [Coming from other tools](https://docs.marimo.io/guides/coming_from/) | Transitioning from Jupyter and other tools |
 | [Extending marimo](https://docs.marimo.io/guides/integrating_with_marimo/) | Rich displays of objects, custom UI plugins |
@@ -39,19 +39,3 @@ tutorials that you can launch with `marimo tutorial` at the command line.
 | [Best practices](https://docs.marimo.io/guides/best_practices/) | Best practices to help you get the most out of marimo |
 | [Debugging](https://docs.marimo.io/guides/debugging/) | Interactive debugging with pdb, debugpy, and AI assistance |
 | [Troubleshooting](https://docs.marimo.io/guides/troubleshooting/) | Troubleshooting notebooks |
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)

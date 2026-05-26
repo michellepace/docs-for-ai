@@ -1,135 +1,128 @@
 <docs_index>
   <source>
-    <title>marimo</title>
-    <description>Reactive Python notebook environment with automatic cell execution, interactive UI elements, SQL support, Git-friendly storage, deployable apps, AI assistance, package management, deterministic execution, and reproducibility features.</description>
-    <source_url>https://docs.marimo.io/#inspiration</source_url>
-    <local_file>marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Installation - marimo</title>
-    <description>Installation guide covering virtual environment setup with pip, uv, and conda, minimal installation commands, recommended dependencies bundle including SQL cells, AI completion, dataframe plotting, formatting, and IPYNB export features.</description>
-    <source_url>https://docs.marimo.io/getting_started/installation</source_url>
-    <local_file>installation-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Quickstart - marimo</title>
-    <description>marimo CLI essentials including tutorial access, notebook editing, app deployment with marimo run, script execution, Jupyter conversion, exporting to formats, optional dependencies, GitHub Copilot integration, and cloud sharing.</description>
-    <source_url>https://docs.marimo.io/getting_started/quickstart</source_url>
-    <local_file>quickstart-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Key Concepts - marimo</title>
-    <description>Core marimo concepts including reactive execution, cell dependency graphs, interactive UI elements with marimo.ui, SQL cell support, output visualisation, running notebooks as web apps or scripts, and eliminating hidden state.</description>
-    <source_url>https://docs.marimo.io/getting_started/key_concepts</source_url>
-    <local_file>key-concepts-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Recipes - marimo</title>
-    <description>Code snippets for control flow, UI element grouping (arrays, dictionaries, forms), button patterns (counters, toggles, triggers), conditional execution with mo.stop, timers with mo.ui.refresh, and caching with mo.cache and mo.persistent_cache.</description>
-    <source_url>https://docs.marimo.io/recipes</source_url>
-    <local_file>recipes-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Commands - marimo</title>
-    <description>Comprehensive marimo CLI reference covering edit, run, check, convert, export formats (HTML, WASM, ipynb, markdown, script), config management, tutorial commands, environment debugging, shell completion, notebook recovery, and AI-generated notebook creation.</description>
-    <source_url>https://docs.marimo.io/cli</source_url>
-    <local_file>commands-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>FAQ - marimo</title>
-    <description>Frequently asked questions covering differences from Jupyter, reactive execution, UI elements, forms, markdown, plotting, layouts, deployment, remote server usage, module reloading, type annotations, and troubleshooting common issues.</description>
-    <source_url>https://docs.marimo.io/faq</source_url>
-    <local_file>faq-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
     <title>Marimo — The Dan MacKinlay stable of variably-well-consider’d enterprises</title>
-    <description>Personal perspective on marimo covering trade-offs versus Jupyter, HPC cluster development, VS Code integration, remote access, debugging, coding assistant workflows, export/import commands, PEP 723 sandboxing, dotenv configuration, and file format.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://danmackinlay.name/notebook/marimo.html</source_url>
-    <local_file>marimo-the-dan-mackinlay-stable-of-variably-well-considerd-enterprises.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
+    <local_file>notebook-marimo-html.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>User Guide - marimo</title>
-    <description>Index of user guide topics including reactivity, interactivity, outputs, data manipulation, package management, AI generation, deployment, configuration, state management, debugging, testing, exporting, and migration from Jupyter.</description>
+    <title>marimo</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/cli</source_url>
+    <local_file>cli.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>FAQ</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/faq</source_url>
+    <local_file>faq.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Installation</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/getting_started/installation</source_url>
+    <local_file>getting-started-installation.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Key concepts</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/getting_started/key_concepts</source_url>
+    <local_file>getting-started-key-concepts.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Quickstart</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/getting_started/quickstart</source_url>
+    <local_file>getting-started-quickstart.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Guides</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides</source_url>
-    <local_file>user-guide-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
+    <local_file>guides.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Lint Rules - marimo</title>
-    <description>marimo linting system with marimo check command, categorised rules including breaking errors (unparsable cells, multiple definitions, circular dependencies), runtime issues (self-import), and formatting rules with auto-fix capabilities.</description>
-    <source_url>https://docs.marimo.io/guides/lint_rules</source_url>
-    <local_file>lint-rules-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>DataFrames - marimo</title>
-    <description>Interactive dataframe features with Pandas and Polars including rich display, no-code transformations with mo.ui.dataframe, custom filters using UI elements, row selection with mo.ui.table, and dataframe panels for exploration and visualisation.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/dataframes</source_url>
-    <local_file>dataframes-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>SQL - marimo</title>
-    <description>SQL integration with DuckDB, querying dataframes and databases (SQLite, Postgres), output types (native, Polars, Pandas), f-string parameterisation, database connections via UI or code, data source auto-discovery, SQL linting and formatting.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/sql</source_url>
-    <local_file>sql-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Plotting - marimo</title>
-    <description>Plotting library support including Matplotlib, Seaborn, Plotly, Altair, HoloViews, reactive plots via mo.ui.altair_chart and mo.ui.plotly, automatic selections, transformations, interactive matplotlib plots, and built-in chart builder.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/plotting</source_url>
-    <local_file>plotting-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Using your own editor - marimo</title>
-    <description>File watching with --watch flag, marimo file format, cells as functions with @app.cell, top-level functions and classes, type hints and autocompletion, markdown format, watching modules and data files, WebAssembly hot-reloading.</description>
-    <source_url>https://docs.marimo.io/guides/editor_features/watching</source_url>
-    <local_file>using-your-own-editor-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Best practices - marimo</title>
-    <description>Coding practices for marimo notebooks covering global variable management, descriptive naming, function encapsulation, mo.stop for execution control, module splitting, mutation minimisation, avoiding on_change handlers, and writing idempotent cells.</description>
+    <title>Best practices</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/best_practices</source_url>
-    <local_file>best-practices-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
+    <local_file>guides-best-practices.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>HTML head - marimo</title>
-    <description>Custom HTML head configuration through html_head_file parameter enabling analytics, custom fonts, meta tags, and external scripts with examples for Google Analytics, fonts, SEO metadata, and libraries.</description>
+    <title>Custom HTML Head</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/html_head</source_url>
-    <local_file>html-head-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
+    <local_file>guides-configuration-html-head.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Theming - marimo</title>
-    <description>Custom CSS file integration for notebook theming, CSS variables for fonts, project-level theme configuration, dark mode forcing, cell-specific styling, data attributes for targeting, and community theme library.</description>
-    <source_url>https://docs.marimo.io/guides/configuration/theming</source_url>
-    <local_file>theming-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>Snippets - marimo</title>
-    <description>Snippet configuration via marimo.toml including custom_paths for custom snippet directories, include_default_snippets flag, custom snippet creation, snippet file format as marimo App notebooks, and managing default snippets.</description>
-    <source_url>https://docs.marimo.io/guides/configuration/snippets</source_url>
-    <local_file>snippets-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
-  </source>
-  <source>
-    <title>LLM Providers - marimo</title>
-    <description>Configuring LLM providers in marimo via marimo.toml: model roles (chat, edit, autocomplete), provider routing, API configuration for OpenAI, Anthropic, AWS Bedrock, Google AI, Azure, GitHub, OpenRouter, Ollama, and OpenAI-compatible providers.</description>
+    <title>Configuring LLM providers</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/llm_providers</source_url>
-    <local_file>llm-providers-marimo.md</local_file>
-    <scraped_at>2025-11-11</scraped_at>
+    <local_file>guides-configuration-llm-providers.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Snippets Configuration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/configuration/snippets</source_url>
+    <local_file>guides-configuration-snippets.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Theming</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/configuration/theming</source_url>
+    <local_file>guides-configuration-theming.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Using your own editor</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/editor_features/watching</source_url>
+    <local_file>guides-editor-features-watching.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Lint Rules</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/lint_rules</source_url>
+    <local_file>guides-lint-rules.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Interactive dataframes</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/dataframes</source_url>
+    <local_file>guides-working-with-data-dataframes.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Plotting</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/plotting</source_url>
+    <local_file>guides-working-with-data-plotting.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Using SQL</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/sql</source_url>
+    <local_file>guides-working-with-data-sql.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Recipes</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.marimo.io/recipes</source_url>
+    <local_file>recipes.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

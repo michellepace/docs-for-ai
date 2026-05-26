@@ -1,6 +1,6 @@
-[Skip to content](https://docs.marimo.io/guides/configuration/theming/#theming)
+<!-- Source: https://docs.marimo.io/guides/configuration/theming/ -->
 
-# Theming [¶](https://docs.marimo.io/guides/configuration/theming/\#theming "Permanent link")
+# Theming
 
 marimo provides basic support for theming. You can include a custom CSS file in your notebook that will be applied to the entire notebook. This allows you to customize the appearance of your notebook to your liking.
 
@@ -10,18 +10,17 @@ To include a custom CSS file, in the configuration dropdown, add the relative fi
 app = marimo.App(css_file="custom.css")
 ```
 
-## Theming at the project level [¶](https://docs.marimo.io/guides/configuration/theming/\#theming-at-the-project-level "Permanent link")
+## Theming at the project level
 
 You may also set the `custom_css` field in your project configuration to apply a custom CSS file. This theme won't be applied if the notebook is shared with someone else, but it will be applied to all notebooks open inside the project.
 
 pyproject.toml
-
 ```toml
 [tool.marimo.display]
 custom_css = ["additional.css"]
 ```
 
-## CSS Variables [¶](https://docs.marimo.io/guides/configuration/theming/\#css-variables "Permanent link")
+## CSS Variables
 
 We support only a few CSS variables as part of the "public API" for theming. These are:
 
@@ -31,11 +30,11 @@ We support only a few CSS variables as part of the "public API" for theming. The
 --marimo-heading-font
 ```
 
-Other CSS Variables
+> **Other CSS Variables**
+>
+> We cannot guarantee that other CSS variables or classnames will be stable across versions.
 
-We cannot guarantee that other CSS variables or classnames will be stable across versions.
-
-## Example [¶](https://docs.marimo.io/guides/configuration/theming/\#example "Permanent link")
+## Example
 
 Here is an example of a custom CSS file that changes the font of the notebook:
 
@@ -54,24 +53,26 @@ Here is an example of a custom CSS file that changes the font of the notebook:
 }
 ```
 
-## Custom HTML Head [¶](https://docs.marimo.io/guides/configuration/theming/\#custom-html-head "Permanent link")
+You can push custom CSS pretty far in marimo, check out [this demo on YouTube](https://www.youtube.com/shorts/GiMnWT_ZMOc) on how to create a custom theme based on [NES.css](https://nostalgic-css.github.io/NES.css/).
+
+## Custom HTML Head
 
 You can further customize your notebook by adding custom HTML in the `<head>` section of your notebook. This allows you to add additional functionality to your notebook, such as analytics, custom fonts, meta tags, or external scripts.
 
 See the [Custom HTML Head](https://docs.marimo.io/guides/configuration/html_head/) guide for more details.
 
-## Forcing dark mode [¶](https://docs.marimo.io/guides/configuration/theming/\#forcing-dark-mode "Permanent link")
+## Forcing dark mode
 
 In order to force a theme for an application, you can override the marimo configuration specifically for an application using the script metadata. See the [Script Configuration](https://docs.marimo.io/guides/configuration/#script-metadata-configuration) for more details.
 
-```toml
+```python
 # /// script
 # [tool.marimo.display]
 # theme = "dark"
 # ///
 ```
 
-## Targeting cells [¶](https://docs.marimo.io/guides/configuration/theming/\#targeting-cells "Permanent link")
+## Targeting cells
 
 You can target a cell's styles from the `data-cell-name` attribute. You can also target a cell's output with the `data-cell-role="output"` attribute.
 
@@ -87,7 +88,7 @@ You can target a cell's styles from the `data-cell-name` attribute. You can also
 }
 ```
 
-## Community Themes [¶](https://docs.marimo.io/guides/configuration/theming/\#community-themes "Permanent link")
+## Community Themes
 
 The marimo community maintains a [library of custom themes](https://github.com/Haleshot/marimo-themes) that you can use in your notebooks. The library includes various themes like "coldme", "nord", "mininini", and "wigwam", each supporting both light and dark modes.
 
@@ -99,22 +100,6 @@ You can:
 
 Visit the [marimo-themes repository](https://github.com/Haleshot/marimo-themes) to explore available themes and learn how to contribute your own.
 
-## More customizations [¶](https://docs.marimo.io/guides/configuration/theming/\#more-customizations "Permanent link")
+## More customizations
 
 We want to hear from you! If you have any suggestions for more customization options, please let us know on [GitHub](https://github.com/marimo-team/marimo/discussions)
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)

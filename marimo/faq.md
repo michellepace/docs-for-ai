@@ -1,10 +1,10 @@
-[Skip to content](https://docs.marimo.io/faq/#choosing-marimo)
+<!-- Source: https://docs.marimo.io/faq/ -->
 
 # FAQ
 
-## Choosing marimo [¶](https://docs.marimo.io/faq/\#choosing-marimo "Permanent link")
+## Choosing marimo
 
-### How is marimo different from Jupyter? [¶](https://docs.marimo.io/faq/\#how-is-marimo-different-from-jupyter "Permanent link")
+### How is marimo different from Jupyter?
 
 marimo is a reinvention of the Python notebook as a reproducible, interactive,
 and shareable Python program that can be executed as scripts or deployed as
@@ -15,7 +15,7 @@ are guaranteed to be consistent. Run a cell and marimo reacts by automatically
 running the cells that reference its variables. Delete a cell and marimo scrubs
 its variables from program memory, eliminating hidden state.
 
-**Built-in interactivity.** marimo also comes with [UI\\
+**Built-in interactivity.** marimo also comes with [UI
 elements](https://docs.marimo.io/guides/interactivity/) like sliders, a dataframe transformer, and
 interactive plots that are automatically synchronized with Python. Interact
 with an element and the cells that use it are automatically re-run with its
@@ -25,7 +25,7 @@ latest value.
 as pure Python files that can be executed as scripts, deployed as interactive
 web apps, and versioned easily with Git.
 
-### What problems does marimo solve? [¶](https://docs.marimo.io/faq/\#what-problems-does-marimo-solve "Permanent link")
+### What problems does marimo solve?
 
 marimo solves problems in reproducibility, maintainability, interactivity,
 reusability, and shareability of notebooks.
@@ -54,7 +54,7 @@ require extra steps to version.
 
 **Interactivity.**
 marimo notebooks come with [UI elements](https://docs.marimo.io/guides/interactivity/) that are
-automatically synchronized with Python (like sliders, dropdowns); _eg_, scrub a
+automatically synchronized with Python (like sliders, dropdowns); *eg*, scrub a
 slider and all cells that reference it are automatically re-run with the new
 value. This is difficult to get working in Jupyter notebooks.
 
@@ -71,37 +71,40 @@ Every marimo notebook can double as an interactive web app, complete with UI
 elements, which you can serve using the `marimo run` command. This isn't
 possible in Jupyter without substantial extra effort.
 
-_To learn more about problems with traditional notebooks,_
-_see these references_
-_[\[1\]](https://austinhenley.com/pubs/Chattopadhyay2020CHI_NotebookPainpoints.pdf) [\[2\]](https://www.youtube.com/watch?v=7jiPeIFXb6U&t=1s)._
+*To learn more about problems with traditional notebooks,
+see these references
+[[1]](https://austinhenley.com/pubs/Chattopadhyay2020CHI_NotebookPainpoints.pdf)
+[[2]](https://www.youtube.com/watch?v=7jiPeIFXb6U&t=1s).*
 
-### How is `marimo.ui` different from Jupyter widgets? [¶](https://docs.marimo.io/faq/\#how-is-marimoui-different-from-jupyter-widgets "Permanent link")
+### How is `marimo.ui` different from Jupyter widgets?
 
 Unlike Jupyter widgets, marimo's interactive elements are automatically
 synchronized with the Python kernel: no callbacks, no observers, no manually
 re-running cells.
 
-## Using marimo [¶](https://docs.marimo.io/faq/\#using-marimo "Permanent link")
+[Video: https://docs.marimo.io/_static/faq-marimo-ui.mp4](https://docs.marimo.io/_static/faq-marimo-ui.mp4)
 
-### Is marimo a notebook or a library? [¶](https://docs.marimo.io/faq/\#is-marimo-a-notebook-or-a-library "Permanent link")
+## Using marimo
+
+### Is marimo a notebook or a library?
 
 marimo is both a notebook and a library.
 
-- Create _marimo notebooks_ with the editor that opens in your
-browser when you run `marimo edit`.
-- Use the _marimo library_ (`import marimo as mo`) in
-marimo notebooks. Write markdown with `mo.md(...)`,
-create stateful interactive elements with `mo.ui` (`mo.ui.slider(...)`), and
-more. See the docs for an [API reference](https://docs.marimo.io/api/).
+- Create *marimo notebooks* with the editor that opens in your
+  browser when you run `marimo edit`.
+- Use the *marimo library* (`import marimo as mo`) in
+  marimo notebooks. Write markdown with `mo.md(...)`,
+  create stateful interactive elements with `mo.ui` (`mo.ui.slider(...)`), and
+  more. See the docs for an [API reference](https://docs.marimo.io/api/).
 
-### What's the difference between a marimo notebook and a marimo app? [¶](https://docs.marimo.io/faq/\#whats-the-difference-between-a-marimo-notebook-and-a-marimo-app "Permanent link")
+### What's the difference between a marimo notebook and a marimo app?
 
 marimo programs are notebooks, apps, or both, depending on how you use them.
 
 There are two ways to interact with a marimo program:
 
-1. open it as a computational _notebook_ with `marimo edit`
-2. run it as an interactive _app_ with `marimo run`
+1. open it as a computational *notebook* with `marimo edit`
+2. run it as an interactive *app* with `marimo run`
 
 All marimo programs start as notebooks, since they are created with `marimo
 edit`. Because marimo notebooks are reactive and have built-in interactive
@@ -115,25 +118,25 @@ settings, such as collaborative research, education, and technical
 presentations, going back and forth between the notebook view and app view
 (which you can do from `marimo edit`) can be useful!
 
-### How does marimo know what cells to run? [¶](https://docs.marimo.io/faq/\#how-does-marimo-know-what-cells-to-run "Permanent link")
+### How does marimo know what cells to run?
 
 marimo reads each cell once to determine what global names it defines and what
 global names it reads. When a cell is run, marimo runs all other cells that
 read any of the global names it defines. A global name can refer to a variable,
 class, function, or import.
 
-In other words, marimo uses _static analysis_ to make a dataflow graph out of
+In other words, marimo uses *static analysis* to make a dataflow graph out of
 your cells. Each cell is a node in the graph across which global
 variables "flow". Whenever a cell is run, either because you changed its
 code or interacted with a UI element it reads, all its descendants run in turn.
 
-### Does marimo slow my code down? [¶](https://docs.marimo.io/faq/\#does-marimo-slow-my-code-down "Permanent link")
+### Does marimo slow my code down?
 
 No, marimo doesn't slow your code down. marimo determines the dependencies
 among cells by reading your code, not running or tracing it, so there's
 zero runtime overhead.
 
-### How do I prevent automatic execution from running expensive cells? [¶](https://docs.marimo.io/faq/\#how-do-i-prevent-automatic-execution-from-running-expensive-cells "Permanent link")
+### How do I prevent automatic execution from running expensive cells?
 
 Reactive (automatic) execution ensures your code and outputs are always
 in sync, improving reproducibility by eliminating hidden state and
@@ -142,21 +145,21 @@ cells needed to keep your notebook up to date. But when some cells take a long
 time to run, it's understandable to be concerned that automatic execution will
 kick off expensive cells before you're ready to run them.
 
-_Here are some tips to avoid accidental execution of expensive cells:_
+*Here are some tips to avoid accidental execution of expensive cells:*
 
 - [Disable expensive cells](https://docs.marimo.io/guides/reactivity/#disabling-cells). When a cell
-is disabled, it and its descendants are blocked from running.
-- Wrap UI elements in a [form](https://docs.marimo.io/api/inputs/form/#marimo.ui.form "            marimo.ui.form").
-- Use [`mo.stop`](https://docs.marimo.io/api/control_flow/#marimo.stop "            marimo.stop") to conditionally stop
-execution of a cell and its descendants.
-- Decorate functions with marimo's [`mo.cache`](https://docs.marimo.io/api/caching/#marimo.cache "            marimo.cache") to cache
-expensive intermediate computations.
-- Use [`mo.persistent_cache`](https://docs.marimo.io/api/caching/#marimo.persistent_cache "            marimo.persistent_cache") to cache variables to
-disk; on re-run, marimo will read values from disk instead of recalculating
-them as long as the cell is not stale.
+  is disabled, it and its descendants are blocked from running.
+- Wrap UI elements in a [form](https://docs.marimo.io/api/inputs/form/#marimo.ui.form).
+- Use [`mo.stop`](https://docs.marimo.io/api/control_flow/#marimo.stop) to conditionally stop
+  execution of a cell and its descendants.
+- Decorate functions with marimo's [`mo.cache`](https://docs.marimo.io/api/caching/#marimo.cache) to cache
+  expensive intermediate computations.
+- Use [`mo.persistent_cache`](https://docs.marimo.io/api/caching/#marimo.persistent_cache) to cache variables to
+  disk; on re-run, marimo will read values from disk instead of recalculating
+  them as long as the cell is not stale.
 - Disable automatic execution in the [runtime configuration](https://docs.marimo.io/guides/configuration/runtime_configuration/).
 
-### How do I disable automatic execution? [¶](https://docs.marimo.io/faq/\#how-do-i-disable-automatic-execution "Permanent link")
+### How do I disable automatic execution?
 
 You can disable automatic execution through the notebook runtime settings;
 see the [guide on runtime configuration](https://docs.marimo.io/guides/configuration/runtime_configuration/).
@@ -164,7 +167,7 @@ see the [guide on runtime configuration](https://docs.marimo.io/guides/configura
 When automatic execution is disabled, marimo still gives you guarantees on
 your notebook state and automatically marks cells as stale when appropriate.
 
-### How do I use sliders and other interactive elements? [¶](https://docs.marimo.io/faq/\#how-do-i-use-sliders-and-other-interactive-elements "Permanent link")
+### How do I use sliders and other interactive elements?
 
 Interactive UI elements like sliders are available in `marimo.ui`.
 
@@ -172,8 +175,8 @@ Interactive UI elements like sliders are available in `marimo.ui`.
 - Include it in the last expression of a cell to display it (`slider` or `mo.md(f"Choose a value: {slider}")`)
 - Read its current value in another cell via its `value` attribute (`slider.value`)
 
-_When a UI element bound to a global variable is interacted with, all cells_
-_referencing the global variable are run automatically_.
+*When a UI element bound to a global variable is interacted with, all cells
+referencing the global variable are run automatically*.
 
 If you have many UI elements or don't know the elements
 you'll create until runtime, use `marimo.ui.array` and `marimo.ui.dictionary`
@@ -188,7 +191,7 @@ marimo tutorial ui
 
 at the command line.
 
-### How do I add a submit button to UI elements? [¶](https://docs.marimo.io/faq/\#how-do-i-add-a-submit-button-to-ui-elements "Permanent link")
+### How do I add a submit button to UI elements?
 
 Use the `form` method to add a submit button to a UI element. For
 example,
@@ -201,13 +204,13 @@ When wrapped in a form, the
 text area's value will only be sent to Python when you click the submit button.
 Access the last submitted value of the text area with `form.value`.
 
-### How do I write markdown? [¶](https://docs.marimo.io/faq/\#how-do-i-write-markdown "Permanent link")
+### How do I write markdown?
 
 Import `marimo` (as `mo`) in a notebook, and use the `mo.md` function.
 Learn more in the [outputs guide](https://docs.marimo.io/guides/outputs/#markdown)
 or by running `marimo tutorial markdown`.
 
-### How do I display plots? [¶](https://docs.marimo.io/faq/\#how-do-i-display-plots "Permanent link")
+### How do I display plots?
 
 Include plots in the last expression of a cell to display them, just like all
 other outputs. If you're using matplotlib, you can display the `Figure` object
@@ -219,7 +222,7 @@ marimo tutorial plots
 
 Also see the [plotting API reference](https://docs.marimo.io/api/plotting/).
 
-### How do I prevent matplotlib plots from being cut off? [¶](https://docs.marimo.io/faq/\#how-do-i-prevent-matplotlib-plots-from-being-cut-off "Permanent link")
+### How do I prevent matplotlib plots from being cut off?
 
 If your legend or axes labels are cut off, try calling `plt.tight_layout()`
 before outputting your plot:
@@ -233,17 +236,17 @@ plt.tight_layout()
 plt.gca()
 ```
 
-### How do I display interactive matplotlib plots? [¶](https://docs.marimo.io/faq/\#how-do-i-display-interactive-matplotlib-plots "Permanent link")
+### How do I display interactive matplotlib plots?
 
-Use [`marimo.mpl.interactive`](https://docs.marimo.io/api/plotting/#marimo.mpl.interactive "            marimo.mpl.interactive").
+Use [`marimo.mpl.interactive`](https://docs.marimo.io/api/plotting/#marimo.mpl.interactive).
 
-```python
+```bash
 fig, ax = plt.subplots()
 ax.plot([1, 2])
 mo.mpl.interactive(ax)
 ```
 
-### How do I display objects in rows and columns? [¶](https://docs.marimo.io/faq/\#how-do-i-display-objects-in-rows-and-columns "Permanent link")
+### How do I display objects in rows and columns?
 
 Use `marimo.hstack` and `marimo.vstack`. See the layout tutorial for details:
 
@@ -251,31 +254,95 @@ Use `marimo.hstack` and `marimo.vstack`. See the layout tutorial for details:
 marimo tutorial layout
 ```
 
-### How do I show cell code in the app view? [¶](https://docs.marimo.io/faq/\#how-do-i-show-cell-code-in-the-app-view "Permanent link")
+### How do I show cell code in the app view?
 
-Use [`mo.show_code`](https://docs.marimo.io/api/outputs/#marimo.show_code "            marimo.show_code").
+Use [`mo.show_code`](https://docs.marimo.io/api/outputs/#marimo.show_code).
 
-### How do I create an output with a dynamic number of UI elements? [¶](https://docs.marimo.io/faq/\#how-do-i-create-an-output-with-a-dynamic-number-of-ui-elements "Permanent link")
+### How do I create an output with a dynamic number of UI elements?
 
-Use [`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array "            marimo.ui.array"),
-[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary "            marimo.ui.dictionary"), or
-[`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch "            marimo.ui.batch") to create a UI element
+Use [`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array),
+[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary), or
+[`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch) to create a UI element
 that wraps a dynamic number of other UI elements.
 
 If you need custom
-formatting, use [`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch "            marimo.ui.batch"), otherwise
-use [`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array "            marimo.ui.array") or
-[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary "            marimo.ui.dictionary").
+formatting, use [`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch), otherwise
+use [`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array) or
+[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary).
 
 For usage examples, see the
 [recipes for grouping UI elements together](https://docs.marimo.io/recipes/#grouping-ui-elements-together).
 
-### How do I restart a notebook? [¶](https://docs.marimo.io/faq/\#how-do-i-restart-a-notebook "Permanent link")
+### How do I let users interrupt a progress bar iteration?
+
+To create an interruptible progress bar, run the progress bar in its own thread,
+and create a button that on change signals to the thread that it should exit.
+
+Example:
+
+```python
+import marimo
+
+__generated_with = "0.20.1"
+app = marimo.App()
+
+
+@app.cell
+def _():
+    import marimo as mo
+    import time
+    from threading import Event
+    return Event, mo, time
+
+
+@app.cell
+def _(Event):
+    cancelled = Event()
+    return (cancelled,)
+
+
+@app.cell
+def _(cancelled, mo):
+    cancel = mo.ui.button(
+        label="Interrupt the progress bar", on_change=lambda _: cancelled.set()
+    )
+    cancel
+    return
+
+
+@app.cell
+def _(cancelled, mo, time):
+    def progress(total):
+        with mo.status.progress_bar(total=10) as pbar:
+            for _ in range(10):
+                if cancelled.is_set():
+                    pbar.update(
+                        increment=0, subtitle="The user cancelled the iteration"
+                    )
+                    break
+                # Sleep... or anything else that releases GIL
+                time.sleep(0.5)
+                pbar.update()
+
+    return (progress,)
+
+
+@app.cell
+def _(mo, progress):
+    mo.Thread(target=progress, args=(10,)).start()
+    return
+
+
+if __name__ == "__main__":
+    app.run()
+```
+
+### How do I restart a notebook?
 
 To clear all program memory and restart the notebook from scratch, open the
 notebook menu in the top right and click "Restart kernel".
 
-### How do I reload modules? [¶](https://docs.marimo.io/faq/\#how-do-i-reload-modules "Permanent link")
+### How do I reload modules?
 
 Enable automatic reloading of modules via the runtime settings in your
 marimo installation's user configuration. (Click the "gear" icon in the
@@ -284,7 +351,7 @@ top right of a marimo notebook).
 When enabled, marimo will automatically hot-reload modified modules
 before executing a cell.
 
-### Why aren't my `on_change`/`on_click` handlers being called? [¶](https://docs.marimo.io/faq/\#why-arent-my-on_changeon_click-handlers-being-called "Permanent link")
+### Why aren't my `on_change`/`on_click` handlers being called?
 
 A UI Element's `on_change` (or for buttons, `on_click`) handlers are only
 called if the element is bound to a global variable. For example, this won't work
@@ -295,21 +362,21 @@ mo.vstack([mo.ui.button(on_change=lambda _: print("I was called")) for _ in rang
 
 In such cases (when you want to output a dynamic number of UI elements),
 you need to use
-[`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array "            marimo.ui.array"),
-[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary "            marimo.ui.dictionary"), or
-[`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch "            marimo.ui.batch").
+[`mo.ui.array`](https://docs.marimo.io/api/inputs/array/#marimo.ui.array),
+[`mo.ui.dictionary`](https://docs.marimo.io/api/inputs/dictionary/#marimo.ui.dictionary), or
+[`mo.ui.batch`](https://docs.marimo.io/api/inputs/batch/#marimo.ui.batch).
 
 See the
 [recipes for grouping UI elements together](https://docs.marimo.io/recipes/#grouping-ui-elements-together)
 for example code.
 
-### Why are my `on_change` handlers in an array all referencing the last element? [¶](https://docs.marimo.io/faq/\#why-are-my-on_change-handlers-in-an-array-all-referencing-the-last-element "Permanent link")
+### Why are my `on_change` handlers in an array all referencing the last element?
 
 **Don't do this**: In the below snippet, every `on_change` will print `9`!.
 
 ```python
 array = mo.ui.array(
-  [mo.ui.button(on_change=lambda value: print(i)) for i in range(10)\
+  [mo.ui.button(on_change=lambda value: print(i)) for i in range(10)
 ])
 ```
 
@@ -324,21 +391,21 @@ array
 
 This is necessary because [in Python, closures are late-binding](https://docs.python-guide.org/writing/gotchas/#late-binding-closures).
 
-### Why aren't my SQL brackets working? [¶](https://docs.marimo.io/faq/\#why-arent-my-sql-brackets-working "Permanent link")
+### Why aren't my SQL brackets working?
 
 Our "SQL" cells are really just Python under the hood to keep notebooks as pure Python scripts. By default, we use `f-strings` for SQL strings, which allows for parameterized SQL like `SELECT * from table where value < {min}`.
 
-To escape real `{` / `}` that you don't want parameterized, use double `\{\{...\}\}`:
+To escape real `{` / `}` that you don't want parameterized, use double `{{...}}`:
 
 ```sql
-SELECT unnest([\{\{'a': 42, 'b': 84\}\}, \{\{'a': 100, 'b': NULL\}\}]);
+SELECT unnest([{{'a': 42, 'b': 84}}, {{'a': 100, 'b': NULL}}]);
 ```
 
-### How does marimo treat type annotations? [¶](https://docs.marimo.io/faq/\#how-does-marimo-treat-type-annotations "Permanent link")
+### How does marimo treat type annotations?
 
 Type annotations are registered as references of a cell, unless they
 are explicitly written as strings. This helps ensure correctness of code that
-depends on type annotations at runtime ( _e.g._, Pydantic), while still
+depends on type annotations at runtime (*e.g.*, Pydantic), while still
 providing a way to omit annotations from affecting dataflow graph.
 
 For example, in
@@ -358,16 +425,18 @@ x: "A" = ...
 
 For Python 3.12+, marimo additionally implements annotation scoping.
 
-### How do I use dotenv? [¶](https://docs.marimo.io/faq/\#how-do-i-use-dotenv "Permanent link")
+### How do I use dotenv?
 
 The package `dotenv`'s `loadenv()` function does not work out-of-the box in
 marimo. Instead, use `dotenv.load_dotenv(dotenv.find_dotenv(usecwd=True))`.
 
-### What packages can I use? [¶](https://docs.marimo.io/faq/\#what-packages-can-i-use "Permanent link")
+### What packages can I use?
 
 You can use any Python package. marimo cells run arbitrary Python code.
 
-### How do I use marimo on a remote server? [¶](https://docs.marimo.io/faq/\#how-do-i-use-marimo-on-a-remote-server "Permanent link")
+### How do I use marimo on a remote server?
+
+> We recorded a video tutorial on how to use marimo on a remote server. Check it out [here](https://youtu.be/pam9Hw8rbaA).
 
 Use SSH port-forwarding to run marimo on a remote server
 and connect to it from a browser on your local machine. Make sure
@@ -375,7 +444,7 @@ to pass the `--headless` flag when starting marimo on remote; on the remote
 machine, we also recommend using a port other than marimo's default port, such
 as 8080:
 
-_On the remote machine, run:_
+*On the remote machine, run:*
 
 ```bash
 marimo edit --headless --port 8080
@@ -387,15 +456,15 @@ or, if you want to set a custom host:
 marimo edit --headless --host 0.0.0.0 --port 8080
 ```
 
-_On local, run:_
+*On local, run:*
 
-```bash
+```text
 ssh -N -L 3718:127.0.0.1:8080 REMOTE_USER@REMOTE_HOST
 ```
 
 Then open `localhost:3718` in your browser.
 
-### How do I make marimo accessible on all network interfaces? [¶](https://docs.marimo.io/faq/\#how-do-i-make-marimo-accessible-on-all-network-interfaces "Permanent link")
+### How do I make marimo accessible on all network interfaces?
 
 Use `--host 0.0.0.0` with `marimo edit`, `marimo run`, or `marimo tutorial`:
 
@@ -403,12 +472,12 @@ Use `--host 0.0.0.0` with `marimo edit`, `marimo run`, or `marimo tutorial`:
 marimo edit --host 0.0.0.0
 ```
 
-### How do I use marimo behind JupyterHub? [¶](https://docs.marimo.io/faq/\#how-do-i-use-marimo-behind-jupyterhub "Permanent link")
+### How do I use marimo behind JupyterHub?
 
-JupyterHub can be configured to launch marimo using the [`jupyter-marimo-proxy`\\
-package](https://github.com/jyio/jupyter-marimo-proxy).
+JupyterHub can be configured to launch marimo using the
+[`marimo-jupyter-extension`](https://github.com/marimo-team/marimo-jupyter-extension).
 
-### How do I use marimo with JupyterBook? [¶](https://docs.marimo.io/faq/\#how-do-i-use-marimo-with-jupyterbook "Permanent link")
+### How do I use marimo with JupyterBook?
 
 [JupyterBook](https://jupyterbook.org/en/stable/intro.html) makes it easy
 to create static websites with markdown and Jupyter notebooks.
@@ -419,7 +488,7 @@ notebook to an `ipynb` file, or export to `HTML`:
 1. export to ipynb: `marimo export ipynb my_notebook.py -o my_notebook.ipynb --include-outputs`
 2. export to HTML: `marimo export html my_notebook.py -o my_notebook.html`
 
-### How do I deploy apps? [¶](https://docs.marimo.io/faq/\#how-do-i-deploy-apps "Permanent link")
+### How do I deploy apps?
 
 Use the marimo CLI's `run` command to serve a notebook as an app:
 
@@ -433,22 +502,6 @@ If you are running marimo inside a Docker container, you may want to run under a
 marimo run notebook.py --host 0.0.0.0 --port 8080
 ```
 
-### Is marimo free? [¶](https://docs.marimo.io/faq/\#is-marimo-free "Permanent link")
+### Is marimo free?
 
 Yes!
-
-Back to top
-
-![Project Logo](https://marimo.io/logo.png)
-
-Ask
-
-reCAPTCHA
-
-Recaptcha requires verification.
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)
-
-protected by **reCAPTCHA**
-
-[Privacy](https://www.google.com/intl/en/policies/privacy/) \- [Terms](https://www.google.com/intl/en/policies/terms/)

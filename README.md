@@ -13,25 +13,25 @@ Available collections in this repo:
 
 | Collection | Collection Index | Description | Scraped | Source |
 |:-----------|:-----------------|:------------|:--------|:-------|
-| 📦 [`biome/`](biome/) | 📄 [`biome/INDEX.xml`](biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
-| 📦 [`claudecode/`](claudecode/) | 📄 [`claudecode/INDEX.xml`](claudecode/INDEX.xml) | Anthropic Claude Code | 2026-02-05 | [Official](https://code.claude.com) |
-| 📦 [`claudeplat/`](claudeplat/) | 📄 [`claudeplat/INDEX.xml`](claudeplat/INDEX.xml) | Anthropic Claude Platform | 2026-01-07 | [Official](https://platform.claude.com) |
-| 📦 [`clerk/`](clerk/) | 📄 [`clerk/INDEX.xml`](clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`convex/`](convex/) | 📄 [`convex/INDEX.xml`](convex/INDEX.xml) | Reactive database | 2026-01-07 | [Official](https://docs.convex.dev) |
-| 🪝 [`lefthook/`](lefthook/) | 📄 [`lefthook/INDEX.xml`](lefthook/INDEX.xml) | Git hooks manager | 2025-11-24 | [Official](https://github.com/evilmartians/lefthook) |
-| 📦 [`marimo/`](marimo/) | 📄 [`marimo/INDEX.xml`](marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
-| 📦 [`nextjs/`](nextjs/) | 📄 [`nextjs/INDEX.xml`](nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwright/`](playwright/) | 📄 [`playwright/INDEX.xml`](playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
-| 📦 [`shadcn/`](shadcn/) | 📄 [`shadcn/INDEX.xml`](shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
-| 📦 [`shiny/`](shiny/) | 📄 [`shiny/INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
-| 📦 [`tailwind/`](tailwind/) | 📄 [`tailwind/INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
-| 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`tailwindplus/INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](uv/) | 📄 [`uv/INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
-| 📦 [`vercel/`](vercel/) | 📄 [`vercel/INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
-| 📦 [`vitest/`](vitest/) | 📄 [`vitest/INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
-| 📦 [`zustand/`](zustand/) | 📄 [`zustand/INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
+| 📦 [`biome/`](biome/) | 📄 [`INDEX.xml`](biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
+| 📦 [`claudecode/`](claudecode/) | 📄 [`INDEX.xml`](claudecode/INDEX.xml) | Anthropic Claude Code | 2026-02-05 | [Official](https://code.claude.com) |
+| 📦 [`claudeplat/`](claudeplat/) | 📄 [`INDEX.xml`](claudeplat/INDEX.xml) | Anthropic Claude Platform | 2026-01-07 | [Official](https://platform.claude.com) |
+| 📦 [`clerk/`](clerk/) | 📄 [`INDEX.xml`](clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
+| 📦 [`convex/`](convex/) | 📄 [`INDEX.xml`](convex/INDEX.xml) | Reactive database | 2026-01-07 | [Official](https://docs.convex.dev) |
+| 🪝 [`lefthook/`](lefthook/) | 📄 [`INDEX.xml`](lefthook/INDEX.xml) | Git hooks manager | 2025-11-24 | [Official](https://github.com/evilmartians/lefthook) |
+| 📦 [`marimo/`](marimo/) | 📄 [`INDEX.xml`](marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
+| 📦 [`nextjs/`](nextjs/) | 📄 [`INDEX.xml`](nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
+| 📦 [`playwright/`](playwright/) | 📄 [`INDEX.xml`](playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
+| 📦 [`shadcn/`](shadcn/) | 📄 [`INDEX.xml`](shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
+| 📦 [`shiny/`](shiny/) | 📄 [`INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
+| 📦 [`tailwind/`](tailwind/) | 📄 [`INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
+| 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
+| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`vercel/`](vercel/) | 📄 [`INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
+| 📦 [`vitest/`](vitest/) | 📄 [`INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
+| 📦 [`zustand/`](zustand/) | 📄 [`INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
 
-*Curate your own collections. The [lefthook](lefthook/) collection is non-standard, docs directly downloaded from GitHub. For Anthropic docs use [this tool](https://github.com/ericbuess/claude-code-docs).*
+*Curate your own collections. The [lefthook](lefthook/) collection is non-standard — docs are downloaded directly from GitHub. For Anthropic docs use [this tool](https://github.com/ericbuess/claude-code-docs).*
 
 ---
 
@@ -130,24 +130,9 @@ Scripts use the FireCrawl Python SDK for general web sources and Python stdlib (
 
 ## 👉 Notes to Improve later
 
-### New Idea (2026.01.16) — use `llms.txt` + direct fetch
+### LLM Routing (2026-05-22)
 
-Instruction given to Claude Code and successfully run on `uv/` directory to update all documents via direct HTTP fetch (Python script), so no scraping, 100% clean, and no Firecrawl tokens.
-
-<div align="center">
-  <a href=".images/20260116_better_idea.jpg">
-    <img src=".images/20260116_better_idea.jpg" alt="Claude Code terminal showing user prompt to assess llms.txt approach: explains that instead of FireCrawl scraping (which isn't always clean), match INDEX.xml source_url entries to llms.txt markdown URLs and curl content directly. Shows Claude reading README.md, uv/llms.txt, and uv/INDEX.xml files." width="875">
-  </a>
-  <p><em>Refactor to use llms.txt + direct fetch</em></p>
-</div>
-
-Adding this as a note for later to refactor to this method. (The screenshot mentions `curl` but we used Python's `urllib.request`.)
-
-Lefthook has https://lefthook.dev/llms.txt
-
-### New Idea (2026.05.22) — "LLM routing"
-
-"Semantic search" isn't the right term. Also the examples need to be improved. Very keyword heavy.
+"Semantic search" isn't the right term. The examples also need improving — very keyword-heavy, with redundant starting words. Index should say `<summary>` instead of `<description>`.
 
 > Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question. Optimise for that, not human readability:
 
@@ -155,6 +140,20 @@ Discriminative descriptions
 
 > Bottom line: keep the descriptions, drop the "semantic search" framing. What you want is discriminative descriptions — meaningful and keyword-anchored and written to stand apart from their neighbours — read by an LLM, not matched by vectors.
 
-### New Idea (2026.05.22) — Extrat duplicated examples
+Also, extract all duplicated examples into one `.claude/commands/references/examples.md` file.
 
-Into one file in .claude/commands/
+Then regenerate all the `PLACEHOLDER` descriptions.
+
+## Remove Scripts? (2026-05-27)
+
+Remove the scripts in [scripts/](scripts/) I don't need. For example, what about a bash for-loop over `curate_doc.py`, then allocate to subagents (run `wc --chars *.md | sort -n` or token counts). Read the diff on each local file and assess if the description needs refining (using `head`).
+
+Pick a cap so no agent is overloaded, on two axes:
+- Input size — a target like "~X total words per agent" so context stays comfortable.
+- File count — a soft cap (e.g. ≤5 files) so no single agent does too much serial reading, which hurts both speed and summary quality.
+
+The honest rule: isolation matters in proportion to file size and similarity. Give a large or highly-similar file its own agent (where contamination/dilution is real). Batch small, distinct files 3–5 together — the interference there is negligible, and you save the overhead. It's a quality-vs-efficiency trade-off, not a flat "always isolate".
+
+> For this task I'd set the budget as "≤5 files AND ≤~12k words per agent, whichever binds first". I'd rather use the anthropic tokeniser script in `~/projects/python/TEMP-token-counts/`.
+
+But if there's an API cost to running these, use a multiplier (approximated across curated files): tokens ≈ characters × 0.37 (I don't think my sampling was wonky across 49 files).

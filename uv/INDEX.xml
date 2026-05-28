@@ -1,198 +1,198 @@
 <docs_index>
   <source>
-    <title>Features</title>
-    <description>Overview of uv's command-line interface covering Python version management, script execution, project workflows, tool installation, pip-compatible operations, and cache utilities.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/getting-started/features.md</source_url>
-    <local_file>getting-started-features.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Working on projects</title>
-    <description>Covers project initialisation with uv init, structure including pyproject.toml and uv.lock, dependency management with uv add/remove, running commands with uv run, and building distributions.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/projects.md</source_url>
-    <local_file>guides-projects.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Managing dependencies</title>
-    <description>Comprehensive guide to dependency fields, uv add/remove commands, dependency sources (Git, URL, path, workspace), optional dependencies, development groups, build dependencies, editable installations, and dependency specifiers syntax.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/dependencies.md</source_url>
-    <local_file>concepts-projects-dependencies.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Running commands in projects</title>
-    <description>Explains uv run for executing commands in project environments, requesting additional dependencies with --with, running scripts with inline metadata, legacy Windows script support, and signal handling behaviour.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/run.md</source_url>
-    <local_file>concepts-projects-run.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Configuration files</title>
-    <description>Explains project-level pyproject.toml and uv.toml files, user and system configuration hierarchy, settings precedence rules, --no-config and --config-file options, dotenv file loading with UV_ENV_FILE, and uv.pip section for pip-interface configuration.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/configuration-files.md</source_url>
-    <local_file>concepts-configuration-files.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Python versions</title>
-    <description>Comprehensive guide to requesting, installing, upgrading, discovering, and managing Python versions including version formats, .python-version files, automatic downloads, managed vs system installations, CPython/PyPy/GraalPy support, free-threaded variants, and python-preference settings.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/python-versions.md</source_url>
-    <local_file>concepts-python-versions.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Building and publishing a package</title>
-    <description>Guide to preparing projects for packaging, building distributions with uv build, updating versions with uv version --bump options, publishing to PyPI with uv publish including token authentication and custom indices.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/package.md</source_url>
-    <local_file>guides-package.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Using uv with pre-commit</title>
-    <description>Demonstrates configuring astral-sh/uv-pre-commit hooks for automatic lockfile updates with uv-lock, exporting requirements with uv-export, and compiling requirements files with pip-compile including multi-file configurations and customisation options.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/pre-commit.md</source_url>
-    <local_file>guides-integration-pre-commit.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Using uv with Jupyter</title>
-    <description>Jupyter integration with uv including running notebooks within projects, creating kernels with ipykernel, package installation methods, standalone tool usage, non-project environments, and VS Code setup.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/jupyter.md</source_url>
-    <local_file>guides-integration-jupyter.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Installing and managing Python</title>
-    <description>Installing Python with uv including specific versions, PyPy, automatic downloads, system Python usage, viewing installations, reinstalling, upgrading patch versions, and managing Python executables.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/install-python.md</source_url>
-    <local_file>guides-install-python.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Project structure and files</title>
-    <description>Project structure including pyproject.toml configuration, .venv project environment management with uv run and uv sync, uv.lock universal lockfile for reproducible installations, and pylock.toml export format support.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/layout.md</source_url>
-    <local_file>concepts-projects-layout.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Creating projects</title>
-    <description>Creating projects with uv init including applications, packaged applications, libraries, extension modules with maturin or scikit-build-core, build backend selection, minimal bare projects, and project structure layouts.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/init.md</source_url>
-    <local_file>concepts-projects-init.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Locking and syncing</title>
-    <description>Lockfile creation and environment syncing with uv lock and uv sync, automatic locking, frozen and locked modes, upgrading packages, syncing extras and development groups, editable installations, and requirements.txt export.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/sync.md</source_url>
-    <local_file>concepts-projects-sync.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Configuring projects</title>
-    <description>Python version requirements, entry points for CLI and GUI scripts, build systems and packaging, build isolation with extra-build-dependencies, project environment paths, editable mode installation, conflicting dependencies, and platform resolution environments.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/config.md</source_url>
-    <local_file>concepts-projects-config.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
-    <title>Building distributions</title>
-    <description>Building distributions with uv build command for sdists and wheels, build frontend role, output directory options, selective building flags, build constraints, and hash verification for reproducibility.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/projects/build.md</source_url>
-    <local_file>concepts-projects-build.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
-  </source>
-  <source>
     <title>Settings</title>
-    <description>Complete reference for all uv configuration settings organised into project metadata and configuration categories, documenting dependency management, indexes, caching, Python installation, resolution strategies, build settings, and package installation options.</description>
+    <description>PLACEHOLDER_SPECIAL</description>
     <source_url>https://docs.astral.sh/uv/reference/settings/index.md</source_url>
     <local_file>reference-settings.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>CLI Reference</title>
-    <description>Comprehensive CLI reference covering all uv commands including run, init, add, remove, sync, lock, export, tree, tool, python, pip, venv, build, publish, with complete syntax, options, and environment variables.</description>
+    <description>PLACEHOLDER_SPECIAL</description>
     <source_url>https://docs.astral.sh/uv/reference/cli/index.md</source_url>
     <local_file>reference-cli.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Environment variables</title>
-    <description>Reference for environment variables uv defines (`UV_*` covering cache, concurrency, indexes, Python installation, publishing, builds) and externally defined variables it respects (`PATH`, proxies, `XDG_*`, `AWS_*`, SSL certs, CI markers).</description>
+    <description>PLACEHOLDER_SPECIAL</description>
     <source_url>https://docs.astral.sh/uv/reference/environment/index.md</source_url>
-    <local_file>environment-variables.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <local_file>reference-environment.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Features</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/getting-started/features.md</source_url>
+    <local_file>getting-started-features.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Working on projects</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/projects.md</source_url>
+    <local_file>guides-projects.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Managing dependencies</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/dependencies.md</source_url>
+    <local_file>concepts-projects-dependencies.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Running commands in projects</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/run.md</source_url>
+    <local_file>concepts-projects-run.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Configuration files</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/configuration-files.md</source_url>
+    <local_file>concepts-configuration-files.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Python versions</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/python-versions.md</source_url>
+    <local_file>concepts-python-versions.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Building and publishing a package</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/package.md</source_url>
+    <local_file>guides-package.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Using uv with pre-commit</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/integration/pre-commit.md</source_url>
+    <local_file>guides-integration-pre-commit.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Using uv with Jupyter</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/integration/jupyter.md</source_url>
+    <local_file>guides-integration-jupyter.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Installing and managing Python</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/install-python.md</source_url>
+    <local_file>guides-install-python.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Project structure and files</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/layout.md</source_url>
+    <local_file>concepts-projects-layout.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Creating projects</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/init.md</source_url>
+    <local_file>concepts-projects-init.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Locking and syncing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/sync.md</source_url>
+    <local_file>concepts-projects-sync.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Configuring projects</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/config.md</source_url>
+    <local_file>concepts-projects-config.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Building distributions</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/build.md</source_url>
+    <local_file>concepts-projects-build.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>The uv build backend</title>
-    <description>uv's native build backend for transforming source trees into distributions, covering configuration, module discovery, namespace packages, stub packages, and file inclusion/exclusion patterns for source distributions and wheels.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/build-backend.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/build-backend.md</source_url>
     <local_file>concepts-build-backend.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Using uv with marimo</title>
-    <description>Integrating uv with marimo notebooks as standalone tool, self-contained scripts with inline metadata, within projects, and non-project environments, including dependency management and running notebooks as scripts.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/marimo.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/integration/marimo.md</source_url>
     <local_file>guides-integration-marimo.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Using uv in GitHub Actions</title>
-    <description>GitHub Actions integration via astral-sh/setup-uv action, Python version setup, matrix testing, dependency syncing with uv sync, cache strategies using enable-cache or actions/cache, private repository authentication, PyPI trusted publishing workflows.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/github.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/integration/github.md</source_url>
     <local_file>guides-integration-github.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Installing uv</title>
-    <description>Installation methods: standalone installer via curl/wget/PowerShell, PyPI with `pipx`/`pip`, Homebrew, MacPorts, WinGet, Scoop, Docker, GitHub releases, Cargo. Covers `uv self update`, shell autocompletion with `uv generate-shell-completion`, and uninstallation steps.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/getting-started/installation.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/getting-started/installation.md</source_url>
     <local_file>getting-started-installation.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Running scripts</title>
-    <description>Running standalone Python scripts with `uv run`, declaring inline dependencies via PEP 723 script metadata, `uv add --script`, `--with` flag, `requires-python`, shebang executables, `uv lock --script`, `exclude-newer` reproducibility.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/scripts.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/scripts.md</source_url>
     <local_file>guides-scripts.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Tools</title>
-    <description>Tools concept: `uvx`/`uv tool run` for ephemeral execution, `uv tool install` for persistent installation, tool environments, version pinning with `@version`/`@latest`, `--with` for extra dependencies, `uv tool upgrade`, executable PATH management.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/tools.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/tools.md</source_url>
     <local_file>concepts-tools.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Using tools</title>
-    <description>`uvx` and `uv tool run` for ephemeral tools, `--from` for package/command mismatches, version pinning, extras, Git sources, `--with` for plugins, `uv tool install` and `upgrade` for persistent installations, `--python` selection.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/tools.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/tools.md</source_url>
     <local_file>guides-tools.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Caching</title>
-    <description>Dependency caching by source type (registry, URL, Git, local), cache invalidation with `--refresh`/`--reinstall`, `tool.uv.cache-keys` for dynamic metadata, `uv cache clean`/`prune`, CI caching strategies, cache directory configuration.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/concepts/cache.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/concepts/cache.md</source_url>
     <local_file>concepts-cache.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Storage</title>
-    <description>uv storage directories: cache, persistent data, configuration, temporary, executable — XDG on Unix, Known Folder on Windows. Lists `UV_PYTHON_INSTALL_DIR`, `UV_TOOL_DIR`, `UV_PROJECT_ENVIRONMENT` env vars and paths for Python versions, tools, `.venv`.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/reference/storage.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/reference/storage.md</source_url>
     <local_file>reference-storage.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
     <title>Using uv with Dependabot</title>
-    <description>Guide to configuring Dependabot for uv projects: enabling automated `uv.lock` updates via `package-ecosystem: "uv"` in `dependabot.yml`, scheduling intervals, and pairing `exclude-newer` with the `cooldown` option.</description>
-    <source_url>https://raw.githubusercontent.com/astral-sh/uv/main/docs/guides/integration/dependabot.md</source_url>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/integration/dependabot.md</source_url>
     <local_file>guides-integration-dependabot.md</local_file>
-    <scraped_at>2026-05-19</scraped_at>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
 </docs_index>

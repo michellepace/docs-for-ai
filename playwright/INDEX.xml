@@ -1,107 +1,107 @@
 <docs_index>
   <source>
-    <title>Configuration | Playwright</title>
-    <description>Configuration options including testDir, fullyParallel, forbidOnly, retries, workers, reporter, projects for multiple browsers, webServer, test filtering patterns, globalSetup, globalTeardown, timeout, outputDir, and expect assertion timeouts.</description>
-    <source_url>https://playwright.dev/docs/test-configuration</source_url>
-    <local_file>configuration-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Writing tests | Playwright</title>
-    <description>Writing tests with test() function, page navigation, locator interactions, basic actions (click, fill, hover, check, press), expect assertions with async matchers (toBeVisible, toHaveTitle), test isolation, and test hooks (beforeEach, describe).</description>
-    <source_url>https://playwright.dev/docs/writing-tests</source_url>
-    <local_file>writing-tests-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Generating tests | Playwright</title>
-    <description>Test generator (codegen) for automatic test generation by recording actions and assertions (visibility, text, value), generating locators with Pick Locator tool, and emulation options for viewports, devices, and color schemes.</description>
-    <source_url>https://playwright.dev/docs/codegen-intro</source_url>
-    <local_file>generating-tests-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Setting up CI | Playwright</title>
-    <description>GitHub Actions workflow setup, test execution, viewing logs and HTML reports, trace inspection, publishing reports to Azure Storage, and handling sensitive artifacts securely in CI.</description>
-    <source_url>https://playwright.dev/docs/ci-intro</source_url>
-    <local_file>setting-up-ci-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>TypeScript | Playwright</title>
-    <description>TypeScript support with automatic transformation, running tsc for type checking, tsconfig.json options (allowJs, baseUrl, paths, references), path mapping, tsconfig resolution (automatic and --tsconfig flag), and manual compilation setup.</description>
-    <source_url>https://playwright.dev/docs/test-typescript</source_url>
-    <local_file>typescript-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Global setup and teardown | Playwright</title>
-    <description>Project dependencies and globalSetup config approaches for global setup/teardown, configuration with testMatch and dependencies, teardown property, test filtering, authentication state reuse, environment variables, and capturing traces during setup failures.</description>
-    <source_url>https://playwright.dev/docs/test-global-setup-teardown</source_url>
-    <local_file>global-setup-and-teardown-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Best Practices | Playwright</title>
-    <description>Testing philosophy (user-visible behavior, test isolation), best practices including locators, web first assertions, debugging (VS Code, trace viewer), cross-browser testing, CI setup, linting, parallelism, sharding, and soft assertions.</description>
-    <source_url>https://playwright.dev/docs/best-practices</source_url>
-    <local_file>best-practices-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Fixtures | Playwright</title>
-    <description>Test fixtures for isolated environment setup, built-in fixtures (page, context, browser, request), creating custom fixtures with test.extend(), overriding fixtures, worker-scoped and automatic fixtures, timeout configuration, execution order, and combining fixtures.</description>
-    <source_url>https://playwright.dev/docs/test-fixtures</source_url>
-    <local_file>fixtures-playwright.md</local_file>
-    <scraped_at>2025-11-07</scraped_at>
-  </source>
-  <source>
-    <title>Test generator | Playwright</title>
-    <description>Test generator (codegen) for recording browser interactions, generating tests in VS Code or CLI, creating locators, recording assertions, emulating devices/viewports/colour schemes/geolocation, preserving authenticated state, custom setup with page.pause().</description>
-    <source_url>https://playwright.dev/docs/codegen</source_url>
-    <local_file>test-generator-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
-  </source>
-  <source>
-    <title>Continuous Integration | Playwright</title>
-    <description>Continuous integration setup for Playwright tests across multiple CI providers including GitHub Actions, Azure Pipelines, CircleCI, Jenkins, GitLab, Docker configuration, sharding, worker settings, browser caching, debugging, headed execution.</description>
-    <source_url>https://playwright.dev/docs/ci</source_url>
-    <local_file>continuous-integration-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
-  </source>
-  <source>
-    <title>Configuration (use) | Playwright</title>
-    <description>Test configuration use object with baseURL, storageState, emulation (viewport, locale, geolocation, colour scheme, permissions, timezone), network (proxy, HTTP authentication, offline), recording (screenshots, videos, traces), browser options, per-test/project/global scopes, option inheritance.</description>
-    <source_url>https://playwright.dev/docs/test-use-options</source_url>
-    <local_file>configuration-use-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
-  </source>
-  <source>
-    <title>UI Mode | Playwright</title>
+    <title>Best Practices</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://playwright.dev/docs/test-ui-mode</source_url>
-    <local_file>ui-mode-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/best-practices-js.md</source_url>
+    <local_file>src-best-practices-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Web server | Playwright</title>
-    <description>webServer configuration for launching local dev servers during tests including command setup, URL readiness checks, timeout settings, reuseExistingServer behaviour, graceful shutdown, baseURL configuration, and multiple server support.</description>
-    <source_url>https://playwright.dev/docs/test-webserver</source_url>
-    <local_file>web-server-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
+    <title>Continuous Integration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/ci.md</source_url>
+    <local_file>src-ci.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Agents | Playwright</title>
-    <description>Three Playwright Test Agents (planner, generator, healer) for automated test creation, including agent initialisation, test planning workflow, code generation, automatic test repair, artifacts structure, seed tests, and agent definitions.</description>
-    <source_url>https://playwright.dev/docs/test-agents</source_url>
-    <local_file>agents-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
+    <title>Setting up CI</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/ci-intro.md</source_url>
+    <local_file>src-ci-intro.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Reporters | Playwright</title>
-    <description>Built-in reporters (list, line, dot, HTML, blob, JSON, JUnit, GitHub Actions) with CLI, programmatic, and environment variable configuration, multiple reporter support, CI optimisation, sharding workflows, and custom Reporter API.</description>
-    <source_url>https://playwright.dev/docs/test-reporters</source_url>
-    <local_file>reporters-playwright.md</local_file>
-    <scraped_at>2025-11-21</scraped_at>
+    <title>Test generator</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/codegen.md</source_url>
+    <local_file>src-codegen.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Generating tests</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/codegen-intro.md</source_url>
+    <local_file>src-codegen-intro.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Agents</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-agents-js.md</source_url>
+    <local_file>src-test-agents-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Configuration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-configuration-js.md</source_url>
+    <local_file>src-test-configuration-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Fixtures</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-fixtures-js.md</source_url>
+    <local_file>src-test-fixtures-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Global setup and teardown</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-global-setup-teardown-js.md</source_url>
+    <local_file>src-test-global-setup-teardown-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Reporters</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-reporters-js.md</source_url>
+    <local_file>src-test-reporters-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>TypeScript</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-typescript-js.md</source_url>
+    <local_file>src-test-typescript-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>UI Mode</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-ui-mode-js.md</source_url>
+    <local_file>src-test-ui-mode-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Configuration (use)</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-use-options-js.md</source_url>
+    <local_file>src-test-use-options-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Web server</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/test-webserver-js.md</source_url>
+    <local_file>src-test-webserver-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Writing tests</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/writing-tests-js.md</source_url>
+    <local_file>src-writing-tests-js.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

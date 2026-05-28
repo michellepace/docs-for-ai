@@ -1,34 +1,21 @@
-"""Add or update documentation in collection directories.
+"""Curate one source URL into a collection directory.
 
-Routes each source URL to either GitHub raw fetch (`github_source`) or
-FireCrawl scrape, then resolves a non-colliding filename and updates
-INDEX.xml. Filenames are stable across re-scrapes.
+Saves the curated doc as a file and registers it in INDEX.xml. URLs ending in
+`.md` and GitHub blobs (`.md`/`.mdx`/`.qmd`, extension preserved) are fetched
+directly. All other URLs are scraped via FireCrawl.
 """
 
 import argparse
 import re
 import sys
-import time
 import xml.etree.ElementTree as ET
 from datetime import date
-from os import environ
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, TypedDict
+from typing import NamedTuple
 from urllib.parse import urlparse
 
-import github_source
-from firecrawl import Firecrawl
-from firecrawl.v2.utils.error_handler import FirecrawlError, RateLimitError
-
-if TYPE_CHECKING:
-    from firecrawl.types import Document
-
-
-class ScrapedDoc(TypedDict):
-    """Normalised result of a single scrape: markdown body plus metadata."""
-
-    markdown: str
-    metadata: dict[str, str]
+import firecrawl_source
+import markdown_source
 
 
 def _normalise_directory_path(dir_path_str: str) -> Path:
@@ -59,11 +46,11 @@ def _validate_url(url: str) -> None:
 
 
 def _reject_uv_docs_url(url: str) -> None:
-    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub raw."""
+    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
     if url.startswith("https://docs.astral.sh/uv/"):
         print(
-            "❌ Error: USE_RAW_GITHUB|"
-            "Use the GitHub RAW URL for this source; "
+            "❌ Error: USE_GITHUB_BLOB|"
+            "Use the GitHub blob URL for this source; "
             "see uv/INDEX.xml for the canonical mapping|"
             f"{url}|"
         )
@@ -84,16 +71,24 @@ def _validate_directory_for_collection(dir_path: Path, index_path: Path) -> None
         sys.exit(1)
 
 
-def _slugify_title(title: str) -> str:
-    """Convert title to filename-safe slug."""
-    slug = title.lower()
-    slug = re.sub(r"[^\w\s-]", "", slug)
-    slug = re.sub(r"[-\s]+", "-", slug)
-    return slug.strip("-")
+def filename_from_canonical_url(url: str) -> str:
+    """Derive a `.md` filename from a non-GitHub doc URL path.
+
+    Expects the canonical URL from `resolve_md_route` (no query/fragment or
+    trailing `.md`); a `docs` segment and any prefix are dropped to avoid a
+    redundant `docs-` slug.
+    """
+    segments = [s for s in urlparse(url).path.strip("/").split("/") if s]
+    if "docs" in segments:
+        segments = segments[segments.index("docs") + 1 :]
+    slug = re.sub(r"[^a-z0-9]+", "-", "-".join(segments).lower()).strip("-")
+    return f"{slug or 'index'}.md"
 
 
-def _create_readme(dir_path: Path, source_site_url: str) -> None:
-    """Create README.md for new collection with overview and source link."""
+def _create_readme(dir_path: Path, source_url: str) -> None:
+    """Create README.md for a new collection with overview and source link."""
+    parsed_url = urlparse(source_url)
+    source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
     readme_content = f"""# {dir_path.name} Documentation
 
 Curated docs for targeted AI context.
@@ -163,197 +158,76 @@ def _add_or_update_source_in_index(
     return is_update
 
 
-def resolve_filename(
-    index_path: Path,
-    source_url: str,
-    candidate: str,
-    *,
-    on_collision: Literal["error", "suffix"],
-) -> str:
-    """Pick a non-colliding filename in INDEX.xml.
+class FetchedDoc(NamedTuple):
+    """A fetched source document: body, title, filename, and canonical URL."""
 
-    Re-scrape (`source_url` already in INDEX) reuses the assigned filename.
-    New source with a free candidate uses the candidate as-is. New source
-    colliding with a different source either exits (`error`) or appends
-    `-2`, `-3`, ... until free (`suffix`).
+    content: str
+    title: str
+    filename: str
+    source_url: str
 
-    `candidate` must include an extension (e.g. `foo.md`); the suffix
-    branch splits on the final `.`.
+
+def fetch_document(source_url: str) -> FetchedDoc:
+    """Fetch a source document, returning a `FetchedDoc`.
+
+    GitHub is checked before the generic `.md` branch because a blob URL also
+    ends in `.md`, yet must be fetched from `raw` and keep its blob URL.
     """
-    if not index_path.exists():
-        return candidate
+    if markdown_source.is_github_url(source_url):
+        raw_url = markdown_source.github_blob_to_raw_url(source_url)
+        print(f"✅ Detected GitHub source|{source_url}|")
+        filename = markdown_source.github_filename_from_blob_url(source_url)
+        content = markdown_source.fetch_markdown(raw_url)
+        title = markdown_source.extract_title(content, raw_url)
+        return FetchedDoc(content, title, filename, source_url)
 
-    root = ET.parse(index_path).getroot()
-    normalised = source_url.rstrip("/")
-    taken: dict[str, str] = {}  # local_file -> source_url (for other sources)
-
-    for source in root.findall("source"):
-        url_elem = source.find("source_url")
-        file_elem = source.find("local_file")
-        if (
-            url_elem is None
-            or url_elem.text is None
-            or file_elem is None
-            or file_elem.text is None
-        ):
-            continue
-        stored_url = url_elem.text.rstrip("/")
-        if stored_url == normalised:
-            return file_elem.text
-        taken[file_elem.text] = stored_url
-
-    if candidate not in taken:
-        return candidate
-
-    if on_collision == "error":
-        print(
-            f"❌ Error: FILENAME_COLLISION|"
-            f"{candidate} already mapped to {taken[candidate]}|{source_url}|"
-        )
-        sys.exit(1)
-
-    stem, ext = candidate.rsplit(".", 1)
-    n = 2
-    while f"{stem}-{n}.{ext}" in taken:
-        n += 1
-    return f"{stem}-{n}.{ext}"
+    prefixes = markdown_source.load_md_allowlist()
+    route = markdown_source.resolve_md_route(source_url, prefixes)
+    filename = filename_from_canonical_url(route.canonical_url)
+    # fetch_url is set unless we route to FireCrawl; the None check also narrows it.
+    if route.use_firecrawl or route.fetch_url is None:
+        content, title = firecrawl_source.scrape(route.canonical_url)
+    else:
+        content = markdown_source.fetch_markdown(route.fetch_url)
+        title = markdown_source.extract_title(content, route.fetch_url)
+    return FetchedDoc(content, title, filename, route.canonical_url)
 
 
-def _get_firecrawl_client() -> Firecrawl:
-    """Get Firecrawl client with API key from environment."""
-    api_key = environ.get("API_KEY_MCP_FIRECRAWL")
-    if not api_key:
-        print("❌ Error: MISSING_API_KEY|API_KEY_MCP_FIRECRAWL not set|")
-        sys.exit(1)
-    return Firecrawl(api_key=api_key)
+def _write_document(dir_path: Path, doc: FetchedDoc) -> None:
+    """Write the fetched markdown to its file."""
+    file_path = dir_path / doc.filename
+    file_existed = file_path.exists()
+    file_path.write_text(doc.content)
+    if file_existed:
+        print(f"✅ Overwrote existing document|{_format_path_for_display(file_path)}|")
+    else:
+        print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
 
 
-def _parse_retry_seconds(error: RateLimitError) -> int:
-    """Parse retry-after seconds from rate limit error message."""
-    error_msg = str(error)
-    retry_match = re.search(r"retry after (\d+)s", error_msg, re.IGNORECASE)
-    if retry_match:
-        return int(retry_match.group(1))
-    # Default to 60s if pattern not found (rate limit window is per minute)
-    return 60
-
-
-def _extract_metadata(result: Document) -> dict[str, str]:
-    """Extract title from Firecrawl document metadata."""
-    metadata = {}
-    if hasattr(result, "metadata") and result.metadata:
-        metadata = {
-            "title": getattr(result.metadata, "title", "Untitled"),
-        }
-    return metadata
-
-
-def _perform_scrape(firecrawl: Firecrawl, url: str) -> ScrapedDoc:
-    """Make one Firecrawl scrape call and return `{markdown, metadata}`.
-
-    Exits with `NO_CONTENT` if the response has no markdown. Rate-limit,
-    API, network, and unexpected errors propagate to `_scrape_with_firecrawl`.
-    """
-    result = firecrawl.scrape(
-        url,
-        formats=["markdown"],
-        only_main_content=True,  # Excl. nav menu, footer, sidebars, etc.
-        remove_base64_images=True,  # Removes base64 strings (keeps alt text)
-        wait_for=3000,  # Wait to capture dynamic content (3 seconds)
-        max_age=86400000,  # Use cached content for speed (24 hours)
-    )
-
-    if not result or not hasattr(result, "markdown") or not result.markdown:
-        print(f"❌ Error: NO_CONTENT|No scrape content returned|{url}|")
-        sys.exit(1)
-
-    return {
-        "markdown": result.markdown,
-        "metadata": _extract_metadata(result),
-    }
-
-
-def _scrape_with_firecrawl(url: str, max_attempts: int = 2) -> ScrapedDoc:
-    """Scrape URL using Firecrawl Python SDK with automatic retry on rate limits.
-
-    Retries on `RateLimitError` for the retry-after duration plus a 2-second
-    safety buffer. `max_attempts` is initial + retries (default `2` = 1
-    initial + 1 retry). Exits via `sys.exit(1)` on rate-limit exhaustion or
-    any other API, network, or unexpected error.
-    """
-    firecrawl = _get_firecrawl_client()
-
-    for attempt in range(max_attempts):
-        try:
-            return _perform_scrape(firecrawl, url)
-
-        except RateLimitError as e:
-            if attempt < max_attempts - 1:
-                retry_seconds = _parse_retry_seconds(e)
-                wait_time = retry_seconds + 2  # Add 2s safety buffer
-                print(f"⏳ Rate limited|Waiting {wait_time}s before retry...|")
-                time.sleep(wait_time)
-                continue
-
-            # Final attempt exhausted
-            print(
-                f"❌ Error: FIRECRAWL_RATELIMIT|"
-                f"Firecrawl rate limited all {max_attempts} attempts, "
-                f"no content scraped|{url}|"
-            )
-            sys.exit(1)
-
-        except FirecrawlError as e:
-            # All other Firecrawl API errors
-            print(f"❌ Error: FIRECRAWL|{e}|{url}|")
-            sys.exit(1)
-
-        except OSError as e:
-            # Network/connection failures (timeouts, DNS errors, etc.)
-            print(f"❌ Error: NETWORK|{e}|{url}|")
-            sys.exit(1)
-
-        except Exception as e:  # noqa: BLE001
-            # Unexpected errors (ValueError, RuntimeError, SDK bugs, etc.)
-            print(f"❌ Error: UNEXPECTED|{type(e).__name__}: {e}|{url}|")
-            sys.exit(1)
-
-    # Defensive fallback (unreachable in normal execution)
-    print(f"❌ Error: NETWORK|Failed after {max_attempts} attempts|{url}|")
-    sys.exit(1)
-
-
-def main() -> None:
-    """Add or update documentation in a collection directory.
-
-    Workflow:
-        1. Validate URL and directory
-        2. Detect source: GitHub raw fetch or FireCrawl scrape
-        3. Create collection structure if new (README.md, INDEX.xml)
-        4. Resolve filename (re-scrape preserves assigned name; new sources
-           use candidate, with GitHub erroring on collision and FireCrawl
-           suffixing)
-        5. Write markdown file and update INDEX.xml
-
-    Filenames are stable across re-scrapes even when the upstream title
-    changes — the URL, not the title, is the identity key in INDEX.
-    """
+def _parse_args() -> argparse.Namespace:
+    """Parse CLI arguments: target directory and source URL."""
     parser = argparse.ArgumentParser(
         description="Add or update documentation in a collection directory"
     )
-
     parser.add_argument(
         "directory",
         help="Documentation directory (e.g. `tailwind/`)",
     )
     parser.add_argument(
         "source_url",
-        help="Web URL to curate (Firecrawl scrape or GitHub raw fetch)",
+        help=(
+            "Web URL to curate (direct `.md` fetch, GitHub `.md`/`.mdx`/`.qmd` "
+            "blob, or FireCrawl scrape)"
+        ),
     )
+    return parser.parse_args()
 
-    args = parser.parse_args()
 
-    source_url = args.source_url.rstrip("/")  # canonical form: no trailing slash
+def main() -> None:
+    """Curate a single source URL into a collection directory."""
+    args = _parse_args()
+
+    source_url: str = args.source_url.rstrip("/")
     dir_path = _normalise_directory_path(args.directory)
     index_path = dir_path / "INDEX.xml"
 
@@ -365,51 +239,23 @@ def main() -> None:
 
     dir_path.mkdir(parents=True, exist_ok=True)
 
-    # Route GitHub vs FireCrawl before creating files (fail fast).
-    is_github = github_source.is_github_url(source_url)
-
-    if is_github:
-        source_url = github_source.to_raw_url(source_url)
-        print(f"✅ Detected GitHub source|{source_url}|")
-        candidate = github_source.derive_filename(source_url)  # exits if invalid
-        content = github_source.fetch_raw(source_url)  # exits on 404/network
-        title = github_source.extract_title(content, source_url)
-    else:
-        scraped_doc = _scrape_with_firecrawl(source_url, max_attempts=2)
-        content = scraped_doc["markdown"]
-        print(f"✅ Scraped content|({len(content):,} characters)|")
-        title = scraped_doc["metadata"].get("title", "Untitled")
-        candidate = f"{_slugify_title(title)}.md"
-
-    # scheme + netloc for the README's curation-source link
-    parsed_url = urlparse(source_url)
-    source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    # Fetch first: failures leave no partial collection.
+    doc = fetch_document(source_url)
 
     if not index_path.exists():
-        _create_readme(dir_path, source_site_url)
+        _create_readme(dir_path, source_url)
         _create_index_xml(dir_path)
 
-    filename = resolve_filename(
-        index_path,
-        source_url,
-        candidate,
-        on_collision="error" if is_github else "suffix",
+    _write_document(dir_path, doc)
+
+    # doc.source_url is canonical: query/fragment-free, no trailing `.md`
+    # (blob form for GitHub). The raw input is kept only for the steps above.
+    is_update = _add_or_update_source_in_index(
+        dir_path, doc.title, doc.source_url, doc.filename
     )
 
-    file_path = dir_path / filename
-
-    file_existed = file_path.exists()
-    file_path.write_text(content)
-    if file_existed:
-        print(f"✅ Overwrote existing document|{_format_path_for_display(file_path)}|")
-    else:
-        print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
-
-    is_update = _add_or_update_source_in_index(dir_path, title, source_url, filename)
-
-    # source_url is canonical (raw form for GitHub, rstripped user URL for FireCrawl)
     verb = "overwrote and re-indexed" if is_update else "created and indexed new"
-    print(f"🎉 Curation Success!|{verb} document|{source_url}|\n")
+    print(f"🎉 Curation Success!|{verb} document|{doc.source_url}|\n")
 
 
 if __name__ == "__main__":

@@ -94,10 +94,14 @@ max-complexity = 10
 # Pytest Configuration
 # =================================
 [tool.pytest.ini_options]
-# scripts/curate_doc.py does `import github_source` (bare) so it runs as
-# `python scripts/curate_doc.py`. Put scripts/ on sys.path for pytest too.
+# scripts/curate_doc.py does bare imports (`markdown_source`, `firecrawl_source`)
+# so it runs as `python scripts/curate_doc.py`. Put scripts/ on sys.path for pytest too.
 pythonpath = ["scripts"]
 markers = [
     "firecrawl: hits FireCrawl API (paid, network)",
     "github: hits raw.githubusercontent.com (free, network)",
+]
+filterwarnings = [
+    # firecrawl-py models name a field `json`, shadowing BaseModel.json (upstream, not ours).
+    "ignore:Field name .* shadows an attribute in parent:UserWarning",
 ]

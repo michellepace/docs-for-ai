@@ -1,149 +1,149 @@
 <docs_index>
   <source>
-    <title>Convex Overview | Convex Developer Hub</title>
-    <description>Convex reactive database architecture: query/mutation functions, `useQuery` hook subscriptions, WebSocket sync, document-relational model, ACID transactions, `ctx.db.query()`, client libraries, three-tier app structure.</description>
-    <source_url>https://docs.convex.dev/understanding</source_url>
-    <local_file>convex-overview-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Dev workflow | Convex Developer Hub</title>
-    <description>Convex project setup: `npx convex dev` command, `convex/` directory structure, `.env.local` deployment config, `convex/_generated` types, dashboard logs/health/data, `npx convex deploy` production workflow.</description>
-    <source_url>https://docs.convex.dev/understanding/workflow</source_url>
-    <local_file>dev-workflow-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>The Zen of Convex | Convex Developer Hub</title>
-    <description>Convex design philosophy and anti-patterns: prioritise sync engine queries over actions, avoid client-side caching, action workflow patterns, mutation return values, record progress incrementally, dashboard-driven debugging.</description>
-    <source_url>https://docs.convex.dev/understanding/zen</source_url>
-    <local_file>the-zen-of-convex-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Best Practices | Convex Developer Hub</title>
-    <description>Production Convex best practices and anti-patterns: awaiting promises, avoiding `.filter()`/`.collect()` on large datasets, `withIndex` optimisation, `v` validators, `ctx.auth` access control, `internalMutation`/`internalQuery`, helper function organisation.</description>
-    <source_url>https://docs.convex.dev/understanding/best-practices</source_url>
-    <local_file>best-practices-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>TypeScript | Convex Developer Hub</title>
-    <description>End-to-end TypeScript types: argument inference from validators, schema-driven `Doc`/`Id`, context types `QueryCtx`/`MutationCtx`/`ActionCtx`, `Infer` for validators, `WithoutSystemFields`, `FunctionReturnType`, `UsePaginatedQueryReturnType` for client annotations.</description>
-    <source_url>https://docs.convex.dev/understanding/best-practices/typescript</source_url>
-    <local_file>typescript-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Next.js | Convex Developer Hub</title>
-    <description>Next.js App Router client-side integration: `ConvexReactClient` setup, `ConvexClientProvider` wrapper, `ConvexProviderWithAuth0`, Clerk/Auth0 authentication configuration, `Authenticated`/`Unauthenticated`/`AuthLoading` helpers, JWT tokens for hybrid server-client auth.</description>
-    <source_url>https://docs.convex.dev/client/nextjs/app-router</source_url>
-    <local_file>nextjs-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Next.js Server Rendering | Convex Developer Hub</title>
-    <description>Next.js SSR with Convex: `preloadQuery`/`usePreloadedQuery` for reactive preloading, `fetchQuery`/`fetchMutation`/`fetchAction` for Server Components, Server Actions, Route Handlers. JWT token auth, `preloadedQueryResult`, `Preloaded` type, consistency caveats.</description>
-    <source_url>https://docs.convex.dev/client/nextjs/app-router/server-rendering</source_url>
-    <local_file>nextjs-server-rendering-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>ESLint rules | Convex Developer Hub</title>
-    <description>`@convex-dev/eslint-plugin` setup for ESLint 9 flat config `eslint.config.js` and legacy `.eslintrc`. Rules: `no-old-registered-function-syntax`, `require-argument-validators`, `explicit-table-ids`, `import-wrong-runtime`. Auto-fixable linting for Convex functions.</description>
-    <source_url>https://docs.convex.dev/eslint</source_url>
-    <local_file>eslint-rules-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Next.js Quickstart | Convex Developer Hub</title>
-    <description>Step-by-step Convex + Next.js App Router setup: `npm create convex@latest`, `npx convex dev`, `npx convex import`, `ConvexProvider`, `ConvexReactClient`, `useQuery` hook, `api` generated module, `convex/` folder structure.</description>
-    <source_url>https://docs.convex.dev/quickstart/nextjs</source_url>
-    <local_file>nextjs-quickstart-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Database | Convex Developer Hub</title>
-    <description>Convex database fundamentals: tables, JSON-like documents, optional schemas with `defineSchema`/`defineTable`, document IDs, `v` validators. Entry point for reading/writing data in query/mutation functions.</description>
-    <source_url>https://docs.convex.dev/database</source_url>
-    <local_file>database-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>AI Code Generation | Convex Developer Hub</title>
-    <description>AI coding assistant setup for Convex: `convex_rules.txt` for Cursor/Windsurf/Copilot, `CONVEX_AGENT_MODE` for background agents like Jules/Devin/Codex, MCP server integration. LLM leaderboard link.</description>
+    <title>AI Code Generation</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.convex.dev/ai</source_url>
-    <local_file>ai-code-generation-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <local_file>ai.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Using Cursor with Convex | Convex Developer Hub</title>
-    <description>Cursor IDE setup for Convex: `.cursor/rules` with `.mdc` files, MCP server via `mcp.json`, `npx convex dev` for type generation, `@Convex` docs indexing, `README.md` context tips.</description>
-    <source_url>https://docs.convex.dev/ai/using-cursor</source_url>
-    <local_file>using-cursor-with-convex-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
-  </source>
-  <source>
-    <title>Convex MCP Server | Convex Developer Hub</title>
-    <description>Convex MCP server tools: `status`, `tables`, `data`, `runOneoffQuery`, `functionSpec`, `run`, `logs`, `envList`/`envGet`/`envSet`/`envRemove`. Install via `npx convex mcp start`. Editor-agnostic reference.</description>
+    <title>Convex MCP Server</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.convex.dev/ai/convex-mcp-server</source_url>
-    <local_file>convex-mcp-server-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <local_file>ai-convex-mcp-server.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Testing | Convex Developer Hub</title>
-    <description>Convex testing overview: `convex-test` JavaScript mocking, open-source local backend for production parity, GitHub Actions CI setup, manual testing via CLI and dashboard.</description>
-    <source_url>https://docs.convex.dev/testing</source_url>
-    <local_file>testing-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <title>Using Cursor with Convex</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/ai/using-cursor</source_url>
+    <local_file>ai-using-cursor.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>convex-test | Convex Developer Hub</title>
-    <description>Unit testing with `convex-test` and Vitest: `convexTest()` setup, `t.query`/`t.mutation`/`t.action`, `t.run` for direct DB writes, `t.withIdentity` for auth mocking, `t.fetch` for HTTP actions, `vi.useFakeTimers` for scheduled functions, `vi.stubGlobal` for fetch.</description>
-    <source_url>https://docs.convex.dev/testing/convex-test</source_url>
-    <local_file>convex-test-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <title>Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/client/nextjs/app-router</source_url>
+    <local_file>client-nextjs-app-router.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Testing Local Backend | Convex Developer Hub</title>
-    <description>Testing against open-source Convex local backend: production parity, limit enforcement, data imports, client-backend integration. Cannot mock fetch, time, environment variables, or dependencies.</description>
-    <source_url>https://docs.convex.dev/testing/convex-backend</source_url>
-    <local_file>testing-local-backend-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <title>Next.js Server Rendering</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/client/nextjs/app-router/server-rendering</source_url>
+    <local_file>client-nextjs-app-router-server-rendering.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Continuous Integration | Convex Developer Hub</title>
-    <description>GitHub Actions CI workflow for Convex tests: `.github/workflows/test.yml` configuration, `actions/checkout`, `actions/setup-node`, `npm ci`, `npm run test` on `pull_request` and `push` events.</description>
-    <source_url>https://docs.convex.dev/testing/ci</source_url>
-    <local_file>continuous-integration-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-07</scraped_at>
+    <title>Database</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database</source_url>
+    <local_file>database.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Schemas | Convex Developer Hub</title>
-    <description>Convex schema definition with `defineSchema`, `defineTable`, `v` validators: optional fields, unions, literals, `v.record`, `v.any`. Schema options `schemaValidation`, `strictTableNameTypes`. Circular reference handling, TypeScript `Doc&lt;TableName&gt;` types.</description>
-    <source_url>https://docs.convex.dev/database/schemas</source_url>
-    <local_file>schemas-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-19</scraped_at>
-  </source>
-  <source>
-    <title>Data Types | Convex Developer Hub</title>
-    <description>Convex data types reference: Id, Null, Int64, Float64, Boolean, String, Bytes, Array, Object, Record with `v` validators, system fields `_id`/`_creationTime`, size limits, `undefined` behaviour, dates/times storage patterns.</description>
-    <source_url>https://docs.convex.dev/database/types</source_url>
-    <local_file>data-types-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-19</scraped_at>
-  </source>
-  <source>
-    <title>Document IDs | Convex Developer Hub</title>
-    <description>Document IDs: unique string identifiers via `ctx.db.insert`, retrieval with `ctx.db.get`, `Id&lt;table&gt;` TypeScript type, references for relationships, `v.id()` validators, `normalizeId` for external ID validation, nested documents vs relationships trade-offs.</description>
+    <title>Document IDs</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.convex.dev/database/document-ids</source_url>
-    <local_file>document-ids-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-19</scraped_at>
+    <local_file>database-document-ids.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>dataModel.d.ts | Convex Developer Hub</title>
-    <description>Generated TypeScript types in `dataModel.d.ts`: `TableNames`, `Doc&lt;TableName&gt;`, `Id&lt;TableName&gt;`, `DataModel`. Created via `npx convex dev`, used to type-parameterise queries and mutations.</description>
+    <title>Schemas</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database/schemas</source_url>
+    <local_file>database-schemas.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Data Types</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database/types</source_url>
+    <local_file>database-types.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>ESLint rules</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/eslint</source_url>
+    <local_file>eslint.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>dataModel.d.ts</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://docs.convex.dev/generated-api/data-model</source_url>
-    <local_file>datamodeldts-convex-developer-hub.md</local_file>
-    <scraped_at>2026-01-19</scraped_at>
+    <local_file>generated-api-data-model.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Next.js Quickstart</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/quickstart/nextjs</source_url>
+    <local_file>quickstart-nextjs.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing</source_url>
+    <local_file>testing.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Continuous Integration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/ci</source_url>
+    <local_file>testing-ci.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Testing Local Backend</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/convex-backend</source_url>
+    <local_file>testing-convex-backend.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>convex-test</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/convex-test</source_url>
+    <local_file>testing-convex-test.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Convex Overview</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding</source_url>
+    <local_file>understanding.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Best Practices</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/best-practices</source_url>
+    <local_file>understanding-best-practices.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>TypeScript</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/best-practices/typescript</source_url>
+    <local_file>understanding-best-practices-typescript.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Dev workflow</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/workflow</source_url>
+    <local_file>understanding-workflow.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>The Zen of Convex</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/zen</source_url>
+    <local_file>understanding-zen.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

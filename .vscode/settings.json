@@ -3,6 +3,14 @@
     "window.commandCenter": true,   // search box at top of window
     "editor.colorDecorators": true, // show colour pickers in code
 
+    // Hide generated dirs from the Explorer
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.ruff_cache": true,
+        "**/.venv": true
+    },
+
 
     // 🐍 UV PYTHON ENVIRONMENT
     // Run `uv sync` to create .venv/ → IDE auto-detects the interpreter below

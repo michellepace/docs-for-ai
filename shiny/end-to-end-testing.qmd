@@ -1,0 +1,231 @@
+---
+title: End-to-End Testing Your App
+editor:
+  markdown:
+    wrap: sentence
+---
+
+### What is End-to-End Testing (and Why Should You Care)?
+
+Imagine you've built a beautiful, interactive Shiny app.  You want to make sure everything works exactly as expected, every time, for every user.  That's where end-to-end testing comes in.
+
+**What it is:**
+
+*   End-to-end testing checks your *entire* Shiny app, from start to finish, as if a real person were using it.
+*   It simulates user actions like clicking buttons, filling in forms, and navigating between different parts of your app.
+*   It verifies that the app's outputs (like graphs, tables, and text) are correct based on those actions.
+
+**Why it's awesome:**
+
+*   **Early bug detection:**  Find problems *before* your users do!  No more embarrassing surprises.
+*   **Confidence in changes:**  When you update your app, tests make sure you haven't accidentally broken anything.
+*   **Time saver:**  Instead of manually clicking through your app every time you make a change, tests automate the process.
+*   **Peace of mind:**  Know that your app is working reliably, so you can focus on building new features.
+
+### Introducing Playwright: A Comprehensive Automated Testing Solution for Web Applications
+
+***Playwright*** is a robust, open-source automation framework developed by Microsoft that enables programmatic control of web browsers. This tool provides developers with the capability to automate interactions with web applications across Chrome, Firefox, and Safari, simulating user behavior in a controlled, reproducible environment.
+
+**Why Playwright is perfect for Shiny:**
+
+*   **Handles interactivity:**  It can interact with all those cool Shiny widgets like sliders, dropdowns, and buttons.
+*   **Cross-browser testing:**  Make sure your app works flawlessly on different browsers.
+*   **Smart waiting:** Playwright automatically waits for your app to load and for elements to be ready, so your tests are reliable.
+*   **Easy to learn:**  The code is relatively straightforward, and we'll walk you through it.
+
+Learn more at the [official Playwright documentation](https://playwright.dev/python/).
+
+### Let's Build and Test a Simple Shiny App!
+
+We'll start with a super simple example to show you the basics.  Follow along, and you'll be writing your own tests in no time!
+
+#### Step 1: Create Your First Shiny App
+
+First, let's create a tiny Shiny app with just a slider and some text.
+
+1.  **Create a new file:**  Create a file named `app.py`.
+2.  **Copy and paste this code:**
+
+```python
+from shiny.express import input, render, ui
+
+ui.panel_title("Hello Shiny!")
+ui.input_slider("n", "N", 0, 100, 20)
+
+
+@render.text
+def txt():
+    return f"n*2 is {input.n() * 2}"
+
+```
+
+3.  **What this app does:** This app displays a slider (labeled "N") that goes from 0 to 100.  Below the slider, it shows the text "n*2 is \[value]", where \[value] is twice the current slider value.
+
+#### Step 2:  What Are We Testing?
+
+Our goal is to write a test that does the following:
+
+1.  **Opens the app:**  Starts the Shiny app in a browser.
+2.  **Moves the slider:**  Sets the slider to a specific value (*55* in this case).
+3.  **Checks the output:**  Verifies that the text below the slider displays the correct result ("n*2 is 110").
+
+#### Step 3:  Write Your First Test!
+
+Now for the exciting part – writing the test code!
+
+1.  **Create a new file:** Create a new file named `test_basic_app.py` in the same directory as your `app.py` file. Remember, test file names must start with `test_`.
+2.  **Copy and paste this code:**
+
+```python
+from shiny.playwright import controller
+from shiny.run import ShinyAppProc
+from playwright.sync_api import Page
+
+def test_basic_app(page: Page, local_app: ShinyAppProc) -> None:
+    # Navigate to the app URL when it's ready
+    page.goto(local_app.url)
+
+    # Controller objects for interacting with specific Shiny components
+    txt = controller.OutputText(page, "txt")
+    slider = controller.InputSlider(page, "n")
+
+    # Move the slider to position 55
+    slider.set("55")
+
+    # Verify that the output text shows "n*2 is 110"
+    # (since 55 * 2 = 110)
+    txt.expect_value("n*2 is 110")
+```
+
+- **Understand role of Fixtures**
+    - **ShinyAppProc**: Manages a Shiny application subprocess, handling lifecycle (startup, shutdown) and providing access to output streams.
+    - **page**: Playwright object representing the browser tab.
+    - **local_app**: Running instance of the Shiny application.
+
+-  **Understand role of Controllers**
+
+    Controllers such as `OutputText` and `InputSlider` provide abstraction over Playwright's low-level interactions by:
+
+    - Automatically handling element waiting and state changes
+    - Offering specialized interfaces for specific Shiny component types
+    - Managing Shiny-specific behaviors without additional code
+    - Providing consistent patterns for testing similar components
+
+And visually, this is what happens when the test runs:
+
+
+![](assets/end-to-end-test-workflow.png)
+
+#### Step 4: Run Your Test!
+
+Before you run the test, you need to install a couple of things:
+
+1.  **Install pytest and pytest-playwright**: Open your terminal (or command prompt) and type:
+
+```bash
+pip install pytest pytest-playwright
+```
+
+2.  **Navigate to your app's directory**: In the terminal, use the `cd` command to go to the folder where you saved `app.py` and `test_basic_app.py`.
+
+3.  **Run the test**: Type the following command and press Enter:
+
+```bash
+pytest
+```
+
+You should see output similar to this:
+
+```text
+======== test session starts ========
+... (some details about your setup)
+.
+======== 1 passed in 3.05s ========
+```
+
+What does this mean?
+
+- The `.` (dot) means your test passed!
+- If you see an `F`, it means the test failed. Double-check your code and make sure you followed all the steps.
+
+#### Visualize Your Test (Optional)
+
+If you want to see what Playwright is doing, you can run the test in "headed" mode. This will open a browser window and show you the interactions.
+
+```bash
+pytest --headed
+```
+
+You can also specify a particular browser:
+
+```bash
+pytest --browser firefox
+```
+
+### Adding Tests to an Existing Shiny App
+
+If you already have a Shiny app, you can easily add tests:
+
+1. Open your terminal: Navigate to your app's directory.
+1. Run the shiny add test command:
+
+```bash
+shiny add test
+```
+
+1. Answer the prompts: It will ask for the path to your app file (e.g., `app.py`) and a name for your test file (e.g., `test_myapp.py`). Remember, the test file name must start with `test_`.
+1. Generated test files usually include simple assertions that check visible UI text and interactive states for Shiny components (for example, slider values or checkbox output). Treat these as a starting point and expand them to cover additional behaviors, edge cases, and integration points as needed.
+
+Before generating tests, make sure you have:
+
+- An API key or credentials for the provider you intend to use:
+  - Anthropic: `export ANTHROPIC_API_KEY=...`
+  - OpenAI: `export OPENAI_API_KEY=...`
+
+- A working Shiny app file (e.g. `app.py`).
+- Shiny testing dependencies installed. If you haven't installed the extras yet:
+
+```bash
+pip install "shiny[add-test]"
+```
+
+#### Choosing a provider for generating tests
+
+```bash
+# Anthropic (default)
+shiny add test --app app.py
+
+# OpenAI (will use gpt-5)
+shiny add test --app app.py --provider openai
+
+# explicitly use gpt-5-mini model
+shiny add test --app app.py --provider openai --model gpt-5-mini
+```
+
+### Troubleshooting Common Issues
+
+- Test fails with an error about finding an element: Make sure the IDs you're using in your test code (e.g., "txt", "n") match the IDs in your Shiny app code. Inspect your app's HTML in the browser's developer tools if you're unsure.
+
+- Test is flaky (sometimes passes, sometimes fails): This can happen if your app takes a while to load or if there are timing issues. Playwright has built-in waiting mechanisms, but you might need to add explicit waits in some cases. See the [Playwright documentation](https://playwright.dev/python/docs/events#waiting-for-event) on waiting.
+
+### Keep Exploring!
+
+You've taken your first steps into the world of Shiny app testing! Here are some resources to help you learn more:
+
+- [Shiny testing API documentation](https://shiny.posit.co/py/api/testing/) - This is your go-to guide for all the available testing methods in Shiny.
+- [Playwright documentation](https://playwright.dev/python/) - Learn more about Playwright's powerful features.
+- [pytest documentation](https://docs.pytest.org/en/stable/)
+- [OpenTelemetry](opentelemetry.qmd) - Monitor your app's performance in production with distributed tracing
+
+::: {.callout-note}
+## Disabling Tracing in Tests
+
+If your app uses [OpenTelemetry tracing](opentelemetry.qmd), you may want to disable it during tests to avoid generating unnecessary trace data. Set the environment variable before running tests:
+
+```bash
+export SHINY_OTEL_COLLECT=none
+pytest
+```
+:::
+
+Happy testing! You're now well-equipped to build more robust and reliable Shiny apps.

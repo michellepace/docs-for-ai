@@ -1,191 +1,163 @@
 <docs_index>
   <source>
-    <title>Sheet</title>
-    <description>Sheet component extending Radix Dialog for slide-out panels. `Sheet`, `SheetTrigger`, `SheetContent` with `side` prop (top, right, bottom, left), `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose`. CSS width customisation via className.</description>
-    <source_url>https://ui.shadcn.com/docs/components/sheet</source_url>
-    <local_file>sheet-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Shadcn Sheet (Unofficial)</title>
-    <description>Extended Sheet patterns: settings panels, navigation drawers, mobile action sheets, filter sidebars, notification bars. API reference for `SheetContent` `side` prop, `SheetHeader`, `SheetFooter`, `SheetClose`, focus trapping, portal rendering, production tips.</description>
-    <source_url>https://www.shadcn.io/ui/sheet</source_url>
-    <local_file>shadcn-sheet.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Field</title>
-    <description>Field component family for accessible forms: `Field`, `FieldSet`, `FieldGroup`, `FieldLabel`, `FieldContent`, `FieldDescription`, `FieldError`, `FieldSeparator`. Orientation props (vertical, horizontal, responsive), `data-invalid` validation, choice cards, Standard Schema error support.</description>
-    <source_url>https://ui.shadcn.com/docs/components/field</source_url>
-    <local_file>field-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>TanStack Form</title>
-    <description>TanStack Form integration: `useForm` hook, Zod schema validation, `form.Field` render prop. Validation modes (`onChange`, `onBlur`, `onSubmit`), `FieldError` display, field types (input, textarea, select, checkbox, radio, switch), array fields with `pushValue`/`removeValue`.</description>
-    <source_url>https://ui.shadcn.com/docs/forms/tanstack-form</source_url>
-    <local_file>tanstack-form-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Button</title>
-    <description>Button with `variant` prop (default, outline, ghost, destructive, secondary, link), `size` prop (sm, default, lg, icon, icon-sm, icon-lg), automatic icon spacing, `Spinner` loading, `asChild` polymorphic rendering, `ButtonGroup` composition.</description>
-    <source_url>https://ui.shadcn.com/docs/components/button</source_url>
-    <local_file>button-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Sonner</title>
-    <description>Sonner toast installation via CLI/manual, `Toaster` component in app layout, `toast()` import, success/error/loading variants, lucide icons customisation, `next-themes` dark mode, CSS variables styling.</description>
-    <source_url>https://ui.shadcn.com/docs/components/sonner</source_url>
-    <local_file>sonner-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Shadcn Sonner (Unofficial)</title>
-    <description>Sonner toast patterns: `toast.success()`, `toast.error()`, `toast.loading()`, `toast.promise()` for async, `toast.custom()` JSX, undo actions, `duration` control, persistent notifications with `duration: Infinity`, icon customisation, position configuration.</description>
-    <source_url>https://www.shadcn.io/ui/sonner</source_url>
-    <local_file>shadcn-sonner.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>MCP Server</title>
-    <description>MCP server enabling AI assistants (Claude Code, Cursor, VS Code, Codex) to browse, search, install registry components. Setup via `npx shadcn mcp init --client`, `components.json` registries config, authentication headers, troubleshooting.</description>
-    <source_url>https://ui.shadcn.com/docs/mcp</source_url>
-    <local_file>mcp-server-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
     <title>shadcn</title>
-    <description>CLI reference: `init` (dependencies, `cn` util, CSS variables), `add` (`--overwrite`, `--all`, `--path`), `view`, `search`/`list` (`-q` query), `build` for registry JSON. Flags: `--template`, `--base-color`, `--cwd`, `--silent`, `@namespace` syntax.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/cli</source_url>
-    <local_file>shadcn-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
+    <local_file>cli.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>components.json</title>
-    <description>Project configuration schema: `style`, `tailwind` (`config`, `css`, `baseColor`, `cssVariables`, `prefix`), `rsc`, `tsx`, `aliases` (`components`, `utils`, `ui`, `lib`, `hooks`), `registries` with `@namespace` URLs, authentication headers, `${VAR}` expansion.</description>
+    <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components-json</source_url>
-    <local_file>componentsjson-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Theming</title>
-    <description>CSS variables theming with oklch colours, background/foreground convention, variables (`--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--ring`, `--chart-*`, `--sidebar-*`), `@theme inline` directive, base palettes (neutral, stone, zinc, gray, slate).</description>
-    <source_url>https://ui.shadcn.com/docs/theming</source_url>
-    <local_file>theming-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Empty</title>
-    <description>Empty state placeholder with `Empty`, `EmptyHeader`, `EmptyMedia` (icon/avatar variants), `EmptyTitle`, `EmptyDescription`, `EmptyContent` subcomponents. Supports outline borders via `border` utility, gradient backgrounds, avatar groups, `InputGroup` integration, call-to-action buttons.</description>
-    <source_url>https://ui.shadcn.com/docs/components/empty</source_url>
-    <local_file>empty-shadcnui.md</local_file>
-    <scraped_at>2025-12-16</scraped_at>
-  </source>
-  <source>
-    <title>Item</title>
-    <description>Flex container with `Item`, `ItemMedia` (icon/image/avatar), `ItemContent`, `ItemTitle`, `ItemDescription`, `ItemActions`, `ItemHeader`, `ItemFooter`, `ItemGroup`, `ItemSeparator`. Variants (default, outline, muted), sizes (default, sm), `asChild` for links, dropdown menus.</description>
-    <source_url>https://ui.shadcn.com/docs/components/item</source_url>
-    <local_file>item-shadcnui.md</local_file>
-    <scraped_at>2025-12-18</scraped_at>
-  </source>
-  <source>
-    <title>Sidebar</title>
-    <description>Composable sidebar: `SidebarProvider`, `Sidebar`, `SidebarContent`, `SidebarGroup`, `SidebarMenu`, `SidebarMenuButton`, `SidebarMenuAction`, `SidebarMenuSub`, `SidebarMenuBadge`, `SidebarMenuSkeleton`. `useSidebar` hook, collapsible modes (offcanvas, icon, none), variants (sidebar, floating, inset), CSS variables theming, keyboard shortcuts, cookie persistence.</description>
-    <source_url>https://ui.shadcn.com/docs/components/sidebar</source_url>
-    <local_file>sidebar-shadcnui.md</local_file>
-    <scraped_at>2025-12-24</scraped_at>
-  </source>
-  <source>
-    <title>Navigation Menu</title>
-    <description>Radix UI navigation menu with `NavigationMenu`, `NavigationMenuList`, `NavigationMenuItem`, `NavigationMenuTrigger`, `NavigationMenuContent`, `NavigationMenuLink`, `NavigationMenuIndicator`, `NavigationMenuViewport`. `asChild` prop for Next.js `Link` integration, dropdown navigation patterns.</description>
-    <source_url>https://ui.shadcn.com/docs/components/navigation-menu</source_url>
-    <local_file>navigation-menu-shadcnui.md</local_file>
-    <scraped_at>2025-12-24</scraped_at>
-  </source>
-  <source>
-    <title>Drawer</title>
-    <description>Mobile drawer component built on Vaul library. `Drawer`, `DrawerTrigger`, `DrawerContent`, `DrawerHeader`, `DrawerFooter`, `DrawerClose` subcomponents. Gesture support, responsive Dialog/Drawer pattern for desktop/mobile switching.</description>
-    <source_url>https://ui.shadcn.com/docs/components/drawer</source_url>
-    <local_file>drawer-shadcnui.md</local_file>
-    <scraped_at>2025-12-25</scraped_at>
-  </source>
-  <source>
-    <title>Shadcn Drawer (Unofficial)</title>
-    <description>Extended Drawer patterns with Vaul physics-based gestures, snap points, `direction` prop (bottom, top, left, right), nested drawers, controlled `open`/`onOpenChange` state. Responsive dialog-drawer strategy, swipe/drag interactions, production tips.</description>
-    <source_url>https://www.shadcn.io/ui/drawer</source_url>
-    <local_file>shadcn-drawer.md</local_file>
-    <scraped_at>2025-12-25</scraped_at>
+    <local_file>components-json.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Badge</title>
-    <description>Badge component for status labels, tags, counts. Variants: default, outline, secondary, destructive. `asChild` prop enables polymorphic rendering as Next.js `Link` or other elements.</description>
-    <source_url>https://ui.shadcn.com/docs/components/badge</source_url>
-    <local_file>badge-shadcnui.md</local_file>
-    <scraped_at>2025-12-31</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/badge</source_url>
+    <local_file>components-radix-badge.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>LLMs.txt</title>
-    <description>Machine-readable component catalogue for AI assistants. Lists all shadcn/ui components by category: form/input, layout/navigation, overlays/dialogs, feedback/status, display/media. Links to dark mode, forms, monorepo, registry, MCP server documentation.</description>
-    <source_url>https://ui.shadcn.com/llms.txt</source_url>
-    <local_file>llms-txt.md</local_file>
-    <scraped_at>2025-01-05</scraped_at>
+    <title>Button</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/button</source_url>
+    <local_file>components-radix-button.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Drawer</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/drawer</source_url>
+    <local_file>components-radix-drawer.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Empty</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/empty</source_url>
+    <local_file>components-radix-empty.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Field</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/field</source_url>
+    <local_file>components-radix-field.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Input Group</title>
-    <description>`InputGroup` component for enhancing inputs/textareas with icons, text, buttons, tooltips, spinners, labels, dropdowns. `InputGroupAddon` alignment (`inline-start`/`inline-end`, `block-start`/`block-end`), `InputGroupButton` variants, custom controls via `data-slot` attribute.</description>
-    <source_url>https://ui.shadcn.com/docs/components/input-group</source_url>
-    <local_file>input-group-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/input-group</source_url>
+    <local_file>components-radix-input-group.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Item</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/item</source_url>
+    <local_file>components-radix-item.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Native Select</title>
-    <description>Styled native HTML `&lt;select&gt;` with `NativeSelect`, `NativeSelectOption`, `NativeSelectOptGroup`. Option grouping, disabled states, `aria-invalid` validation styling, React Hook Form integration, InputGroup compatibility, mobile-optimised native dropdowns vs custom Select component.</description>
-    <source_url>https://ui.shadcn.com/docs/components/native-select</source_url>
-    <local_file>native-select-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/native-select</source_url>
+    <local_file>components-radix-native-select.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Navigation Menu</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/navigation-menu</source_url>
+    <local_file>components-radix-navigation-menu.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Sheet</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/sheet</source_url>
+    <local_file>components-radix-sheet.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Sidebar</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/sidebar</source_url>
+    <local_file>components-radix-sidebar.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Sonner</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/sonner</source_url>
+    <local_file>components-radix-sonner.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
     <title>Spinner</title>
-    <description>Loading indicator component with `animate-spin` animation. Customisable size via `size-*` utilities, colour via `text-*` utilities, replaceable icon. Integration examples with Button, Badge, InputGroup, Empty, Item components.</description>
-    <source_url>https://ui.shadcn.com/docs/components/spinner</source_url>
-    <local_file>spinner-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/components/radix/spinner</source_url>
+    <local_file>components-radix-spinner.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
   <source>
-    <title>Registry Item JSON Schema Examples</title>
-    <description>Registry item JSON schema examples: `registry:style` with `extends: none`, `registry:theme`, `registry:block`. Covers `cssVars` theme/light/dark, `@layer base`/`components`, `@utility`, `@import`, `@plugin`, `@keyframes` animations, `envVars`, universal items with explicit `target` paths.</description>
-    <source_url>https://ui.shadcn.com/docs/registry/examples</source_url>
-    <local_file>examples-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
-  </source>
-  <source>
-    <title>Registry System Introduction</title>
-    <description>Registry system overview for distributing custom components, hooks, pages, config, rules via `shadcn` CLI. Framework-agnostic (React, Vue, Svelte). Links to getting-started, authentication, namespaces, examples, schema documentation.</description>
-    <source_url>https://ui.shadcn.com/docs/registry</source_url>
-    <local_file>introduction-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
-  </source>
-  <source>
-    <title>Registry Setup and Build Guide</title>
-    <description>Registry setup: `registry.json` schema with name, homepage, items. Item definition with name, type, files, `registryDependencies`, `dependencies`. `shadcn build` to `public/r/`, `npx shadcn add` URL installation, `@/registry` imports, `registry/[STYLE]/[NAME]` structure.</description>
-    <source_url>https://ui.shadcn.com/docs/registry/getting-started</source_url>
-    <local_file>getting-started-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
-  </source>
-  <source>
-    <title>Changelog 2025 (newest-first)</title>
-    <description>2025 release history (newest-first): `npx shadcn create` with styles Vega/Nova/Maia/Lyra/Mira (Dec), Registry Directory (Nov), CLI 3.0 namespaced registries MCP (Aug), October components (Spinner, Field, Item), universal items, `radix-ui` migration.</description>
-    <source_url>https://ui.shadcn.com/docs/changelog</source_url>
-    <local_file>changelog.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
-  </source>
-  <source>
-    <title>Registry Directory - shadcn/ui</title>
-    <description>Directory of 90+ community registries with `npx shadcn add @&lt;namespace&gt;/&lt;component&gt;` zero-config installation. Includes @magicui, @aceternity, @assistant-ui, @animate-ui, @cult-ui, @motion-primitives, @plate, @supabase, @clerk, @react-aria.</description>
+    <title>Registry Directory</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/directory</source_url>
-    <local_file>registry-directory-shadcnui.md</local_file>
-    <scraped_at>2026-01-05</scraped_at>
+    <local_file>directory.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>TanStack Form</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/forms/tanstack-form</source_url>
+    <local_file>forms-tanstack-form.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>MCP Server</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/mcp</source_url>
+    <local_file>mcp.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Introduction</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/registry</source_url>
+    <local_file>registry.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Examples</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/registry/examples</source_url>
+    <local_file>registry-examples.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Getting Started</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/registry/getting-started</source_url>
+    <local_file>registry-getting-started.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>Theming</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/docs/theming</source_url>
+    <local_file>theming.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
+  </source>
+  <source>
+    <title>LLMS.txt</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://ui.shadcn.com/llms.txt</source_url>
+    <local_file>llms-txt.md</local_file>
+    <scraped_at>2026-05-26</scraped_at>
   </source>
 </docs_index>

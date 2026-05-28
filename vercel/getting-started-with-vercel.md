@@ -1,30 +1,141 @@
+---
+title: Getting started with Vercel
+product: vercel
+url: /docs/getting-started-with-vercel
+canonical_url: "https://vercel.com/docs/getting-started-with-vercel"
+last_updated: 2025-09-24
+type: tutorial
+prerequisites:
+  []
+related:
+  - /docs/cli
+  - /docs/agent-resources/vercel-plugin
+  - /docs/agent-resources/skills
+  - /docs/cli/install
+  - /docs/cli/integration
+summary: This step-by-step tutorial will help you get started with Vercel, an end-to-end platform for developers that allows you to create and deploy your web...
+install_vercel_plugin: npx plugins add vercel/vercel-plugin
+---
+
 # Getting started with Vercel
 
-Vercel is a platform for developers that provides the tools, workflows, and infrastructure you need to build and deploy your web apps faster, without the need for additional configuration.
+Deploy your app on Vercel in three steps: install the CLI, add agent support if you use an AI coding agent, and deploy.
 
-Vercel supports [popular frontend frameworks](/docs/frameworks) out-of-the-box, and its scalable, secure infrastructure is globally distributed to serve content from data centers near your users for optimal speeds.
+## Prerequisites
 
-During development, Vercel provides tools for real-time collaboration on your projects such as automatic preview and production environments, and comments on preview deployments.
+- A [Vercel account](/signup)
+- [Node.js 18+](https://nodejs.org/)
 
-## [Before you begin](#before-you-begin)
+## Install the Vercel CLI
 
-To get started, create an account with Vercel. You can [select the plan](/docs/plans) that's right for you.
+Every Vercel workflow starts with the CLI. Install it whether or not you use an AI coding agent. Agents that can run terminal commands use the CLI to deploy, pull environment variables, and manage projects.
 
-* [Sign up for a new Vercel account](/signup)
-* [Log in to your existing Vercel account](/login)
+- ### Install Vercel CLI
+  <CodeBlock>
+    <Code tab="pnpm">
+      ```bash
+      pnpm i vercel
+      ```
+    </Code>
+    <Code tab="yarn">
+      ```bash
+      yarn i vercel
+      ```
+    </Code>
+    <Code tab="npm">
+      ```bash
+      npm i vercel
+      ```
+    </Code>
+    <Code tab="bun">
+      ```bash
+      bun i vercel
+      ```
+    </Code>
+  </CodeBlock>
 
-Once you create an account, you can choose to authenticate either with a Git provider or by using an email. When using email authentication, you may need to confirm both your email address and a phone number.
+- ### Log in to Vercel
+  ```bash
+  vercel login
+  ```
+  Follow the prompts to authenticate with your Vercel account.
 
-## [Customizing your journey](#customizing-your-journey)
+- ### Deploy your project
+  Navigate to your project directory and run:
+  ```bash
+  vercel
+  ```
+  The CLI detects your framework, builds your project, and deploys it. To deploy to production:
+  ```bash
+  vercel --prod
+  ```
 
-This tutorial is framework agnostic but Vercel supports many frontend [frameworks](/docs/frameworks/more-frameworks). As you go through the docs, the quickstarts will provide specific instructions for your framework. If you don't find what you need, give us feedback and we'll update them!
+See the [CLI documentation](/docs/cli) for the full command reference.
 
-While many of our instructions use the dashboard, you can also use [Vercel CLI](/docs/cli) to carry out most tasks on Vercel. In this tutorial, look for the "Using CLI?" section for the CLI steps. To use the CLI, you'll need to install it:
+## Install the Vercel Plugin
 
-npm
+If you use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Cursor](https://www.cursor.com), install the [Vercel Plugin](https://github.com/vercel/vercel-plugin). It gives your agent deployment skills, framework best practices, and slash commands like `/vercel-plugin:deploy prod` and `/vercel-plugin:env`.
 
 ```bash
-npm i -g vercel
+npx plugins add vercel/vercel-plugin
 ```
 
-[Let's go](/docs/getting-started-with-vercel/projects-deployments)
+The plugin activates automatically. No configuration needed.
+
+See the [Vercel Plugin documentation](/docs/agent-resources/vercel-plugin) for the full list of skills, specialist agents, and slash commands.
+
+## Install Vercel Skills for other agents
+
+If you use Cline, Windsurf, GitHub Copilot, or any of the 18+ agents supported by [Skills.sh](https://skills.sh), install Vercel Skills instead. Skills give your agent the same deployment and framework expertise in a format compatible with your tool.
+
+```bash
+npx skills add vercel-labs/agent-skills
+```
+
+To install a specific skill:
+
+```bash
+npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices
+```
+
+See [Agent Skills](/docs/agent-resources/skills) for the full list.
+
+## Add a database or other storage
+
+If your project needs a database, blob storage, or another backing service, you can provision one from the CLI and have Vercel wire the credentials into your project automatically.
+
+Run [`vercel install`](/docs/cli/install) (alias for [`vercel integration add`](/docs/cli/integration#vercel-integration-add)) to install a Marketplace integration, provision a resource, connect it to the currently linked project, and sync environment variables into `.env.local`:
+
+```bash
+vercel install neon
+vercel install upstash
+vercel install supabase
+```
+
+Add `--help` to any command to see integration-specific products, metadata options, and billing plans. For non-interactive flows, pass options as flags:
+
+```bash
+vercel install neon --name my-database --plan free -e production -e preview
+```
+
+See [Storage on Vercel Marketplace](/docs/marketplace-storage) for the full list of storage integrations.
+
+## Deploy from the dashboard
+
+You can also deploy without the CLI. Go to the [New Project](/new) page, connect your [GitHub](/docs/git/vercel-for-github), [GitLab](/docs/git/vercel-for-gitlab), or [Bitbucket](/docs/git/vercel-for-bitbucket) account, select a repo, and click **Deploy**. Every push to your connected branch triggers a new deployment automatically.
+
+## Next steps
+
+- [Fundamental concepts](/docs/fundamentals) – How requests, builds, and compute work on Vercel
+- [Set up environment variables](/docs/environment-variables)
+- [Add a custom domain](/docs/domains/set-up-custom-domain)
+- [Explore supported frameworks](/docs/frameworks)
+- [Vercel Functions](/docs/functions) – Run server-side code on demand
+- [Storage on Vercel Marketplace](/docs/marketplace-storage) – Provision Postgres, Redis, NoSQL, and more with `vercel install`
+- [Connect the Vercel MCP server](/docs/agent-resources/vercel-mcp) – Give AI agents direct access to your Vercel account
+- [Agent resources](/docs/agent-resources) – Documentation access, skills, and CLI workflows for AI agents
+
+
+---
+
+[View full sitemap](/docs/sitemap)

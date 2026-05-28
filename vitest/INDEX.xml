@@ -1,121 +1,121 @@
 <docs_index>
   <source>
-    <title>Why Vitest | Guide | Vitest</title>
-    <description>Rationale for Vitest as a Vite-native test runner: unified configuration pipeline, instant HMR, Jest-compatible API, parallel execution via Worker threads, lightweight dependencies, performance improvements, and watch mode enabled by default.</description>
-    <source_url>https://vitest.dev/guide/why</source_url>
-    <local_file>why-vitest-guide-vitest.md</local_file>
-    <scraped_at>2025-11-05</scraped_at>
-  </source>
-  <source>
-    <title>Getting Started | Guide | Vitest</title>
-    <description>Installation, basic test writing with expect API, configuration via vite.config or vitest.config, projects support, CLI usage, IDE integrations, dependency management, examples, and community resources.</description>
+    <title>Getting Started</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide</source_url>
-    <local_file>getting-started-guide-vitest.md</local_file>
-    <scraped_at>2025-11-05</scraped_at>
+    <local_file>guide.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
   <source>
-    <title>Configuring Vitest | Vitest</title>
-    <description>Configuration reference: test property options, file patterns, server settings, execution modes, environments, reporters, coverage, mocking, benchmarking, browser mode, workspace projects, and all parameters with types and defaults.</description>
-    <source_url>https://vitest.dev/config</source_url>
-    <local_file>configuring-vitest-vitest.md</local_file>
-    <scraped_at>2025-11-05</scraped_at>
-  </source>
-  <source>
-    <title>Features | Guide | Vitest</title>
-    <description>Core features including Vite integration, smart watch mode, TypeScript support, concurrent execution, snapshots, Jest-compatible assertions, Tinyspy mocking, DOM environments, code coverage via v8/istanbul, in-source testing, benchmarking, type testing, and sharding</description>
-    <source_url>https://vitest.dev/guide/features.html</source_url>
-    <local_file>features-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Component Testing | Guide | Vitest</title>
-    <description>Component testing with isolation and integration strategies, Testing Library integration via page.elementLocator, MSW for API mocking, async patterns, form validation, error boundaries, accessibility testing, browser debugging, Jest migration guide.</description>
-    <source_url>https://vitest.dev/guide/browser/component-testing.html</source_url>
-    <local_file>component-testing-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Why Browser Mode | Browser Mode | Vitest</title>
-    <description>Browser mode rationale comparing jsdom and happy-dom simulation limitations versus native browser accuracy, false positive risks, trade-offs including longer initialisation and early development status, recommended augmentation with standalone test runners.</description>
-    <source_url>https://vitest.dev/guide/browser/why.html</source_url>
-    <local_file>why-browser-mode-browser-mode-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Browser Mode | Guide | Vitest</title>
-    <description>Browser Mode installation with Playwright, WebdriverIO, or Preview providers, configuration for React, Vue, Svelte, headless execution, viewport options, component rendering, DOM assertions, interactivity API, limitations with dialogs and module spying.</description>
-    <source_url>https://vitest.dev/guide/browser</source_url>
-    <local_file>browser-mode-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Vitest UI | Guide | Vitest</title>
-    <description>Optional Vitest UI for viewing and interacting with tests, installation via @vitest/ui package, launching with --ui flag, HTML reporter configuration, static report generation, coverage integration, output file options.</description>
-    <source_url>https://vitest.dev/guide/ui.html</source_url>
-    <local_file>vitest-ui-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Test Environment | Guide | Vitest</title>
-    <description>Environment configuration options (node, jsdom, happy-dom, edge-runtime), per-file environment selection via @vitest-environment control comments, custom environment package creation with setup/setupVM lifecycle methods, viteEnvironment requirement, and populateGlobal utility function.</description>
-    <source_url>https://vitest.dev/guide/environment</source_url>
-    <local_file>test-environment-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Mocking | Guide | Vitest</title>
-    <description>Mocking cheat sheet using vi helper: vi.mock and vi.spyOn for functions, classes, exported variables, partial modules, factory caching patterns, vi.setSystemTime for dates, vi.stubGlobal and vi.stubEnv for globals, browser mode limitations.</description>
-    <source_url>https://vitest.dev/guide/mocking</source_url>
-    <local_file>mocking-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Testing Types | Guide | Vitest</title>
-    <description>Type testing using expectTypeOf and assertType APIs, test-d.ts file conventions, typecheck.include configuration, tsc/vue-tsc integration, error message interpretation for type mismatches, ts-expect-error patterns, and --typecheck CLI flag setup.</description>
-    <source_url>https://vitest.dev/guide/testing-types</source_url>
-    <local_file>testing-types-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>In-Source Testing | Guide | Vitest</title>
-    <description>In-source testing using import.meta.vitest blocks, includeSource configuration, production build dead code elimination via define options for bundlers (Vite, Rolldown, Rollup, unbuild, webpack), TypeScript support.</description>
-    <source_url>https://vitest.dev/guide/in-source</source_url>
-    <local_file>in-source-testing-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Extending Matchers | Guide | Vitest</title>
-    <description>Custom matcher creation using expect.extend, TypeScript interface extensions, matcher function structure with pass and message returns, context properties (isNot, promise, equals, utils), and async matcher implementation patterns.</description>
-    <source_url>https://vitest.dev/guide/extending-matchers</source_url>
-    <local_file>extending-matchers-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Reporters | Guide | Vitest</title>
-    <description>Built-in reporters (default, verbose, tree, dot, junit, json, html, tap, tap-flat, hanging-process, github-actions, blob) with configuration options, outputFile setup, combining multiple reporters, custom reporter implementation via Reporter interface.</description>
-    <source_url>https://vitest.dev/guide/reporters.html</source_url>
-    <local_file>reporters-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Command Line Interface | Guide | Vitest</title>
-    <description>CLI commands (vitest, run, watch, related, bench, init, list) and comprehensive options including coverage configuration, browser settings, test filtering, watch mode, sharding, reporters, changed file detection, and merge-reports functionality.</description>
-    <source_url>https://vitest.dev/guide/cli</source_url>
-    <local_file>command-line-interface-guide-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>Improving Performance | Vitest</title>
-    <description>Test isolation settings with isolate and fileParallelism options, pool configurations (threads, forks, vmThreads), directory search limiting, and test sharding for parallel execution across multiple machines using shard and merge-reports commands.</description>
-    <source_url>https://vitest.dev/guide/improving-performance</source_url>
-    <local_file>improving-performance-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
-  </source>
-  <source>
-    <title>allowOnly | Config | Vitest</title>
-    <description>Configuration option controlling whether tests marked with only flag are permitted, with default behaviour blocking them in CI environments but allowing them locally, configurable via allowOnly setting or CLI flag.</description>
+    <title>allowOnly</title>
+    <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/config/allowonly</source_url>
-    <local_file>allowonly-config-vitest.md</local_file>
-    <scraped_at>2025-11-20</scraped_at>
+    <local_file>config-allowonly.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Browser Mode {#browser-mode}</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/browser</source_url>
+    <local_file>guide-browser.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Component Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/browser/component-testing</source_url>
+    <local_file>guide-browser-component-testing.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Why Browser Mode</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/browser/why</source_url>
+    <local_file>guide-browser-why.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Command Line Interface</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/cli</source_url>
+    <local_file>guide-cli.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Test Environment</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/environment</source_url>
+    <local_file>guide-environment.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Extending Matchers</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/extending-matchers</source_url>
+    <local_file>guide-extending-matchers.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Features</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/features</source_url>
+    <local_file>guide-features.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Improving Performance</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/improving-performance</source_url>
+    <local_file>guide-improving-performance.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>In-Source Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/in-source</source_url>
+    <local_file>guide-in-source.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Mocking</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/mocking</source_url>
+    <local_file>guide-mocking.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Reporters</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/reporters</source_url>
+    <local_file>guide-reporters.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Testing Types</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/testing-types</source_url>
+    <local_file>guide-testing-types.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Vitest UI</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/ui</source_url>
+    <local_file>guide-ui.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Why Vitest</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/guide/why</source_url>
+    <local_file>guide-why.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
+  </source>
+  <source>
+    <title>Configuring Vitest</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://vitest.dev/config</source_url>
+    <local_file>config.md</local_file>
+    <scraped_at>2026-05-25</scraped_at>
   </source>
 </docs_index>

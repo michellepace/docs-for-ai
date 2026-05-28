@@ -1,0 +1,99 @@
+# Install Clerk with shadcn/ui CLI
+
+The [shadcn/ui CLI](https://ui.shadcn.com/docs/cli) is a tool that allows you to bootstrap your Next.js app with Clerk. Clerk's shadcn/ui registry enables developers to add pre-built components and configurations to their projects with a single command. You can either get started with the [complete quickstart package](#quickstart), or add [pages](#pages) and [components](#components) individually.
+
+## Quickstart
+
+Get started with Clerk authentication in seconds using the complete quickstart package:
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-quickstart
+```
+
+This single command will install:
+
+- App layout with ClerkProvider and theme integration
+- Sign-in and sign-up pages with catch-all routes
+- Clerk middleware for route protection
+- Header component with authentication buttons
+- Theme provider for dark/light mode support
+
+## Pages
+
+### Sign In
+
+The sign-in page is a dedicated page that allows users to sign in to their account.
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-sign-in-page
+```
+
+### Sign Up
+
+The sign-up page is a dedicated page that allows users to sign up for a new account which includes a two column layout with a list of selling points and a form to sign up.
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-sign-up-page
+```
+
+### Waitlist
+
+The following example includes a basic implementation of the `<Waitlist />` component hosted on the `/waitlist` route. You can use this as a starting point for your own implementation.
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-waitlist-page
+```
+
+## Components
+
+### `<ClerkProvider />`
+
+The [<ClerkProvider />](https://clerk.com/docs/reference/components/clerk-provider.md) component is required to integrate Clerk into your React application, providing session and user context to Clerk's hooks and components.
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-clerk-provider
+```
+
+With the ClerkProvider component installed, you can wrap your app's layout to provide Clerk's authentication context to your app.
+
+filename: app/layout.tsx
+```tsx
+import { ClerkProvider } from '@/components/clerk-provider'
+import './globals.css'
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en">
+      <body>
+        <ClerkProvider>{children}</ClerkProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+## Files
+
+### Middleware
+
+The [clerkMiddleware()](https://clerk.com/docs/reference/nextjs/clerk-middleware.md) helper integrates Clerk authentication into your Next.js application through Middleware.
+
+filename: terminal
+```npm
+npx shadcn@latest add @clerk/nextjs-middleware
+```
+
+---
+
+## Sitemap
+
+[Overview of all docs pages](https://clerk.com/docs/llms.txt)

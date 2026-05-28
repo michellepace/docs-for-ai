@@ -5,6 +5,7 @@
 
     // Hide generated dirs from the Explorer
     "files.exclude": {
+        "**/__pycache__": true,
         "**/.pytest_cache": true,
         "**/.ruff_cache": true,
         "**/.venv": true

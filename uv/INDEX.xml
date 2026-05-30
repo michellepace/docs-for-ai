@@ -4,35 +4,35 @@
     <description>`[tool.uv]` and `uv.toml` keys split into project metadata — `sources`, `workspace`, `dependency-groups`, `conflicts`, `build-backend` — and resolver/installer configuration like `resolution`, `prerelease`, `index-strategy`, `link-mode`, `exclude-newer`.</description>
     <source_url>https://docs.astral.sh/uv/reference/settings/index.md</source_url>
     <local_file>reference-settings.md</local_file>
-    <scraped_at>2026-05-29</scraped_at>
+    <scraped_at>2026-05-30</scraped_at>
   </source>
   <source>
     <title>CLI Reference</title>
     <description>Per-command usage, arguments, and options for `run`, `add`, `sync`, `lock`, `tool`, `python`, `pip`, `venv`, `build`, `publish`, and `auth`, including flag defaults and environment-variable equivalents.</description>
     <source_url>https://docs.astral.sh/uv/reference/cli/index.md</source_url>
     <local_file>reference-cli.md</local_file>
-    <scraped_at>2026-05-29</scraped_at>
+    <scraped_at>2026-05-30</scraped_at>
   </source>
   <source>
     <title>Environment variables</title>
     <description>Alphabetical `UV_*` reference with version-added notes, each typically mapping to a CLI flag — covering caching, index URLs, proxies, concurrency limits, Python-download mirrors, and authentication tokens.</description>
     <source_url>https://docs.astral.sh/uv/reference/environment/index.md</source_url>
     <local_file>reference-environment.md</local_file>
-    <scraped_at>2026-05-29</scraped_at>
+    <scraped_at>2026-05-30</scraped_at>
   </source>
   <source>
     <title>Features</title>
     <description>Covers `python` version management, the `run` command for scripts, `add`, `sync`, and `lock` project commands, `tool` execution via `uvx`, the legacy `pip` interface, and `cache` plus `self update` maintenance.</description>
     <source_url>https://github.com/astral-sh/uv/blob/main/docs/getting-started/features.md</source_url>
     <local_file>getting-started-features.md</local_file>
-    <scraped_at>2026-05-29</scraped_at>
+    <scraped_at>2026-05-30</scraped_at>
   </source>
   <source>
     <title>Working on projects</title>
     <description>Scaffold projects with `uv init`, manage dependencies via `uv add`/`uv remove`, read `uv version`, execute through `uv run` versus `uv sync` plus activation, and build sdist/wheel artifacts with `uv build`.</description>
     <source_url>https://github.com/astral-sh/uv/blob/main/docs/guides/projects.md</source_url>
     <local_file>guides-projects.md</local_file>
-    <scraped_at>2026-05-29</scraped_at>
+    <scraped_at>2026-05-30</scraped_at>
   </source>
   <source>
     <title>Managing dependencies</title>

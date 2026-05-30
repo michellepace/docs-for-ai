@@ -26,7 +26,7 @@ Available collections in this repo:
 | 📦 [`shiny/`](shiny/) | 📄 [`INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](tailwind/) | 📄 [`INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-30 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](vercel/) | 📄 [`INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](vitest/) | 📄 [`INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](zustand/) | 📄 [`INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |

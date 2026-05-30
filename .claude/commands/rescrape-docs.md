@@ -6,6 +6,7 @@ allowed-tools:
   - Bash(printf *)
   - Bash(uv run scripts/sync_index.py *)
   - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(wc *)
   - Read
   - Write
 ---
@@ -67,7 +68,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 
 1. Analyse the corresponding markdown file
 2. Draft a description
-3. **COUNT THE WORDS** with `echo "description text" | wc -w` — rewrite until it's 20-30 words
+3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
 4. Append it to `$1/descriptions.txt`:
 
    ```text

@@ -6,6 +6,7 @@ allowed-tools:
   - Bash(printf *)
   - Bash(uv run scripts/curate_doc.py *)
   - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(wc *)
   - Read
   - Write
 ---
@@ -93,7 +94,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 
 1. Analyse the curated markdown file
 2. Draft a description
-3. Validate 20-30 words, rewrite if needed: `echo "description text" | wc -w`
+3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
 4. Write it to `$1/description.txt`:
 
       ```text

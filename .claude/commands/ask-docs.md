@@ -1,7 +1,14 @@
 ---
 description: Query curated documentation collection directory to answer the question.
 argument-hint: <collection> <question>
-allowed-tools: Read, Glob, Grep, Bash(echo:*), Bash(awk:*), Bash(cut:*), WebSearch, WebFetch
+allowed-tools:
+  - Bash(awk *)
+  - Bash(cut *)
+  - Glob
+  - Grep
+  - Read
+  - WebFetch
+  - WebSearch
 ---
 
 # Query Documentation Collection

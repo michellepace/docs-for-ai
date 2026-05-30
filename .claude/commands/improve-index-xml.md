@@ -3,7 +3,6 @@ argument-hint: <collection>
 description: Improve INDEX.xml descriptions for LLM reader routing
 allowed-tools:
   - Bash(cat *)
-  - Bash(echo *)
   - Bash(find *)
   - Bash(printf *)
   - Bash(test *)
@@ -100,9 +99,9 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 Then, for each assigned document:
 
 1. Analyse the markdown file at `[COLLECTION]/<local_file>`
-2. Write a description following those criteria
+2. Draft a description following those criteria
 3. Compare to current description in INDEX.xml, ensure yours is better
-4. **COUNT THE WORDS** with `echo "description text" | wc -w` to verify it's 20-30 words — if not, rewrite until it is
+4. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
 
 ## Output Format
 

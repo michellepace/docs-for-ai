@@ -184,7 +184,7 @@ wheels = [
 [[package]]
 name = "docs-for-ai"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "firecrawl-py" },
 ]

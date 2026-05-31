@@ -4,8 +4,8 @@ description: Re-scrape all docs in collection and regenerate descriptions
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
-  - Bash(uv run scripts/sync_index.py *)
-  - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(uv run sync-index *)
+  - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
   - Read
   - Write
@@ -50,7 +50,7 @@ Validate `$1` against `<existing_collections>`; reject if absent, and if it look
 ### 2. Run sync and scrape
 
 ```bash
-uv run scripts/sync_index.py "$1"
+uv run sync-index "$1"
 ```
 
 This script:
@@ -81,7 +81,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 Run the update script to apply all descriptions:
 
 ```bash
-uv run scripts/update_index_descriptions.py "$1" "$1/descriptions.txt"
+uv run update-index-descriptions "$1" "$1/descriptions.txt"
 ```
 
 Verify `PLACEHOLDER` no longer appears in `$1/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.

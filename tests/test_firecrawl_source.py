@@ -6,7 +6,7 @@ path is covered end-to-end by the FireCrawl-marked tests in test_curate_doc.py.
 
 from firecrawl.v2.utils.error_handler import RateLimitError
 
-from scripts.firecrawl_source import parse_retry_seconds
+from docs_for_ai.firecrawl_source import parse_retry_seconds
 
 
 class TestParseRetrySeconds:

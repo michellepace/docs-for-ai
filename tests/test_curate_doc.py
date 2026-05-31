@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from scripts import curate_doc
-from scripts.curate_doc import filename_from_canonical_url
+from docs_for_ai import curate_doc
+from docs_for_ai.curate_doc import filename_from_canonical_url
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -79,7 +79,7 @@ class TestFilenameFromUrl:
 
 def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
     """Run curate_doc.py script via uv and return (exit_code, output)."""
-    cmd = ["uv", "run", "python", "scripts/curate_doc.py"]
+    cmd = ["uv", "run", "curate-doc"]
     cmd.extend(args)
 
     result = subprocess.run(

@@ -6,7 +6,7 @@ allowed-tools:
   - Bash(find *)
   - Bash(printf *)
   - Bash(test *)
-  - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
   - Glob
   - Grep
@@ -179,7 +179,7 @@ Type "yes" to apply, or "no" to cancel.
 On user confirmation ("yes"), run:
 
 ```bash
-uv run scripts/update_index_descriptions.py "$1" "$1/descriptions_improved.txt"
+uv run update-index-descriptions "$1" "$1/descriptions_improved.txt"
 ```
 
 Clean up any remaining agent files:

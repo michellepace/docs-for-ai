@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.sync_index import (
+from docs_for_ai.sync_index import (
     get_changed_markdown_files,
     get_markdown_files,
     restore_unchanged_descriptions,
@@ -434,7 +434,7 @@ class TestIntegration:
             )
 
             result = subprocess.run(
-                ["uv", "run", "python", "scripts/sync_index.py", str(collection_dir)],
+                ["uv", "run", "sync-index", str(collection_dir)],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -487,7 +487,7 @@ class TestErrorHandling:
             index_path.write_text("This is not XML at all")
 
             result = subprocess.run(
-                ["uv", "run", "python", "scripts/sync_index.py", str(tmp_path)],
+                ["uv", "run", "sync-index", str(tmp_path)],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -535,7 +535,7 @@ class TestGitHubBlobRoundTrip:
 
             # sync_index.py delegates to curate_doc.py's GitHub blob path.
             result = subprocess.run(
-                ["uv", "run", "python", "scripts/sync_index.py", str(collection_dir)],
+                ["uv", "run", "sync-index", str(collection_dir)],
                 capture_output=True,
                 text=True,
                 check=False,

@@ -11,6 +11,15 @@ dependencies = [
     "firecrawl-py>=4.27.1",
 ]
 
+[project.scripts]
+curate-doc                = "docs_for_ai.curate_doc:main"
+sync-index                = "docs_for_ai.sync_index:main"
+update-index-descriptions = "docs_for_ai.update_index_descriptions:main"
+
+[build-system]
+requires = ["uv_build>=0.11.17,<0.12"]
+build-backend = "uv_build"
+
 [dependency-groups]
 dev = [
     "pre-commit>=4.6.0",
@@ -65,7 +74,7 @@ ignore = [  # Ignore rules that are incompatible or overly pedantic
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = [
+"src/docs_for_ai/*" = [
     "S314",    # XML parsing (safe - trusted local files only)
     "S603",    # subprocess call: check for execution of untrusted input
     "DTZ011",  # date.today() appropriate for local date tracking
@@ -94,9 +103,6 @@ max-complexity = 10
 # Pytest Configuration
 # =================================
 [tool.pytest.ini_options]
-# scripts/curate_doc.py does bare imports (`markdown_source`, `firecrawl_source`)
-# so it runs as `python scripts/curate_doc.py`. Put scripts/ on sys.path for pytest too.
-pythonpath = ["scripts"]
 markers = [
     "firecrawl: hits FireCrawl API (paid, network)",
     "github: hits raw.githubusercontent.com (free, network)",

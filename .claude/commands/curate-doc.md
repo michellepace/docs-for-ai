@@ -4,8 +4,8 @@ description: Curate a source URL into a collection
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
-  - Bash(uv run scripts/curate_doc.py *)
-  - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(uv run curate-doc *)
+  - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
   - Read
   - Write
@@ -81,7 +81,7 @@ Analyse `$1` (collection) and `$2` (URL) against the existing collections and de
 ## Step 2. Run the script
 
 ```bash
-uv run scripts/curate_doc.py "$1" "$2"
+uv run curate-doc "$1" "$2"
 ```
 
 ## Step 3. On script error
@@ -105,7 +105,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 5. Apply it:
 
    ```bash
-   uv run scripts/update_index_descriptions.py "$1" "$1/description.txt"
+   uv run update-index-descriptions "$1" "$1/description.txt"
    ```
 
 ## Step 5. Report success

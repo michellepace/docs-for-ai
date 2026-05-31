@@ -135,7 +135,7 @@ The framing has shifted from "semantic search" to **LLM routing**, so existing d
 
 ## 👉 Improve later - Remove Scripts? (2026-05-27)
 
-Remove the scripts in [scripts/](scripts/) I don't need. For example, what about a bash for-loop over `curate_doc.py`, then allocate to subagents (run `wc --chars *.md | sort -n` or token counts). Read the diff on each local file and assess if the description needs refining (using `head`).
+Remove the scripts in [scripts/](scripts/) I don't need. For example, what about a bash for-loop over `curate-doc`, then allocate to subagents (run `wc --chars *.md | sort -n` or token counts). Read the diff on each local file and assess if the description needs refining (using `head`).
 
 Pick a cap so no agent is overloaded, on two axes:
 - Input size — a target like "~X total words per agent" so context stays comfortable.

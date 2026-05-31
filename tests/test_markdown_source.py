@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from scripts.markdown_source import (
+from docs_for_ai.markdown_source import (
     extract_title,
     fetch_markdown,
     github_blob_to_raw_url,

@@ -1,12 +1,14 @@
 ---
-argument-hint: <collection>
 description: Improve INDEX.xml descriptions for LLM reader routing
+argument-hint: <collection>
+arguments: [collection]
 allowed-tools:
   - Bash(cat *)
   - Bash(find *)
   - Bash(printf *)
+  - Bash(rm -f */descriptions_agent*.txt)
   - Bash(test *)
-  - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
   - Glob
   - Grep
@@ -17,13 +19,13 @@ allowed-tools:
 
 # Improve INDEX.xml Descriptions
 
-Batch-improve `$1` collection descriptions for LLM reader routing using parallel subagents.
+Batch-improve `$collection` descriptions for LLM reader routing using parallel subagents.
 
 ## 1. Validate Collection
 
 !`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
 
-Validate `$1` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match:
+Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match:
 
 <validation_examples>
 
@@ -41,8 +43,8 @@ Validate `$1` against `<existing_collections>`; reject if absent, and if it look
 - Collection not found:
 
   ```
-  ## 🤔 Collection "$1" not found
-  - No INDEX.xml at `$1/INDEX.xml`
+  ## 🤔 Collection `$collection` not found
+  - No INDEX.xml at `$collection/INDEX.xml`
   - Existing collections: [list]
   - Did you mean: [closest match]?
   ```
@@ -52,7 +54,7 @@ Validate `$1` against `<existing_collections>`; reject if absent, and if it look
 <validation_success>
 
 ```
-## 📋 Ready to improve `$1` descriptions
+## 📋 Ready to improve `$collection` descriptions
 Found [N] documents in INDEX.xml
 ```
 
@@ -62,7 +64,7 @@ Found [N] documents in INDEX.xml
 
 ## 2. Analyse and Group Documents
 
-Read `$1/INDEX.xml` and extract all `<source>` entries into a list.
+Read `$collection/INDEX.xml` and extract all `<source>` entries into a list.
 
 **Agent count:** ceil(docs / 5) - max 5 docs per agent
 
@@ -135,13 +137,13 @@ After all agents complete:
 1. Combine output files:
 
    ```bash
-   cat $1/descriptions_agent*.txt > $1/descriptions_improved.txt
+   cat $collection/descriptions_agent*.txt > $collection/descriptions_improved.txt
    ```
 
 2. Present summary to user:
 
 ```markdown
-## 📊 New Descriptions for `$1`
+## 📊 New Descriptions for `$collection`
 
 <details>
 
@@ -179,13 +181,13 @@ Type "yes" to apply, or "no" to cancel.
 On user confirmation ("yes"), run:
 
 ```bash
-uv run scripts/update_index_descriptions.py "$1" "$1/descriptions_improved.txt"
+uv run update-index-descriptions "$collection" "$collection/descriptions_improved.txt"
 ```
 
 Clean up any remaining agent files:
 
 ```bash
-rm -f $1/descriptions_agent*.txt 2>/dev/null || true
+rm -f $collection/descriptions_agent*.txt
 ```
 
 ## 6. Report Success
@@ -193,9 +195,9 @@ rm -f $1/descriptions_agent*.txt 2>/dev/null || true
 ```markdown
 ## 🎉 Description Improvement Complete
 
-Collection: `$1`
+Collection: `$collection`
 - Descriptions updated: [N]
-- INDEX.xml: `$1/INDEX.xml`
+- INDEX.xml: `$collection/INDEX.xml`
 ```
 
 If user cancels, clean up temporary files and confirm cancellation.

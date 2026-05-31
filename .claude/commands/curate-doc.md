@@ -1,23 +1,24 @@
 ---
-argument-hint: <collection> <source_url>
 description: Curate a source URL into a collection
+argument-hint: <collection> <source_url>
+arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
-  - Bash(uv run scripts/curate_doc.py *)
-  - Bash(uv run scripts/update_index_descriptions.py *)
+  - Bash(uv run curate-doc *)
+  - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
   - Read
   - Write
 ---
 
-Curate source URL `$2` into collection directory `$1`. The script (Step 2) fetches the document and registers its `$1/INDEX.xml` entry; **your task:** write that entry's description.
+Curate source URL `$source_url` into `$collection`. The script (Step 2) fetches the document and registers its `$collection/INDEX.xml` entry; **your task:** write that entry's description.
 
 Existing collections: !`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
 
 ## Step 1. Validate arguments
 
-The collection `$1` may be an existing one (see `<existing_collections>`) or a new one to create.
+The collection `$collection` may be an existing one (see `<existing_collections>`) or a new one to create.
 
 Here are just a few examples what new users can inadvertently get wrong - you are to help them do what they intend:
 
@@ -34,7 +35,7 @@ Here are just a few examples what new users can inadvertently get wrong - you ar
   [Friendly suggestion. Ask for confirmation.]
   ```
 
-- Missing args (URL as $1, smart inference):
+- Missing args (URL as `$collection`, smart inference):
 
   ```
   ## 🤔 You didn't give me a collection?
@@ -76,12 +77,12 @@ Here are just a few examples what new users can inadvertently get wrong - you ar
 
 </validation_success>
 
-Analyse `$1` (collection) and `$2` (URL) against the existing collections and decide whether to fail validation. Match the examples above — emoji-led, brief, kind to an overwhelmed new user. On failure, suggest a fix and ask for confirmation; otherwise output a success message and proceed.
+Analyse `$collection` and `$source_url` against the existing collections and decide whether to fail validation. Match the examples above — emoji-led, brief, kind to an overwhelmed new user. On failure, suggest a fix and ask for confirmation; otherwise output a success message and proceed.
 
 ## Step 2. Run the script
 
 ```bash
-uv run scripts/curate_doc.py "$1" "$2"
+uv run curate-doc "$collection" "$source_url"
 ```
 
 ## Step 3. On script error
@@ -95,7 +96,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 1. Analyse the curated markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Write it to `$1/description.txt`:
+4. Write it to `$collection/description.txt`:
 
       ```text
       overview-shiny-for-python.md
@@ -105,7 +106,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 5. Apply it:
 
    ```bash
-   uv run scripts/update_index_descriptions.py "$1" "$1/description.txt"
+   uv run update-index-descriptions "$collection" "$collection/description.txt"
    ```
 
 ## Step 5. Report success

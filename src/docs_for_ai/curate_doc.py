@@ -14,8 +14,7 @@ from pathlib import Path
 from typing import NamedTuple
 from urllib.parse import urlparse
 
-import firecrawl_source
-import markdown_source
+from docs_for_ai import firecrawl_source, markdown_source
 
 # Written for every new source; a later LLM step fills it.
 PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"

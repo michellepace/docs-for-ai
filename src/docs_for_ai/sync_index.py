@@ -89,7 +89,7 @@ def _scrape_doc(collection_dir: Path, source_url: str) -> bool:
     # - source_url is validated by curate_doc.py via urlparse
     # - Using list (not shell=True) prevents command injection
     result = subprocess.run(
-        [uv_path, "run", "scripts/curate_doc.py", str(collection_dir), source_url],
+        [uv_path, "run", "curate-doc", str(collection_dir), source_url],
         check=False,
         capture_output=False,  # Let output stream through
         text=True,

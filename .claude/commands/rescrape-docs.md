@@ -1,6 +1,7 @@
 ---
-argument-hint: <collection>
 description: Re-scrape all docs in collection and regenerate descriptions
+argument-hint: <collection>
+arguments: [collection]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -11,7 +12,7 @@ allowed-tools:
   - Write
 ---
 
-Re-scrape all documents in $1 collection directory and batch-regenerate descriptions.
+Re-scrape every document in `$collection` and batch-regenerate its descriptions.
 
 ## Context
 
@@ -25,12 +26,12 @@ The sync script re-scrapes every source, syncs INDEX.xml to the filesystem, and 
 
 !`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
 
-Validate `$1` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match.
+Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match.
 
 <example_validation_success>
 
 ```
-## 🙂 Super! Re-scraping $1 collection...
+## 🙂 Super! Re-scraping the `$collection` collection...
 ```
 
 </example_validation_success>
@@ -50,7 +51,7 @@ Validate `$1` against `<existing_collections>`; reject if absent, and if it look
 ### 2. Run sync and scrape
 
 ```bash
-uv run sync-index "$1"
+uv run sync-index "$collection"
 ```
 
 This script:
@@ -69,7 +70,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 1. Analyse the corresponding markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Append it to `$1/descriptions.txt`:
+4. Append it to `$collection/descriptions.txt`:
 
    ```text
    getting-started-installation.md
@@ -81,10 +82,10 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 Run the update script to apply all descriptions:
 
 ```bash
-uv run update-index-descriptions "$1" "$1/descriptions.txt"
+uv run update-index-descriptions "$collection" "$collection/descriptions.txt"
 ```
 
-Verify `PLACEHOLDER` no longer appears in `$1/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
+Verify `PLACEHOLDER` no longer appears in `$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
 
 ### 5. Report completion
 
@@ -96,14 +97,14 @@ Parse structured output from the script and report completion following the `<ex
 ## ✅ Re-scrape Complete!
 
 📊 Statistics
-- Collection:            `$1`
+- Collection:            `$collection`
 - Stale sources removed: [N]
 - Total docs:            [M]
 - Successfully scraped:  [X]
 - Failed to scrape:      [Y]
 - Descriptions updated:  [D]
 
-💡 Collection Content Changes for `$1`:
+💡 Collection Content Changes for `$collection`:
 - [Analyse script output section "## Git Content Changes" and list files here]
 
 *NB: excludes files with only whitespace changes*

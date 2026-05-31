@@ -1,8 +1,9 @@
 ---
-description: Query curated documentation collection directory to answer the question.
-argument-hint: <collection> <question>
+description: Query a local doc collection for a grounded answer.
+argument-hint: [collection] [question]
 allowed-tools:
-  - Bash(sed *)
+  - Bash(find *)
+  - Bash(printf *)
   - Glob
   - Grep
   - mcp__firecrawl__firecrawl_scrape
@@ -12,40 +13,75 @@ allowed-tools:
   - WebSearch
 ---
 
-# Query Documentation Collection
+# Answer from a Doc Collection
 
-Split `$ARGUMENTS`: the first word is the **collection**, the rest is the **question**.
+Parse `$ARGUMENTS`:
+- **collection** = the first word
+- **question** = everything after the first word
 
-## Locations
+Available collections: !`printf '<available_collections>\n'; find ~/projects/python/docs-for-ai -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</available_collections>\n'`
 
-- Index: `~/projects/python/docs-for-ai/<collection>/INDEX.xml`
-- Directory: `~/projects/python/docs-for-ai/<collection>/`
-- Fallbacks (run): `sed -n '/## 📦 Repo Collections/,/^---$/{/^|/p}' ~/projects/python/docs-for-ai/README.md`
+Read the collection's `INDEX.xml` to route to the relevant local files, then give a grounded, cohesive answer to the question.
 
-## Task
+The collection follows this pattern:
 
-1. Read the index and match the question to the relevant local file(s).
+<collection_pattern>
 
-2. **If relevant files exist:** answer from them, citing file paths and quotes. If they fall short, say so and ask before going to the web.
+```text
+~/projects/python/docs-for-ai/{collection}/
+├── INDEX.xml       # Index of all docs
+├── README.md
+├── api-python.md   # Indexed doc
+└── ...
+```
 
-3. **If nothing relevant:** check whether the collection even fits the question. Consult the fallbacks and propose a next step (another collection, or a web search).
+`INDEX.xml` schema:
 
-4. **If the collection doesn't exist:** show available collections.
+```xml
+<docs_index>
+  <source>
+    <title>{use as routing signal}</title>
+    <description>{use as routing signal}</description>
+    <source_url>{URL}</source_url>
+    <local_file>{file}</local_file>
+  </source>
+  <!-- Multiple <source> entries, one per .md file -->
+</docs_index>
+```
 
-## Web fallback
+Local file: `~/projects/python/docs-for-ai/{collection}/{file}`
 
-Only after exhausting local docs. Prefer Firecrawl; fall back to WebSearch / WebFetch (lossy on code/config) only if it's unavailable.
+</collection_pattern>
+
+## Procedure
+
+1. **Read `INDEX.xml` first** — it's the authoritative manifest. Use each source's `<title>` and `<description>` to route.
+2. **Read** the local files of the relevant sources.
+3. **Answer** from those files, citing quotes. If they fall short, re-check the index for other relevant files, then **ask before any web fallback**.
+
+If the question doesn't fit this collection, suggest a better-matching one from `<available_collections>` (or a web search) before answering.
+
+## Web fallback (only after local docs are exhausted)
+
+Prefer Firecrawl; use WebSearch / WebFetch (lossy on code/config) only if it's unavailable.
 
 - **Known URL:** `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
-- **Need to discover the page:** `firecrawl_search` for ranked URLs (no `scrapeOptions` — inline scraping overflows), then `firecrawl_scrape` the 1–2 best hits.
+- **Discover the page:** `firecrawl_search` for ranked URLs (no `scrapeOptions` — inline scraping overflows), then `firecrawl_scrape` the 1–2 best hits.
 
-## Response Format
+## Response format
 
-1. **Source:** local files (which) or web (which URLs).
-2. **Answer:** a comprehensive answer to the question.
-3. **References:** file paths with line numbers, or URLs.
+Use this as a guide:
 
-## Rules
+<format>
+# Question tersely framed
 
-- Prefer local docs; be explicit about local vs web.
-- Use the exact locations above — no variations.
+Grounded answer — well-structured and scannable, use emojis to aid readability
+
+## References used
+
+- Index: `~/projects/python/docs-for-ai/{collection}/INDEX.xml`
+- `~/projects/python/docs-for-ai/{collection}/{file-1}`
+- `~/projects/python/docs-for-ai/{collection}/{file-N}`
+- `https://..` (Web fallback only)
+
+</format>

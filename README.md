@@ -26,7 +26,7 @@ Available collections in this repo:
 | 📦 [`shiny/`](shiny/) | 📄 [`INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](tailwind/) | 📄 [`INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-30 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](vercel/) | 📄 [`INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](vitest/) | 📄 [`INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](zustand/) | 📄 [`INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
@@ -45,7 +45,7 @@ Available collections in this repo:
 git clone https://github.com/michellepace/docs-for-ai.git
 cd docs-for-ai
 
-# 3. Get free FireCrawl API key (Only GitHub sources are downloaded directly)
+# 3. Get free FireCrawl API key
 # Visit: https://www.firecrawl.dev/app/api-keys
 
 # 4. Add to your shell profile
@@ -93,19 +93,20 @@ Assume tailwind was not already a collection in this repo:
 
 ## 🏗️ How This Repo Works
 
-**Workflow:** Python script fetches from source URL → writes .md file → creates INDEX.xml entry with `PLACEHOLDER` description → Claude Code generates semantic description.
+**Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collection/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
+
 The `/curate-doc` command always regenerates the description, whereas `/rescrape-docs` only regenerates descriptions for files with content changes.
 
-**Source routing:** If the source URL is on GitHub, a direct fetch is used instead of FireCrawl.
+**Source routing:** Direct `.md` URLs and GitHub blobs (`.md`/`.mdx`/`.qmd`) are fetched as-is; FireCrawl scrapes everything else as a fallback.
 
-**Directory Structure:**
+**Curated Collection:**
 
 ```text
-uv/
+collection-name/
 ├── INDEX.xml               # Index of all docs
 ├── README.md
-├── api-reference.md        # Scraped doc
-├── getting-started.md      # Scraped doc
+├── api-reference.md        # Curated doc
+├── getting-started.md      # Curated doc
 └── ...
 ```
 
@@ -115,7 +116,7 @@ uv/
 <docs_index>
   <source>
     <title>Hello Document Title</title>
-    <description>20-30 word dense summary optimised for semantic search...</description>
+    <description>20-30 word routing signal an LLM reader uses to pick this file...</description>
     <source_url>https://docs.example.com/hello</source_url>
     <local_file>hello-document-title.md</local_file>
     <scraped_at>2025-10-15</scraped_at>
@@ -124,27 +125,15 @@ uv/
 </docs_index>
 ```
 
-Scripts use the FireCrawl Python SDK for general web sources and Python stdlib (`urllib.request`) for GitHub raw markdown.
-
 ---
 
-## 👉 Notes to Improve later
+## 📝 TODO - Regenerate "Descriptions" (2026-05-31)
 
-### LLM Routing (2026-05-22)
+Collections still have `PLACEHOLDER` descriptions — run `/improve-index-xml` (or `/rescrape-docs`) on each.
 
-"Semantic search" isn't the right term. The examples also need improving — very keyword-heavy, with redundant starting words. Index should say `<summary>` instead of `<description>`.
+The framing has shifted from "semantic search" to **LLM routing**, so existing descriptions should also be regenerated to match the current rules in [.claude/references/source-descriptions.md](.claude/references/source-descriptions.md).
 
-> Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question. Optimise for that, not human readability:
-
-Discriminative descriptions
-
-> Bottom line: keep the descriptions, drop the "semantic search" framing. What you want is discriminative descriptions — meaningful and keyword-anchored and written to stand apart from their neighbours — read by an LLM, not matched by vectors.
-
-Also, extract all duplicated examples into one `.claude/commands/references/examples.md` file.
-
-Then regenerate all the `PLACEHOLDER` descriptions.
-
-## Remove Scripts? (2026-05-27)
+## 👉 Improve later - Remove Scripts? (2026-05-27)
 
 Remove the scripts in [scripts/](scripts/) I don't need. For example, what about a bash for-loop over `curate_doc.py`, then allocate to subagents (run `wc --chars *.md | sort -n` or token counts). Read the diff on each local file and assess if the description needs refining (using `head`).
 

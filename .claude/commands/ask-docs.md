@@ -1,46 +1,51 @@
 ---
 description: Query curated documentation collection directory to answer the question.
 argument-hint: <collection> <question>
-allowed-tools: Read, Glob, Grep, Bash(echo:*), Bash(awk:*), Bash(cut:*), WebSearch, WebFetch
+allowed-tools:
+  - Bash(sed *)
+  - Glob
+  - Grep
+  - mcp__firecrawl__firecrawl_scrape
+  - mcp__firecrawl__firecrawl_search
+  - Read
+  - WebFetch
+  - WebSearch
 ---
 
 # Query Documentation Collection
 
-Parse the collection name and question from these arguments: `$ARGUMENTS`
+Split `$ARGUMENTS`: the first word is the **collection**, the rest is the **question**.
 
-The first word is the **collection name** and the remaining words are the **question**.
+## Locations
 
-## Context
+- Index: `~/projects/python/docs-for-ai/<collection>/INDEX.xml`
+- Directory: `~/projects/python/docs-for-ai/<collection>/`
+- Fallbacks (run): `sed -n '/## 📦 Repo Collections/,/^---$/{/^|/p}' ~/projects/python/docs-for-ai/README.md`
 
-Use the **Collection** name extracted above to construct these paths:
+## Task
 
-- Collection index path: `~/projects/python/docs-for-ai/<collection>/INDEX.xml`
-- Collection directory: `~/projects/python/docs-for-ai/<collection>/`
-- Fallback collections: `~/projects/python/docs-for-ai/README.md#repo-collections`
+1. Read the index and match the question to the relevant local file(s).
 
-## Your Task
+2. **If relevant files exist:** answer from them, citing file paths and quotes. If they fall short, say so and ask before going to the web.
 
-Answer the **Question** using relevant documentation.
+3. **If nothing relevant:** check whether the collection even fits the question. Consult the fallbacks and propose a next step (another collection, or a web search).
 
-1. Analyse the question to understand it clearly.
+4. **If the collection doesn't exist:** show available collections.
 
-2. Search the collection index to identify relevant local documentation files.
+## Web fallback
 
-3. **If relevant index sources found:** Analyse local files to answer the user's question accurately. Cite specific sections using file paths and relevant quotes. If insufficient, ask for confirmatoion to do websearch against offical docs.
+Only after exhausting local docs. Prefer Firecrawl; fall back to WebSearch / WebFetch (lossy on code/config) only if it's unavailable.
 
-4. **If there are no relevant sources:** Determine if the user has specified a relevant collection in respect to the question. Analyse the fallback collections and make a new suggestion (e.g. search another collection or do a websearch)
+- **Known URL:** `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
+- **Need to discover the page:** `firecrawl_search` for ranked URLs (no `scrapeOptions` — inline scraping overflows), then `firecrawl_scrape` the 1–2 best hits.
 
 ## Response Format
 
-Structure your response as:
+1. **Source:** local files (which) or web (which URLs).
+2. **Answer:** a comprehensive answer to the question.
+3. **References:** file paths with line numbers, or URLs.
 
-1. **Source:** Specify whether you used local docs (which files) or web search
-2. **Answer:** Comprehensive answer to the question
-3. **References:** Cite specific local file paths, line numbers, or URLs
+## Rules
 
-## Important Notes
-
-- **Always prefer local documentation** when available and relevant
-- **Be explicit** about whether you used local files or web search
-- **If the collection doesn't exist**, refer to the README table to show what's available
-- **Use the exact path structure** provided above - no path variations
+- Prefer local docs; be explicit about local vs web.
+- Use the exact locations above — no variations.

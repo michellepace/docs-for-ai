@@ -93,6 +93,14 @@ def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
     return result.returncode, result.stdout + result.stderr
 
 
+def _index_source_fields(output: str, verb: str) -> dict[str, str]:
+    """Parse key=value fields from the '✅ {verb} index source|...' line."""
+    line = next(
+        ln for ln in output.splitlines() if ln.startswith(f"✅ {verb} index source|")
+    )
+    return dict(part.split("=", 1) for part in line.split("|") if "=" in part)
+
+
 class TestInputValidation:
     """Fast tests for argument, URL, and directory-state validation (no API calls)."""
 
@@ -441,12 +449,22 @@ class TestDirectoryScenarios:
         exit_code1, output1 = run_script(str(collection_dir), URL_FIRECRAWL)
         assert exit_code1 == 0
         assert "✅ Added index source|" in output1
+        fields1 = _index_source_fields(output1, "Added")
+        assert fields1["local_file"] == "learn-guides-updating-state.md"
+        assert fields1["description"] == "PLACEHOLDER"
+        assert fields1["title"]
+        assert "💡 Source description pending|" in output1
         assert "🎉 Curation Success!|created and indexed new document|" in output1
 
         # Re-curating the SAME URL must UPDATE, not error.
         exit_code2, output2 = run_script(str(collection_dir), URL_FIRECRAWL)
         assert exit_code2 == 0
         assert "✅ Updated index source|" in output2
+        fields2 = _index_source_fields(output2, "Updated")
+        assert fields2["local_file"] == "learn-guides-updating-state.md"
+        assert fields2["description"] == "PLACEHOLDER"
+        assert fields2["title"]
+        assert "💡 Source description pending|" in output2
         assert "🎉 Curation Success!|overwrote and re-indexed document|" in output2
 
         index_path = collection_dir / "INDEX.xml"

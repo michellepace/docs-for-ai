@@ -17,6 +17,9 @@ from urllib.parse import urlparse
 import firecrawl_source
 import markdown_source
 
+# Written for every new source; a later LLM step fills it.
+PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
+
 
 def _normalise_directory_path(dir_path_str: str) -> Path:
     """Normalise directory path by removing trailing slash."""
@@ -139,7 +142,7 @@ def _add_or_update_source_in_index(
 
     source = ET.SubElement(root, "source")
     ET.SubElement(source, "title").text = title
-    ET.SubElement(source, "description").text = "PLACEHOLDER"
+    ET.SubElement(source, "description").text = PLACEHOLDER_DESCRIPTION
     ET.SubElement(source, "source_url").text = source_url
     ET.SubElement(source, "local_file").text = local_file
     ET.SubElement(source, "scraped_at").text = date.today().isoformat()
@@ -148,12 +151,12 @@ def _add_or_update_source_in_index(
 
     tree.write(index_path, encoding="unicode", xml_declaration=False)
 
-    if is_update:
-        print(f"✅ Updated index source|{_format_path_for_display(index_path)}|")
-    else:
-        print(f"✅ Added index source|{_format_path_for_display(index_path)}|")
-
-    print("💡 INDEX.xml <description> pending: PLACEHOLDER requires summary|")
+    verb = "Updated" if is_update else "Added"
+    fields = (
+        f"title={title}|local_file={local_file}|description={PLACEHOLDER_DESCRIPTION}|"
+    )
+    print(f"✅ {verb} index source|{_format_path_for_display(index_path)}|{fields}")
+    print("💡 Source description pending|")
 
     return is_update
 

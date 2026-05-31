@@ -56,7 +56,7 @@ Local file: `~/projects/python/docs-for-ai/{collection}/{file}`
 ## Procedure
 
 1. **Read `INDEX.xml` first** — it's the authoritative manifest. Use each source's `<title>` and `<description>` to route.
-2. **Read** the local files of the relevant sources.
+2. **Analyse** the local files of the relevant sources `~/projects/python/docs-for-ai/{collection}/{file}`
 3. **Answer** from those files, citing quotes. If they fall short, re-check the index for other relevant files, then **ask before any web fallback**.
 
 If the question doesn't fit this collection, suggest a better-matching one from `<available_collections>` (or a web search) before answering.

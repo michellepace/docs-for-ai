@@ -24,7 +24,7 @@ The sync script re-scrapes every source, syncs INDEX.xml to the filesystem, and 
 
 ### 1. Validate argument
 
-!`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
+!`printf '<existing_collections>\n'; find collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
 Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match.
 
@@ -51,7 +51,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 ### 2. Run sync and scrape
 
 ```bash
-uv run sync-index "$collection"
+uv run sync-index "collections/$collection"
 ```
 
 This script:
@@ -70,7 +70,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 1. Analyse the corresponding markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Append it to `$collection/descriptions.txt`:
+4. Append it to `collections/$collection/descriptions.txt`:
 
    ```text
    getting-started-installation.md
@@ -82,10 +82,10 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 Run the update script to apply all descriptions:
 
 ```bash
-uv run update-index-descriptions "$collection" "$collection/descriptions.txt"
+uv run update-index-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
-Verify `PLACEHOLDER` no longer appears in `$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
+Verify `PLACEHOLDER` no longer appears in `collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
 
 ### 5. Report completion
 

@@ -257,7 +257,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Sync INDEX.xml, re-scrape all docs, output batch processing data"
     )
-    parser.add_argument("directory", help="Collection directory (e.g. shiny/)")
+    parser.add_argument(
+        "directory", help="Collection directory (e.g. collections/shiny/)"
+    )
     args = parser.parse_args()
 
     collection_dir = Path(args.directory)
@@ -317,7 +319,7 @@ def main() -> None:
     print(f"- ⚠️ PLACEHOLDER in INDEX.xml (needs description)|{len(changed_files)} files")
     if changed_files:
         for filename in sorted(changed_files):
-            print(f"  - {collection_dir.name}/{filename}")
+            print(f"  - {collection_dir}/{filename}")
 
     # Cleanup backup file
     _cleanup_backup(backup_path)

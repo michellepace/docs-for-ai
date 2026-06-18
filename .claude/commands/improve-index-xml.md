@@ -6,7 +6,7 @@ allowed-tools:
   - Bash(cat *)
   - Bash(find *)
   - Bash(printf *)
-  - Bash(rm -f */descriptions_agent*.txt)
+  - Bash(rm -f collections/*/descriptions_agent*.txt)
   - Bash(test *)
   - Bash(uv run update-index-descriptions *)
   - Bash(wc *)
@@ -23,7 +23,7 @@ Batch-improve `$collection` descriptions for LLM reader routing using parallel s
 
 ## 1. Validate Collection
 
-!`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
+!`printf '<existing_collections>\n'; find collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
 Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match:
 
@@ -44,7 +44,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 
   ```
   ## 🤔 Collection `$collection` not found
-  - No INDEX.xml at `$collection/INDEX.xml`
+  - No INDEX.xml at `collections/$collection/INDEX.xml`
   - Existing collections: [list]
   - Did you mean: [closest match]?
   ```
@@ -64,7 +64,7 @@ Found [N] documents in INDEX.xml
 
 ## 2. Analyse and Group Documents
 
-Read `$collection/INDEX.xml` and extract all `<source>` entries into a list.
+Read `collections/$collection/INDEX.xml` and extract all `<source>` entries into a list.
 
 **Agent count:** ceil(docs / 5) - max 5 docs per agent
 
@@ -100,14 +100,14 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 
 Then, for each assigned document:
 
-1. Analyse the markdown file at `[COLLECTION]/<local_file>`
+1. Analyse the markdown file at `collections/[COLLECTION]/<local_file>`
 2. Draft a description following those criteria
 3. Compare to current description in INDEX.xml, ensure yours is better
 4. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
 
 ## Output Format
 
-Write to `[COLLECTION]/descriptions_agent[N].txt`:
+Write to `collections/[COLLECTION]/descriptions_agent[N].txt`:
 
 ```text
 <local_file1>.md
@@ -137,7 +137,7 @@ After all agents complete:
 1. Combine output files:
 
    ```bash
-   cat $collection/descriptions_agent*.txt > $collection/descriptions_improved.txt
+   cat collections/$collection/descriptions_agent*.txt > collections/$collection/descriptions_improved.txt
    ```
 
 2. Present summary to user:
@@ -181,13 +181,13 @@ Type "yes" to apply, or "no" to cancel.
 On user confirmation ("yes"), run:
 
 ```bash
-uv run update-index-descriptions "$collection" "$collection/descriptions_improved.txt"
+uv run update-index-descriptions "collections/$collection" "collections/$collection/descriptions_improved.txt"
 ```
 
 Clean up any remaining agent files:
 
 ```bash
-rm -f $collection/descriptions_agent*.txt
+rm -f collections/$collection/descriptions_agent*.txt
 ```
 
 ## 6. Report Success
@@ -197,7 +197,7 @@ rm -f $collection/descriptions_agent*.txt
 
 Collection: `$collection`
 - Descriptions updated: [N]
-- INDEX.xml: `$collection/INDEX.xml`
+- INDEX.xml: `collections/$collection/INDEX.xml`
 ```
 
 If user cancels, clean up temporary files and confirm cancellation.

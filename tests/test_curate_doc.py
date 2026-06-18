@@ -125,7 +125,7 @@ class TestInputValidation:
 
         assert exit_code != 0
         assert "❌ Error: USE_GITHUB_BLOB|" in output
-        assert "uv/INDEX.xml" in output
+        assert "collections/uv/INDEX.xml" in output
 
     def test_nonempty_noncollection_directory_fails(self, tmp_path: Path) -> None:
         """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""

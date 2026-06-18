@@ -1,6 +1,6 @@
 # Curate Docs For AI (with Claude Code)
 
-Curate and index documentation from any website into collections like `tailwind/`, `horses/`, etc. Reference collection indexes in your AI chats (e.g. `@tailwind/INDEX.xml what's a utility?`) so that only relevant docs are analysed. Much cleaner than a web-fetch and more focussed than a web-search. Keep your AI context sharp.
+Curate and index documentation from any website into collections like `tailwind/`, `horses/`, etc. Then `/ask-docs [collection] [your question]` to get a grounded answer. Cleaner than a web-fetch and more focussed than a web-search. Keeps AI context sharp.
 
 <div align="center">
   <img src=".images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
@@ -13,29 +13,31 @@ Available collections in this repo:
 
 | Collection | Collection Index | Description | Scraped | Source |
 |:-----------|:-----------------|:------------|:--------|:-------|
-| 📦 [`biome/`](biome/) | 📄 [`INDEX.xml`](biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
-| 📦 [`claudecode/`](claudecode/) | 📄 [`INDEX.xml`](claudecode/INDEX.xml) | Anthropic Claude Code | 2026-02-05 | [Official](https://code.claude.com) |
-| 📦 [`claudeplat/`](claudeplat/) | 📄 [`INDEX.xml`](claudeplat/INDEX.xml) | Anthropic Claude Platform | 2026-01-07 | [Official](https://platform.claude.com) |
-| 📦 [`clerk/`](clerk/) | 📄 [`INDEX.xml`](clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`convex/`](convex/) | 📄 [`INDEX.xml`](convex/INDEX.xml) | Reactive database | 2026-01-07 | [Official](https://docs.convex.dev) |
-| 🪝 [`lefthook/`](lefthook/) | 📄 [`INDEX.xml`](lefthook/INDEX.xml) | Git hooks manager | 2025-11-24 | [Official](https://github.com/evilmartians/lefthook) |
-| 📦 [`marimo/`](marimo/) | 📄 [`INDEX.xml`](marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
-| 📦 [`nextjs/`](nextjs/) | 📄 [`INDEX.xml`](nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwright/`](playwright/) | 📄 [`INDEX.xml`](playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
-| 📦 [`shadcn/`](shadcn/) | 📄 [`INDEX.xml`](shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
-| 📦 [`shiny/`](shiny/) | 📄 [`INDEX.xml`](shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
-| 📦 [`tailwind/`](tailwind/) | 📄 [`INDEX.xml`](tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
-| 📦 [`tailwindplus/`](tailwindplus/) | 📄 [`INDEX.xml`](tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](uv/) | 📄 [`INDEX.xml`](uv/INDEX.xml) | Python projects | 2026-05-30 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
-| 📦 [`vercel/`](vercel/) | 📄 [`INDEX.xml`](vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
-| 📦 [`vitest/`](vitest/) | 📄 [`INDEX.xml`](vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
-| 📦 [`zustand/`](zustand/) | 📄 [`INDEX.xml`](zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
+| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
+| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Anthropic Claude Code | 2026-02-05 | [Official](https://code.claude.com) |
+| 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Anthropic Claude Platform | 2026-01-07 | [Official](https://platform.claude.com) |
+| 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
+| 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive database | 2026-01-07 | [Official](https://docs.convex.dev) |
+| 🪝 [`lefthook/`](collections/lefthook/) | 📄 [`INDEX.xml`](collections/lefthook/INDEX.xml) | Git hooks manager | 2025-11-24 | [Official](https://github.com/evilmartians/lefthook) |
+| 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
+| 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
+| 📦 [`playwright/`](collections/playwright/) | 📄 [`INDEX.xml`](collections/playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
+| 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
+| 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
+| 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
+| 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI Components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
+| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python projects | 2026-05-30 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
+| 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
+| 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
 
-*Curate your own collections. The [lefthook](lefthook/) collection is non-standard — docs are downloaded directly from GitHub. For Anthropic docs use [this tool](https://github.com/ericbuess/claude-code-docs).*
+*Curate your own collections. The [lefthook](collections/lefthook/) collection is non-standard — docs are downloaded directly from GitHub. For Anthropic docs use [this tool](https://github.com/ericbuess/claude-code-docs).*
 
 ---
 
 ## 🚀 Setup
+
+**(1) First these 5 steps:**
 
 ```bash
 # 1. Install UV
@@ -56,10 +58,24 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 uv run pre-commit install
 ```
 
-## 📖 Usage via Slash Commands
+**(2) Fix the hard-coded repo path.** The command hard-codes `~/projects/python/docs-for-ai` in several places. If you cloned elsewhere, ask Claude Code:
 
-> [!IMPORTANT]
-> Edit the paths in [.claude/commands/ask-docs.md](.claude/commands/ask-docs.md) to match your local setup. To use from anywhere, move it to `~/.claude/commands/`.
+```text
+In .claude/commands/ask-docs.md, find every instance of the path
+`~/projects/python/docs-for-ai` and replace each with the absolute
+path to the root of this cloned repo.
+```
+
+**(3) Symlink it into your global commands** (run from the repo root):
+
+```bash
+mkdir -p ~/.claude/commands
+ln -s "$PWD/.claude/commands/ask-docs.md" ~/.claude/commands/ask-docs.md
+```
+
+Now `/ask-docs <collection> <question>` works from any directory. The symlink points back to this one source of truth, so edits to the project file stay live everywhere.
+
+## 📖 Usage via Slash Commands
 
 | Slash Command | Purpose | .md Files | INDEX `<source>` |
 |:--------|:--------|:----------|:----------|
@@ -75,7 +91,7 @@ Assume tailwind was not already a collection in this repo:
 ```bash
 # Start a new collection
 /curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
-# → Creates tailwind/ collection directory, with README.md + INDEX.xml, and first curated doc
+# → Creates collections/tailwind/ collection directory, with README.md + INDEX.xml, and first curated doc
 
 # Re-scrape existing doc (refresh content from same URL)
 /curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
@@ -91,12 +107,12 @@ Assume tailwind was not already a collection in this repo:
 
 # ✨ Use the docs
 /ask-docs tailwind Please evaluate my project for correct usage of utility classes?
-# → Searches tailwind/INDEX.xml for relevant docs, analyses these, gives you an answer
+# → Searches collections/tailwind/INDEX.xml for relevant docs, analyses these, gives you an answer
 ```
 
 ## 🏗️ How This Repo Works
 
-**Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collection/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
+**Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
 
 The `/curate-doc` command always regenerates the description, whereas `/rescrape-docs` only regenerates descriptions for files with content changes.
 
@@ -105,12 +121,13 @@ The `/curate-doc` command always regenerates the description, whereas `/rescrape
 **Curated Collection:**
 
 ```text
-collection-name/
-├── INDEX.xml               # Index of all docs
-├── README.md
-├── api-reference.md        # Curated doc
-├── getting-started.md      # Curated doc
-└── ...
+collections/
+└── collection-name/
+    ├── INDEX.xml           # Index of all docs
+    ├── README.md
+    ├── api-reference.md    # Curated doc
+    ├── getting-started.md  # Curated doc
+    └── ...
 ```
 
 **INDEX.xml Schema:**

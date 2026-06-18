@@ -26,7 +26,7 @@ def _normalise_directory_path(dir_path_str: str) -> Path:
 
 
 def _format_path_for_display(path: Path) -> str:
-    """Format path as a project-relative string, e.g. `vite/INDEX.xml`.
+    """Format path as a project-relative string, e.g. `collections/vite/INDEX.xml`.
 
     Falls back to `str(path)` for paths outside the project root.
     """
@@ -53,7 +53,7 @@ def _reject_uv_docs_url(url: str) -> None:
         print(
             "❌ Error: USE_GITHUB_BLOB|"
             "Use the GitHub blob URL for this source; "
-            "see uv/INDEX.xml for the canonical mapping|"
+            "see collections/uv/INDEX.xml for the canonical mapping|"
             f"{url}|"
         )
         sys.exit(1)
@@ -213,7 +213,7 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "directory",
-        help="Documentation directory (e.g. `tailwind/`)",
+        help="Documentation directory (e.g. `collections/tailwind/`)",
     )
     parser.add_argument(
         "source_url",

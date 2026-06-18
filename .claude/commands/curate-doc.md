@@ -12,9 +12,9 @@ allowed-tools:
   - Write
 ---
 
-Curate source URL `$source_url` into `$collection`. The script (Step 2) fetches the document and registers its `$collection/INDEX.xml` entry; **your task:** write that entry's description.
+Curate source URL `$source_url` into `$collection`. The script (Step 2) fetches the document and registers its `collections/$collection/INDEX.xml` entry; **your task:** write that entry's description.
 
-Existing collections: !`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
+Existing collections: !`printf '<existing_collections>\n'; find collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
 ## Step 1. Validate arguments
 
@@ -72,7 +72,7 @@ Here are just a few examples what new users can inadvertently get wrong - you ar
 <validation_success>
 
 ```
-## 🙂 Super! Curating Shiny doc to shiny/ collection...
+## 🙂 Super! Curating Shiny doc to collections/shiny/ collection...
 ```
 
 </validation_success>
@@ -82,7 +82,7 @@ Analyse `$collection` and `$source_url` against the existing collections and dec
 ## Step 2. Run the script
 
 ```bash
-uv run curate-doc "$collection" "$source_url"
+uv run curate-doc "collections/$collection" "$source_url"
 ```
 
 ## Step 3. On script error
@@ -96,7 +96,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 1. Analyse the curated markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Write it to `$collection/description.txt`:
+4. Write it to `collections/$collection/description.txt`:
 
       ```text
       overview-shiny-for-python.md
@@ -106,7 +106,7 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 5. Apply it:
 
    ```bash
-   uv run update-index-descriptions "$collection" "$collection/description.txt"
+   uv run update-index-descriptions "collections/$collection" "collections/$collection/description.txt"
    ```
 
 ## Step 5. Report success
@@ -120,9 +120,9 @@ Output the final success message following the `<example_success_message>` forma
 
 🎯 What happened
 - Source URL: https://shiny.posit.co/py/docs/overview.html
-- [Created/Overwrote] document: `shiny/overview.md`
+- [Created/Overwrote] document: `collections/shiny/overview.md`
 - Generated description: (see below!)
-- [Added/Updated] index: `shiny/INDEX.xml`
+- [Added/Updated] index: `collections/shiny/INDEX.xml`
 
 "_[your generated description]_" = [actual word count] words ✓
 ```

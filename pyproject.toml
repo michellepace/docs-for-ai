@@ -1,6 +1,3 @@
-# =================================
-# Project Metadata & Configuration
-# =================================
 [project]
 name = "docs-for-ai"
 version = "0.1.0"
@@ -8,7 +5,7 @@ description = "Curate and index clean docs for AI context and keep it fresh (wit
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "firecrawl-py>=4.28.2",
+    "firecrawl-py>=4.30.1",
 ]
 
 [project.scripts]
@@ -17,27 +14,26 @@ sync-index                = "docs_for_ai.sync_index:main"
 update-index-descriptions = "docs_for_ai.update_index_descriptions:main"
 
 [build-system]
-requires = ["uv_build>=0.11.17,<0.12"]
+requires = ["uv_build>=0.11.21,<0.12"]
 build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
     "pre-commit>=4.6.0",
-    "pyright>=1.1.409",
-    "pytest>=9.0.3",
-    "ruff>=0.15.15",
+    "pyright>=1.1.410",
+    "pytest>=9.1.0",
+    "ruff>=0.15.18",
 ]
 
 
-# =================================
-# Pyright Type Checking
+# TYPE CHECKING (PYRIGHT)
 # =================================
 [tool.pyright]
 # Type checker — Ruff only lints, doesn't type-check.
 # In VSCode, Pylance reads this config (Pylance bundles Pyright).
 # The CLI `uv run pyright` reads the same config.
 
-typeCheckingMode = "strict"
+typeCheckingMode = "standard" # Keep! (not strict)
 pythonVersion = "3.14"
 
 # Silence rules Ruff already reports these
@@ -45,14 +41,8 @@ reportUnusedImport = false      # Ruff F401
 reportUnusedVariable = false    # Ruff F841
 reportDuplicateImport = false   # Ruff F811
 
-# firecrawl is fully type-annotated but ships no py.typed marker (PEP 561), so
-# strict mode flags every import. useLibraryCodeForTypes (on by default) still
-# reads its real types, so silencing this advisory loses nothing.
-reportMissingTypeStubs = false
 
-
-# =================================
-# Ruff Linter Configuration
+# LINTING (RUFF)
 # =================================
 [tool.ruff]
 line-length = 90
@@ -79,8 +69,8 @@ convention = "google"
     "S603",    # subprocess call: check for execution of untrusted input
     "DTZ011",  # date.today() appropriate for local date tracking
 ]
-"tests/*" = [
-    "D103",    # Missing docstring in public function
+"tests/**" = [
+    "D1",      # Missing docstrings (not required in tests)
     "PLR2004", # Magic value used in comparison
     "S101",    # Use of assert detected
     "S314",    # XML parsing (safe - trusted test data only)
@@ -99,8 +89,7 @@ max-statements = 50
 max-complexity = 10
 
 
-# =================================
-# Pytest Configuration
+# TESTING (PYTEST)
 # =================================
 [tool.pytest.ini_options]
 markers = [

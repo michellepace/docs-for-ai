@@ -51,6 +51,9 @@ cd docs-for-ai
 # 4. Add to your shell profile
 echo 'export API_KEY_MCP_FIRECRAWL=your-api-key-here' >> ~/.zshrc
 source ~/.zshrc  # Use ~/.bashrc if that's your shell
+
+# 5. Install git hooks (lint, type-check & test on commit/push)
+uv run pre-commit install
 ```
 
 ## 📖 Usage via Slash Commands

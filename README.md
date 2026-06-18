@@ -3,7 +3,7 @@
 Curate and index documentation from any website into collections like `tailwind/`, `horses/`, etc. Then `/ask-docs [collection] [your question]` to get a grounded answer. Cleaner than a web-fetch and more focussed than a web-search. Keeps AI context sharp.
 
 <div align="center">
-  <img src=".images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
+  <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
   <p><em>Complete workflow: curate → auto scrape → "/ask-docs biome Validate my config file please"</em></p>
 </div>
 

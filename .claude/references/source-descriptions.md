@@ -25,7 +25,7 @@ Match the style of these good examples and avoid the bad:
 ```xml
 <!-- uv Collection -->
 <title>Project structure and files</title>
-<description>Anatomy of `pyproject.toml` metadata, the gitignored `.venv` that `run` and `sync` manage, and the committed cross-platform `uv.lock` versus the standardised, tool-agnostic `pylock.toml` export target.</description>
+<description>`pyproject.toml` metadata, the gitignored `.venv` managed by `run` and `sync`, and the committed cross-platform `uv.lock` versus the standardised, tool-agnostic `pylock.toml` export target.</description>
 ```
 
 ```xml
@@ -43,7 +43,7 @@ Match the style of these good examples and avoid the bad:
 ```xml
 <!-- uv Collection -->
 <title>Features</title>
-<description>Covers `python` version management, the `run` command for scripts, `add`, `sync`, and `lock` project commands, `tool` execution via `uvx`, the legacy `pip` interface, and `cache` plus `self update` maintenance.</description>
+<description>`python` version management, `run` for scripts, the `add`, `sync`, and `lock` project commands, `tool` execution via `uvx`, the legacy `pip` interface, and `cache` and `self update` maintenance.</description>
 ```
 
 </good>

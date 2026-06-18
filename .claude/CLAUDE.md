@@ -62,7 +62,7 @@ uv lock --upgrade && uv sync      # Update all packages and apply
 uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code
-uv run pre-commit run --all-files # Run all hooks manually
+uv run pre-commit run --all-files # Run pre-commit hooks manually
 
 # Run Non-Network Tests (markers in pyproject.toml)
 uv run pytest -m "not firecrawl and not github"

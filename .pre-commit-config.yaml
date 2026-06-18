@@ -1,4 +1,5 @@
 default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
@@ -18,44 +19,42 @@ repos:
         name: ruff check
         entry: uv run ruff check --fix --exit-non-zero-on-fix
         language: system
-        types_or: [python, toml]
+        types_or: [python, pyproject]
         pass_filenames: false
 
       - id: ruff-format
         name: ruff format
         entry: uv run ruff format
         language: system
-        types_or: [python, toml]
+        types_or: [python, pyproject]
         pass_filenames: false
 
       - id: pyright
         name: pyright
         entry: uv run pyright
         language: system
-        types_or: [python, toml]
+        types_or: [python, pyproject]
         pass_filenames: false
 
       - id: pytest-commit
         name: pytest (offline unit tests)
         entry: uv run pytest -m "not firecrawl and not github"
         language: system
-        types_or: [python, toml]
+        types_or: [python, pyproject]
         pass_filenames: false
-        stages: [pre-commit]
 
       - id: pytest-push
         name: pytest (full suite, incl. firecrawl)
         entry: uv run pytest
         language: system
-        types_or: [python, toml]
+        types_or: [python, pyproject]
         pass_filenames: false
         stages: [pre-push]
 
 # Notes (non-obvious)
-# 1. `toml` matches BOTH pyproject.toml AND uv.lock, so a lockfile-only change
-#    still fires the test hooks.
-# 2. pre-push runs the FULL suite incl. firecrawl (paid) — but only fires on
-#    python/toml changes. Skip deliberately with: git push --no-verify
+# 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
+# 2. `pass_filenames: false` runs hook against the whole project
+# 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
 
 # Install hooks (must): default_install_hook_types installs both stages.
 #   uv run pre-commit install

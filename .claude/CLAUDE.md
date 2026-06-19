@@ -42,15 +42,17 @@ TDD-driven — write the test first; let testability shape the design.
 - **Pure functions preferred** — no side effects in business logic
 - **Single responsibility** — one module, one purpose (one script, one job)
 - **Layer separation** — CLI entry point → core logic → I/O
+- **Self-documenting code** — clear naming throughout, keep docstrings/comments minimal
 - **Fail loud at the I/O boundary** — print `❌ Error: TYPE|detail|url|` then `sys.exit(1)`; print `✅ ...` key progress. Slash commands key off these.
 
 ## TDD Development
 
 Write a failing test (red) → code → pass (green).
 
-- Write the test first; one test drives one behaviour
+- Test behaviour; not implementation or Python itself
+- One test → one behaviour → minimal code → repeat. No bulk-writing tests.
 - Use pytest's `tmp_path` fixture instead of creating real files
-- Use focused, descriptive test names
+- Use self-documenting test names
 
 ## Development Workflow (Python 3.14)
 

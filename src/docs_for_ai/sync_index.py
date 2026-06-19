@@ -7,6 +7,8 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from docs_for_ai.paths import format_path_for_display
+
 
 def get_markdown_files(collection_dir: Path) -> set[str]:
     """Return set of .md filenames (excluding README.md)."""
@@ -244,6 +246,22 @@ def restore_unchanged_descriptions(
     return restored_count
 
 
+def format_descriptions_status(
+    collection_dir: Path, restored_count: int, changed_files: set[str]
+) -> str:
+    """Build the `## Index Descriptions Status` report, listing files as `~/...` paths."""
+    lines = [
+        "\n## Index Descriptions Status",
+        f"- ✅ Restored (.md whitespace-only changes)|{restored_count} files",
+        f"- ⚠️ PLACEHOLDER in INDEX.xml (needs description)|{len(changed_files)} files",
+    ]
+    lines.extend(
+        f"  - {format_path_for_display(collection_dir / filename)}"
+        for filename in sorted(changed_files)
+    )
+    return "\n".join(lines)
+
+
 def _cleanup_backup(backup_path: Path) -> None:
     """Delete backup file with error handling (non-fatal)."""
     try:
@@ -314,12 +332,7 @@ def main() -> None:
     )
 
     # Show descriptions status
-    print("\n## Index Descriptions Status")
-    print(f"- ✅ Restored (.md whitespace-only changes)|{restored_count} files")
-    print(f"- ⚠️ PLACEHOLDER in INDEX.xml (needs description)|{len(changed_files)} files")
-    if changed_files:
-        for filename in sorted(changed_files):
-            print(f"  - {collection_dir}/{filename}")
+    print(format_descriptions_status(collection_dir, restored_count, changed_files))
 
     # Cleanup backup file
     _cleanup_backup(backup_path)

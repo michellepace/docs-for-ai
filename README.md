@@ -58,22 +58,22 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 uv run pre-commit install
 ```
 
-**(2) Fix the hard-coded repo path.** The command hard-codes `~/projects/python/docs-for-ai` in several places. If you cloned elsewhere, ask Claude Code:
+**(2) Anchor the repo at a fixed location** (run from the repo root). The commands reference the repo through this single symlink — universal across machines, so the command files never need editing no matter where you cloned:
 
-```text
-In .claude/commands/ask-docs.md, find every instance of the path
-`~/projects/python/docs-for-ai` and replace each with the absolute
-path to the root of this cloned repo.
+```bash
+ln -s "$PWD" ~/.claude/docs-for-ai
 ```
 
-**(3) Symlink it into your global commands** (run from the repo root):
+**(3) Symlink the commands you want available everywhere** (pointed *through* the anchor):
 
 ```bash
 mkdir -p ~/.claude/commands
-ln -s "$PWD/.claude/commands/ask-docs.md" ~/.claude/commands/ask-docs.md
+ln -s ~/.claude/docs-for-ai/.claude/commands/ask-docs.md      ~/.claude/commands/ask-docs.md
+ln -s ~/.claude/docs-for-ai/.claude/commands/curate-doc.md    ~/.claude/commands/curate-doc.md
+ln -s ~/.claude/docs-for-ai/.claude/commands/rescrape-docs.md ~/.claude/commands/rescrape-docs.md
 ```
 
-Now `/ask-docs <collection> <question>` works from any directory. The symlink points back to this one source of truth, so edits to the project file stay live everywhere.
+Now `/ask-docs`, `/curate-doc` and `/rescrape-docs` work from any directory. Everything routes through the `~/.claude/docs-for-ai` anchor, so there's one source of truth — to relocate the repo, just re-point that one symlink.
 
 ## 📖 Usage via Slash Commands
 
@@ -81,7 +81,6 @@ Now `/ask-docs <collection> <question>` works from any directory. The symlink po
 |:--------|:--------|:----------|:----------|
 | `/curate-doc <collection> <url>` | Add new or re-scrape | ✅ Write | ✅ Add/update INDEX.xml |
 | `/rescrape-docs <collection>` | Re-scrape all docs | ✅ Write all | ✅ Selective update INDEX.xml |
-| `/improve-index-xml <collection>` | Batch improve descriptions | 📖 Read | ✅ Update INDEX.xml |
 | `/ask-docs <collection> <question>` | Query any collection | Docs analysed | Relevant docs identified |
 
 ## 💡 Usage Example
@@ -149,20 +148,22 @@ collections/
 
 ## 📝 TODO - Regenerate "Descriptions" (2026-05-31)
 
-Collections still have `PLACEHOLDER` descriptions — run `/improve-index-xml` (or `/rescrape-docs`) on each.
+Collections still have `PLACEHOLDER` descriptions — run `/rescrape-docs` on each.
 
 The framing has shifted from "semantic search" to **LLM routing**, so existing descriptions should also be regenerated to match the current rules in [.claude/references/source-descriptions.md](.claude/references/source-descriptions.md).
 
-## 👉 Improve later - Remove Scripts? (2026-05-27)
+## 📝 TODO - Replace `/rescrape-docs`
 
-Remove the scripts in [scripts/](scripts/) I don't need. For example, what about a bash for-loop over `curate-doc`, then allocate to subagents (run `wc --chars *.md | sort -n` or token counts). Read the diff on each local file and assess if the description needs refining (using `head`).
+Use `claude -p` sequentially - gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command and iterate on that?
 
-Pick a cap so no agent is overloaded, on two axes:
-- Input size — a target like "~X total words per agent" so context stays comfortable.
-- File count — a soft cap (e.g. ≤5 files) so no single agent does too much serial reading, which hurts both speed and summary quality.
+## 📝 TODO - sort out `scripts/`
 
-The honest rule: isolation matters in proportion to file size and similarity. Give a large or highly-similar file its own agent (where contamination/dilution is real). Batch small, distinct files 3–5 together — the interference there is negligible, and you save the overhead. It's a quality-vs-efficiency trade-off, not a flat "always isolate".
+Improve `scripts/curate-batch.sh` and raise into README
 
-> For this task I'd set the budget as "≤5 files AND ≤~12k words per agent, whichever binds first". I'd rather use the anthropic tokeniser script in `~/projects/python/TEMP-token-counts/`.
+Also the others or DELETE.
 
-But if there's an API cost to running these, use a multiplier (approximated across curated files): tokens ≈ characters × 0.37 (I don't think my sampling was wonky across 49 files).
+## 📝 TODO - populate `md_allowlist.txt`
+
+When a new collection is made, get claude command in `/curate-doc` to establish if we can add it e.g https://www.mintlify.com/docs/quickstart. Need to handle not everyone does a 404 - "did it return x lines and expected content?"
+
+Exclude new collections in `rescrape-docs/` whatever I do there.

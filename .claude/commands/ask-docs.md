@@ -19,7 +19,7 @@ Parse `$ARGUMENTS`:
 - **collection** = the first word
 - **question** = everything after the first word
 
-Available collections: !`printf '<available_collections>\n'; find ~/projects/python/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
+Available collections: !`printf '<available_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
 
 Read the collection's `INDEX.xml` to route to the relevant local files, then give a grounded, cohesive answer to the question.
 
@@ -28,7 +28,7 @@ The collection follows this pattern:
 <collection_pattern>
 
 ```text
-~/projects/python/docs-for-ai/collections/{collection}/
+~/.claude/docs-for-ai/collections/{collection}/
 ├── INDEX.xml       # Index of all docs
 ├── README.md
 ├── api-python.md   # Indexed doc
@@ -49,14 +49,14 @@ The collection follows this pattern:
 </docs_index>
 ```
 
-Local file: `~/projects/python/docs-for-ai/collections/{collection}/{file}`
+Local file: `~/.claude/docs-for-ai/collections/{collection}/{file}`
 
 </collection_pattern>
 
 ## Procedure
 
 1. **Read `INDEX.xml` first** — it's the authoritative manifest. Use each source's `<title>` and `<description>` to route.
-2. **Analyse** the local files of the relevant sources `~/projects/python/docs-for-ai/collections/{collection}/{file}`
+2. **Analyse** the local files of the relevant sources `~/.claude/docs-for-ai/collections/{collection}/{file}`
 3. **Answer** from those files, citing quotes. If they fall short, re-check the index for other relevant files, then **ask before any web fallback**.
 
 If the question doesn't fit this collection, suggest a better-matching one from `<available_collections>` (or a web search) before answering.
@@ -79,9 +79,9 @@ Grounded answer — well-structured and scannable, use emojis to aid readability
 
 ## References used
 
-- Index: `~/projects/python/docs-for-ai/collections/{collection}/INDEX.xml`
-- `~/projects/python/docs-for-ai/collections/{collection}/{file-1}`
-- `~/projects/python/docs-for-ai/collections/{collection}/{file-N}`
+- Index: `~/.claude/docs-for-ai/collections/{collection}/INDEX.xml`
+- `~/.claude/docs-for-ai/collections/{collection}/{file-1}`
+- `~/.claude/docs-for-ai/collections/{collection}/{file-N}`
 - `https://..` (Web fallback only)
 
 </format>

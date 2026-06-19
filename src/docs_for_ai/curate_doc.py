@@ -15,6 +15,7 @@ from typing import NamedTuple
 from urllib.parse import urlparse
 
 from docs_for_ai import firecrawl_source, markdown_source
+from docs_for_ai.paths import format_path_for_display
 
 # Written for every new source; a later LLM step fills it.
 PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
@@ -23,20 +24,6 @@ PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
 def _normalise_directory_path(dir_path_str: str) -> Path:
     """Normalise directory path by removing trailing slash."""
     return Path(dir_path_str.rstrip("/"))
-
-
-def _format_path_for_display(path: Path) -> str:
-    """Format path as a project-relative string, e.g. `collections/vite/INDEX.xml`.
-
-    Falls back to `str(path)` for paths outside the project root.
-    """
-    try:
-        absolute_path = path.resolve()
-        project_root = Path.cwd()
-        return str(absolute_path.relative_to(project_root))
-    except ValueError:
-        # Path is outside project (edge case) - return as-is
-        return str(path)
 
 
 def _validate_url(url: str) -> None:
@@ -100,7 +87,7 @@ Curated docs for targeted AI context.
 """
     readme_path = dir_path / "README.md"
     readme_path.write_text(readme_content)
-    print(f"✅ Created curation readme|{_format_path_for_display(readme_path)}|")
+    print(f"✅ Created curation readme|{format_path_for_display(readme_path)}|")
 
 
 def _create_index_xml(dir_path: Path) -> None:
@@ -111,7 +98,7 @@ def _create_index_xml(dir_path: Path) -> None:
     tree = ET.ElementTree(root)
     index_path = dir_path / "INDEX.xml"
     tree.write(index_path, encoding="unicode", xml_declaration=False)
-    print(f"✅ Created curation index|{_format_path_for_display(index_path)}|")
+    print(f"✅ Created curation index|{format_path_for_display(index_path)}|")
 
 
 def _add_or_update_source_in_index(
@@ -154,7 +141,7 @@ def _add_or_update_source_in_index(
     fields = (
         f"title={title}|local_file={local_file}|description={PLACEHOLDER_DESCRIPTION}|"
     )
-    print(f"✅ {verb} index source|{_format_path_for_display(index_path)}|{fields}")
+    print(f"✅ {verb} index source|{format_path_for_display(index_path)}|{fields}")
     print("💡 Source description pending|")
 
     return is_update
@@ -201,9 +188,9 @@ def _write_document(dir_path: Path, doc: FetchedDoc) -> None:
     file_existed = file_path.exists()
     file_path.write_text(doc.content)
     if file_existed:
-        print(f"✅ Overwrote existing document|{_format_path_for_display(file_path)}|")
+        print(f"✅ Overwrote existing document|{format_path_for_display(file_path)}|")
     else:
-        print(f"✅ Created new document|{_format_path_for_display(file_path)}|")
+        print(f"✅ Created new document|{format_path_for_display(file_path)}|")
 
 
 def _parse_args() -> argparse.Namespace:

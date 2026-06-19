@@ -5,8 +5,8 @@ arguments: [collection]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
-  - Bash(uv run sync-index *)
-  - Bash(uv run update-index-descriptions *)
+  - Bash(uv run --directory * sync-index *)
+  - Bash(uv run --directory * update-index-descriptions *)
   - Bash(wc *)
   - Read
   - Write
@@ -24,7 +24,7 @@ The sync script re-scrapes every source, syncs INDEX.xml to the filesystem, and 
 
 ### 1. Validate argument
 
-!`printf '<existing_collections>\n'; find collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
+!`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
 Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match.
 
@@ -51,7 +51,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 ### 2. Run sync and scrape
 
 ```bash
-uv run sync-index "collections/$collection"
+uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
 This script:
@@ -63,14 +63,14 @@ This script:
 
 ### 3. Generate descriptions for PLACEHOLDER entries only
 
-Take the files marked PLACEHOLDER from the script's `## Index Descriptions Status` output.
+Take the files marked PLACEHOLDER from the script's `## Index Descriptions Status` output — use each path **exactly as the script printed it** (absolute `~/...`, so the file resolves no matter your current directory).
 
-Read `.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then, for each PLACEHOLDER source:
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then, for each PLACEHOLDER source:
 
 1. Analyse the corresponding markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Append it to `collections/$collection/descriptions.txt`:
+4. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
 
    ```text
    getting-started-installation.md
@@ -82,10 +82,10 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 Run the update script to apply all descriptions:
 
 ```bash
-uv run update-index-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
+uv run --directory ~/.claude/docs-for-ai update-index-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
-Verify `PLACEHOLDER` no longer appears in `collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
+Verify `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
 
 ### 5. Report completion
 

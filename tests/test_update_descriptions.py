@@ -13,7 +13,7 @@ INDEX_XML = """<docs_index>
     <description>old description</description>
     <source_url>https://example.com/a</source_url>
     <local_file>doc-a.md</local_file>
-    <scraped_at>2025-01-01</scraped_at>
+    <curated_at>2025-01-01</curated_at>
   </source>
 </docs_index>
 """

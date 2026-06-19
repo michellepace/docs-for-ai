@@ -4,251 +4,251 @@
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/getting-started/core-concepts</source_url>
     <local_file>getting-started-core-concepts.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Sign-up and sign-in options</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/configure/auth-strategies/sign-up-sign-in-options</source_url>
     <local_file>guides-configure-auth-strategies-sign-up-sign-in-options.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>shadcn/ui</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/customizing-clerk/elements/examples/shadcn-ui</source_url>
     <local_file>guides-customizing-clerk-elements-examples-shadcn-ui.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Localization prop (experimental)</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/customizing-clerk/localization</source_url>
     <local_file>guides-customizing-clerk-localization.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Clerk environment variables</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/clerk-environment-variables</source_url>
     <local_file>guides-development-clerk-environment-variables.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Customize your redirect URLs</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/customize-redirect-urls</source_url>
     <local_file>guides-development-customize-redirect-urls.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Install Clerk with shadcn/ui CLI</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/shadcn-cli</source_url>
     <local_file>guides-development-shadcn-cli.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/testing/overview</source_url>
     <local_file>guides-development-testing-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Testing with Playwright</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/testing/playwright/overview</source_url>
     <local_file>guides-development-testing-playwright-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Test emails and phones</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/development/testing/test-emails-and-phones</source_url>
     <local_file>guides-development-testing-test-emails-and-phones.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How Clerk works</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/how-clerk-works/overview</source_url>
     <local_file>guides-how-clerk-works-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Legal compliance</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/secure/legal-compliance</source_url>
     <local_file>guides-secure-legal-compliance.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Session tokens</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/sessions/session-tokens</source_url>
     <local_file>guides-sessions-session-tokens.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Users</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/guides/users/managing</source_url>
     <local_file>guides-users-managing.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Add Clerk to Next.js App Router</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/getting-started/quickstart</source_url>
     <local_file>nextjs-getting-started-quickstart.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Add custom pages and links to the &lt;OrganizationProfile /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/organization-profile</source_url>
     <local_file>nextjs-guides-customizing-clerk-adding-items-organization-profile.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Add custom items and links to the &lt;UserButton /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-button</source_url>
     <local_file>nextjs-guides-customizing-clerk-adding-items-user-button.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Add custom pages and links to the &lt;UserProfile /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-profile</source_url>
     <local_file>nextjs-guides-customizing-clerk-adding-items-user-profile.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>captcha prop</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/captcha</source_url>
     <local_file>nextjs-guides-customizing-clerk-appearance-prop-captcha.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Options prop</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/options</source_url>
     <local_file>nextjs-guides-customizing-clerk-appearance-prop-options.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Appearance prop</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/overview</source_url>
     <local_file>nextjs-guides-customizing-clerk-appearance-prop-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Themes</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/themes</source_url>
     <local_file>nextjs-guides-customizing-clerk-appearance-prop-themes.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Variables prop</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/variables</source_url>
     <local_file>nextjs-guides-customizing-clerk-appearance-prop-variables.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Build your own sign-in-or-up page for your Next.js app with Clerk</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/development/custom-sign-in-or-up-page</source_url>
     <local_file>nextjs-guides-development-custom-sign-in-or-up-page.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Build your own sign-up page for your Next.js app with Clerk</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/development/custom-sign-up-page</source_url>
     <local_file>nextjs-guides-development-custom-sign-up-page.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Protect content and read user data</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/guides/users/reading</source_url>
     <local_file>nextjs-guides-users-reading.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;GoogleOneTap /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/google-one-tap</source_url>
     <local_file>nextjs-reference-components-authentication-google-one-tap.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;SignIn /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-in</source_url>
     <local_file>nextjs-reference-components-authentication-sign-in.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;SignUp /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/authentication/sign-up</source_url>
     <local_file>nextjs-reference-components-authentication-sign-up.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;ClerkProvider&gt;</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/clerk-provider</source_url>
     <local_file>nextjs-reference-components-clerk-provider.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;Show&gt;</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/control/show</source_url>
     <local_file>nextjs-reference-components-control-show.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Component Reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/overview</source_url>
     <local_file>nextjs-reference-components-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;UserButton /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-button</source_url>
     <local_file>nextjs-reference-components-user-user-button.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>&lt;UserProfile /&gt; component</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/user/user-profile</source_url>
     <local_file>nextjs-reference-components-user-user-profile.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Clerk Next.js SDK</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/reference/nextjs/overview</source_url>
     <local_file>reference-nextjs-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>User</title>
     <description>PLACEHOLDER</description>
     <source_url>https://clerk.com/docs/reference/objects/user</source_url>
     <local_file>reference-objects-user.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

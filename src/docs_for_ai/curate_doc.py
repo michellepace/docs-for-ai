@@ -129,7 +129,7 @@ def _add_or_update_source_in_index(
     ET.SubElement(source, "description").text = PLACEHOLDER_DESCRIPTION
     ET.SubElement(source, "source_url").text = source_url
     ET.SubElement(source, "local_file").text = local_file
-    ET.SubElement(source, "scraped_at").text = date.today().isoformat()
+    ET.SubElement(source, "curated_at").text = date.today().isoformat()
 
     write_index(root, index_path)
 

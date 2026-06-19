@@ -51,14 +51,14 @@ def analyse_index(index_path: Path) -> CollectionStats:
         description = (source.findtext("description") or "").strip()
         if description and description != PLACEHOLDER:
             populated += 1
-        scraped = (source.findtext("scraped_at") or "").strip() or "(missing)"
-        date_counts[scraped] += 1
+        curated = (source.findtext("curated_at") or "").strip() or "(missing)"
+        date_counts[curated] += 1
 
     return CollectionStats(name, len(sources), populated, date_counts)
 
 
 def format_dates(date_counts: Counter[str]) -> str:
-    """Render scraped dates: a single date, or each distinct date with its count."""
+    """Render curation dates: a single date, or each distinct date with its count."""
     if not date_counts:
         return "—"
     if len(date_counts) == 1:
@@ -79,7 +79,7 @@ def build_table(stats: list[CollectionStats]) -> Table:
     table.add_column("Sources", justify="right")
     table.add_column("Populated", justify="right", style="green")
     table.add_column("Placeholder", justify="right")
-    table.add_column("Scraped date(s)")
+    table.add_column("Curated date(s)")
 
     total_sources = sum(s.total for s in stats)
     total_populated = sum(s.populated for s in stats)
@@ -119,7 +119,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
             "Report each <collection>/INDEX.xml: source count, populated vs "
-            "PLACEHOLDER descriptions, and a tally of <scraped_at> dates."
+            "PLACEHOLDER descriptions, and a tally of <curated_at> dates."
         ),
     )
     parser.add_argument(

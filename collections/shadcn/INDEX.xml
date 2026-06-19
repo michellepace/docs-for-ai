@@ -4,160 +4,160 @@
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/cli</source_url>
     <local_file>cli.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>components.json</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components-json</source_url>
     <local_file>components-json.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Badge</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/badge</source_url>
     <local_file>components-radix-badge.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Button</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/button</source_url>
     <local_file>components-radix-button.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Drawer</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/drawer</source_url>
     <local_file>components-radix-drawer.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Empty</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/empty</source_url>
     <local_file>components-radix-empty.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Field</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/field</source_url>
     <local_file>components-radix-field.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Input Group</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/input-group</source_url>
     <local_file>components-radix-input-group.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Item</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/item</source_url>
     <local_file>components-radix-item.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Native Select</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/native-select</source_url>
     <local_file>components-radix-native-select.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Navigation Menu</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/navigation-menu</source_url>
     <local_file>components-radix-navigation-menu.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Sheet</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/sheet</source_url>
     <local_file>components-radix-sheet.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Sidebar</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/sidebar</source_url>
     <local_file>components-radix-sidebar.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Sonner</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/sonner</source_url>
     <local_file>components-radix-sonner.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Spinner</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/components/radix/spinner</source_url>
     <local_file>components-radix-spinner.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Registry Directory</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/directory</source_url>
     <local_file>directory.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>TanStack Form</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/forms/tanstack-form</source_url>
     <local_file>forms-tanstack-form.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>MCP Server</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/mcp</source_url>
     <local_file>mcp.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Introduction</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/registry</source_url>
     <local_file>registry.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Examples</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/registry/examples</source_url>
     <local_file>registry-examples.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Getting Started</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/registry/getting-started</source_url>
     <local_file>registry-getting-started.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Theming</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/docs/theming</source_url>
     <local_file>theming.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>LLMS.txt</title>
     <description>PLACEHOLDER</description>
     <source_url>https://ui.shadcn.com/llms.txt</source_url>
     <local_file>llms-txt.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

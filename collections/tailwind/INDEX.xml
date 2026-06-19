@@ -4,153 +4,153 @@
     <description>Tailwind CSS v4.0 release: high-performance engine, CSS-first configuration with `@theme`/`@source`, Vite plugin, P3 colour palette, container queries, 3D transforms, gradient APIs, `@starting-style`, `not-*` variant, automatic content detection.</description>
     <source_url>https://tailwindcss.com/blog/tailwindcss-v4</source_url>
     <local_file>blog-tailwindcss-v4.md</local_file>
-    <scraped_at>2026-01-09</scraped_at>
+    <curated_at>2026-01-09</curated_at>
   </source>
   <source>
     <title>Tailwind CSS v4.1 - Release Notes / Change Log - Tailwind CSS</title>
     <description>Tailwind CSS v4.1 release: `text-shadow-*` utilities, `mask-*` composable masking API, `overflow-wrap` utilities (`wrap-break-word`, `wrap-anywhere`), coloured `drop-shadow`, `pointer-*`/`any-pointer-*` variants, `items-baseline-last`, `safe` alignment, `@source not`, `@source inline()` safelisting, browser compatibility improvements.</description>
     <source_url>https://tailwindcss.com/blog/tailwindcss-v4-1</source_url>
     <local_file>blog-tailwindcss-v4-1.md</local_file>
-    <scraped_at>2026-01-09</scraped_at>
+    <curated_at>2026-01-09</curated_at>
   </source>
   <source>
     <title>Install Tailwind CSS with Next.js - Tailwind CSS</title>
     <description>Next.js v4 installation: `create-next-app` scaffolding, `npm install tailwindcss @tailwindcss/postcss postcss`, `postcss.config.mjs` plugin configuration, `@import "tailwindcss"` in `globals.css`, TypeScript setup, `npm run dev` build process.</description>
     <source_url>https://tailwindcss.com/docs/installation/framework-guides/nextjs</source_url>
     <local_file>installation-framework-guides-nextjs.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Editor setup - Getting started - Tailwind CSS</title>
     <description>Editor tooling: VS Code IntelliSense extension for autocomplete/linting/hover previews, `prettier-plugin-tailwindcss` for class sorting, JetBrains IDE completions, Zed built-in support, custom syntax highlighting for `@theme`/`@variant`/`@source`.</description>
     <source_url>https://tailwindcss.com/docs/editor-setup</source_url>
     <local_file>editor-setup.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Compatibility - Getting started - Tailwind CSS</title>
     <description>Browser requirements (Chrome 111+, Safari 16.4+, Firefox 128+), why not Sass/Less/Stylus, CSS modules performance gotchas, `@reference` for `@apply` in Vue/Svelte/Astro `&lt;style&gt;` blocks, native nesting/variables.</description>
     <source_url>https://tailwindcss.com/docs/compatibility</source_url>
     <local_file>compatibility.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Styling with utility classes - Core concepts - Tailwind CSS</title>
     <description>Utility-first methodology: variants (`hover:`, `dark:`, `lg:`), responsive design, arbitrary values with `[]` syntax, class composition, complex selectors, `group-*` patterns, `!` important modifier, `prefix`/`important` flags, duplication management via components/loops.</description>
     <source_url>https://tailwindcss.com/docs/styling-with-utility-classes</source_url>
     <local_file>styling-with-utility-classes.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Hover, focus, and other states - Core concepts - Tailwind CSS</title>
     <description>Variant system for conditional styling: `hover:`, `focus:`, `active:`, `disabled:`, `first:`, `odd:`, `group-*`, `peer-*`, `has-*`, `not-*`, pseudo-elements (`before:`, `after:`, `placeholder:`), media queries, ARIA/data attributes, RTL, child selectors.</description>
     <source_url>https://tailwindcss.com/docs/hover-focus-and-other-states</source_url>
     <local_file>hover-focus-and-other-states.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Colors - Core concepts - Tailwind CSS</title>
     <description>OKLCH color palette with 11-step scales (50-950), color utilities (`bg-*`, `text-*`, `border-*`, `ring-*`, `fill-*`, `stroke-*`), opacity modifiers (`/75`), `--color-*` CSS variables, `--alpha()` function, `@theme` customisation, `dark:` variant.</description>
     <source_url>https://tailwindcss.com/docs/colors</source_url>
     <local_file>colors.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Adding custom styles - Core concepts - Tailwind CSS</title>
     <description>Theme customisation via `@theme` directive, arbitrary values/properties/variants with `[]` syntax, underscore whitespace handling, type hints, CSS layers (`@layer base/components`), `@utility` with `--value()`/`--modifier()`, `@variant`, `@custom-variant` directives.</description>
     <source_url>https://tailwindcss.com/docs/adding-custom-styles</source_url>
     <local_file>adding-custom-styles.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Detecting classes in source files - Core concepts - Tailwind CSS</title>
     <description>Class detection via plain-text scanning, dynamic class name restrictions, `@source` directive for explicit paths, `source()` base path, `@source not` exclusion, `@source inline()` safelisting with brace expansion.</description>
     <source_url>https://tailwindcss.com/docs/detecting-classes-in-source-files</source_url>
     <local_file>detecting-classes-in-source-files.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Functions and directives - Core concepts - Tailwind CSS</title>
     <description>Tailwind CSS at-rules: `@import`, `@theme`, `@source`, `@utility`, `@variant`, `@custom-variant`, `@apply`, `@reference` directives, `--alpha()`/`--spacing()` functions, v3.x compatibility with `@config`, `@plugin`, `theme()`.</description>
     <source_url>https://tailwindcss.com/docs/functions-and-directives</source_url>
     <local_file>functions-and-directives.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Dark mode - Core concepts - Tailwind CSS</title>
     <description>`dark:` variant for dark mode styling using `prefers-color-scheme` media query, `@custom-variant` for manual class/data-attribute toggling, `localStorage` theme persistence, `window.matchMedia()` system preference detection.</description>
     <source_url>https://tailwindcss.com/docs/dark-mode</source_url>
     <local_file>dark-mode.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Responsive design - Core concepts - Tailwind CSS</title>
     <description>Mobile-first breakpoint variants `sm:`/`md:`/`lg:`/`xl:`/`2xl:`, `max-*` variants for upper bounds, `--breakpoint-*` customisation, container queries with `@container`, named containers, `@sm`/`@md` variants, `--container-*` theme variables.</description>
     <source_url>https://tailwindcss.com/docs/responsive-design</source_url>
     <local_file>responsive-design.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <source>
     <title>Theme variables - Core concepts - Tailwind CSS</title>
     <description>`@theme` directive for design tokens, namespace mappings (`--color-*`, `--font-*`, `--spacing-*`, `--breakpoint-*`), extending/overriding defaults, `@keyframes` definitions, `inline`/`static` options, CSS variable output, JavaScript access via `getComputedStyle`.</description>
     <source_url>https://tailwindcss.com/docs/theme</source_url>
     <local_file>theme.md</local_file>
-    <scraped_at>2025-11-16</scraped_at>
+    <curated_at>2025-11-16</curated_at>
   </source>
   <source>
     <title>font-family - Typography - Tailwind CSS</title>
     <description>Font-family utilities: `font-sans`, `font-serif`, `font-mono` classes, `font-[value]` arbitrary syntax, `font-(family-name:--var)` CSS variables, `--font-*` theme customisation, `font-feature-settings`, `font-variation-settings`, `@font-face` integration, Google Fonts `@import`.</description>
     <source_url>https://tailwindcss.com/docs/font-family</source_url>
     <local_file>font-family.md</local_file>
-    <scraped_at>2025-11-16</scraped_at>
+    <curated_at>2025-11-16</curated_at>
   </source>
   <source>
     <title>Preflight - Base styles - Tailwind CSS</title>
     <description>Base reset styles built on modern-normalize: margin/padding/border resets, unstyled headings/lists, block-level images with `max-width: 100%`, form input normalisation, `[hidden]` attribute enforcement, extending via `@layer base`, disabling by omitting `preflight.css` import.</description>
     <source_url>https://tailwindcss.com/docs/preflight</source_url>
     <local_file>preflight.md</local_file>
-    <scraped_at>2025-11-17</scraped_at>
+    <curated_at>2025-11-17</curated_at>
   </source>
   <source>
     <title>Upgrade guide - Getting started - Tailwind CSS</title>
     <description>v3 to v4 migration: `npx @tailwindcss/upgrade` tool, `@tailwindcss/postcss`/`@tailwindcss/vite`/`@tailwindcss/cli` packages, renamed utilities (`shadow-sm`-&gt;`shadow-xs`, `ring`-&gt;`ring-3`, `outline-none`-&gt;`outline-hidden`), `@utility` directive, variant stacking order reversal, CSS variable syntax changes.</description>
     <source_url>https://tailwindcss.com/docs/upgrade-guide</source_url>
     <local_file>upgrade-guide.md</local_file>
-    <scraped_at>2025-11-17</scraped_at>
+    <curated_at>2025-11-17</curated_at>
   </source>
   <source>
     <title>background-image - Backgrounds - Tailwind CSS</title>
     <description>Background image utilities: `bg-linear-to-r`/`bg-linear-&lt;angle&gt;` linear gradients, `bg-radial` radial gradients, `bg-conic-&lt;angle&gt;` conic gradients, `from-`/`via-`/`to-` colour stops with positions, interpolation modifiers (`srgb`, `oklch`, `oklab`), `bg-none`, arbitrary values.</description>
     <source_url>https://tailwindcss.com/docs/background-image</source_url>
     <local_file>background-image.md</local_file>
-    <scraped_at>2025-11-17</scraped_at>
+    <curated_at>2025-11-17</curated_at>
   </source>
   <source>
     <title>backdrop-filter: blur() - Filters - Tailwind CSS</title>
     <description>Backdrop blur filter utilities: `backdrop-blur-xs` through `backdrop-blur-3xl` preset sizes, `backdrop-blur-none` to disable, `backdrop-blur-[value]` arbitrary values, `backdrop-blur-(--var)` CSS variables, `--blur-*` theme customisation, responsive variants.</description>
     <source_url>https://tailwindcss.com/docs/backdrop-blur</source_url>
     <local_file>backdrop-blur.md</local_file>
-    <scraped_at>2025-12-17</scraped_at>
+    <curated_at>2025-12-17</curated_at>
   </source>
   <source>
     <title>animation - Transitions &amp; Animation - Tailwind CSS</title>
     <description>CSS animation utilities: `animate-spin`, `animate-ping`, `animate-pulse`, `animate-bounce` with keyframe definitions, `animate-none`, `motion-safe`/`motion-reduce` accessibility variants, `animate-[value]` arbitrary syntax, `--animate-*` theme customisation with `@keyframes`.</description>
     <source_url>https://tailwindcss.com/docs/animation</source_url>
     <local_file>animation.md</local_file>
-    <scraped_at>2025-12-22</scraped_at>
+    <curated_at>2025-12-22</curated_at>
   </source>
   <source>
     <title>font-size - Typography - Tailwind CSS</title>
     <description>Font-size utilities from `text-xs` to `text-9xl`, combined `text-sm/6` size/line-height shorthand, `text-[value]` arbitrary values, `text-(length:--var)` CSS variables, `--text-*` theme customisation with `line-height`, `letter-spacing`, `font-weight` defaults.</description>
     <source_url>https://tailwindcss.com/docs/font-size</source_url>
     <local_file>font-size.md</local_file>
-    <scraped_at>2025-12-30</scraped_at>
+    <curated_at>2025-12-30</curated_at>
   </source>
   <source>
     <title>box-shadow - Effects - Tailwind CSS</title>
     <description>Box shadow utilities: `shadow-2xs` to `shadow-2xl` outer shadows, `inset-shadow-*` inset shadows, `ring`/`ring-&lt;number&gt;` solid rings, `inset-ring-*` inset rings, colour modifiers (`shadow-indigo-500`), opacity modifiers (`/50`), `shadow-none`, `--shadow-*` theme customisation.</description>
     <source_url>https://tailwindcss.com/docs/box-shadow</source_url>
     <local_file>box-shadow.md</local_file>
-    <scraped_at>2026-01-06</scraped_at>
+    <curated_at>2026-01-06</curated_at>
   </source>
 </docs_index>

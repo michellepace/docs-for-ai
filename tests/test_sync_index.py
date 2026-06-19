@@ -1,4 +1,4 @@
-"""sync_index.py: INDEX sync, description restore, and re-scrape round-trips."""
+"""sync_index.py: INDEX sync, description restore, and re-curate round-trips."""
 
 import subprocess
 import tempfile
@@ -56,7 +56,7 @@ def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:
         ET.SubElement(source, "description").text = source_data["description"]
         ET.SubElement(source, "source_url").text = source_data["source_url"]
         ET.SubElement(source, "local_file").text = source_data["local_file"]
-        ET.SubElement(source, "scraped_at").text = "2025-01-01"
+        ET.SubElement(source, "curated_at").text = "2025-01-01"
 
     write_index(root, index_path)
 
@@ -183,7 +183,7 @@ class TestDescriptionRestoration:
             backup_path = tmp_path / "INDEX.xml.backup"
             create_index_xml(backup_path, backup_sources)
 
-            # Current = all PLACEHOLDER (after scrape)
+            # Current = all PLACEHOLDER (after curation)
             current_sources = [
                 {
                     "title": "Doc A",
@@ -305,7 +305,7 @@ class TestDescriptionRestoration:
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
 
-            # Backup has PLACEHOLDER (first scrape)
+            # Backup has PLACEHOLDER (first curation)
             backup_sources = [
                 {
                     "title": "Doc A",
@@ -393,7 +393,7 @@ class TestDescriptionRestoration:
             )
             assert git_diff_w.stdout.strip() == ""
 
-            # Simulate curate_doc.py's scrape: set description to PLACEHOLDER
+            # Simulate curate_doc.py's curation: set description to PLACEHOLDER
             sources[0]["description"] = "PLACEHOLDER"
             create_index_xml(index_path, sources)
 
@@ -419,9 +419,9 @@ class TestDescriptionRestoration:
 
 @pytest.mark.firecrawl
 class TestIntegration:
-    """Full re-scrape through the sync_index.py CLI with real git and live FireCrawl."""
+    """Full re-curate through the sync_index.py CLI with real git and live FireCrawl."""
 
-    def test_full_rescrape_workflow(self) -> None:
+    def test_full_recurate_workflow(self) -> None:
         """PLACEHOLDER kept when content changed, restored when unchanged."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
@@ -447,7 +447,7 @@ class TestIntegration:
             index_path = collection_dir / "INDEX.xml"
             create_index_xml(index_path, sources)
 
-            # Name matches filename_from_url(source_url) so re-scrape overwrites it.
+            # Name matches filename_from_url(source_url) so re-curate overwrites it.
             (collection_dir / "learn-guides-updating-state.md").write_text(
                 "# Dummy content to be replaced"
             )
@@ -482,7 +482,7 @@ class TestIntegration:
 
             descriptions = get_descriptions_from_index(index_path)
 
-            # Scraped filename may differ from the seeded 'updating-state.md'.
+            # Curated filename may differ from the seeded 'updating-state.md'.
             assert len(descriptions) == 1, "Should have exactly one source"
             actual_filename = next(iter(descriptions.keys()))
 

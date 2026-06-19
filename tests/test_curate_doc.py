@@ -557,7 +557,7 @@ class TestOutputContent:
         assert (
             "<local_file>learn-guides-updating-state.md</local_file>\n" in index_content
         )
-        assert f"<scraped_at>{today}</scraped_at>\n" in index_content
+        assert f"<curated_at>{today}</curated_at>\n" in index_content
         assert "</source>\n" in index_content
         assert index_content.endswith("</docs_index>\n")
 

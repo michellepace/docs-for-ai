@@ -1,4 +1,4 @@
-"""Sync INDEX.xml, re-scrape all docs, output results for batch processing."""
+"""Sync INDEX.xml, re-curate all docs, output results for batch processing."""
 
 import argparse
 import shutil
@@ -69,12 +69,12 @@ def sync_index_to_filesystem(
     return valid_pairs, orphans, removed_count
 
 
-def _scrape_doc(collection_dir: Path, source_url: str) -> bool:
-    """Scrape single doc using curate_doc.py via subprocess.
+def _curate_doc(collection_dir: Path, source_url: str) -> bool:
+    """Curate single doc using curate_doc.py via subprocess.
 
     Args:
         collection_dir: Collection directory path
-        source_url: URL to scrape
+        source_url: URL to curate
 
     Returns:
         True if successful, False if failed
@@ -86,9 +86,6 @@ def _scrape_doc(collection_dir: Path, source_url: str) -> bool:
         return False
 
     # S603: Subprocess call is safe - calling our own trusted script with validated args
-    # - collection_dir is validated by main() to be existing dir with INDEX.xml
-    # - source_url is validated by curate_doc.py via urlparse
-    # - Using list (not shell=True) prevents command injection
     result = subprocess.run(
         [uv_path, "run", "curate-doc", str(collection_dir), source_url],
         check=False,
@@ -129,13 +126,13 @@ def _print_git_content_changes(collection_dir: Path) -> None:
     print("</GIT_CONTENT_CHANGES>")
 
 
-def _print_scrape_summary(
+def _print_curation_summary(
     valid_pairs: list[tuple[str, str]],
     failed_urls: list[str],
     orphans: list[str],
 ) -> None:
-    """Print scrape summary."""
-    print("\n### Scrape Summary")
+    """Print curation summary."""
+    print("\n### Curation Summary")
     print(f"- Successful|{len(valid_pairs) - len(failed_urls)}")
     print(f"- Failed|{len(failed_urls)}")
 
@@ -268,9 +265,9 @@ def _cleanup_backup(backup_path: Path) -> None:
 
 
 def main() -> None:
-    """Sync INDEX.xml, scrape all docs, output structured results."""
+    """Sync INDEX.xml, curate all docs, output structured results."""
     parser = argparse.ArgumentParser(
-        description="Sync INDEX.xml, re-scrape all docs, output batch processing data"
+        description="Sync INDEX.xml, re-curate all docs, output batch processing data"
     )
     parser.add_argument(
         "directory", help="Collection directory (e.g. collections/shiny/)"
@@ -297,27 +294,27 @@ def main() -> None:
     valid_pairs, orphans, removed_count = sync_index_to_filesystem(index_path, md_files)
 
     print("\n## SYNC INDEX.xml (source of truth)")
-    print(f"- Index sources ready to scrape|{len(valid_pairs)}")
+    print(f"- Index sources ready to curate|{len(valid_pairs)}")
     print(f"- Stale sources removed (missing .md)|{removed_count}")
     print(f"- Orphaned .md files (not in INDEX)|{len(orphans)}")
     sys.stdout.flush()
 
-    # Step 2: Scrape all docs
-    print(f"\n## SCRAPING INDEX SOURCES ({len(valid_pairs)} total)")
+    # Step 2: Curate all docs
+    print(f"\n## CURATING INDEX SOURCES ({len(valid_pairs)} total)")
     sys.stdout.flush()
     failed_urls: list[str] = []
 
     for idx, (local_file, source_url) in enumerate(valid_pairs, 1):
         print(f"### 🔄 Doc {idx} of {len(valid_pairs)}: {local_file}")
         sys.stdout.flush()
-        success = _scrape_doc(collection_dir, source_url)
+        success = _curate_doc(collection_dir, source_url)
 
         if not success:
             failed_urls.append(source_url)
         sys.stdout.flush()
 
-    # Step 3: Output scrape results
-    _print_scrape_summary(valid_pairs, failed_urls, orphans)
+    # Step 3: Output curation results
+    _print_curation_summary(valid_pairs, failed_urls, orphans)
 
     # Step 4: Show git changes summary
     _print_git_content_changes(collection_dir)

@@ -4,174 +4,174 @@
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/agent-sdk/overview</source_url>
     <local_file>en-agent-sdk-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Agent SDK reference - Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
     <local_file>en-agent-sdk-python.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Agent SDK reference - TypeScript</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/agent-sdk/typescript</source_url>
     <local_file>en-agent-sdk-typescript.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Best practices for Claude Code</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/best-practices</source_url>
     <local_file>en-best-practices.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Use Claude Code with Chrome (beta)</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/chrome</source_url>
     <local_file>en-chrome.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>CLI reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/cli-reference</source_url>
     <local_file>en-cli-reference.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Common workflows</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/common-workflows</source_url>
     <local_file>en-common-workflows.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Extend Claude Code</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/features-overview</source_url>
     <local_file>en-features-overview.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Run Claude Code programmatically</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/headless</source_url>
     <local_file>en-headless.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Automate workflows with hooks</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/hooks-guide</source_url>
     <local_file>en-hooks-guide.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Hooks reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/hooks</source_url>
     <local_file>en-hooks.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How Claude Code works</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/how-claude-code-works</source_url>
     <local_file>en-how-claude-code-works.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Customize keyboard shortcuts</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/keybindings</source_url>
     <local_file>en-keybindings.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How Claude remembers your project</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/memory</source_url>
     <local_file>en-memory.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Output styles</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/output-styles</source_url>
     <local_file>en-output-styles.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Configure permissions</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/permissions</source_url>
     <local_file>en-permissions.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Create and distribute a plugin marketplace</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/plugin-marketplaces</source_url>
     <local_file>en-plugin-marketplaces.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Plugins reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
     <local_file>en-plugins-reference.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Create plugins</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/plugins</source_url>
     <local_file>en-plugins.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Claude Code settings</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/settings</source_url>
     <local_file>en-settings.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Customize your status line</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/statusline</source_url>
     <local_file>en-statusline.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Create custom subagents</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
     <local_file>en-sub-agents.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Configure your terminal for Claude Code</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/terminal-config</source_url>
     <local_file>en-terminal-config.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Use Claude Code in VS Code</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/vs-code</source_url>
     <local_file>en-vs-code.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

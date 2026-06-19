@@ -2,7 +2,7 @@
 
 ## Overview
 
-Documentation collections scraped via FireCrawl Python SDK. The collection/INDEX.xml is a routing signal that an LLM reader uses for targeted context retrieval.
+Curated documentation collections — docs are fetched directly when possible, else scraped via FireCrawl. Each collection's INDEX.xml is a routing signal an LLM reader uses for targeted context retrieval.
 
 Documentation is organised by tool/framework in collection directories:
 
@@ -23,7 +23,7 @@ Every `INDEX.xml` shares this schema — one `<source>` per curated `.md` file:
     <description>[short description for LLM routing]</description>
     <source_url>[document source url]</source_url>
     <local_file>[filename within collection/]</local_file>
-    <scraped_at>YYYY-MM-DD</scraped_at>
+    <curated_at>YYYY-MM-DD</curated_at>
   </source>
   <!-- ...repeated per doc... -->
 </docs_index>
@@ -33,7 +33,7 @@ Workflow is driven by slash commands in `.claude/commands/`:
 
 - `/curate-doc <collection> <url>` — curate a source URL into a collection
 - `/ask-docs <collection> <question>` — query a collection to answer a question
-- `/rescrape-docs <collection>` — re-scrape all docs & regenerate descriptions
+- `/recurate-docs <collection>` — re-curate all docs & regenerate descriptions
 
 ## Code Design Principles
 

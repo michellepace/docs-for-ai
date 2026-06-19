@@ -1,5 +1,6 @@
 ---
 description: Re-scrape all docs in collection and regenerate descriptions
+disable-model-invocation: true
 argument-hint: <collection>
 arguments: [collection]
 allowed-tools:

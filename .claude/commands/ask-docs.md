@@ -1,5 +1,6 @@
 ---
 description: Query a local doc collection for a grounded answer.
+disable-model-invocation: true
 argument-hint: [collection] [question]
 allowed-tools:
   - Bash(find *)

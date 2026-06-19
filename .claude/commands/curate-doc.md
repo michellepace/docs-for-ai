@@ -1,5 +1,6 @@
 ---
 description: Curate a source URL into a collection
+disable-model-invocation: true
 argument-hint: <collection> <source_url>
 arguments: [collection, source_url]
 allowed-tools:

@@ -146,7 +146,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Update INDEX.xml descriptions from descriptions file"
     )
-    parser.add_argument("directory", help="Collection directory (e.g. shiny/)")
+    parser.add_argument(
+        "directory", help="Collection directory (e.g. collections/shiny/)"
+    )
     parser.add_argument(
         "descriptions_file", help="Path to descriptions file (e.g. descriptions.txt)"
     )

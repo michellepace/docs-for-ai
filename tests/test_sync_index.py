@@ -8,11 +8,42 @@ from pathlib import Path
 import pytest
 
 from docs_for_ai.sync_index import (
+    format_descriptions_status,
     get_changed_markdown_files,
     get_markdown_files,
     restore_unchanged_descriptions,
     sync_index_to_filesystem,
 )
+
+
+class TestFormatDescriptionsStatus:
+    """PLACEHOLDER files are listed as absolute `~/...` paths (CWD-independent)."""
+
+    def test_placeholder_files_listed_as_home_relative_paths(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Each flagged file renders as `~/...`, regardless of the caller's CWD."""
+        home = tmp_path.resolve()
+        monkeypatch.setattr(Path, "home", lambda: home)
+        collection_dir = home / "repo" / "collections" / "shiny"
+
+        output = format_descriptions_status(collection_dir, 0, {"b.md", "a.md"})
+
+        assert "  - ~/repo/collections/shiny/a.md" in output
+        assert "  - ~/repo/collections/shiny/b.md" in output
+
+    def test_no_file_lines_when_nothing_changed(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """With no PLACEHOLDER files, the report lists none and counts zero."""
+        home = tmp_path.resolve()
+        monkeypatch.setattr(Path, "home", lambda: home)
+        collection_dir = home / "repo" / "collections" / "shiny"
+
+        output = format_descriptions_status(collection_dir, 3, set())
+
+        assert "(needs description)|0 files" in output
+        assert "  - " not in output
 
 
 def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:

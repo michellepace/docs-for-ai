@@ -7,17 +7,17 @@ Documentation collections scraped via FireCrawl Python SDK. The collection/INDEX
 Documentation is organised by tool/framework in collection directories:
 
 ```text
-<collection>/
-├── INDEX.xml       # Structured index for targeted doc retrieval
-├── README.md       # Directory overview
-└── *.md            # Curated doc files
+collections/
+└── <collection>/
+    ├── INDEX.xml       # Structured index for targeted doc retrieval
+    ├── README.md       # Directory overview
+    └── *.md            # Curated doc files
 ```
 
 Workflow is driven by slash commands in `.claude/commands/`:
 
 - `/curate-doc <collection> <url>` — curate a source URL into a collection
 - `/ask-docs <collection> <question>` — query a collection to answer a question
-- `/improve-index-xml <collection>` — refine INDEX.xml descriptions for LLM reader routing
 - `/rescrape-docs <collection>` — re-scrape all docs & regenerate descriptions
 
 ## Code Design Principles

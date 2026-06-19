@@ -8,6 +8,7 @@ import pytest
 
 from docs_for_ai import curate_doc
 from docs_for_ai.curate_doc import filename_from_canonical_url
+from docs_for_ai.paths import format_path_for_display
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -125,7 +126,7 @@ class TestInputValidation:
 
         assert exit_code != 0
         assert "❌ Error: USE_GITHUB_BLOB|" in output
-        assert "uv/INDEX.xml" in output
+        assert "collections/uv/INDEX.xml" in output
 
     def test_nonempty_noncollection_directory_fails(self, tmp_path: Path) -> None:
         """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
@@ -401,8 +402,13 @@ class TestDirectoryScenarios:
         readme_path = new_dir / "README.md"
         index_path = new_dir / "INDEX.xml"
 
-        assert f"✅ Created curation readme|{readme_path}|" in output
-        assert f"✅ Created curation index|{index_path}|" in output
+        assert (
+            f"✅ Created curation readme|{format_path_for_display(readme_path)}|"
+            in output
+        )
+        assert (
+            f"✅ Created curation index|{format_path_for_display(index_path)}|" in output
+        )
         assert readme_path.exists()
         assert index_path.exists()
 

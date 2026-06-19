@@ -5,22 +5,20 @@ arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
-  - Bash(uv run curate-doc *)
-  - Bash(uv run update-index-descriptions *)
+  - Bash(uv run --directory * curate-doc *)
+  - Bash(uv run --directory * update-index-descriptions *)
   - Bash(wc *)
   - Read
   - Write
 ---
 
-Curate source URL `$source_url` into `$collection`. The script (Step 2) fetches the document and registers its `$collection/INDEX.xml` entry; **your task:** write that entry's description.
-
-Existing collections: !`printf '<existing_collections>\n'; find . -mindepth 2 -maxdepth 2 -name INDEX.xml -printf '%h\n'; printf '</existing_collections>\n'`
+Your task is to curate a source URL `$source_url` into a collection `$collection`.
 
 ## Step 1. Validate arguments
 
-The collection `$collection` may be an existing one (see `<existing_collections>`) or a new one to create.
+Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Here are just a few examples what new users can inadvertently get wrong - you are to help them do what they intend:
+The collection `$collection` may already exist else will be created. Parse the user's arguments first. Here are just a few examples what new users can inadvertently get wrong - you are to help them do what they intend:
 
 <validation_failure>
 
@@ -72,7 +70,7 @@ Here are just a few examples what new users can inadvertently get wrong - you ar
 <validation_success>
 
 ```
-## 🙂 Super! Curating Shiny doc to shiny/ collection...
+## 🙂 Super! Curating Shiny doc to collections/shiny/ collection...
 ```
 
 </validation_success>
@@ -82,7 +80,7 @@ Analyse `$collection` and `$source_url` against the existing collections and dec
 ## Step 2. Run the script
 
 ```bash
-uv run curate-doc "$collection" "$source_url"
+uv run --directory ~/.claude/docs-for-ai curate-doc "collections/$collection" "$source_url"
 ```
 
 ## Step 3. On script error
@@ -91,12 +89,12 @@ Script errors print actionable information. If recovery is possible, propose spe
 
 ## Step 4. Write the description
 
-Read `.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then:
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then:
 
 1. Analyse the curated markdown file
 2. Draft a description
 3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Write it to `$collection/description.txt`:
+4. Write it to `~/.claude/docs-for-ai/collections/$collection/description.txt`:
 
       ```text
       overview-shiny-for-python.md
@@ -106,12 +104,12 @@ Read `.claude/references/source-descriptions.md` and follow its quality rules an
 5. Apply it:
 
    ```bash
-   uv run update-index-descriptions "$collection" "$collection/description.txt"
+   uv run --directory ~/.claude/docs-for-ai update-index-descriptions "collections/$collection" "collections/$collection/description.txt"
    ```
 
 ## Step 5. Report success
 
-Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`).
+Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`). For the document and index paths, use them **exactly as the script printed them** in its `✅ Created/Overwrote ... document|<path>|` and `✅ ... index source|<path>|` lines — these are absolute (`~/...`) so the reader sees the real location.
 
 <example_success_message>
 
@@ -120,9 +118,9 @@ Output the final success message following the `<example_success_message>` forma
 
 🎯 What happened
 - Source URL: https://shiny.posit.co/py/docs/overview.html
-- [Created/Overwrote] document: `shiny/overview.md`
-- Generated description: (see below!)
-- [Added/Updated] index: `shiny/INDEX.xml`
+- [Created/Overwrote] document: `~/path/<file>.md`
+- [Added/Updated] index: `~/path/INDEX.xml`
+- Generated index description:
 
 "_[your generated description]_" = [actual word count] words ✓
 ```

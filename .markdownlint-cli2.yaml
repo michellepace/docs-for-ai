@@ -5,23 +5,7 @@ ignores:
   - ".venv/**"
   - ".pytest_cache/**"
   - "__pycache__/**"
-  - "biome/**"
-  - "claudecode/**"
-  - "claudeplat/**"
-  - "clerk/**"
-  - "convex/**"
-  - "lefthook/**"
-  - "marimo/**"
-  - "nextjs/**"
-  - "playwright/**"
-  - "shadcn/**"
-  - "shiny/**"
-  - "tailwind/**"
-  - "tailwindplus/**"
-  - "uv/**"
-  - "vercel/**"
-  - "vitest/**"
-  - "zustand/**"
+  - "collections/**" # all curated doc collections
 
 # Disable rules
 config:

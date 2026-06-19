@@ -1,7 +1,7 @@
 [project]
 name = "docs-for-ai"
 version = "0.1.0"
-description = "Curate and index clean docs for AI context and keep it fresh (with Claude Code)"
+description = "Curate and index clean docs for targeted AI context"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -22,6 +22,7 @@ dev = [
     "pre-commit>=4.6.0",
     "pyright>=1.1.410",
     "pytest>=9.1.0",
+    "rich>=15.0.0",
     "ruff>=0.15.18",
 ]
 

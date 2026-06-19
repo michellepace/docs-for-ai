@@ -210,7 +210,7 @@ class TestCanonicalCollapse:
         """Allowlisted `…/storage` then `…/storage.md` updates, not duplicates."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
 
@@ -335,7 +335,7 @@ class TestFetchDocumentRouting:
         """An allowlisted suffixless URL fetches `url + '.md'` and never FireCrawls."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
         fetched_urls: list[str] = []
@@ -364,7 +364,7 @@ class TestFetchDocumentRouting:
         """An allowlisted but suffixed (.html) URL still FireCrawls; stored as given."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
         scraped_urls: list[str] = []

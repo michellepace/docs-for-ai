@@ -162,7 +162,7 @@ Improve `scripts/curate-batch.sh` and raise into README
 
 Also the others or DELETE.
 
-## 📝 TODO - populate `md_allowlist.txt`
+## 📝 TODO - populate `markdown-allowlist.txt`
 
 When a new collection is made, get claude command in `/curate-doc` to establish if we can add it e.g https://www.mintlify.com/docs/quickstart. Need to handle not everyone does a 404 - "did it return x lines and expected content?"
 

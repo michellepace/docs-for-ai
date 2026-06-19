@@ -166,7 +166,7 @@ def fetch_document(source_url: str) -> FetchedDoc:
         title = markdown_source.extract_title(content, raw_url)
         return FetchedDoc(content, title, filename, source_url)
 
-    prefixes = markdown_source.load_md_allowlist()
+    prefixes = markdown_source.load_markdown_allowlist()
     route = markdown_source.resolve_md_route(source_url, prefixes)
     filename = filename_from_canonical_url(route.canonical_url)
     # fetch_url is set unless we route to FireCrawl; the None check also narrows it.

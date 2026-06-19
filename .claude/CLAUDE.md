@@ -14,6 +14,21 @@ collections/
     └── *.md            # Curated doc files
 ```
 
+Every `INDEX.xml` shares this schema — one `<source>` per curated `.md` file:
+
+```xml
+<docs_index>
+  <source>
+    <title>[curated source document title]</title>
+    <description>[short description for LLM routing]</description>
+    <source_url>[document source url]</source_url>
+    <local_file>[filename within collection/]</local_file>
+    <scraped_at>YYYY-MM-DD</scraped_at>
+  </source>
+  <!-- ...repeated per doc... -->
+</docs_index>
+```
+
 Workflow is driven by slash commands in `.claude/commands/`:
 
 - `/curate-doc <collection> <url>` — curate a source URL into a collection
@@ -42,7 +57,6 @@ Write a failing test (red) → code → pass (green).
 **Package Management:** `https://docs.astral.sh/uv/`
 
 **Strict Rules:**
-
 - Use British spelling - never American
 - Use `uv run` - never activate venv
 - Use `uv add` - never pip

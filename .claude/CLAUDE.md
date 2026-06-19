@@ -4,17 +4,17 @@
 
 Curated documentation collections — docs are fetched directly when possible, else scraped via FireCrawl. Each collection's INDEX.xml is a routing signal an LLM reader uses for targeted context retrieval.
 
-Documentation is organised by tool/framework in collection directories:
+Documentation is organised into collection directories:
 
 ```text
 collections/
-└── <collection>/
-    ├── INDEX.xml       # Structured index for targeted doc retrieval
+└── <collection>/       # eg. nextjs/, clerk/, uv/
+    ├── INDEX.xml       # Targeted doc retrieval
     ├── README.md       # Directory overview
     └── *.md            # Curated doc files
 ```
 
-Every `INDEX.xml` shares this schema — one `<source>` per curated `.md` file:
+Consistent `INDEX.xml` schema (one `<source>` per curated `.md` file):
 
 ```xml
 <docs_index>
@@ -22,10 +22,10 @@ Every `INDEX.xml` shares this schema — one `<source>` per curated `.md` file:
     <title>[curated source document title]</title>
     <description>[short description for LLM routing]</description>
     <source_url>[document source url]</source_url>
-    <local_file>[filename within collection/]</local_file>
+    <local_file>[curated .md filename]</local_file>
     <curated_at>YYYY-MM-DD</curated_at>
   </source>
-  <!-- ...repeated per doc... -->
+  <!-- ...repeated per curated doc... -->
 </docs_index>
 ```
 

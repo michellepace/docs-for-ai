@@ -5,6 +5,8 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from docs_for_ai.index_io import write_index
+
 
 def parse_descriptions_file(descriptions_path: Path) -> dict[str, str]:
     """Parse descriptions file into filename -> description mapping.
@@ -106,8 +108,7 @@ def update_descriptions(index_path: Path, descriptions: dict[str, str]) -> int:
     Returns:
         Number of descriptions updated
     """
-    tree = ET.parse(index_path)
-    root = tree.getroot()
+    root = ET.parse(index_path).getroot()
 
     updated_count = 0
 
@@ -132,8 +133,7 @@ def update_descriptions(index_path: Path, descriptions: dict[str, str]) -> int:
 
     # Write back to INDEX.xml
     if updated_count > 0:
-        ET.indent(root, space="  ")
-        tree.write(index_path, encoding="unicode", xml_declaration=False)
+        write_index(root, index_path)
         print(f"\n🎉 Updated {updated_count} description(s) in {index_path}")
     else:
         print(f"\nℹ️  No descriptions needed updating in {index_path}")  # noqa: RUF001

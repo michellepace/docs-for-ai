@@ -7,6 +7,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from docs_for_ai.index_io import write_index
 from docs_for_ai.paths import format_path_for_display
 
 
@@ -30,8 +31,7 @@ def sync_index_to_filesystem(
         - orphans: List of .md filenames not in INDEX.xml
         - removed_count: Number of invalid sources removed
     """
-    tree = ET.parse(index_path)
-    root = tree.getroot()
+    root = ET.parse(index_path).getroot()
 
     valid_pairs: list[tuple[str, str]] = []
     indexed_files: set[str] = set()
@@ -64,8 +64,7 @@ def sync_index_to_filesystem(
 
     # Write cleaned INDEX.xml back
     if removed_count > 0:
-        ET.indent(root, space="  ")
-        tree.write(index_path, encoding="unicode", xml_declaration=False)
+        write_index(root, index_path)
 
     return valid_pairs, orphans, removed_count
 
@@ -218,8 +217,7 @@ def restore_unchanged_descriptions(
         if local_file_elem is not None and desc_elem is not None:
             backup_descriptions[local_file_elem.text] = desc_elem.text
 
-    tree = ET.parse(index_path)
-    root = tree.getroot()
+    root = ET.parse(index_path).getroot()
     restored_count = 0
 
     for source in root.findall("source"):
@@ -240,8 +238,7 @@ def restore_unchanged_descriptions(
             restored_count += 1
 
     if restored_count > 0:
-        ET.indent(root, space="  ")
-        tree.write(index_path, encoding="unicode", xml_declaration=False)
+        write_index(root, index_path)
 
     return restored_count
 

@@ -559,7 +559,7 @@ class TestOutputContent:
         )
         assert f"<scraped_at>{today}</scraped_at>\n" in index_content
         assert "</source>\n" in index_content
-        assert index_content.endswith("</docs_index>")
+        assert index_content.endswith("</docs_index>\n")
 
     def test_readme_md_contains_required_content(self, tmp_path: Path) -> None:
         """Generated README links to INDEX.xml and back to the upstream source site."""

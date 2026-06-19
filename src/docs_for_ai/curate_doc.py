@@ -15,6 +15,7 @@ from typing import NamedTuple
 from urllib.parse import urlparse
 
 from docs_for_ai import firecrawl_source, markdown_source
+from docs_for_ai.index_io import write_index
 from docs_for_ai.paths import format_path_for_display
 
 # Written for every new source; a later LLM step fills it.
@@ -90,14 +91,12 @@ Curated docs for targeted AI context.
     print(f"✅ Created curation readme|{format_path_for_display(readme_path)}|")
 
 
-def _create_index_xml(dir_path: Path) -> None:
+def _create_empty_index(dir_path: Path) -> None:
     """Create empty INDEX.xml structure."""
     root = ET.Element("docs_index")
-    ET.indent(root, space="  ")
 
-    tree = ET.ElementTree(root)
     index_path = dir_path / "INDEX.xml"
-    tree.write(index_path, encoding="unicode", xml_declaration=False)
+    write_index(root, index_path)
     print(f"✅ Created curation index|{format_path_for_display(index_path)}|")
 
 
@@ -110,8 +109,7 @@ def _add_or_update_source_in_index(
     """
     index_path = dir_path / "INDEX.xml"
 
-    tree = ET.parse(index_path)
-    root = tree.getroot()
+    root = ET.parse(index_path).getroot()
 
     is_update = False
 
@@ -133,9 +131,7 @@ def _add_or_update_source_in_index(
     ET.SubElement(source, "local_file").text = local_file
     ET.SubElement(source, "scraped_at").text = date.today().isoformat()
 
-    ET.indent(root, space="  ")
-
-    tree.write(index_path, encoding="unicode", xml_declaration=False)
+    write_index(root, index_path)
 
     verb = "Updated" if is_update else "Added"
     fields = (
@@ -233,7 +229,7 @@ def main() -> None:
 
     if not index_path.exists():
         _create_readme(dir_path, source_url)
-        _create_index_xml(dir_path)
+        _create_empty_index(dir_path)
 
     _write_document(dir_path, doc)
 

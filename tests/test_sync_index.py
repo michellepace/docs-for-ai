@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from docs_for_ai.index_io import write_index
 from docs_for_ai.sync_index import (
     format_descriptions_status,
     get_changed_markdown_files,
@@ -57,9 +58,7 @@ def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:
         ET.SubElement(source, "local_file").text = source_data["local_file"]
         ET.SubElement(source, "scraped_at").text = "2025-01-01"
 
-    ET.indent(root, space="  ")
-    tree = ET.ElementTree(root)
-    tree.write(index_path, encoding="unicode", xml_declaration=False)
+    write_index(root, index_path)
 
 
 def get_descriptions_from_index(index_path: Path) -> dict[str, str]:

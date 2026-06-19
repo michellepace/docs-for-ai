@@ -7,7 +7,7 @@ allowed-tools:
   - Bash(find *)
   - Bash(printf *)
   - Bash(uv run --directory * sync-index *)
-  - Bash(uv run --directory * update-index-descriptions *)
+  - Bash(uv run --directory * update-descriptions *)
   - Bash(wc *)
   - Read
   - Write
@@ -83,7 +83,7 @@ Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follo
 Run the update script to apply all descriptions:
 
 ```bash
-uv run --directory ~/.claude/docs-for-ai update-index-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
+uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
 Verify `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.

@@ -9,9 +9,9 @@ dependencies = [
 ]
 
 [project.scripts]
-curate-doc                = "docs_for_ai.curate_doc:main"
-sync-index                = "docs_for_ai.sync_index:main"
-update-index-descriptions = "docs_for_ai.update_index_descriptions:main"
+curate-doc          = "docs_for_ai.curate_doc:main"
+sync-index          = "docs_for_ai.sync_index:main"
+update-descriptions = "docs_for_ai.update_descriptions:main"
 
 [build-system]
 requires = ["uv_build>=0.11.21,<0.12"]

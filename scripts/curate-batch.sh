@@ -11,7 +11,7 @@ set -uo pipefail
 COLLECTION="${1:-}"
 URL_FILE="${2:-}"
 MODEL="claude-opus-4-8"
-ALLOWED='Bash(find *),Bash(printf *),Bash(wc *),Bash(uv run curate-doc *),Bash(uv run update-index-descriptions *),Read,Write'
+ALLOWED='Bash(find *),Bash(printf *),Bash(wc *),Bash(uv run curate-doc *),Bash(uv run update-descriptions *),Read,Write'
 
 if [ -z "$COLLECTION" ] || [ -z "$URL_FILE" ]; then
   echo "❌ usage: $0 <collection> <file>" >&2

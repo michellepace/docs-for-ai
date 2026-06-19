@@ -1,8 +1,8 @@
-"""update_index_descriptions.py: INDEX.xml description updates."""
+"""update_descriptions.py: INDEX.xml description updates."""
 
 from typing import TYPE_CHECKING
 
-from docs_for_ai.update_index_descriptions import update_descriptions
+from docs_for_ai.update_descriptions import update_descriptions
 
 if TYPE_CHECKING:
     from pathlib import Path

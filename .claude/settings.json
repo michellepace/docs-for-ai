@@ -23,7 +23,8 @@
     "git-utils@my-claude-marketplace": true,
     "claude-code-utils@my-claude-marketplace": false,
     "superpowers@claude-plugins-official": false,
-    "playground@claude-plugins-official": false
+    "playground@claude-plugins-official": false,
+    "ponytail@ponytail": false
   },
   "extraKnownMarketplaces": {
     "my-claude-marketplace": {
@@ -36,6 +37,12 @@
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
       }
     }
   }

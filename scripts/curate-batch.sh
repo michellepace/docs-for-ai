@@ -11,7 +11,7 @@ set -uo pipefail
 COLLECTION="${1:-}"
 URL_FILE="${2:-}"
 MODEL="claude-opus-4-8"
-ALLOWED='Bash(find *),Bash(printf *),Bash(wc *),Bash(uv run curate-doc *),Bash(uv run update-index-descriptions *),Read,Write'
+ALLOWED='Bash(find *),Bash(printf *),Bash(wc *),Bash(uv run curate-doc *),Bash(uv run update-descriptions *),Read,Write'
 
 if [ -z "$COLLECTION" ] || [ -z "$URL_FILE" ]; then
   echo "❌ usage: $0 <collection> <file>" >&2
@@ -29,29 +29,29 @@ results=()
 
 i=0
 while IFS= read -r url <&3 || [ -n "$url" ]; do
-  url="${url#"${url%%[![:space:]]*}"}"   # ltrim
-  url="${url%"${url##*[![:space:]]}"}"    # rtrim
+  url="${url#"${url%%[![:space:]]*}"}" # ltrim
+  url="${url%"${url##*[![:space:]]}"}" # rtrim
   [ -z "$url" ] && continue
-  case "$url" in \#*) continue ;; esac    # skip comment lines
+  case "$url" in \#*) continue ;; esac # skip comment lines
 
-  i=$((i+1))
+  i=$((i + 1))
   echo "=== [$i] curating: $url ==="
 
   # Run one isolated curation
   out=$(claude -p "/curate-doc $COLLECTION $url" \
     --model "$MODEL" \
     --allowedTools "$ALLOWED" \
-    --permission-mode acceptEdits </dev/null 2>&1)
+    --permission-mode acceptEdits < /dev/null 2>&1)
   code=$?
   printf '%s\n' "$out"
 
   # Decide PASS/FAIL
   if [ "$code" -ne 0 ] || printf '%s' "$out" | grep -q "❌ Error:"; then
-    fail=$((fail+1))
+    fail=$((fail + 1))
     results+=("FAIL  [$i] $url  (exit=$code)")
     echo "--- ❌ FAIL [$i]: $url"
   else
-    pass=$((pass+1))
+    pass=$((pass + 1))
     results+=("PASS  [$i] $url")
     echo "--- ✅ PASS [$i]: $url"
   fi

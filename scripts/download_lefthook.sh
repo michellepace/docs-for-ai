@@ -1,22 +1,22 @@
 #!/bin/bash
 set -e
 
-COPIED_URL="https://github.com/evilmartians/lefthook/tree/master/docs/mdbook"
+# Source: https://github.com/evilmartians/lefthook/tree/master/docs/mdbook
 
 COLLECTION_DIR="collections/lefthook"
-DOWNLOAD_TEMP="collections/lefthook/download_temp"
+DOWNLOAD_TEMP="$COLLECTION_DIR/download_temp"
 CLONE_URL="https://github.com/evilmartians/lefthook.git"
 DOCS_PATH="docs/mdbook"
 BRANCH="master"
 
-mkdir -p collections/lefthook/download_temp && cd collections/lefthook/download_temp
+mkdir -p "$DOWNLOAD_TEMP" && cd "$DOWNLOAD_TEMP"
 git init
-git remote add origin https://github.com/evilmartians/lefthook.git
+git remote add origin "$CLONE_URL"
 git config core.sparseCheckout true
-echo "docs/mdbook/*" > .git/info/sparse-checkout
-git pull origin master --depth=1
+echo "$DOCS_PATH/*" > .git/info/sparse-checkout
+git pull origin "$BRANCH" --depth=1
 rsync -av --include='*/' --include='*.mdx' --include='*.md' --exclude='*' \
-    docs/mdbook/ ../../../collections/lefthook/
+  "$DOCS_PATH/" "../../../$COLLECTION_DIR/"
 cd ../../..
-rm -rf collections/lefthook/download_temp
-npx markdownlint-cli2 --fix "collections/lefthook/**/*.md"
+rm -rf "$DOWNLOAD_TEMP"
+npx markdownlint-cli2 --fix "$COLLECTION_DIR/**/*.md"

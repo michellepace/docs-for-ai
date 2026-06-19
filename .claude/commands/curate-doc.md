@@ -1,12 +1,13 @@
 ---
 description: Curate a source URL into a collection
+disable-model-invocation: true
 argument-hint: <collection> <source_url>
 arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
   - Bash(uv run --directory * curate-doc *)
-  - Bash(uv run --directory * update-index-descriptions *)
+  - Bash(uv run --directory * update-descriptions *)
   - Bash(wc *)
   - Read
   - Write
@@ -104,7 +105,7 @@ Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follo
 5. Apply it:
 
    ```bash
-   uv run --directory ~/.claude/docs-for-ai update-index-descriptions "collections/$collection" "collections/$collection/description.txt"
+   uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
    ```
 
 ## Step 5. Report success

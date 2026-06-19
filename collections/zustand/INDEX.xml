@@ -4,174 +4,174 @@
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/index.md</source_url>
     <local_file>learn-index.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Tutorial: Tic-Tac-Toe</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/tutorial-tic-tac-toe.md</source_url>
     <local_file>learn-guides-tutorial-tic-tac-toe.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Updating state</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/updating-state.md</source_url>
     <local_file>learn-guides-updating-state.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Practice with no store actions</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/practice-with-no-store-actions.md</source_url>
     <local_file>learn-guides-practice-with-no-store-actions.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Slices Pattern</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/slices-pattern.md</source_url>
     <local_file>learn-guides-slices-pattern.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Immutable state and merging</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/immutable-state-and-merging.md</source_url>
     <local_file>learn-guides-immutable-state-and-merging.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Prevent rerenders with useShallow</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/prevent-rerenders-with-use-shallow.md</source_url>
     <local_file>learn-guides-prevent-rerenders-with-use-shallow.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Beginner TypeScript Guide</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/beginner-typescript.md</source_url>
     <local_file>learn-guides-beginner-typescript.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Advanced TypeScript Guide</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/advanced-typescript.md</source_url>
     <local_file>learn-guides-advanced-typescript.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Auto Generating Selectors</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/auto-generating-selectors.md</source_url>
     <local_file>learn-guides-auto-generating-selectors.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Setup with Next.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/nextjs.md</source_url>
     <local_file>learn-guides-nextjs.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>SSR and Hydration</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/ssr-and-hydration.md</source_url>
     <local_file>learn-guides-ssr-and-hydration.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Initialize state with props</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/initialize-state-with-props.md</source_url>
     <local_file>learn-guides-initialize-state-with-props.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/testing.md</source_url>
     <local_file>learn-guides-testing.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Flux inspired practice</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/flux-inspired-practice.md</source_url>
     <local_file>learn-guides-flux-inspired-practice.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>How to reset state</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/how-to-reset-state.md</source_url>
     <local_file>learn-guides-how-to-reset-state.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/index.md</source_url>
     <local_file>reference-index.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>create</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create.md</source_url>
     <local_file>reference-apis-create.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>createStore</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create-store.md</source_url>
     <local_file>reference-apis-create-store.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>shallow</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/shallow.md</source_url>
     <local_file>reference-apis-shallow.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>persist</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/persist.md</source_url>
     <local_file>reference-middlewares-persist.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>devtools</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/devtools.md</source_url>
     <local_file>reference-middlewares-devtools.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>immer</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/immer.md</source_url>
     <local_file>reference-middlewares-immer.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Persisting store data</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/persisting-store-data.md</source_url>
     <local_file>reference-integrations-persisting-store-data.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
   <source>
     <title>Immer middleware</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/immer-middleware.md</source_url>
     <local_file>reference-integrations-immer-middleware.md</local_file>
-    <scraped_at>2026-05-23</scraped_at>
+    <curated_at>2026-05-23</curated_at>
   </source>
 </docs_index>

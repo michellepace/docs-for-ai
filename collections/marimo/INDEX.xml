@@ -4,125 +4,125 @@
     <description>PLACEHOLDER</description>
     <source_url>https://danmackinlay.name/notebook/marimo.html</source_url>
     <local_file>notebook-marimo-html.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>marimo</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/cli</source_url>
     <local_file>cli.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>FAQ</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/faq</source_url>
     <local_file>faq.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Installation</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/getting_started/installation</source_url>
     <local_file>getting-started-installation.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Key concepts</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/getting_started/key_concepts</source_url>
     <local_file>getting-started-key-concepts.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Quickstart</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/getting_started/quickstart</source_url>
     <local_file>getting-started-quickstart.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Guides</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides</source_url>
     <local_file>guides.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Best practices</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/best_practices</source_url>
     <local_file>guides-best-practices.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Custom HTML Head</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/html_head</source_url>
     <local_file>guides-configuration-html-head.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Configuring LLM providers</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/llm_providers</source_url>
     <local_file>guides-configuration-llm-providers.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Snippets Configuration</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/snippets</source_url>
     <local_file>guides-configuration-snippets.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Theming</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/configuration/theming</source_url>
     <local_file>guides-configuration-theming.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Using your own editor</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/editor_features/watching</source_url>
     <local_file>guides-editor-features-watching.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Lint Rules</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/lint_rules</source_url>
     <local_file>guides-lint-rules.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Interactive dataframes</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/working_with_data/dataframes</source_url>
     <local_file>guides-working-with-data-dataframes.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Plotting</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/working_with_data/plotting</source_url>
     <local_file>guides-working-with-data-plotting.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Using SQL</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/guides/working_with_data/sql</source_url>
     <local_file>guides-working-with-data-sql.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Recipes</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.marimo.io/recipes</source_url>
     <local_file>recipes.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

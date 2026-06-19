@@ -1,24 +1,25 @@
 ---
-description: Re-scrape all docs in collection and regenerate descriptions
+description: Re-curate all docs in collection and regenerate descriptions
+disable-model-invocation: true
 argument-hint: <collection>
 arguments: [collection]
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
   - Bash(uv run --directory * sync-index *)
-  - Bash(uv run --directory * update-index-descriptions *)
+  - Bash(uv run --directory * update-descriptions *)
   - Bash(wc *)
   - Read
   - Write
 ---
 
-Re-scrape every document in `$collection` and batch-regenerate its descriptions.
+Re-curate every document in `$collection` and batch-regenerate its descriptions.
 
 ## Context
 
 Documentation curation enables targeted, efficient context retrieval for AI agents. Rather than searching entire documentation sites, curated collections provide INDEX.xml descriptions that route an LLM reader to the relevant markdown files.
 
-The sync script re-scrapes every source, syncs INDEX.xml to the filesystem, and flags new or changed docs with a PLACEHOLDER description. **Your task:** write a description for each flagged doc.
+The sync script re-curates every source, syncs INDEX.xml to the filesystem, and flags new or changed docs with a PLACEHOLDER description. **Your task:** write a description for each flagged doc.
 
 ## Workflow
 
@@ -31,7 +32,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 <example_validation_success>
 
 ```
-## 🙂 Super! Re-scraping the `$collection` collection...
+## 🙂 Super! Re-curating the `$collection` collection...
 ```
 
 </example_validation_success>
@@ -40,7 +41,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 
 ```
 ## 🤔 Missing argument!
-- Usage: `/rescrape-docs <collection>`
+- Usage: `/recurate-docs <collection>`
 - Existing: `shiny`, `uv`, `tailwind`
 
 [Friendly recommendation/suggestion in 1 short sentence]
@@ -48,7 +49,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 
 </example_validation_failure>
 
-### 2. Run sync and scrape
+### 2. Run sync and curate
 
 ```bash
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
@@ -57,7 +58,7 @@ uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 This script:
 
 - Syncs INDEX.xml to filesystem (removes stale entries)
-- Re-scrapes all docs via curate_doc.py
+- Re-curates all docs via curate_doc.py
 - Preserves existing index descriptions for unchanged/whitespace-only content
 - Sets PLACEHOLDER index descriptions only for new or content-changed docs, and lists them in its `## Index Descriptions Status` output
 
@@ -82,7 +83,7 @@ Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follo
 Run the update script to apply all descriptions:
 
 ```bash
-uv run --directory ~/.claude/docs-for-ai update-index-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
+uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
 Verify `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
@@ -94,14 +95,14 @@ Parse structured output from the script and report completion following the `<ex
 <example_summary_message>
 
 ```
-## ✅ Re-scrape Complete!
+## ✅ Re-curate Complete!
 
 📊 Statistics
 - Collection:            `$collection`
 - Stale sources removed: [N]
 - Total docs:            [M]
-- Successfully scraped:  [X]
-- Failed to scrape:      [Y]
+- Successfully curated:  [X]
+- Failed to curate:      [Y]
 - Descriptions updated:  [D]
 
 💡 Collection Content Changes for `$collection`:

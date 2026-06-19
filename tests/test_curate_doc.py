@@ -210,7 +210,7 @@ class TestCanonicalCollapse:
         """Allowlisted `…/storage` then `…/storage.md` updates, not duplicates."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
 
@@ -335,7 +335,7 @@ class TestFetchDocumentRouting:
         """An allowlisted suffixless URL fetches `url + '.md'` and never FireCrawls."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
         fetched_urls: list[str] = []
@@ -364,7 +364,7 @@ class TestFetchDocumentRouting:
         """An allowlisted but suffixed (.html) URL still FireCrawls; stored as given."""
         monkeypatch.setattr(
             curate_doc.markdown_source,
-            "load_md_allowlist",
+            "load_markdown_allowlist",
             lambda: ["https://allowed.test/docs/"],
         )
         scraped_urls: list[str] = []
@@ -557,9 +557,9 @@ class TestOutputContent:
         assert (
             "<local_file>learn-guides-updating-state.md</local_file>\n" in index_content
         )
-        assert f"<scraped_at>{today}</scraped_at>\n" in index_content
+        assert f"<curated_at>{today}</curated_at>\n" in index_content
         assert "</source>\n" in index_content
-        assert index_content.endswith("</docs_index>")
+        assert index_content.endswith("</docs_index>\n")
 
     def test_readme_md_contains_required_content(self, tmp_path: Path) -> None:
         """Generated README links to INDEX.xml and back to the upstream source site."""

@@ -4,118 +4,118 @@
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide</source_url>
     <local_file>guide.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>allowOnly</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/config/allowonly</source_url>
     <local_file>config-allowonly.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Browser Mode {#browser-mode}</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/browser</source_url>
     <local_file>guide-browser.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Component Testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/browser/component-testing</source_url>
     <local_file>guide-browser-component-testing.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Why Browser Mode</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/browser/why</source_url>
     <local_file>guide-browser-why.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Command Line Interface</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/cli</source_url>
     <local_file>guide-cli.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Test Environment</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/environment</source_url>
     <local_file>guide-environment.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Extending Matchers</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/extending-matchers</source_url>
     <local_file>guide-extending-matchers.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Features</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/features</source_url>
     <local_file>guide-features.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Improving Performance</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/improving-performance</source_url>
     <local_file>guide-improving-performance.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>In-Source Testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/in-source</source_url>
     <local_file>guide-in-source.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Mocking</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/mocking</source_url>
     <local_file>guide-mocking.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Reporters</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/reporters</source_url>
     <local_file>guide-reporters.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Testing Types</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/testing-types</source_url>
     <local_file>guide-testing-types.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Vitest UI</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/ui</source_url>
     <local_file>guide-ui.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Why Vitest</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/guide/why</source_url>
     <local_file>guide-why.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
   <source>
     <title>Configuring Vitest</title>
     <description>PLACEHOLDER</description>
     <source_url>https://vitest.dev/config</source_url>
     <local_file>config.md</local_file>
-    <scraped_at>2026-05-25</scraped_at>
+    <curated_at>2026-05-25</curated_at>
   </source>
 </docs_index>

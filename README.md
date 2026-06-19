@@ -1,17 +1,19 @@
 # Curate Docs For AI (with Claude Code)
 
-Curate and index documentation from any website into collections like `tailwind/`, `horses/`, etc. Then `/ask-docs [collection] [your question]` to get a grounded answer. Cleaner than a web-fetch and more focussed than a web-search. Keeps AI context sharp.
+Curate and index documentation from any website into collections like `tailwind/` or `horses/`, then `/ask-docs [collection] [your question]` for a grounded answer — cleaner than a web-fetch, more focussed than a web-search, and keeps AI context sharp.
+
+Each collection is curated from source docs — fetched directly where possible (`.md` URLs, GitHub blobs, or [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt)), and scraped via the FireCrawl Python SDK only as a last resort. Its `INDEX.xml` is a routing signal an LLM reader uses for targeted context retrieval.
 
 <div align="center">
-  <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing scraped documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
-  <p><em>Complete workflow: curate → auto scrape → "/ask-docs biome Validate my config file please"</em></p>
+  <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing curated documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
+  <p><em>Three Steps: (1) run <code>/curate-doc</code> on a URL → (2) the doc is curated and indexed → (3) <code>/ask-docs</code> to query it</em></p>
 </div>
 
 ## 📦 Repo Collections
 
 Available collections in this repo:
 
-| Collection | Collection Index | Description | Scraped | Source |
+| Collection | Collection Index | Description | Curated | Source |
 |:-----------|:-----------------|:------------|:--------|:-------|
 | 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Anthropic Claude Code | 2026-02-05 | [Official](https://code.claude.com) |
@@ -70,17 +72,17 @@ ln -s "$PWD" ~/.claude/docs-for-ai
 mkdir -p ~/.claude/commands
 ln -s ~/.claude/docs-for-ai/.claude/commands/ask-docs.md      ~/.claude/commands/ask-docs.md
 ln -s ~/.claude/docs-for-ai/.claude/commands/curate-doc.md    ~/.claude/commands/curate-doc.md
-ln -s ~/.claude/docs-for-ai/.claude/commands/rescrape-docs.md ~/.claude/commands/rescrape-docs.md
+ln -s ~/.claude/docs-for-ai/.claude/commands/recurate-docs.md ~/.claude/commands/recurate-docs.md
 ```
 
-Now `/ask-docs`, `/curate-doc` and `/rescrape-docs` work from any directory. Everything routes through the `~/.claude/docs-for-ai` anchor, so there's one source of truth — to relocate the repo, just re-point that one symlink.
+Now `/ask-docs`, `/curate-doc` and `/recurate-docs` work from any directory. Everything routes through the `~/.claude/docs-for-ai` anchor, so there's one source of truth — to relocate the repo, just re-point that one symlink.
 
 ## 📖 Usage via Slash Commands
 
 | Slash Command | Purpose | .md Files | INDEX `<source>` |
 |:--------|:--------|:----------|:----------|
-| `/curate-doc <collection> <url>` | Add new or re-scrape | ✅ Write | ✅ Add/update INDEX.xml |
-| `/rescrape-docs <collection>` | Re-scrape all docs | ✅ Write all | ✅ Selective update INDEX.xml |
+| `/curate-doc <collection> <url>` | Add new or re-curate | ✅ Write | ✅ Add/update INDEX.xml |
+| `/recurate-docs <collection>` | Re-curate all docs | ✅ Write all | ✅ Selective update INDEX.xml |
 | `/ask-docs <collection> <question>` | Query any collection | Docs analysed | Relevant docs identified |
 
 ## 💡 Usage Example
@@ -92,17 +94,17 @@ Assume tailwind was not already a collection in this repo:
 /curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
 # → Creates collections/tailwind/ collection directory, with README.md + INDEX.xml, and first curated doc
 
-# Re-scrape existing doc (refresh content from same URL)
+# Re-curate existing doc (refresh content from same URL)
 /curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
-# → Re-scrapes, writes .md file, replaces source in INDEX.xml
+# → Re-curates, writes .md file, replaces source in INDEX.xml
 
 # Curate a new doc into collection
 /curate-doc tailwind https://tailwindcss.com/docs/styling-with-utility-classes
-# → Scrapes page into collection, writes .md file, adds source to INDEX.xml
+# → Curates page into collection, writes .md file, adds source to INDEX.xml
 
-# Re-scrape all docs in collection
-/rescrape-docs tailwind
-# → Re-scrapes all URLs in INDEX.xml, writes all .md files, updates descriptions for changed content
+# Re-curate all docs in collection
+/recurate-docs tailwind
+# → Re-curates all URLs in INDEX.xml, writes all .md files, updates descriptions for changed content
 
 # ✨ Use the docs
 /ask-docs tailwind Please evaluate my project for correct usage of utility classes?
@@ -113,7 +115,7 @@ Assume tailwind was not already a collection in this repo:
 
 **Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
 
-The `/curate-doc` command always regenerates the description, whereas `/rescrape-docs` only regenerates descriptions for files with content changes.
+The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
 **Source routing:** Direct `.md` URLs and GitHub blobs (`.md`/`.mdx`/`.qmd`) are fetched as-is; FireCrawl scrapes everything else as a fallback.
 
@@ -138,7 +140,7 @@ collections/
     <description>20-30 word routing signal an LLM reader uses to pick this file...</description>
     <source_url>https://docs.example.com/hello</source_url>
     <local_file>hello-document-title.md</local_file>
-    <scraped_at>2025-10-15</scraped_at>
+    <curated_at>2025-10-15</curated_at>
   </source>
   <!-- Multiple <source> entries, one per .md file -->
 </docs_index>
@@ -148,11 +150,11 @@ collections/
 
 ## 📝 TODO - Regenerate "Descriptions" (2026-05-31)
 
-Collections still have `PLACEHOLDER` descriptions — run `/rescrape-docs` on each.
+Collections still have `PLACEHOLDER` descriptions — run `/recurate-docs` on each.
 
 The framing has shifted from "semantic search" to **LLM routing**, so existing descriptions should also be regenerated to match the current rules in [.claude/references/source-descriptions.md](.claude/references/source-descriptions.md).
 
-## 📝 TODO - Replace `/rescrape-docs`
+## 📝 TODO - Replace `/recurate-docs`
 
 Use `claude -p` sequentially - gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command and iterate on that?
 
@@ -162,8 +164,8 @@ Improve `scripts/curate-batch.sh` and raise into README
 
 Also the others or DELETE.
 
-## 📝 TODO - populate `md_allowlist.txt`
+## 📝 TODO - populate `markdown-allowlist.txt`
 
 When a new collection is made, get claude command in `/curate-doc` to establish if we can add it e.g https://www.mintlify.com/docs/quickstart. Need to handle not everyone does a 404 - "did it return x lines and expected content?"
 
-Exclude new collections in `rescrape-docs/` whatever I do there.
+Exclude new collections in `recurate-docs/` whatever I do there.

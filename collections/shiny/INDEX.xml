@@ -4,251 +4,251 @@
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/components/index.qmd</source_url>
     <local_file>components-index.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>End-to-End Testing Your App</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/end-to-end-testing.qmd</source_url>
     <local_file>end-to-end-testing.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Express in depth</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/express-in-depth.qmd</source_url>
     <local_file>express-in-depth.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Choosing a syntax</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/express-or-core.qmd</source_url>
     <local_file>express-or-core.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Transition to Core</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/express-to-core.qmd</source_url>
     <local_file>express-to-core.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Express vs. Core</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/express-vs-core.qmd</source_url>
     <local_file>express-vs-core.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Chatbots</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-chatbots.qmd</source_url>
     <local_file>genai-chatbots.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Get inspired</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-inspiration.qmd</source_url>
     <local_file>genai-inspiration.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Genai Rag</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-rag.qmd</source_url>
     <local_file>genai-rag.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Streaming</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-stream.qmd</source_url>
     <local_file>genai-stream.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Structured data</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-structured-data.qmd</source_url>
     <local_file>genai-structured-data.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Tool calling</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/genai-tools.qmd</source_url>
     <local_file>genai-tools.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Jupyter Widgets</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/jupyter-widgets.qmd</source_url>
     <local_file>jupyter-widgets.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Module Communication</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/module-communication.qmd</source_url>
     <local_file>module-communication.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Shiny Modules</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/modules.qmd</source_url>
     <local_file>modules.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Non-blocking operations</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/nonblocking.qmd</source_url>
     <local_file>nonblocking.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Overview</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/overview.qmd</source_url>
     <local_file>overview.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Foundations</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/reactive-foundations.qmd</source_url>
     <local_file>reactive-foundations.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Mutable objects</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/reactive-mutable.qmd</source_url>
     <local_file>reactive-mutable.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Patterns</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/reactive-patterns.qmd</source_url>
     <local_file>reactive-patterns.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Routing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/routing.qmd</source_url>
     <local_file>routing.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Customizing UI</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/ui-customize.qmd</source_url>
     <local_file>ui-customize.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Dynamic UI</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/ui-dynamic.qmd</source_url>
     <local_file>ui-dynamic.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>UI as HTML</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/ui-html.qmd</source_url>
     <local_file>ui-html.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Unit testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/unit-testing.qmd</source_url>
     <local_file>unit-testing.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>User interfaces</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/user-interfaces.qmd</source_url>
     <local_file>user-interfaces.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Create and Run</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/get-started/create-run.qmd</source_url>
     <local_file>get-started-create-run.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Debug, troubleshoot, &amp; help</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/get-started/debug.qmd</source_url>
     <local_file>get-started-debug.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Cloud hosting</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd</source_url>
     <local_file>get-started-deploy-cloud.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>What is Shiny?</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/get-started/what-is-shiny.qmd</source_url>
     <local_file>get-started-what-is-shiny.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Index</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/layouts/index.qmd</source_url>
     <local_file>layouts-index.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Index</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/templates/index.qmd</source_url>
     <local_file>templates-index.qmd</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>index – Shiny for Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://shiny.posit.co/py/api/express</source_url>
     <local_file>py-api-express.md</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>index – Shiny for Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://shiny.posit.co/py/api/testing</source_url>
     <local_file>py-api-testing.md</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Welcome – Shiny for Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://shiny.posit.co/py/get-started</source_url>
     <local_file>py-get-started.md</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
   <source>
     <title>Installation – Shiny for Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://shiny.posit.co/py/get-started/install.html</source_url>
     <local_file>py-get-started-install-html.md</local_file>
-    <scraped_at>2026-05-27</scraped_at>
+    <curated_at>2026-05-27</curated_at>
   </source>
 </docs_index>

@@ -4,251 +4,251 @@
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/installation</source_url>
     <local_file>app-getting-started-installation.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Project structure and organization</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/project-structure</source_url>
     <local_file>app-getting-started-project-structure.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Layouts and Pages</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/layouts-and-pages</source_url>
     <local_file>app-getting-started-layouts-and-pages.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Linking and Navigating</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/linking-and-navigating</source_url>
     <local_file>app-getting-started-linking-and-navigating.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Server and Client Components</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/server-and-client-components</source_url>
     <local_file>app-getting-started-server-and-client-components.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Fetching Data</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/fetching-data</source_url>
     <local_file>app-getting-started-fetching-data.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Caching</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/caching</source_url>
     <local_file>app-getting-started-caching.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Font Optimization</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/fonts</source_url>
     <local_file>app-getting-started-fonts.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Image Optimization</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/images</source_url>
     <local_file>app-getting-started-images.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Proxy</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/getting-started/proxy</source_url>
     <local_file>app-getting-started-proxy.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Caching and Revalidating (Previous Model)</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/caching-without-cache-components</source_url>
     <local_file>app-guides-caching-without-cache-components.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How to optimize your Next.js application for production</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/production-checklist</source_url>
     <local_file>app-guides-production-checklist.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Testing</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/testing</source_url>
     <local_file>app-guides-testing.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How to set up Jest with Next.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/jest</source_url>
     <local_file>app-guides-testing-jest.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How to set up Playwright with Next.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/playwright</source_url>
     <local_file>app-guides-testing-playwright.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How to set up Vitest with Next.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/vitest</source_url>
     <local_file>app-guides-testing-vitest.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>use cache</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache</source_url>
     <local_file>app-api-reference-directives-use-cache.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>use cache: private</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-private</source_url>
     <local_file>app-api-reference-directives-use-cache-private.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>use cache: remote</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-remote</source_url>
     <local_file>app-api-reference-directives-use-cache-remote.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>use client</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-client</source_url>
     <local_file>app-api-reference-directives-use-client.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>use server</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-server</source_url>
     <local_file>app-api-reference-directives-use-server.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>generateMetadata</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/generate-metadata</source_url>
     <local_file>app-api-reference-functions-generate-metadata.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>redirect</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/redirect</source_url>
     <local_file>app-api-reference-functions-redirect.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>permanentRedirect</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/permanentRedirect</source_url>
     <local_file>app-api-reference-functions-permanentredirect.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>loading.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/loading</source_url>
     <local_file>app-api-reference-file-conventions-loading.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Metadata Files API Reference</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/metadata</source_url>
     <local_file>app-api-reference-file-conventions-metadata.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Font Module</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/components/font</source_url>
     <local_file>app-api-reference-components-font.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>TypeScript</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/typescript</source_url>
     <local_file>app-api-reference-config-typescript.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>next.config.js</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js</source_url>
     <local_file>app-api-reference-config-next-config-js.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>devIndicators</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/devIndicators</source_url>
     <local_file>app-api-reference-config-next-config-js-devindicators.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>redirects</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects</source_url>
     <local_file>app-api-reference-config-next-config-js-redirects.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>serverComponentsHmrCache</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/serverComponentsHmrCache</source_url>
     <local_file>app-api-reference-config-next-config-js-servercomponentshmrcache.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Turbopack</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/app/api-reference/turbopack</source_url>
     <local_file>app-api-reference-turbopack.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Uncached data was accessed outside of `&lt;Suspense&gt;`</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/messages/blocking-route</source_url>
     <local_file>messages-blocking-route.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Missing Suspense boundary with useSearchParams</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout</source_url>
     <local_file>messages-missing-suspense-with-csr-bailout.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>How to use fonts</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/pages/getting-started/fonts</source_url>
     <local_file>pages-getting-started-fonts.md</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

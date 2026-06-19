@@ -4,90 +4,90 @@
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/configure-biome.mdx</source_url>
     <local_file>src-content-docs-guides-configure-biome.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>First-party extensions</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/editors/first-party-extensions.mdx</source_url>
     <local_file>src-content-docs-guides-editors-first-party-extensions.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Format all files</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/getting-started.mdx</source_url>
     <local_file>src-content-docs-guides-getting-started.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Integrate Biome with your VCS</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/guides/integrate-in-vcs.mdx</source_url>
     <local_file>src-content-docs-guides-integrate-in-vcs.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Language support</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/internals/language-support.mdx</source_url>
     <local_file>src-content-docs-internals-language-support.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Philosophy</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/internals/philosophy.mdx</source_url>
     <local_file>src-content-docs-internals-philosophy.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Linter</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/linter/index.mdx</source_url>
     <local_file>src-content-docs-linter-index.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>useSortedClasses</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/linter/rules/use-sorted-classes.mdx</source_url>
     <local_file>src-content-docs-linter-rules-use-sorted-classes.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Continuous Integration</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/recipes/continuous-integration.mdx</source_url>
     <local_file>src-content-docs-recipes-continuous-integration.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Git Hooks</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/recipes/git-hooks.mdx</source_url>
     <local_file>src-content-docs-recipes-git-hooks.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Configuration</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/configuration.mdx</source_url>
     <local_file>src-content-docs-reference-configuration.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>Reporters</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/reporters.mdx</source_url>
     <local_file>src-content-docs-reference-reporters.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
   <source>
     <title>VS Code extension</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/reference/vscode.mdx</source_url>
     <local_file>src-content-docs-reference-vscode.mdx</local_file>
-    <scraped_at>2026-05-26</scraped_at>
+    <curated_at>2026-05-26</curated_at>
   </source>
 </docs_index>

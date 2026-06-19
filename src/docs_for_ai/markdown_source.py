@@ -15,7 +15,7 @@ from urllib.parse import urlparse, urlunparse
 HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
-MD_ALLOWLIST_PATH = Path(__file__).parent / "md_allowlist.txt"
+MARKDOWN_ALLOWLIST_PATH = Path(__file__).parent / "markdown-allowlist.txt"
 FILENAME_RE = re.compile(r"^[a-z0-9-]+\.(?:md|mdx|qmd)$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
@@ -43,11 +43,8 @@ def is_md_url(url: str) -> bool:
     return urlparse(url).path.endswith(".md")
 
 
-def load_md_allowlist(path: Path = MD_ALLOWLIST_PATH) -> list[str]:
-    """Load non-GitHub host prefixes that serve a `.md` twin of each page.
-
-    One prefix per line; blank lines and `#` comments are ignored.
-    """
+def load_markdown_allowlist(path: Path = MARKDOWN_ALLOWLIST_PATH) -> list[str]:
+    """Load non-GitHub host prefixes that serve a `.md` twin of each page."""
     return [
         stripped
         for line in path.read_text().splitlines()

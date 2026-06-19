@@ -11,7 +11,7 @@ from docs_for_ai.markdown_source import (
     github_filename_from_blob_url,
     is_github_url,
     is_md_url,
-    load_md_allowlist,
+    load_markdown_allowlist,
     resolve_md_route,
 )
 
@@ -62,7 +62,7 @@ class TestLoadMdAllowlist:
 
     def test_parses_prefixes_ignoring_comments_and_blanks(self, tmp_path: Path) -> None:
         """Comment lines, blank lines, and surrounding whitespace are dropped."""
-        allowlist = tmp_path / "md_allowlist.txt"
+        allowlist = tmp_path / "markdown-allowlist.txt"
         allowlist.write_text(
             "# a comment\n"
             "\n"
@@ -71,7 +71,7 @@ class TestLoadMdAllowlist:
             "\n"
             "# trailing comment\n"
         )
-        assert load_md_allowlist(allowlist) == [
+        assert load_markdown_allowlist(allowlist) == [
             "https://vercel.com/docs/",
             "https://vitest.dev/guide/",
         ]

@@ -4,7 +4,7 @@ This task: write the one `<description>` field for each source in a collection i
 
 You write only the `<description>` field — `<title>`, `<source_url>`, and `<local_file>` are filled programmatically. Complement the sibling `<title>`; don't repeat it.
 
-Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question, not a vector index matching keywords. Optimise for that, then follow the quality rules and reference examples.
+Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question, not a vector index matching keywords. Optimise for that, then follow the quality rules (`<quality_rules>`) and reference examples (`<reference_examples>`).
 
 <quality_rules>
 - Length 20-30 words; every word earns its place — terse and direct
@@ -34,31 +34,28 @@ Match the style of these good examples and avoid the bad:
 <description>Mobile-first breakpoint prefixes (`sm`–`2xl`), `max-*` range variants, custom `--breakpoint-*` themes, arbitrary values, and `@container` queries for styling utilities based on viewport or parent size.</description>
 ```
 
+</good>
+
+<bad_vs_good>
+
+Same `vercel` source — anti-pattern, then the fix:
+
 ```xml
-<!-- vercel Collection -->
+<!-- ❌ bad -->
+<title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
+<description>This tutorial shows you how to build a fullstack app: it walks through Next.js 16 and Prisma Postgres step by step, covering everything you need to know.</description>
+```
+
+- ❌ framing lead-in instead of specifics ("This tutorial shows...")
+- ❌ repeats the title instead of complementing it (e.g. `Next.js 16`)
+- ❌ vague filler in place of high-value terms (e.g. "everything you need")
+
+```xml
+<!-- ✅ good -->
 <title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
 <description>Tutorial with `App Router` pages, Prisma ORM schema and queries, Sign in with Vercel `OAuth` (PKCE, `jose` ID-token verification), `Server Actions` for drafts/publishing, and `vercel` CLI deployment.</description>
 ```
 
-```xml
-<!-- uv Collection -->
-<title>Features</title>
-<description>`python` version management, `run` for scripts, the `add`, `sync`, and `lock` project commands, `tool` execution via `uvx`, the legacy `pip` interface, and `cache` and `self update` maintenance.</description>
-```
-
-</good>
-
-<bad>
-
-```xml
-<title>Features</title>
-<description>Tour of uv's command surface grouped by purpose: `uv python` version management, `uv run` scripts, `uv add`/`sync`/`lock` projects, `uvx` tools, the legacy `uv pip` interface, and `uv cache`/`self` utilities.</description>
-```
-
-- ❌ opens with a framing lead-in ("Tour of...:") instead of the specifics
-- ❌ spends words on the collection topic (`uv`)
-- ❌ glues words together "`uv add`/`sync`/`lock`"
-
-</bad>
+</bad_vs_good>
 
 </reference_examples>

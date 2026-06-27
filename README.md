@@ -9,9 +9,65 @@ Each collection is curated from source docs — fetched directly where possible 
   <p><em>Three Steps: (1) run <code>/curate-doc</code> on a URL → (2) the doc is curated and indexed → (3) <code>/ask-docs</code> to query it</em></p>
 </div>
 
+---
+
+## 🚀 Setup
+
+This will setup `/ask-docs`, `/curate-doc` and `/recurate-docs` to work anywhere — not just inside this repo.
+
+```bash
+# 1. Install UV
+# 👉 https://docs.astral.sh/uv/getting-started/installation/
+
+# 2. Clone repository
+git clone https://github.com/michellepace/docs-for-ai.git
+cd docs-for-ai
+
+# 3. Get free FireCrawl API key
+# Visit: https://www.firecrawl.dev/app/api-keys
+
+# 4. Add to your shell profile
+echo 'export API_KEY_MCP_FIRECRAWL=your-api-key-here' >> ~/.zshrc
+source ~/.zshrc  # Use ~/.bashrc if that's your shell
+
+# 5. Install dependencies and git hooks (commit/push)
+uv sync && uv run pre-commit install
+
+# 6. Symlink slash commands so they work anywhere
+mkdir -p ~/.claude/commands
+ln -s "$PWD" ~/.claude/docs-for-ai # anchor (run from repo root)
+ln -s ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
+```
+
+To always curate via direct fetch (not scraping), add to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt). GitHub URLs and any URL ending in `.md` are always fetched directly.
+
+## 📖 Usage
+
+| I want to… | Command |
+|:--|:--|
+| Ask a collection a question | `/ask-docs <collection> <question>` |
+| Add or refresh a doc | `/curate-doc <collection> <url>` |
+| Re-curate a whole collection | `/recurate-docs <collection>` |
+
+Example:
+
+```bash
+# Ask a question — the everyday command
+/ask-docs tailwind Is my project using utility classes correctly?
+
+# Add a doc — a new URL starts a collection or extends an existing one
+/curate-doc tailwind https://tailwindcss.com/docs/theme
+
+# Refresh a doc — re-run the same URL to pull the latest content
+/curate-doc tailwind https://tailwindcss.com/docs/theme
+
+# Re-curate every doc in a collection at once
+/recurate-docs tailwind
+```
+
 ## 📦 Repo Collections
 
-Available collections in this repo:
+My curations — a starting point. Keep what's useful, delete the rest, re-curate anytime to refresh.
 
 | Collection | Collection Index | Description | Curated | Source |
 |:-----------|:-----------------|:------------|:--------|:-------|
@@ -33,84 +89,6 @@ Available collections in this repo:
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | State management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
 
-*Curate your own collections. The [lefthook](collections/lefthook/) collection is non-standard — docs are downloaded directly from GitHub. For Anthropic docs use [this tool](https://github.com/ericbuess/claude-code-docs).*
-
----
-
-## 🚀 Setup
-
-**(1) First these 5 steps:**
-
-```bash
-# 1. Install UV
-# 👉 https://docs.astral.sh/uv/getting-started/installation/
-
-# 2. Clone repository
-git clone https://github.com/michellepace/docs-for-ai.git
-cd docs-for-ai
-
-# 3. Get free FireCrawl API key
-# Visit: https://www.firecrawl.dev/app/api-keys
-
-# 4. Add to your shell profile
-echo 'export API_KEY_MCP_FIRECRAWL=your-api-key-here' >> ~/.zshrc
-source ~/.zshrc  # Use ~/.bashrc if that's your shell
-
-# 5. Install git hooks (lint, type-check & test on commit/push)
-uv run pre-commit install
-```
-
-**(2) Anchor the repo at a fixed location** (run from the repo root). The commands reference the repo through this single symlink — universal across machines, so the command files never need editing no matter where you cloned:
-
-```bash
-ln -s "$PWD" ~/.claude/docs-for-ai
-```
-
-**(3) Symlink the commands you want available everywhere** (pointed *through* the anchor):
-
-```bash
-mkdir -p ~/.claude/commands
-ln -s ~/.claude/docs-for-ai/.claude/commands/ask-docs.md      ~/.claude/commands/ask-docs.md
-ln -s ~/.claude/docs-for-ai/.claude/commands/curate-doc.md    ~/.claude/commands/curate-doc.md
-ln -s ~/.claude/docs-for-ai/.claude/commands/recurate-docs.md ~/.claude/commands/recurate-docs.md
-```
-
-Now `/ask-docs`, `/curate-doc` and `/recurate-docs` work from any directory. Everything routes through the `~/.claude/docs-for-ai` anchor, so there's one source of truth — to relocate the repo, just re-point that one symlink.
-
-## 📖 Usage via Slash Commands
-
-| Slash Command | Purpose | .md Files | INDEX `<source>` |
-|:--------|:--------|:----------|:----------|
-| `/curate-doc <collection> <url>` | Add new or re-curate | ✅ Write | ✅ Add/update INDEX.xml |
-| `/recurate-docs <collection>` | Re-curate all docs | ✅ Write all | ✅ Selective update INDEX.xml |
-| `/ask-docs <collection> <question>` | Query any collection | Docs analysed | Relevant docs identified |
-
-## 💡 Usage Example
-
-Assume tailwind was not already a collection in this repo:
-
-```bash
-# Start a new collection
-/curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
-# → Creates collections/tailwind/ collection directory, with README.md + INDEX.xml, and first curated doc
-
-# Re-curate existing doc (refresh content from same URL)
-/curate-doc tailwind https://tailwindcss.com/docs/customizing-colors
-# → Re-curates, writes .md file, replaces source in INDEX.xml
-
-# Curate a new doc into collection
-/curate-doc tailwind https://tailwindcss.com/docs/styling-with-utility-classes
-# → Curates page into collection, writes .md file, adds source to INDEX.xml
-
-# Re-curate all docs in collection
-/recurate-docs tailwind
-# → Re-curates all URLs in INDEX.xml, writes all .md files, updates descriptions for changed content
-
-# ✨ Use the docs
-/ask-docs tailwind Please evaluate my project for correct usage of utility classes?
-# → Searches collections/tailwind/INDEX.xml for relevant docs, analyses these, gives you an answer
-```
-
 ## 🏗️ How This Repo Works
 
 **Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
@@ -123,12 +101,10 @@ The `/curate-doc` command always regenerates the description, whereas `/recurate
 
 ```text
 collections/
-└── collection-name/
-    ├── INDEX.xml           # Index of all docs
+└── <collection>/       # eg. biome/, clerk/, uv/
+    ├── INDEX.xml       # Routing index for targeted retrieval
     ├── README.md
-    ├── api-reference.md    # Curated doc
-    ├── getting-started.md  # Curated doc
-    └── ...
+    └── *.md            # Curated doc files
 ```
 
 **INDEX.xml Schema:**
@@ -136,36 +112,30 @@ collections/
 ```xml
 <docs_index>
   <source>
-    <title>Hello Document Title</title>
-    <description>20-30 word routing signal an LLM reader uses to pick this file...</description>
-    <source_url>https://docs.example.com/hello</source_url>
-    <local_file>hello-document-title.md</local_file>
-    <curated_at>2025-10-15</curated_at>
+    <title>[curated source document title]</title>
+    <description>[20-30 word routing signal an LLM reader uses to pick this file]</description>
+    <source_url>[document source url]</source_url>
+    <local_file>[curated .md filename]</local_file>
+    <curated_at>YYYY-MM-DD</curated_at>
   </source>
-  <!-- Multiple <source> entries, one per .md file -->
+  <!-- One <source> entry per curated .md file -->
 </docs_index>
 ```
 
 ---
 
-## 📝 TODO - Regenerate "Descriptions" (2026-05-31)
+## 📝 TODO
 
-Collections still have `PLACEHOLDER` descriptions — run `/recurate-docs` on each.
+Regenerate "Descriptions":
+- `uv run scripts/collection_status.py`
+- Framing has shifted from "semantic search" to **LLM routing**, still need to re-curate.
+- Possibly replace `/recurate-docs` via `claude -p` sequent script. Gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command? Possibly related to `scripts/curate-batch.sh`?
 
-The framing has shifted from "semantic search" to **LLM routing**, so existing descriptions should also be regenerated to match the current rules in [.claude/references/source-descriptions.md](.claude/references/source-descriptions.md).
+Sort out `scripts/`
+- delete things
 
-## 📝 TODO - Replace `/recurate-docs`
-
-Use `claude -p` sequentially - gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command and iterate on that?
-
-## 📝 TODO - sort out `scripts/`
-
-Improve `scripts/curate-batch.sh` and raise into README
-
-Also the others or DELETE.
-
-## 📝 TODO - populate `markdown-allowlist.txt`
-
-When a new collection is made, get claude command in `/curate-doc` to establish if we can add it e.g https://www.mintlify.com/docs/quickstart. Need to handle not everyone does a 404 - "did it return x lines and expected content?"
-
-Exclude new collections in `recurate-docs/` whatever I do there.
+Markdown allowlist
+- new collection → get Claude to check for .md twin
+- has to read the page, 404 doesn't always work
+- test on https://www.mintlify.com/docs/quickstart
+- rich blows my paradigm https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt

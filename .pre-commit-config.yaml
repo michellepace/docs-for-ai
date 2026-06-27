@@ -2,61 +2,87 @@ default_install_hook_types: [pre-commit, pre-push]
 default_stages: [pre-commit]
 
 repos:
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.25
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
     hooks:
-      - id: uv-lock
+      - id: check-merge-conflict    # block on merge markers
+        fail_fast: true
+      - id: trailing-whitespace
+        exclude: ^collections/      # curated corpus — keep faithful to source
+      - id: end-of-file-fixer
+        exclude: ^collections/      # curated corpus
+      - id: check-yaml
+      - id: check-json
+        exclude: ^\.vscode/         # .vscode/*.json is JSONC
+      - id: check-toml
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.22.1
+    hooks:
+      - id: markdownlint-cli2       # lint + autofix markdown
+        args: [--fix]
+
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format            # format TOML
+        types: [toml]
 
   - repo: https://github.com/maxwinterstein/shfmt-py
     rev: v4.0.0
     hooks:
-      - id: shfmt
+      - id: shfmt                   # format shell
         args: [-w, -i, '2', -ci, -bn]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
-      - id: shellcheck
+      - id: shellcheck              # lint shell (read-only, after shfmt)
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.25
+    hooks:
+      - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 
   - repo: local
     hooks:
-      - id: xmllint
+      - id: xmllint                 # validate XML (INDEX.xml routing files)
         name: xmllint
         entry: xmllint --noout
         language: system
         types: [xml]
 
-      - id: ruff-check
+      - id: ruff-check              # lint + autofix first
         name: ruff check
         entry: uv run ruff check --fix --exit-non-zero-on-fix
         language: system
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: ruff-format
+      - id: ruff-format             # format last, so it owns final layout
         name: ruff format
         entry: uv run ruff format
         language: system
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: pyright
+      - id: pyright                 # ruff lints; pyright type-checks
         name: pyright
         entry: uv run pyright
         language: system
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: pytest-commit
+      - id: pytest-commit           # offline unit tests on commit
         name: pytest (offline unit tests)
-        entry: uv run pytest -m "not firecrawl and not github"
+        entry: uv run pytest -q -m "not firecrawl and not github"
         language: system
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: pytest-push
+      - id: pytest-push             # full suite (incl. firecrawl) on push
         name: pytest (full suite, incl. firecrawl)
-        entry: uv run pytest
+        entry: uv run pytest -q
         language: system
         types_or: [python, pyproject]
         pass_filenames: false

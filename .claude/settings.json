@@ -24,7 +24,8 @@
     "claude-code-utils@my-claude-marketplace": false,
     "superpowers@claude-plugins-official": false,
     "playground@claude-plugins-official": false,
-    "ponytail@ponytail": false
+    "ponytail@ponytail": false,
+    "pyright-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "my-claude-marketplace": {

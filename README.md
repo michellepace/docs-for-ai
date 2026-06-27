@@ -39,7 +39,7 @@ ln -s "$PWD" ~/.claude/docs-for-ai # anchor (run from repo root)
 ln -s ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 ```
 
-To always curate via direct fetch (not scraping), add to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt). GitHub URLs and any URL ending in `.md` are always fetched directly.
+To always curate via direct fetch (not scraping), add a URL prefix — not a full URL (e.g. `https://nextjs.org/docs/`) — to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt). GitHub URLs and any URL ending in `.md` are always fetched directly.
 
 ## 📖 Usage
 
@@ -129,7 +129,7 @@ collections/
 Regenerate "Descriptions":
 - `uv run scripts/collection_status.py`
 - Framing has shifted from "semantic search" to **LLM routing**, still need to re-curate.
-- Possibly replace `/recurate-docs` via `claude -p` sequent script. Gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command? Possibly related to `scripts/curate-batch.sh`?
+- Possibly replace `/recurate-docs` via a sequential `claude -p` shell script. Gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command? Possibly related to `scripts/curate-batch.sh`?
 
 Sort out `scripts/`
 - delete things

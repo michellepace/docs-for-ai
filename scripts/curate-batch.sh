@@ -41,7 +41,7 @@ while IFS= read -r url <&3 || [ -n "$url" ]; do
   out=$(claude -p "/curate-doc $COLLECTION $url" \
     --model "$MODEL" \
     --allowedTools "$ALLOWED" \
-    --permission-mode acceptEdits < /dev/null 2>&1)
+    --permission-mode acceptEdits </dev/null 2>&1)
   code=$?
   printf '%s\n' "$out"
 
@@ -56,7 +56,7 @@ while IFS= read -r url <&3 || [ -n "$url" ]; do
     echo "--- ✅ PASS [$i]: $url"
   fi
   echo
-done 3< "$URL_FILE"
+done 3<"$URL_FILE"
 
 echo "======================================================"
 echo "Summary: $pass passed, $fail failed, $i total"

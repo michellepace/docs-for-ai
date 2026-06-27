@@ -13,7 +13,7 @@ mkdir -p "$DOWNLOAD_TEMP" && cd "$DOWNLOAD_TEMP"
 git init
 git remote add origin "$CLONE_URL"
 git config core.sparseCheckout true
-echo "$DOCS_PATH/*" > .git/info/sparse-checkout
+echo "$DOCS_PATH/*" >.git/info/sparse-checkout
 git pull origin "$BRANCH" --depth=1
 rsync -av --include='*/' --include='*.mdx' --include='*.md' --exclude='*' \
   "$DOCS_PATH/" "../../../$COLLECTION_DIR/"

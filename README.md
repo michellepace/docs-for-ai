@@ -39,7 +39,7 @@ ln -s "$PWD" ~/.claude/docs-for-ai # anchor (run from repo root)
 ln -s ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 ```
 
-To always curate via direct fetch (not scraping), add a URL prefix — not a full URL (e.g. `https://nextjs.org/docs/`) — to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt). GitHub URLs and any URL ending in `.md` are always fetched directly.
+If a site serves a plain `.md` twin of each page (page URL + ".md"), add its URL prefix (e.g. `https://nextjs.org/docs/`) to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt) to fetch those pages directly instead of scraping — faster, cleaner, and free. GitHub URLs and `.md` URLs are always fetched directly.
 
 ## 📖 Usage
 

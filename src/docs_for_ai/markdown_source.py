@@ -44,7 +44,7 @@ def is_md_url(url: str) -> bool:
 
 
 def load_markdown_allowlist(path: Path = MARKDOWN_ALLOWLIST_PATH) -> list[str]:
-    """Load non-GitHub host prefixes that serve a `.md` twin of each page."""
+    """Load non-GitHub URL prefixes that serve a `.md` twin of each page."""
     return [
         stripped
         for line in path.read_text().splitlines()

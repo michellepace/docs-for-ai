@@ -20,7 +20,7 @@ repos:
     rev: v0.22.1
     hooks:
       - id: markdownlint-cli2       # lint + autofix markdown
-        args: [--fix]               # .markdownlint-cli2.yaml
+        args: [--fix]               # see .markdownlint-cli2.yaml
 
   - repo: https://github.com/ComPWA/taplo-pre-commit
     rev: v0.9.3

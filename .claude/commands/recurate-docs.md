@@ -17,9 +17,7 @@ Re-curate every document in `$collection` and batch-regenerate its descriptions.
 
 ## Context
 
-Documentation curation enables targeted, efficient context retrieval for AI agents. Rather than searching entire documentation sites, curated collections provide INDEX.xml descriptions that route an LLM reader to the relevant markdown files.
-
-The sync script re-curates every source, syncs INDEX.xml to the filesystem, and flags new or changed docs with a PLACEHOLDER description. **Your task:** write a description for each flagged doc.
+Curated collections route an LLM reader to the right doc via INDEX.xml descriptions, instead of searching whole documentation sites. The sync script re-curates every source and flags new or changed docs with a PLACEHOLDER description. **Your task:** write a description for each flagged doc.
 
 ## Workflow
 
@@ -27,7 +25,7 @@ The sync script re-curates every source, syncs INDEX.xml to the filesystem, and 
 
 !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Validate `$collection` against `<existing_collections>`; reject if absent, and if it looks like a typo suggest the closest match.
+Validate `$collection` against `<existing_collections>`; reject if absent, and suggest the closest match if it looks like a typo.
 
 <example_validation_success>
 
@@ -55,23 +53,15 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and i
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
-This script:
-
-- Syncs INDEX.xml to filesystem (removes stale entries)
-- Re-curates all docs via curate_doc.py
-- Preserves existing index descriptions for unchanged/whitespace-only content
-- Sets PLACEHOLDER index descriptions only for new or content-changed docs, and lists them in its `## Index Descriptions Status` output
+INDEX.xml is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a PLACEHOLDER description on each new or content-changed doc. Read its output as it runs.
 
 ### 3. Generate descriptions for PLACEHOLDER entries only
 
-Take the files marked PLACEHOLDER from the script's `## Index Descriptions Status` output — use each path **exactly as the script printed it** (absolute `~/...`, so the file resolves no matter your current directory).
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` for the quality rules and reference examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then, for each PLACEHOLDER source:
-
-1. Analyse the corresponding markdown file
-2. Draft a description
-3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
+1. Analyse the markdown file and draft a description
+2. Count words (`printf '%s' "<draft>" | wc -w`); rewrite until 20–30
+3. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
 
    ```text
    getting-started-installation.md
@@ -80,17 +70,15 @@ Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follo
 
 ### 4. Update INDEX.xml
 
-Run the update script to apply all descriptions:
-
 ```bash
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
-Verify `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`, otherwise suggest self-healing action and await user confirmation.
+Confirm `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
 
 ### 5. Report completion
 
-Parse structured output from the script and report completion following the `<example_summary_message>` format:
+Report from the script's output, in this format:
 
 <example_summary_message>
 
@@ -106,7 +94,7 @@ Parse structured output from the script and report completion following the `<ex
 - Descriptions updated:  [D]
 
 💡 Collection Content Changes for `$collection`:
-- [Analyse script output section "## Git Content Changes" and list files here]
+- [List files from the <GIT_CONTENT_CHANGES> block here]
 
 *NB: excludes files with only whitespace changes*
 ```

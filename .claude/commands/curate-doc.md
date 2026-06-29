@@ -80,35 +80,29 @@ Analyse `$collection` and `$source_url` against the existing collections and dec
 
 ## Step 2. Run the script
 
-```bash
+```shell
 uv run --directory ~/.claude/docs-for-ai curate-doc "collections/$collection" "$source_url"
 ```
 
-## Step 3. On script error
+Errors print actionable info. Propose fixes but await user approval; proceed ONLY on `🎉 Curation Success!`.
 
-Script errors print actionable information. If recovery is possible, propose specific fixes but wait for explicit user approval. Proceed ONLY when script outputs `🎉 Curation Success!` - don't waste effort if the script failed.
+## Step 3. Generate the description
 
-## Step 4. Write the description
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then:
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then:
+1. Analyse the curated doc and draft a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+    ```text
+    overview-shiny-for-python.md
+    Description for doc on single line
+    ```
+2. Apply it:
+    ```shell
+    uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
+    ```
 
-1. Analyse the curated markdown file
-2. Draft a description
-3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Write it to `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+Word count is enforced; on error, rewrite the description and rerun until it passes.
 
-      ```text
-      overview-shiny-for-python.md
-      Description for this file here
-      ```
-
-5. Apply it:
-
-   ```bash
-   uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
-   ```
-
-## Step 5. Report success
+## Step 4. Report success
 
 Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`). For the document and index paths, use them **exactly as the script printed them** in its `✅ Created/Overwrote ... document|<path>|` and `✅ ... index source|<path>|` lines — these are absolute (`~/...`) so the reader sees the real location.
 

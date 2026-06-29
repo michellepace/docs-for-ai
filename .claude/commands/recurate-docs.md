@@ -17,7 +17,7 @@ Re-curate every document in `$collection` and batch-regenerate its descriptions.
 
 ## Context
 
-Curated collections route an LLM reader to the right doc via INDEX.xml descriptions, instead of searching whole documentation sites. The sync script re-curates every source and flags new or changed docs with a PLACEHOLDER description. **Your task:** write a description for each flagged doc.
+Curated collections route an LLM reader to the right doc via INDEX.xml descriptions, instead of searching whole documentation sites. **Your task:** write a description for each doc the sync script flags with a PLACEHOLDER.
 
 ## Workflow
 
@@ -49,7 +49,7 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and s
 
 ### 2. Run sync and curate
 
-```bash
+```shell
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
@@ -57,11 +57,10 @@ INDEX.xml is the source of truth: the script re-curates exactly the sources it l
 
 ### 3. Generate descriptions for PLACEHOLDER entries only
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` for the quality rules and reference examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
 
-1. Analyse the markdown file and draft a description
-2. Count words (`printf '%s' "<draft>" | wc -w`); rewrite until 20–30
-3. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
+1. Analyse the doc and draft a [20, 30]-word description (strict)
+2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
 
    ```text
    getting-started-installation.md
@@ -70,11 +69,13 @@ Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` for the q
 
 ### 4. Update INDEX.xml
 
-```bash
+```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
 ```
 
-Confirm `PLACEHOLDER` no longer appears in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
+Word count is enforced; rewrite the flagged description(s) and rerun until it passes.
+
+**Verify before proceeding:** no `PLACEHOLDER` remains in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
 
 ### 5. Report completion
 

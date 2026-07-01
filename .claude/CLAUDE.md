@@ -53,9 +53,7 @@ Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding 
 ## Common Commands
 
 ```shell
-uv tree                           # Show dependency tree
-uv add --dev <pkg>                # Add dev dependency
-uv lock --upgrade && uv sync      # Update all packages and apply
+uv run curate-doc <collection> <url> # Curate from a URL into collection
 
 # Quality (see pyproject.toml)
 uv run ruff check --fix           # Lint and auto-fix

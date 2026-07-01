@@ -10,3 +10,8 @@ def format_path_for_display(path: Path) -> str:
     if resolved.is_relative_to(home):
         return f"~/{resolved.relative_to(home)}"
     return str(resolved)
+
+
+def normalise_collection_dir(raw: str) -> Path:
+    """Collection dir from a CLI arg, tolerating a trailing slash."""
+    return Path(raw.rstrip("/"))

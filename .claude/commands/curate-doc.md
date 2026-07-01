@@ -1,7 +1,7 @@
 ---
 description: Curate a source URL into a collection
 disable-model-invocation: true
-argument-hint: <collection> <source_url>
+argument-hint: <collection> <url>
 arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
@@ -104,20 +104,20 @@ Word count is enforced; on error, rewrite the description and rerun until it pas
 
 ## Step 4. Report success
 
-Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`). For the document and index paths, use them **exactly as the script printed them** in its `✅ Created/Overwrote ... document|<path>|` and `✅ ... index source|<path>|` lines — these are absolute (`~/...`) so the reader sees the real location.
+Report success in this format, filling each slot from the script's output above:
 
-<example_success_message>
+<success_message_format>
 
 ```
 ## 🎉 Curation Success!
 
 🎯 What happened
-- Source URL: https://shiny.posit.co/py/docs/overview.html
-- [Created/Overwrote] document: `~/path/<file>.md`
-- [Added/Updated] index: `~/path/INDEX.xml`
+- Source URL: <canonical URL from the 🎉 line — not your raw input>
+- [Created/Overwrote] document: `<path, verbatim from the ✅ doc line>`
+- [Added/Updated] index: `<path, verbatim from the ✅ index line>`
 - Generated index description:
 
-"_[your generated description]_" = [actual word count] words ✓
+"_<description from Step 3>_" = <N> words ✓
 ```
 
-</example_success_message>
+</success_message_format>

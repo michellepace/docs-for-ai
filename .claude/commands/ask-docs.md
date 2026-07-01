@@ -32,7 +32,7 @@ The collection follows this pattern:
 ~/.claude/docs-for-ai/collections/{collection}/
 ├── INDEX.xml       # Index of all docs
 ├── README.md
-├── api-python.md   # Indexed doc
+├── curated-doc.md  # Indexed doc
 └── ...
 ```
 
@@ -46,7 +46,7 @@ The collection follows this pattern:
     <source_url>{URL}</source_url>
     <local_file>{file}</local_file>
   </source>
-  <!-- Multiple <source> entries, one per .md file -->
+  <!-- Multiple <source> entries, one per curated doc file -->
 </docs_index>
 ```
 

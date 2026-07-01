@@ -7,10 +7,11 @@ from itertools import batched
 from pathlib import Path
 
 from docs_for_ai.index_io import write_index
+from docs_for_ai.paths import normalise_collection_dir
 
 DESCRIP_MIN_WORDS = 20
 DESCRIP_MAX_WORDS = 30
-LINES_PER_ENTRY = 2  # filename line followed by its description line
+LINES_PER_ENTRY = 2  # filename line + description line
 
 type DescriptionsByFile = dict[str, str]
 
@@ -62,10 +63,9 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
 
 
 def _validate_collection_inputs(
-    directory: str, temp_descriptions_file: str
+    collection_dir: Path, temp_descriptions_file: str
 ) -> tuple[Path, Path]:
     """Resolve and validate the INDEX.xml and descriptions paths, or exit."""
-    collection_dir = Path(directory)
     index_path = collection_dir / "INDEX.xml"
     descriptions_path = Path(temp_descriptions_file)
 
@@ -134,7 +134,7 @@ def main() -> None:
         description="Update INDEX.xml descriptions from descriptions file"
     )
     parser.add_argument(
-        "directory", help="Collection directory (e.g. collections/shiny/)"
+        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
     )
     parser.add_argument(
         "temp_descriptions_file",
@@ -142,8 +142,9 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    collection_dir = normalise_collection_dir(args.collection_dir)
     index_path, descriptions_path = _validate_collection_inputs(
-        args.directory, args.temp_descriptions_file
+        collection_dir, args.temp_descriptions_file
     )
 
     descriptions = parse_descriptions_file(descriptions_path)

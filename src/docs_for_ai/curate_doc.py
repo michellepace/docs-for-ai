@@ -1,30 +1,23 @@
 """Curate one source URL into a collection directory.
 
-Saves the curated doc as a file and registers it in INDEX.xml. URLs ending in
-`.md` and GitHub blobs (`.md`/`.mdx`/`.qmd`, extension preserved) are fetched
-directly. All other URLs are scraped via FireCrawl.
+Saves the curated doc as a file and registers it in INDEX.xml. GitHub blobs and
+URLs under a direct-fetch registry prefix are fetched directly, as are raw
+`.md`/`.rst.txt` URLs; all other URLs are scraped via FireCrawl.
 """
 
 import argparse
-import re
 import sys
 import xml.etree.ElementTree as ET
 from datetime import date
-from pathlib import Path
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 from urllib.parse import urlparse
 
-from docs_for_ai import firecrawl_source, markdown_source
-from docs_for_ai.index_io import write_index
-from docs_for_ai.paths import format_path_for_display
+from docs_for_ai import direct_fetch, firecrawl_scrape
+from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
+from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
-# Written for every new source; a later LLM step fills it.
-PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
-
-
-def _normalise_directory_path(dir_path_str: str) -> Path:
-    """Normalise directory path by removing trailing slash."""
-    return Path(dir_path_str.rstrip("/"))
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _validate_url(url: str) -> None:
@@ -47,67 +40,53 @@ def _reject_uv_docs_url(url: str) -> None:
         sys.exit(1)
 
 
-def _validate_directory_for_collection(dir_path: Path, index_path: Path) -> None:
-    """Exit if directory exists, is non-empty, and lacks INDEX.xml.
-
-    Prevents overwriting unrelated files in a non-collection directory.
-    """
-    if dir_path.exists() and not index_path.exists() and any(dir_path.iterdir()):
+def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
+    if (
+        collection_dir.exists()
+        and not index_path.exists()
+        and any(collection_dir.iterdir())
+    ):
         print(
             f"❌ Error: INVALID_COLLECTION|"
             f"Directory non-empty and missing INDEX.xml. "
-            f"Rejected to prevent inadvertent file overwrites|{dir_path}|"
+            f"Rejected to prevent inadvertent file overwrites|{collection_dir}|"
         )
         sys.exit(1)
 
 
-def filename_from_canonical_url(url: str) -> str:
-    """Derive a `.md` filename from a non-GitHub doc URL path.
-
-    Expects the canonical URL from `resolve_md_route` (no query/fragment or
-    trailing `.md`); a `docs` segment and any prefix are dropped to avoid a
-    redundant `docs-` slug.
-    """
-    segments = [s for s in urlparse(url).path.strip("/").split("/") if s]
-    if "docs" in segments:
-        segments = segments[segments.index("docs") + 1 :]
-    slug = re.sub(r"[^a-z0-9]+", "-", "-".join(segments).lower()).strip("-")
-    return f"{slug or 'index'}.md"
-
-
-def _create_readme(dir_path: Path, source_url: str) -> None:
+def _create_readme(collection_dir: Path, source_url: str) -> None:
     """Create README.md for a new collection with overview and source link."""
     parsed_url = urlparse(source_url)
     source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
-    readme_content = f"""# {dir_path.name} Documentation
+    readme_content = f"""# {collection_dir.name} Documentation
 
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
 - Curation Source: <{source_site_url}>
 """
-    readme_path = dir_path / "README.md"
+    readme_path = collection_dir / "README.md"
     readme_path.write_text(readme_content)
     print(f"✅ Created curation readme|{format_path_for_display(readme_path)}|")
 
 
-def _create_empty_index(dir_path: Path) -> None:
+def _create_empty_index(collection_dir: Path) -> None:
     """Create empty INDEX.xml structure."""
     root = ET.Element("docs_index")
 
-    index_path = dir_path / "INDEX.xml"
+    index_path = collection_dir / "INDEX.xml"
     write_index(root, index_path)
     print(f"✅ Created curation index|{format_path_for_display(index_path)}|")
 
 
 def _add_or_update_source_in_index(
-    dir_path: Path, title: str, source_url: str, local_file: str
+    collection_dir: Path, title: str, source_url: str, local_file: str
 ) -> bool:
     """Add or replace the source for `source_url` in INDEX.xml.
 
     Returns `is_update` — True if an existing entry was replaced.
     """
-    index_path = dir_path / "INDEX.xml"
+    index_path = collection_dir / "INDEX.xml"
 
     root = ET.parse(index_path).getroot()
 
@@ -143,6 +122,22 @@ def _add_or_update_source_in_index(
     return is_update
 
 
+def _reject_filename_collision(
+    collection_dir: Path, filename: str, source_url: str
+) -> None:
+    """Exit if `filename` already belongs to a DIFFERENT source_url in INDEX.xml."""
+    root = ET.parse(collection_dir / "INDEX.xml").getroot()
+    for source in root.findall("source"):
+        existing_file = source.findtext("local_file")
+        existing_url = (source.findtext("source_url") or "").rstrip("/")
+        if existing_file == filename and existing_url != source_url:
+            print(
+                f"❌ Error: FILENAME_COLLISION|"
+                f"{filename} already curated from {existing_url}|{source_url}|"
+            )
+            sys.exit(1)
+
+
 class FetchedDoc(NamedTuple):
     """A fetched source document: body, title, filename, and canonical URL."""
 
@@ -152,57 +147,41 @@ class FetchedDoc(NamedTuple):
     source_url: str
 
 
-def fetch_document(source_url: str) -> FetchedDoc:
-    """Fetch a source document, returning a `FetchedDoc`.
-
-    GitHub is checked before the generic `.md` branch because a blob URL also
-    ends in `.md`, yet must be fetched from `raw` and keep its blob URL.
-    """
-    if markdown_source.is_github_url(source_url):
-        raw_url = markdown_source.github_blob_to_raw_url(source_url)
-        print(f"✅ Detected GitHub source|{source_url}|")
-        filename = markdown_source.github_filename_from_blob_url(source_url)
-        content = markdown_source.fetch_markdown(raw_url)
-        title = markdown_source.extract_title(content, raw_url)
-        return FetchedDoc(content, title, filename, source_url)
-
-    prefixes = markdown_source.load_markdown_allowlist()
-    route = markdown_source.resolve_md_route(source_url, prefixes)
-    filename = filename_from_canonical_url(route.canonical_url)
-    # fetch_url is set unless we route to FireCrawl; the None check also narrows it.
-    if route.use_firecrawl or route.fetch_url is None:
-        content, title = firecrawl_source.scrape(route.canonical_url)
+def fetch_document(route: direct_fetch.FetchRoute) -> FetchedDoc:
+    """Fetch a resolved route's document; `doc_format` None ⇒ FireCrawl scrape."""
+    if route.doc_format is None:
+        content, title = firecrawl_scrape.scrape(route.canonical_url)
     else:
-        content = markdown_source.fetch_markdown(route.fetch_url)
-        title = markdown_source.extract_title(content, route.fetch_url)
-    return FetchedDoc(content, title, filename, route.canonical_url)
+        content = direct_fetch.fetch_text(route.fetch_url)
+        title = direct_fetch.extract_title(content, route.doc_format, route.canonical_url)
+    return FetchedDoc(content, title, route.filename, route.canonical_url)
 
 
-def _write_document(dir_path: Path, doc: FetchedDoc) -> None:
-    """Write the fetched markdown to its file."""
-    file_path = dir_path / doc.filename
+def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
+    """Write the fetched document to its file."""
+    file_path = collection_dir / doc.filename
     file_existed = file_path.exists()
     file_path.write_text(doc.content)
     if file_existed:
-        print(f"✅ Overwrote existing document|{format_path_for_display(file_path)}|")
+        print(f"✅ Overwrote doc|{format_path_for_display(file_path)}|")
     else:
-        print(f"✅ Created new document|{format_path_for_display(file_path)}|")
+        print(f"✅ Created doc|{format_path_for_display(file_path)}|")
 
 
 def _parse_args() -> argparse.Namespace:
-    """Parse CLI arguments: target directory and source URL."""
+    """Parse CLI arguments: target collection directory and source URL."""
     parser = argparse.ArgumentParser(
         description="Add or update documentation in a collection directory"
     )
     parser.add_argument(
-        "directory",
-        help="Documentation directory (e.g. `collections/tailwind/`)",
+        "collection_dir",
+        help="Collection directory (e.g. collections/tailwind/)",
     )
     parser.add_argument(
         "source_url",
         help=(
-            "Web URL to curate (direct `.md` fetch, GitHub `.md`/`.mdx`/`.qmd` "
-            "blob, or FireCrawl scrape)"
+            "Web URL to curate (direct fetch for `.md`/GitHub blobs and "
+            "registered sites, else FireCrawl scrape)"
         ),
     )
     return parser.parse_args()
@@ -213,30 +192,36 @@ def main() -> None:
     args = _parse_args()
 
     source_url: str = args.source_url.rstrip("/")
-    dir_path = _normalise_directory_path(args.directory)
-    index_path = dir_path / "INDEX.xml"
+    collection_dir = normalise_collection_dir(args.collection_dir)
+    index_path = collection_dir / "INDEX.xml"
 
     _validate_url(source_url)
     _reject_uv_docs_url(source_url)
-    _validate_directory_for_collection(dir_path, index_path)
+    _validate_collection_dir(collection_dir, index_path)
 
-    print(f"✅ Starting to curate from|{source_url}|")
+    print(f"✅ Curating from|{source_url}|")
 
-    dir_path.mkdir(parents=True, exist_ok=True)
+    collection_dir.mkdir(parents=True, exist_ok=True)
+    index_exists = index_path.exists()
 
-    # Fetch first: failures leave no partial collection.
-    doc = fetch_document(source_url)
+    route = direct_fetch.resolve_route(source_url, direct_fetch.load_direct_fetch_rules())
 
-    if not index_path.exists():
-        _create_readme(dir_path, source_url)
-        _create_empty_index(dir_path)
+    # Reject a colliding filename before the (paid) fetch.
+    if index_exists:
+        _reject_filename_collision(collection_dir, route.filename, route.canonical_url)
 
-    _write_document(dir_path, doc)
+    doc = fetch_document(route)
+
+    if not index_exists:
+        _create_readme(collection_dir, source_url)
+        _create_empty_index(collection_dir)
+
+    _write_fetched_document(collection_dir, doc)
 
     # doc.source_url is canonical: query/fragment-free, no trailing `.md`
     # (blob form for GitHub). The raw input is kept only for the steps above.
     is_update = _add_or_update_source_in_index(
-        dir_path, doc.title, doc.source_url, doc.filename
+        collection_dir, doc.title, doc.source_url, doc.filename
     )
 
     verb = "overwrote and re-indexed" if is_update else "created and indexed new"

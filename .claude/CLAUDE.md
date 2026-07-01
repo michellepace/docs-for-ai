@@ -6,13 +6,13 @@ Curated documentation collections — fetched directly when possible, else scrap
 
 ```text
 collections/
-└── <collection>/       # eg. nextjs/, clerk/, uv/
-    ├── INDEX.xml       # Targeted doc retrieval
-    ├── README.md       # Directory overview
-    └── *.md            # Curated doc files
+└── <collection>/           # eg. nextjs/, clerk/, uv/
+    ├── INDEX.xml           # Targeted doc retrieval
+    ├── README.md
+    └── *.{md,rst,mdx,qmd}  # Curated doc files
 ```
 
-Consistent `INDEX.xml` schema (one `<source>` per curated `.md` file):
+Consistent `INDEX.xml` schema (one `<source>` per curated doc file):
 
 ```xml
 <docs_index>
@@ -20,7 +20,7 @@ Consistent `INDEX.xml` schema (one `<source>` per curated `.md` file):
     <title>[curated source document title]</title>
     <description>[short description for LLM routing]</description>
     <source_url>[document source url]</source_url>
-    <local_file>[curated .md filename]</local_file>
+    <local_file>[curated doc filename]</local_file>
     <curated_at>YYYY-MM-DD</curated_at>
   </source>
   <!-- ...repeated per curated doc... -->
@@ -32,22 +32,23 @@ User workflow (commands in `.claude/commands/`):
 - `/ask-docs <collection> <question>`: ask a question about a collection
 - `/recurate-docs <collection>`: re-curate all docs & regenerate descriptions
 
+## Test-Driven Development (TDD)
+
+Failing test first (red → green), shaping the interface as you go. No bulk writing.
+
+**Test the behaviour a caller depends on, not how the code produces it** — assert observable outputs and effects, so tests survive refactors and fail when real behaviour breaks.
+
+- One behaviour per test (be pragmatic not perfect)
+- Prefer pytest's `tmp_path` fixture over real files
+- Self-documenting test names over docstrings
+
 ## Code Design Principles
 
-TDD-driven — write the test first; let testability shape the design.
-- **Pure functions preferred** — no side effects in business logic
-- **Single responsibility** — one module, one purpose (one script, one job)
-- **Layer separation** — CLI entry point → core logic → I/O
-- **Self-documenting code** — clear naming throughout, minimal docstrings
-- **Fail loud at the I/O boundary** — print `❌ Error:` / `✅` progress; so Claude can key off them.
+Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding agent.
 
-## TDD Development
-
-Write a failing test (red) → code → pass (green).
-- Test behaviour; not implementation or Python itself
-- One test → one behaviour → minimal code → repeat. No bulk-writing tests.
-- Use pytest's `tmp_path` fixture instead of creating real files
-- Use self-documenting test names
+- **Names reveal intent** — functions, tests, variables, classes alike; coherent across the codebase.
+- **Focused functions and classes** — one responsibility each, kept small; compose, don't grow.
+- **Types and structure over prose** — encode meaning in signatures and data shapes; docstrings only where names can't reach.
 
 ## Common Commands
 
@@ -63,5 +64,5 @@ uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run pre-commit hooks manually
 
 # Run Non-Network Tests (see pyproject.toml)
-uv run pytest -m "not firecrawl and not github"
+uv run pytest -m "not firecrawl and not github and not readthedocs"
 ```

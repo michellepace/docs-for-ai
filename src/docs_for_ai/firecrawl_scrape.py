@@ -1,4 +1,4 @@
-"""FireCrawl scrape path, dispatched from `curate_doc.py`.
+"""FireCrawl scrape path, dispatched from curate-doc orchestrator.
 
 Failures use the `❌ Error: TYPE|detail|url|` print-and-exit convention.
 """

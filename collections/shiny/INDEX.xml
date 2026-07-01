@@ -248,7 +248,7 @@
     <title>Installation – Shiny for Python</title>
     <description>PLACEHOLDER</description>
     <source_url>https://shiny.posit.co/py/get-started/install.html</source_url>
-    <local_file>py-get-started-install-html.md</local_file>
+    <local_file>py-get-started-install.md</local_file>
     <curated_at>2026-05-27</curated_at>
   </source>
 </docs_index>

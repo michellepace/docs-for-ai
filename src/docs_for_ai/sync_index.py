@@ -8,11 +8,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import NamedTuple
 
-from docs_for_ai.index_io import write_index
-from docs_for_ai.paths import format_path_for_display
-
-# Placeholder description for an uncurated source.
-PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
+from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
+from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
 
 class CuratedSource(NamedTuple):
@@ -20,6 +17,10 @@ class CuratedSource(NamedTuple):
 
     local_file: str
     source_url: str
+
+
+# Collection files that must survive a sync.
+_NON_DOC_FILES = {"INDEX.xml", "README.md"}
 
 
 def prune_stale_index_sources(
@@ -55,12 +56,24 @@ def prune_stale_index_sources(
     return live_sources, removed_count
 
 
+def delete_orphan_files(collection_dir: Path, indexed_files: set[str]) -> list[str]:
+    """Delete on-disk docs with no matching INDEX.xml <local_file>."""
+    keep = indexed_files | _NON_DOC_FILES
+    deleted: list[str] = []
+    for path in sorted(collection_dir.iterdir()):
+        if not path.is_file() or path.name in keep or path.name.endswith(".backup"):
+            continue
+        path.unlink()
+        deleted.append(path.name)
+    return deleted
+
+
 def _curate_doc(collection_dir: Path, source_url: str) -> bool:
     """Run curate-doc for one source via subprocess; return True on success."""
     # Absolute path prevents PATH hijacking (ruff S607)
     uv_path = shutil.which("uv")
     if not uv_path:
-        print("Error: 'uv' executable not found in PATH", file=sys.stderr)
+        print("❌ Error: 'uv' executable not found in PATH", file=sys.stderr)
         return False
 
     result = subprocess.run(
@@ -228,19 +241,25 @@ def main() -> None:
         description="Sync INDEX.xml, re-curate all docs, output batch processing data"
     )
     parser.add_argument(
-        "directory", help="Collection directory (e.g. collections/shiny/)"
+        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
     )
     args = parser.parse_args()
 
-    collection_dir = Path(args.directory)
+    collection_dir = normalise_collection_dir(args.collection_dir)
     index_path = collection_dir / "INDEX.xml"
 
     if not collection_dir.exists() or not collection_dir.is_dir():
-        print(f"Error: Directory '{collection_dir}' does not exist", file=sys.stderr)
+        print(
+            f"❌ Error: Collection directory '{collection_dir}' does not exist",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if not index_path.exists():
-        print(f"Error: INDEX.xml not found in '{collection_dir}'", file=sys.stderr)
+        print(
+            f"❌ Error: Not a valid collection - {index_path} not found",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     backup_path = _validate_and_backup_index(index_path)
@@ -248,10 +267,13 @@ def main() -> None:
     sources_to_curate, removed_count = prune_stale_index_sources(
         index_path, collection_dir
     )
+    indexed_files = {source.local_file for source in sources_to_curate}
+    deleted_orphans = delete_orphan_files(collection_dir, indexed_files)
 
     print("\n## SYNC INDEX.xml (source of truth)")
     print(f"- Index sources ready to curate|{len(sources_to_curate)}")
     print(f"- Stale sources removed (missing file)|{removed_count}")
+    print(f"- Orphan files deleted (not in INDEX)|{len(deleted_orphans)}")
     sys.stdout.flush()
 
     print(f"\n## CURATING INDEX SOURCES ({len(sources_to_curate)} total)")
@@ -270,7 +292,6 @@ def main() -> None:
     _print_curation_summary(sources_to_curate, failed_urls)
     _print_git_content_changes(collection_dir)
 
-    indexed_files = {source.local_file for source in sources_to_curate}
     changed_files = get_changed_curated_files(collection_dir, indexed_files)
     restored_count = restore_unchanged_descriptions(
         index_path, backup_path, changed_files

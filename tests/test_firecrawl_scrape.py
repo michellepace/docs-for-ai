@@ -1,12 +1,8 @@
-"""Tests for firecrawl_source.py.
-
-Only the offline retry-parsing helper is unit-tested here; the network scrape
-path is covered end-to-end by the FireCrawl-marked tests in test_curate_doc.py.
-"""
+"""FireCrawl scrape path: the offline retry-parsing helper."""
 
 from firecrawl.v2.utils.error_handler import RateLimitError
 
-from docs_for_ai.firecrawl_source import parse_retry_seconds
+from docs_for_ai.firecrawl_scrape import parse_retry_seconds
 
 
 class TestParseRetrySeconds:

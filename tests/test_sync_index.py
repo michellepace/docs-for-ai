@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from docs_for_ai.index_io import write_index
+from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.sync_index import (
-    PLACEHOLDER_DESCRIPTION,
+    delete_orphan_files,
     format_descriptions_status,
     get_changed_curated_files,
     prune_stale_index_sources,
@@ -103,6 +103,19 @@ def test_prune_keeps_arbitrary_extension_when_file_exists(tmp_path: Path) -> Non
 
     assert removed_count == 0
     assert {source.local_file for source in live_sources} == {"doc.abc"}
+
+
+def test_delete_orphan_files_removes_unindexed_but_keeps_readme(tmp_path: Path) -> None:
+    (tmp_path / "doc-a.md").write_text("# Doc A")
+    (tmp_path / "orphan.md").write_text("# Orphan")
+    (tmp_path / "README.md").write_text("# Readme")
+
+    deleted = delete_orphan_files(tmp_path, {"doc-a.md"})
+
+    assert deleted == ["orphan.md"]
+    assert (tmp_path / "doc-a.md").exists()
+    assert (tmp_path / "README.md").exists()
+    assert not (tmp_path / "orphan.md").exists()
 
 
 def test_changed_files_ignores_whitespace_only_edit(tmp_path: Path) -> None:

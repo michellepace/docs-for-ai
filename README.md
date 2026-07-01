@@ -2,7 +2,7 @@
 
 Curate and index documentation from any website into collections like `tailwind/` or `horses/`, then `/ask-docs [collection] [your question]` for a grounded answer — cleaner than a web-fetch, more focussed than a web-search, and keeps AI context sharp.
 
-Each collection is curated from source docs — fetched directly where possible (`.md` URLs, GitHub blobs, or [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt)), and scraped via the FireCrawl Python SDK only as a last resort. Its `INDEX.xml` is a routing signal an LLM reader uses for targeted context retrieval.
+Each collection is curated from source docs — fetched directly where possible (`.md` URLs, GitHub blobs, or sites in the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml)), and scraped via FireCrawl as a last resort. Its `INDEX.xml` is a routing signal an LLM reader uses for targeted context retrieval.
 
 <div align="center">
   <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing curated documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
@@ -39,7 +39,7 @@ ln -s "$PWD" ~/.claude/docs-for-ai # anchor (run from repo root)
 ln -s ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 ```
 
-If a site serves a plain `.md` twin of each page (page URL + ".md"), add its URL prefix (e.g. `https://nextjs.org/docs/`) to [markdown-allowlist.txt](src/docs_for_ai/markdown-allowlist.txt) to fetch those pages directly instead of scraping — faster, cleaner, and free. GitHub URLs and `.md` URLs are always fetched directly.
+To direct-fetch a site instead of scraping it — faster, cleaner, free — add its URL prefix to the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml): `append-md` for `.md` twins (page + `.md`, e.g. `https://nextjs.org/docs/`) or `readthedocs` for Sphinx sites. GitHub and `.md` URLs are always direct.
 
 ## 📖 Usage
 
@@ -90,11 +90,11 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 ## 🏗️ How This Repo Works
 
-**Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes a `.md` file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
+**Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes the curated doc file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
 
 The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
-**Source routing:** Direct `.md` URLs and GitHub blobs (`.md`/`.mdx`/`.qmd`) are fetched as-is; FireCrawl scrapes everything else as a fallback.
+**Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 
 **Curated Collection:**
 
@@ -103,7 +103,7 @@ collections/
 └── <collection>/       # eg. biome/, clerk/, uv/
     ├── INDEX.xml       # Routing index for targeted retrieval
     ├── README.md
-    └── *.md            # Curated doc files
+    └── *.{md,rst,mdx,qmd}  # Curated doc files
 ```
 
 **INDEX.xml Schema:**
@@ -114,10 +114,10 @@ collections/
     <title>[curated source document title]</title>
     <description>[20-30 word routing signal an LLM reader uses to pick this file]</description>
     <source_url>[document source url]</source_url>
-    <local_file>[curated .md filename]</local_file>
+    <local_file>[curated doc filename]</local_file>
     <curated_at>YYYY-MM-DD</curated_at>
   </source>
-  <!-- One <source> entry per curated .md file -->
+  <!-- One <source> entry per curated doc file -->
 </docs_index>
 ```
 
@@ -133,8 +133,8 @@ Regenerate "Descriptions":
 Sort out `scripts/`
 - delete things
 
-Markdown allowlist
-- new collection → get Claude to check for .md twin
+direct-fetch-rules.toml
+- new collection → get Claude to check for a direct-fetch twin (`.md` or RST source)
 - has to read the page, 404 doesn't always work
 - test on https://www.mintlify.com/docs/quickstart
-- rich blows my paradigm https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
+- ✅ Read the Docs sites (e.g. rich) now fetch RST source via the `readthedocs` transform

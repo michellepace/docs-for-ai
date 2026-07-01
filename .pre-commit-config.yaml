@@ -73,14 +73,14 @@ repos:
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: pytest-commit           # offline unit tests on commit
-        name: pytest (offline unit tests)
-        entry: uv run pytest -q -m "not firecrawl and not github"
+      - id: pytest-commit
+        name: pytest (free tests)
+        entry: uv run pytest -q -m "not firecrawl"
         language: system
         types_or: [python, pyproject]
         pass_filenames: false
 
-      - id: pytest-push             # full suite (incl. firecrawl) on push
+      - id: pytest-push
         name: pytest (full suite, incl. firecrawl)
         entry: uv run pytest -q
         language: system

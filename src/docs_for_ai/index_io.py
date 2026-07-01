@@ -1,10 +1,13 @@
-"""Shared INDEX.xml writing for the curation scripts."""
+"""Shared INDEX.xml I/O and schema constants for the curation scripts."""
 
 import xml.etree.ElementTree as ET
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+# Default <description> for a new/uncurated source
+PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
 
 
 def write_index(root: ET.Element, index_path: Path) -> None:

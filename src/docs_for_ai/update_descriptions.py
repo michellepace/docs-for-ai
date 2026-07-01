@@ -3,52 +3,59 @@
 import argparse
 import sys
 import xml.etree.ElementTree as ET
+from itertools import batched
 from pathlib import Path
 
 from docs_for_ai.index_io import write_index
+from docs_for_ai.paths import normalise_collection_dir
+
+DESCRIP_MIN_WORDS = 20
+DESCRIP_MAX_WORDS = 30
+LINES_PER_ENTRY = 2  # filename line + description line
+
+type DescriptionsByFile = dict[str, str]
 
 
-def parse_descriptions_file(descriptions_path: Path) -> dict[str, str]:
-    """Parse descriptions file into filename -> description mapping.
-
-    Expected format:
-    getting-started-installation.md
-    Description text for this file
-    configuration-typescript.md
-    Description text for this file
-
-    Args:
-        descriptions_path: Path to descriptions file
-
-    Returns:
-        Dictionary mapping local_file to description text
-    """
-    descriptions: dict[str, str] = {}
-    lines = descriptions_path.read_text().strip().split("\n")
-
-    i = 0
-    while i < len(lines):
-        # Skip empty lines
-        if not lines[i].strip():
-            i += 1
-            continue
-
-        # Line should be a URL
-        url = lines[i].strip()
-        i += 1
-
-        # Skip any empty lines before description
-        while i < len(lines) and not lines[i].strip():
-            i += 1
-
-        # Next non-empty line should be the description
-        if i < len(lines):
-            description = lines[i].strip()
-            descriptions[url] = description
-            i += 1
+def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
+    """Ensure description is within [min, max] band."""
+    failed = False
+    for local_file, description in descriptions.items():
+        count = len(description.split())
+        if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
+            print(f"✅ '{local_file}' description is {count} words")
         else:
             print(
-                f"Warning: filename '{url}' has no description, skipping",
+                f"❌ Error: '{local_file}' description is {count} words "
+                f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})",
+                file=sys.stderr,
+            )
+            failed = True
+    if failed:
+        sys.exit(1)
+
+
+def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
+    """Parse a descriptions file of alternating local_file / description lines.
+
+    file1.md
+    Description text file 1
+    file2.md
+    Description text file 2
+    """
+    non_blank_lines = [
+        line.strip()
+        for line in descriptions_path.read_text().splitlines()
+        if line.strip()
+    ]
+
+    descriptions: DescriptionsByFile = {}
+    for entry in batched(non_blank_lines, LINES_PER_ENTRY, strict=False):
+        if len(entry) == LINES_PER_ENTRY:
+            local_file, description = entry
+            descriptions[local_file] = description
+        else:
+            print(
+                f"Warning: filename '{entry[0]}' has no description, skipping",
                 file=sys.stderr,
             )
 
@@ -56,32 +63,22 @@ def parse_descriptions_file(descriptions_path: Path) -> dict[str, str]:
 
 
 def _validate_collection_inputs(
-    directory: str, descriptions_file: str
+    collection_dir: Path, temp_descriptions_file: str
 ) -> tuple[Path, Path]:
-    """Validate collection (INDEX.xml exists) and descriptions file exist.
-
-    Args:
-        directory: Collection directory path from arguments
-        descriptions_file: Descriptions file path from arguments
-
-    Returns:
-        Tuple of (index_path, descriptions_path) for downstream use
-
-    Exits with error message if any validation fails.
-    """
-    collection_dir = Path(directory)
+    """Resolve and validate the INDEX.xml and descriptions paths, or exit."""
     index_path = collection_dir / "INDEX.xml"
-    descriptions_path = Path(descriptions_file)
+    descriptions_path = Path(temp_descriptions_file)
 
-    # Validate this is a collection (has INDEX.xml)
     if not index_path.exists():
-        print(f"Error: Not a valid collection - {index_path} not found", file=sys.stderr)
+        print(
+            f"❌ Error: Not a valid collection - {index_path} not found",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
-    # Validate descriptions file exists
     if not descriptions_path.exists():
         print(
-            f"Error: Descriptions file '{descriptions_path}' does not exist",
+            f"❌ Error: Descriptions file '{descriptions_path}' does not exist",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -89,25 +86,17 @@ def _validate_collection_inputs(
     return index_path, descriptions_path
 
 
-def _cleanup_temp_file(file_path: Path) -> None:
-    """Delete temporary file with error handling."""
+def _cleanup_temp_file(descriptions_path: Path) -> None:
+    """Delete the temporary descriptions file, warning if it can't be removed."""
     try:
-        file_path.unlink()
-        print(f"🗑️  Cleaned up temporary file: {file_path}")
-    except OSError as e:
-        print(f"Warning: Could not delete {file_path}: {e}", file=sys.stderr)
+        descriptions_path.unlink()
+        print(f"🗑️  Cleaned up temporary file: {descriptions_path}")
+    except OSError as exc:
+        print(f"Warning: Could not delete {descriptions_path}: {exc}", file=sys.stderr)
 
 
-def update_descriptions(index_path: Path, descriptions: dict[str, str]) -> int:
-    """Update descriptions in INDEX.xml, write file, return count.
-
-    Args:
-        index_path: Path to INDEX.xml file
-        descriptions: Dictionary mapping local_file to new description
-
-    Returns:
-        Number of descriptions updated
-    """
+def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> int:
+    """Apply matching descriptions to INDEX.xml, write if changed, return update count."""
     root = ET.parse(index_path).getroot()
 
     updated_count = 0
@@ -116,22 +105,20 @@ def update_descriptions(index_path: Path, descriptions: dict[str, str]) -> int:
         file_elem = source.find("local_file")
         desc_elem = source.find("description")
 
-        if (
-            file_elem is not None
-            and file_elem.text in descriptions
-            and desc_elem is not None
-        ):
-            old_desc = desc_elem.text
-            new_desc = descriptions[file_elem.text]
+        if file_elem is None or desc_elem is None:
+            continue
+        if file_elem.text not in descriptions:
+            continue
 
-            if old_desc != new_desc:
-                desc_elem.text = new_desc
-                updated_count += 1
-                print(f"✅ Updated: {file_elem.text}")
-            else:
-                print(f"ℹ️  Unchanged: {file_elem.text}")  # noqa: RUF001
+        new_desc = descriptions[file_elem.text]
+        if desc_elem.text == new_desc:
+            print(f"ℹ️  Unchanged: {file_elem.text}")  # noqa: RUF001
+            continue
 
-    # Write back to INDEX.xml
+        desc_elem.text = new_desc
+        updated_count += 1
+        print(f"✅ Updated: {file_elem.text}")
+
     if updated_count > 0:
         write_index(root, index_path)
         print(f"\n🎉 Updated {updated_count} description(s) in {index_path}")
@@ -147,33 +134,35 @@ def main() -> None:
         description="Update INDEX.xml descriptions from descriptions file"
     )
     parser.add_argument(
-        "directory", help="Collection directory (e.g. collections/shiny/)"
+        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
     )
     parser.add_argument(
-        "descriptions_file", help="Path to descriptions file (e.g. descriptions.txt)"
+        "temp_descriptions_file",
+        help="Temporary descriptions file (deleted after a successful update)",
     )
     args = parser.parse_args()
 
-    # Validate collection and inputs
+    collection_dir = normalise_collection_dir(args.collection_dir)
     index_path, descriptions_path = _validate_collection_inputs(
-        args.directory, args.descriptions_file
+        collection_dir, args.temp_descriptions_file
     )
 
-    # Parse descriptions file
     descriptions = parse_descriptions_file(descriptions_path)
 
     if not descriptions:
-        print("Error: No descriptions found in file", file=sys.stderr)
+        print("❌ Error: No descriptions found in file", file=sys.stderr)
         sys.exit(1)
+
+    # Reject before touching INDEX.xml if out of the word-count band
+    _validate_word_counts(descriptions)
 
     print(f"📋 Parsed {len(descriptions)} description(s) from {descriptions_path}")
     print()
 
-    # Update INDEX.xml
-    update_descriptions(index_path, descriptions)
+    updated_count = update_descriptions(index_path, descriptions)
 
-    # Cleanup temporary file
-    _cleanup_temp_file(descriptions_path)
+    if updated_count > 0:
+        _cleanup_temp_file(descriptions_path)
 
 
 if __name__ == "__main__":

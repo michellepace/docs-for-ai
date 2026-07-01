@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 import pytest
 
 from docs_for_ai import curate_doc
-from docs_for_ai.curate_doc import filename_from_canonical_url
 from docs_for_ai.paths import format_path_for_display
 
 if TYPE_CHECKING:
@@ -43,41 +42,6 @@ URL_GH_RAW_QMD = (
 )
 
 
-class TestFilenameFromUrl:
-    """Offline unit tests for non-GitHub URL-path filename derivation."""
-
-    @pytest.mark.parametrize(
-        ("url", "expected"),
-        [
-            ("https://clerk.com/docs/guides/users/inviting", "guides-users-inviting.md"),
-            ("https://vercel.com/docs/monorepos", "monorepos.md"),
-            ("https://biomejs.dev/guides/configure-biome/", "guides-configure-biome.md"),
-            ("https://docs.convex.dev/auth/convex-auth", "auth-convex-auth.md"),
-        ],
-    )
-    def test_derives_expected_name(self, url: str, expected: str) -> None:
-        """Path drives the name; a `docs` segment (and its prefix) is dropped."""
-        assert filename_from_canonical_url(url) == expected
-
-    @pytest.mark.parametrize(
-        ("url", "expected"),
-        [
-            ("https://site.com/Getting_Started", "getting-started.md"),
-            ("https://site.com/guide.html", "guide-html.md"),
-            ("https://site.com/docs/v2.0/api", "v2-0-api.md"),
-            ("https://site.com/docs/guide?v=2#frag", "guide.md"),
-            ("https://example.com", "index.md"),
-        ],
-    )
-    def test_sanitises_messy_url_paths(self, url: str, expected: str) -> None:
-        """Uppercase, underscores, dots, query/fragment slugify; empty path → index.md."""
-        assert filename_from_canonical_url(url) == expected
-
-    def test_bare_docs_root_falls_back_to_index(self) -> None:
-        """Trailing `docs/` is a dropped segment, so it yields index.md, not docs.md."""
-        assert filename_from_canonical_url("https://example.com/docs/") == "index.md"
-
-
 def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
     """Run curate_doc.py script via uv and return (exit_code, output)."""
     cmd = ["uv", "run", "curate-doc"]
@@ -105,7 +69,7 @@ def _index_source_fields(output: str, verb: str) -> dict[str, str]:
 class TestInputValidation:
     """Fast tests for argument, URL, and directory-state validation (no API calls)."""
 
-    def test_requires_both_directory_and_url_arguments(self) -> None:
+    def test_requires_both_collection_dir_and_url_arguments(self) -> None:
         """Argparse exits with usage code (2) when required args are missing."""
         exit_code, output = run_script()
         assert exit_code == 2
@@ -151,7 +115,7 @@ class TestInputValidation:
 
         assert exit_code != 0
         assert "❌ Error: GITHUB_BLOB|" in output
-        assert "✅ Fetched markdown|" not in output
+        assert "✅ Fetched content|" not in output
         assert not (new_dir / "INDEX.xml").exists()
         assert not (new_dir / "README.md").exists()
 
@@ -174,13 +138,13 @@ class TestMarkdownDirectPath:
         def _fake_fetch(_url: str) -> str:
             return "# Hello\n\nbody\n"
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
 
         def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
             msg = "FireCrawl must not be called for a .md URL"
             raise AssertionError(msg)
 
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
 
         collection = tmp_path / "coll"
         url = "https://example.com/docs/hello/there/hi.md"
@@ -207,23 +171,23 @@ class TestCanonicalCollapse:
     def test_no_suffix_then_md_suffix_yields_one_source(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Allowlisted `…/storage` then `…/storage.md` updates, not duplicates."""
+        """Registry-matched `…/storage` then `…/storage.md` updates, not duplicates."""
         monkeypatch.setattr(
-            curate_doc.markdown_source,
-            "load_markdown_allowlist",
-            lambda: ["https://allowed.test/docs/"],
+            curate_doc.direct_fetch,
+            "load_direct_fetch_rules",
+            lambda: {"append-md": ["https://allowed.test/docs/"]},
         )
 
         def _fake_fetch(_url: str) -> str:
             return "# Storage\n\nbody\n"
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
 
         def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
-            msg = "FireCrawl must not be called for an allowlisted/.md URL"
+            msg = "FireCrawl must not be called for a registry-matched/.md URL"
             raise AssertionError(msg)
 
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
 
         collection = tmp_path / "coll"
         for url in (
@@ -239,6 +203,82 @@ class TestCanonicalCollapse:
         assert (
             "<source_url>https://allowed.test/docs/storage.md</source_url>" not in index
         )
+
+    def test_readthedocs_html_then_source_twin_yields_one_source(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """`.html` page then its `_sources` twin yield one file and one source."""
+        monkeypatch.setattr(
+            curate_doc.direct_fetch,
+            "load_direct_fetch_rules",
+            lambda: {"readthedocs": ["https://allowed.test/"]},
+        )
+
+        def _fake_fetch(_url: str) -> str:
+            return "Panel\n=====\n\nbody\n"
+
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for a readthedocs URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
+
+        collection = tmp_path / "coll"
+        for url in (
+            "https://allowed.test/panel.html",
+            "https://allowed.test/_sources/panel.rst.txt",
+        ):
+            monkeypatch.setattr("sys.argv", ["curate_doc.py", str(collection), url])
+            curate_doc.main()
+
+        index = (collection / "INDEX.xml").read_text()
+        assert index.count("<source>") == 1
+        assert "<local_file>panel.rst</local_file>" in index
+        assert "<source_url>https://allowed.test/panel.html</source_url>" in index
+        assert [p.name for p in collection.glob("*.rst")] == ["panel.rst"]
+
+
+class TestFilenameCollisionGuard:
+    """Two DIFFERENT canonical URLs that slugify to one filename fail loud."""
+
+    def test_colliding_filename_different_url_fails_without_clobber(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        """A 2nd URL colliding on `local_file` exits FILENAME_COLLISION, no clobber."""
+        monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
+        monkeypatch.setattr(
+            curate_doc.firecrawl_scrape,
+            "scrape",
+            lambda _url, _max_attempts=2: ("# Second\n", "Second"),
+        )
+
+        # Pre-seed: foo-bar.md already curated from a DIFFERENT canonical URL.
+        collection = tmp_path / "coll"
+        collection.mkdir()
+        (collection / "foo-bar.md").write_text("# First\n")
+        (collection / "INDEX.xml").write_text(
+            "<docs_index><source>"
+            "<local_file>foo-bar.md</local_file>"
+            "<source_url>https://x.test/foo/bar</source_url>"
+            "</source></docs_index>"
+        )
+
+        monkeypatch.setattr(
+            "sys.argv", ["curate_doc.py", str(collection), "https://x.test/foo-bar"]
+        )
+        with pytest.raises(SystemExit) as excinfo:
+            curate_doc.main()
+
+        assert excinfo.value.code == 1
+        assert "❌ Error: FILENAME_COLLISION|" in capsys.readouterr().out
+        # No partial state: the file keeps the first doc, index still one <source>.
+        assert (collection / "foo-bar.md").read_text() == "# First\n"
+        assert (collection / "INDEX.xml").read_text().count("<source>") == 1
 
 
 class TestFetchDocumentRouting:
@@ -260,12 +300,13 @@ class TestFetchDocumentRouting:
             msg = "FireCrawl must not be called for a GitHub blob URL"
             raise AssertionError(msg)
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
 
-        doc = curate_doc.fetch_document(URL_GH_BLOB)
+        route = curate_doc.direct_fetch.resolve_route(URL_GH_BLOB, {})
+        doc = curate_doc.fetch_document(route)
 
-        # GitHub is matched before `.md`, fetched from raw, named from the blob path.
+        # GitHub is matched first, fetched from raw, named from the blob path.
         assert fetched_urls == [URL_GH_RAW]
         assert doc.filename == "getting-started-first-steps.md"
         assert "✅ Detected GitHub source|" in capsys.readouterr().out
@@ -296,9 +337,10 @@ class TestFetchDocumentRouting:
             fetched_urls.append(url)
             return "# stub\n\nbody\n"
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
 
-        doc = curate_doc.fetch_document(blob_url)
+        route = curate_doc.direct_fetch.resolve_route(blob_url, {})
+        doc = curate_doc.fetch_document(route)
 
         assert fetched_urls == [raw_url]
         assert doc.filename == filename
@@ -318,26 +360,23 @@ class TestFetchDocumentRouting:
             scraped_urls.append(url)
             return "stub body", "stub title"
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _no_fetch)
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _fake_scrape)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _no_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _fake_scrape)
 
         url = "https://example.com/docs/some/page"
-        doc = curate_doc.fetch_document(url)
+        route = curate_doc.direct_fetch.resolve_route(url, {})
+        doc = curate_doc.fetch_document(route)
 
         # The else-branch reached FireCrawl with the source URL; direct fetch raised.
         assert scraped_urls == [url]
-        # A non-allowlisted URL is stored verbatim as its own canonical.
+        # A URL with no matching registry rule is stored verbatim as its own canonical.
         assert doc.source_url == url
 
-    def test_allowlisted_no_suffix_fetches_md_twin(
+    def test_registry_no_suffix_fetches_md_twin(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """An allowlisted suffixless URL fetches `url + '.md'` and never FireCrawls."""
-        monkeypatch.setattr(
-            curate_doc.markdown_source,
-            "load_markdown_allowlist",
-            lambda: ["https://allowed.test/docs/"],
-        )
+        """A registry-matched suffixless URL fetches `url + '.md'`, never FireCrawls."""
+        rules = {"append-md": ["https://allowed.test/docs/"]}
         fetched_urls: list[str] = []
 
         def _fake_fetch(url: str) -> str:
@@ -345,28 +384,51 @@ class TestFetchDocumentRouting:
             return "# stub\n\nbody\n"
 
         def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
-            msg = "FireCrawl must not be called for an allowlisted URL"
+            msg = "FireCrawl must not be called for a registry-matched URL"
             raise AssertionError(msg)
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _fake_fetch)
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _no_scrape)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
 
         url = "https://allowed.test/docs/storage"
-        doc = curate_doc.fetch_document(url)
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
 
         # The free `.md` twin is fetched; canonical drops the appended suffix.
         assert fetched_urls == [f"{url}.md"]
         assert doc.source_url == url
 
-    def test_allowlisted_suffixed_url_routes_to_firecrawl(
+    def test_append_md_twin_reverse_maps_to_page(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """An allowlisted but suffixed (.html) URL still FireCrawls; stored as given."""
-        monkeypatch.setattr(
-            curate_doc.markdown_source,
-            "load_markdown_allowlist",
-            lambda: ["https://allowed.test/docs/"],
-        )
+        rules = {"append-md": ["https://allowed.test/docs/"]}
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "# stub\n\nbody\n"
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for a registry-matched URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
+
+        url = "https://allowed.test/docs/storage.md"
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
+
+        # Fetched as-is, but canonical drops `.md`, so it converges with the page.
+        assert fetched_urls == [url]
+        assert doc.source_url == "https://allowed.test/docs/storage"
+        assert doc.filename == "storage.md"
+
+    def test_registry_suffixed_url_routes_to_firecrawl(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A registry-matched but suffixed (.html) URL FireCrawls; stored as given."""
+        rules = {"append-md": ["https://allowed.test/docs/"]}
         scraped_urls: list[str] = []
 
         def _no_fetch(_url: str) -> str:
@@ -377,14 +439,101 @@ class TestFetchDocumentRouting:
             scraped_urls.append(url)
             return "stub body", "stub title"
 
-        monkeypatch.setattr(curate_doc.markdown_source, "fetch_markdown", _no_fetch)
-        monkeypatch.setattr(curate_doc.firecrawl_source, "scrape", _fake_scrape)
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _no_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _fake_scrape)
 
         url = "https://allowed.test/docs/page.html"
-        doc = curate_doc.fetch_document(url)
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
 
         assert scraped_urls == [url]
         assert doc.source_url == url
+
+    def test_readthedocs_routes_to_rst_twin(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A registered readthedocs `.html` URL fetches its `_sources/*.rst.txt` twin."""
+        rules = {"readthedocs": ["https://allowed.test/"]}
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "Panel\n=====\n\nbody\n"
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for a readthedocs URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
+
+        url = "https://allowed.test/panel.html"
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
+
+        # The RST source twin is fetched; the page `.html` URL stays canonical.
+        assert fetched_urls == ["https://allowed.test/_sources/panel.rst.txt"]
+        assert doc.filename == "panel.rst"
+        assert doc.source_url == url
+        # The title comes from the RST heading, not the URL stem.
+        assert doc.title == "Panel"
+
+    def test_readthedocs_source_twin_reverse_maps_to_page(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A registered `_sources/*.rst.txt` URL maps back to its `.html` page."""
+        rules = {"readthedocs": ["https://allowed.test/"]}
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "Panel\n=====\n\nbody\n"
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for a readthedocs URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
+
+        url = "https://allowed.test/_sources/panel.rst.txt"
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
+
+        # Fetched as-is, but canonical + filename map to the `.html` page, so this
+        # converges with the `.html` spelling onto one file and one index entry.
+        assert fetched_urls == [url]
+        assert doc.filename == "panel.rst"
+        assert doc.source_url == "https://allowed.test/panel.html"
+        assert doc.title == "Panel"
+
+    def test_raw_rst_txt_routes_to_direct_fetch(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """An off-registry `.rst.txt` URL is fetched directly (not scraped)."""
+        rules: dict[str, list[str]] = {}
+        fetched_urls: list[str] = []
+
+        def _fake_fetch(url: str) -> str:
+            fetched_urls.append(url)
+            return "Panel\n=====\n\nbody\n"
+
+        def _no_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+            msg = "FireCrawl must not be called for a .rst.txt URL"
+            raise AssertionError(msg)
+
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _no_scrape)
+
+        url = "https://example.com/guide.rst.txt"
+        route = curate_doc.direct_fetch.resolve_route(url, rules)
+        doc = curate_doc.fetch_document(route)
+
+        # Fetched as-is; named `.rst`; titled from the RST heading; stored verbatim.
+        assert fetched_urls == [url]
+        assert doc.filename == "guide.rst"
+        assert doc.source_url == url
+        assert doc.title == "Panel"
 
 
 @pytest.mark.firecrawl
@@ -503,7 +652,7 @@ class TestGithubSourcePath:
 
         assert exit_code == 0
         assert "✅ Detected GitHub source|" in output
-        assert "✅ Fetched markdown|" in output
+        assert "✅ Fetched content|" in output
         assert "🎉 Curation Success!|" in output
 
         doc = new_dir / "getting-started-first-steps.md"

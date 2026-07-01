@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from docs_for_ai.paths import format_path_for_display
+from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
 if TYPE_CHECKING:
     import pytest
@@ -36,3 +36,15 @@ class TestFormatPathForDisplay:
         result = format_path_for_display(target)
         assert result == str(target.resolve())
         assert "~" not in result
+
+
+class TestNormaliseCollectionDir:
+    """A CLI collection-dir arg becomes a Path; a trailing slash is tolerated."""
+
+    def test_trailing_slash_matches_bare_form(self) -> None:
+        """`collections/x/` and `collections/x` resolve to the same Path."""
+        assert normalise_collection_dir("collections/x/") == Path("collections/x")
+
+    def test_bare_root_stays_root_not_cwd(self) -> None:
+        """A bare `/` stays filesystem root, not the current directory."""
+        assert normalise_collection_dir("/") == Path("/")

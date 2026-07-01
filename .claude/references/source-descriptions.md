@@ -7,8 +7,8 @@ You write only the `<description>` field — `<title>`, `<source_url>`, and `<lo
 Each description is a **routing signal for an LLM reader** — Claude reads `INDEX.xml` to pick which files answer a question, not a vector index matching keywords. Optimise for that, then follow the quality rules (`<quality_rules>`) and reference examples (`<reference_examples>`).
 
 <quality_rules>
-- Length 20-30 words; every word earns its place — terse and direct
 - No colon intros like 'Here's the X:' — give me X directly (see `<good>`)
+- Length 20-30 words; every word earns its place — terse and direct. Don't glue terms like `sync`/`uv.lock` to fake one word
 - Apply DRY:
   - complement the title; surface high-value terms it lacks (e.g. "anti-patterns", "best-practices")
   - assume every sibling shares the collection's topic — don't spend words on it

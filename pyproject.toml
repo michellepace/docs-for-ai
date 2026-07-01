@@ -33,6 +33,7 @@ dev = [
 markers = [
   "firecrawl: hits FireCrawl API (paid, network)",
   "github: hits raw.githubusercontent.com (free, network)",
+  "readthedocs: hits rich.readthedocs.io (free, network)",
 ]
 
 

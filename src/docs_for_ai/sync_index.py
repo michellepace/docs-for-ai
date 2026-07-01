@@ -6,109 +6,92 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import NamedTuple
 
-from docs_for_ai.index_io import write_index
-from docs_for_ai.paths import format_path_for_display
-
-
-def get_markdown_files(collection_dir: Path) -> set[str]:
-    """Return set of .md filenames (excluding README.md)."""
-    return {file.name for file in collection_dir.glob("*.md") if file.name != "README.md"}
+from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
+from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
 
-def sync_index_to_filesystem(
-    index_path: Path, md_files: set[str]
-) -> tuple[list[tuple[str, str]], list[str], int]:
-    """Remove invalid sources from INDEX.xml, write cleaned file, return results.
+class CuratedSource(NamedTuple):
+    """A curated doc: its local filename paired with its source URL."""
 
-    Args:
-        index_path: Path to INDEX.xml file
-        md_files: Set of existing .md filenames
+    local_file: str
+    source_url: str
 
-    Returns:
-        Tuple of (valid_pairs, orphans, removed_count) where:
-        - valid_pairs: List of (local_file, source_url) tuples
-        - orphans: List of .md filenames not in INDEX.xml
-        - removed_count: Number of invalid sources removed
-    """
-    root = ET.parse(index_path).getroot()
 
-    valid_pairs: list[tuple[str, str]] = []
-    indexed_files: set[str] = set()
+# Collection files that must survive a sync.
+_NON_DOC_FILES = {"INDEX.xml", "README.md"}
+
+
+def prune_stale_index_sources(
+    index_path: Path, collection_dir: Path
+) -> tuple[list[CuratedSource], int]:
+    """Remove malformed, blank, or missing-file sources, rewriting INDEX.xml."""
+    index_root = ET.parse(index_path).getroot()
+
+    live_sources: list[CuratedSource] = []
     removed_count = 0
 
-    # Process each source entry
-    for source in list(root.findall("source")):
+    for source in list(index_root.findall("source")):
         local_file_elem = source.find("local_file")
         source_url_elem = source.find("source_url")
 
         if local_file_elem is None or source_url_elem is None:
-            root.remove(source)
+            index_root.remove(source)
             removed_count += 1
             continue
 
         local_file = (local_file_elem.text or "").strip()
         source_url = (source_url_elem.text or "").strip()
 
-        # Remove if text is blank, or the markdown file doesn't exist
-        if not local_file or not source_url or local_file not in md_files:
-            root.remove(source)
+        if not local_file or not source_url or not (collection_dir / local_file).exists():
+            index_root.remove(source)
             removed_count += 1
         else:
-            # Valid entry
-            valid_pairs.append((local_file, source_url))
-            indexed_files.add(local_file)
+            live_sources.append(CuratedSource(local_file, source_url))
 
-    # Find orphan markdown files (exist but not in INDEX)
-    orphans = sorted(md_files - indexed_files)
-
-    # Write cleaned INDEX.xml back
     if removed_count > 0:
-        write_index(root, index_path)
+        write_index(index_root, index_path)
 
-    return valid_pairs, orphans, removed_count
+    return live_sources, removed_count
+
+
+def delete_orphan_files(collection_dir: Path, indexed_files: set[str]) -> list[str]:
+    """Delete on-disk docs with no matching INDEX.xml <local_file>."""
+    keep = indexed_files | _NON_DOC_FILES
+    deleted: list[str] = []
+    for path in sorted(collection_dir.iterdir()):
+        if not path.is_file() or path.name in keep or path.name.endswith(".backup"):
+            continue
+        path.unlink()
+        deleted.append(path.name)
+    return deleted
 
 
 def _curate_doc(collection_dir: Path, source_url: str) -> bool:
-    """Curate single doc using curate_doc.py via subprocess.
-
-    Args:
-        collection_dir: Collection directory path
-        source_url: URL to curate
-
-    Returns:
-        True if successful, False if failed
-    """
-    # Find uv executable with absolute path to prevent PATH hijacking (S607)
+    """Run curate-doc for one source via subprocess; return True on success."""
+    # Absolute path prevents PATH hijacking (ruff S607)
     uv_path = shutil.which("uv")
     if not uv_path:
-        print("Error: 'uv' executable not found in PATH", file=sys.stderr)
+        print("❌ Error: 'uv' executable not found in PATH", file=sys.stderr)
         return False
 
-    # S603: Subprocess call is safe - calling our own trusted script with validated args
     result = subprocess.run(
         [uv_path, "run", "curate-doc", str(collection_dir), source_url],
         check=False,
-        capture_output=False,  # Let output stream through
+        capture_output=False,  # let curate output stream through
         text=True,
     )
     return result.returncode == 0
 
 
 def _print_git_content_changes(collection_dir: Path) -> None:
-    """Print git diff stats for the collection directory.
-
-    Args:
-        collection_dir: Path to collection directory
-    """
+    """Print git diff --stat for the collection, wrapped in report tags."""
     git_path = shutil.which("git")
     if not git_path:
         print("⚠️  Git not found - skipping change detection")
         return
 
-    # S603: Subprocess call is safe - calling git with validated directory path
-    # - collection_dir validated in main() to be existing directory
-    # - Using list (not shell=True) prevents command injection
     result = subprocess.run(
         [git_path, "diff", "--stat", "-w", "."],
         check=False,
@@ -127,27 +110,21 @@ def _print_git_content_changes(collection_dir: Path) -> None:
 
 
 def _print_curation_summary(
-    valid_pairs: list[tuple[str, str]],
+    curated_sources: list[CuratedSource],
     failed_urls: list[str],
-    orphans: list[str],
 ) -> None:
-    """Print curation summary."""
     print("\n### Curation Summary")
-    print(f"- Successful|{len(valid_pairs) - len(failed_urls)}")
+    print(f"- Successful|{len(curated_sources) - len(failed_urls)}")
     print(f"- Failed|{len(failed_urls)}")
 
-    if orphans:
-        print(f"- Orphaned files|{len(orphans)} (ignored - not in INDEX.xml)")
-
-    # Show failed URLs for debugging
     if failed_urls:
         print("\n### Failed URLs")
         for url in failed_urls:
             print(f"- {url}")
 
 
-def _backup_index_xml(index_path: Path) -> Path:
-    """Validate XML structure and create backup file."""
+def _validate_and_backup_index(index_path: Path) -> Path:
+    """Validate XML structure (exit on parse error), then create a backup file."""
     try:
         ET.parse(index_path)
     except ET.ParseError as e:
@@ -159,18 +136,12 @@ def _backup_index_xml(index_path: Path) -> Path:
     return backup_path
 
 
-def get_changed_markdown_files(collection_dir: Path) -> set[str]:
-    """Get set of changed .md filenames with non-whitespace changes.
-
-    Uses git diff --numstat -w which only shows files with actual content changes,
-    ignoring whitespace-only changes.
-    """
+def get_changed_curated_files(collection_dir: Path, indexed_files: set[str]) -> set[str]:
+    """Return INDEX filenames with non-whitespace content changes (git diff -w)."""
     git_path = shutil.which("git")
     if not git_path:
         return set()
 
-    # Use --numstat with -w: only returns files with non-whitespace changes
-    # Output format: "additions deletions filename"
     result = subprocess.run(
         [git_path, "diff", "--numstat", "-w", "--", "."],
         capture_output=True,
@@ -179,7 +150,7 @@ def get_changed_markdown_files(collection_dir: Path) -> set[str]:
         cwd=collection_dir,
     )
 
-    # numstat format has 3 tab-separated fields: additions, deletions, filepath
+    # numstat is tab-separated: "additions  deletions  filepath"
     numstat_field_count = 3
 
     changed_files: set[str] = set()
@@ -187,13 +158,12 @@ def get_changed_markdown_files(collection_dir: Path) -> set[str]:
         if not line:
             continue
 
-        parts = line.split("\t")
-        if len(parts) < numstat_field_count:
+        numstat_fields = line.split("\t")
+        if len(numstat_fields) < numstat_field_count:
             continue
 
-        filepath = parts[2]
-        if filepath.endswith(".md") and not filepath.endswith("README.md"):
-            filename = Path(filepath).name
+        filename = Path(numstat_fields[2]).name
+        if filename in indexed_files:
             changed_files.add(filename)
 
     return changed_files
@@ -205,7 +175,7 @@ def restore_unchanged_descriptions(
     """Restore descriptions for unchanged files from backup."""
     backup_tree = ET.parse(backup_path)
     backup_root = backup_tree.getroot()
-    backup_descriptions = {}
+    backup_descriptions: dict[str | None, str | None] = {}
 
     for source in backup_root.findall("source"):
         local_file_elem = source.find("local_file")
@@ -214,10 +184,10 @@ def restore_unchanged_descriptions(
         if local_file_elem is not None and desc_elem is not None:
             backup_descriptions[local_file_elem.text] = desc_elem.text
 
-    root = ET.parse(index_path).getroot()
+    current_root = ET.parse(index_path).getroot()
     restored_count = 0
 
-    for source in root.findall("source"):
+    for source in current_root.findall("source"):
         local_file_elem = source.find("local_file")
         desc_elem = source.find("description")
 
@@ -229,13 +199,13 @@ def restore_unchanged_descriptions(
         if (
             local_file not in changed_files
             and local_file in backup_descriptions
-            and backup_descriptions[local_file] != "PLACEHOLDER"
+            and backup_descriptions[local_file] != PLACEHOLDER_DESCRIPTION
         ):
             desc_elem.text = backup_descriptions[local_file]
             restored_count += 1
 
     if restored_count > 0:
-        write_index(root, index_path)
+        write_index(current_root, index_path)
 
     return restored_count
 
@@ -246,8 +216,9 @@ def format_descriptions_status(
     """Build the `## Index Descriptions Status` report, listing files as `~/...` paths."""
     lines = [
         "\n## Index Descriptions Status",
-        f"- ✅ Restored (.md whitespace-only changes)|{restored_count} files",
-        f"- ⚠️ PLACEHOLDER in INDEX.xml (needs description)|{len(changed_files)} files",
+        f"- ✅ Restored (whitespace-only changes)|{restored_count} files",
+        f"- ⚠️ {PLACEHOLDER_DESCRIPTION} in INDEX.xml (needs description)"
+        f"|{len(changed_files)} files",
     ]
     lines.extend(
         f"  - {format_path_for_display(collection_dir / filename)}"
@@ -270,65 +241,64 @@ def main() -> None:
         description="Sync INDEX.xml, re-curate all docs, output batch processing data"
     )
     parser.add_argument(
-        "directory", help="Collection directory (e.g. collections/shiny/)"
+        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
     )
     args = parser.parse_args()
 
-    collection_dir = Path(args.directory)
+    collection_dir = normalise_collection_dir(args.collection_dir)
     index_path = collection_dir / "INDEX.xml"
 
-    # Validate directory and INDEX.xml exist
     if not collection_dir.exists() or not collection_dir.is_dir():
-        print(f"Error: Directory '{collection_dir}' does not exist", file=sys.stderr)
+        print(
+            f"❌ Error: Collection directory '{collection_dir}' does not exist",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if not index_path.exists():
-        print(f"Error: INDEX.xml not found in '{collection_dir}'", file=sys.stderr)
+        print(
+            f"❌ Error: Not a valid collection - {index_path} not found",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
-    # Backup INDEX.xml (validates XML structure)
-    backup_path = _backup_index_xml(index_path)
+    backup_path = _validate_and_backup_index(index_path)
 
-    # Step 1: Sync INDEX.xml
-    md_files = get_markdown_files(collection_dir)
-    valid_pairs, orphans, removed_count = sync_index_to_filesystem(index_path, md_files)
+    sources_to_curate, removed_count = prune_stale_index_sources(
+        index_path, collection_dir
+    )
+    indexed_files = {source.local_file for source in sources_to_curate}
+    deleted_orphans = delete_orphan_files(collection_dir, indexed_files)
 
     print("\n## SYNC INDEX.xml (source of truth)")
-    print(f"- Index sources ready to curate|{len(valid_pairs)}")
-    print(f"- Stale sources removed (missing .md)|{removed_count}")
-    print(f"- Orphaned .md files (not in INDEX)|{len(orphans)}")
+    print(f"- Index sources ready to curate|{len(sources_to_curate)}")
+    print(f"- Stale sources removed (missing file)|{removed_count}")
+    print(f"- Orphan files deleted (not in INDEX)|{len(deleted_orphans)}")
     sys.stdout.flush()
 
-    # Step 2: Curate all docs
-    print(f"\n## CURATING INDEX SOURCES ({len(valid_pairs)} total)")
+    print(f"\n## CURATING INDEX SOURCES ({len(sources_to_curate)} total)")
     sys.stdout.flush()
     failed_urls: list[str] = []
 
-    for idx, (local_file, source_url) in enumerate(valid_pairs, 1):
-        print(f"### 🔄 Doc {idx} of {len(valid_pairs)}: {local_file}")
+    for position, source in enumerate(sources_to_curate, 1):
+        print(f"### 🔄 Doc {position} of {len(sources_to_curate)}: {source.local_file}")
         sys.stdout.flush()
-        success = _curate_doc(collection_dir, source_url)
+        success = _curate_doc(collection_dir, source.source_url)
 
         if not success:
-            failed_urls.append(source_url)
+            failed_urls.append(source.source_url)
         sys.stdout.flush()
 
-    # Step 3: Output curation results
-    _print_curation_summary(valid_pairs, failed_urls, orphans)
-
-    # Step 4: Show git changes summary
+    _print_curation_summary(sources_to_curate, failed_urls)
     _print_git_content_changes(collection_dir)
 
-    # Restore unchanged descriptions
-    changed_files = get_changed_markdown_files(collection_dir)
+    changed_files = get_changed_curated_files(collection_dir, indexed_files)
     restored_count = restore_unchanged_descriptions(
         index_path, backup_path, changed_files
     )
 
-    # Show descriptions status
     print(format_descriptions_status(collection_dir, restored_count, changed_files))
 
-    # Cleanup backup file
     _cleanup_backup(backup_path)
 
 

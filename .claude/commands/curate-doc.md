@@ -1,7 +1,7 @@
 ---
 description: Curate a source URL into a collection
 disable-model-invocation: true
-argument-hint: <collection> <source_url>
+argument-hint: <collection> <url>
 arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
@@ -80,50 +80,44 @@ Analyse `$collection` and `$source_url` against the existing collections and dec
 
 ## Step 2. Run the script
 
-```bash
+```shell
 uv run --directory ~/.claude/docs-for-ai curate-doc "collections/$collection" "$source_url"
 ```
 
-## Step 3. On script error
+Errors print actionable info. Propose fixes but await user approval; proceed ONLY on `🎉 Curation Success!`.
 
-Script errors print actionable information. If recovery is possible, propose specific fixes but wait for explicit user approval. Proceed ONLY when script outputs `🎉 Curation Success!` - don't waste effort if the script failed.
+## Step 3. Generate the description
 
-## Step 4. Write the description
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then:
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its quality rules and reference examples. Then:
+1. Analyse the curated doc and draft a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+    ```text
+    overview-shiny-for-python.md
+    Description for doc on single line
+    ```
+2. Apply it:
+    ```shell
+    uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
+    ```
 
-1. Analyse the curated markdown file
-2. Draft a description
-3. Count words - rewrite until [20, 30]: `printf '%s' "<draft>" | wc -w`
-4. Write it to `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+Word count is enforced; on error, rewrite the description and rerun until it passes.
 
-      ```text
-      overview-shiny-for-python.md
-      Description for this file here
-      ```
+## Step 4. Report success
 
-5. Apply it:
+Report success in this format, filling each slot from the script's output above:
 
-   ```bash
-   uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
-   ```
-
-## Step 5. Report success
-
-Output the final success message following the `<example_success_message>` format. Use the URL from the script's final `🎉 Curation Success!|...|<URL>|` line (this is the canonical form stored in `INDEX.xml`). For the document and index paths, use them **exactly as the script printed them** in its `✅ Created/Overwrote ... document|<path>|` and `✅ ... index source|<path>|` lines — these are absolute (`~/...`) so the reader sees the real location.
-
-<example_success_message>
+<success_message_format>
 
 ```
 ## 🎉 Curation Success!
 
 🎯 What happened
-- Source URL: https://shiny.posit.co/py/docs/overview.html
-- [Created/Overwrote] document: `~/path/<file>.md`
-- [Added/Updated] index: `~/path/INDEX.xml`
+- Source URL: <canonical URL from the 🎉 line — not your raw input>
+- [Created/Overwrote] document: `<path, verbatim from the ✅ doc line>`
+- [Added/Updated] index: `<path, verbatim from the ✅ index line>`
 - Generated index description:
 
-"_[your generated description]_" = [actual word count] words ✓
+"_<description from Step 3>_" = <N> words ✓
 ```
 
-</example_success_message>
+</success_message_format>

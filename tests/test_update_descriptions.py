@@ -77,6 +77,23 @@ def test_one_out_of_band_entry_blocks_the_whole_batch(
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
+def test_temp_file_is_kept_when_no_descriptions_are_applied(
+    index_and_descriptions: tuple[Path, Path],
+) -> None:
+    index_path, descriptions_file = index_and_descriptions
+
+    # In-band words, but the local_file matches nothing in INDEX.xml
+    descriptions_file.write_text(
+        f"doc-missing.md\n{' '.join(['word'] * 25)}\n", encoding="utf-8"
+    )
+
+    main()
+
+    # Nothing was applied, so the generated descriptions must not be discarded
+    assert descriptions_file.exists()
+    assert "old description" in index_path.read_text(encoding="utf-8")
+
+
 def test_replaces_description_for_matching_file(tmp_path: Path) -> None:
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text(INDEX_XML, encoding="utf-8")

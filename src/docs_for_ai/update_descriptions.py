@@ -159,9 +159,10 @@ def main() -> None:
     print(f"📋 Parsed {len(descriptions)} description(s) from {descriptions_path}")
     print()
 
-    update_descriptions(index_path, descriptions)
+    updated_count = update_descriptions(index_path, descriptions)
 
-    _cleanup_temp_file(descriptions_path)
+    if updated_count > 0:
+        _cleanup_temp_file(descriptions_path)
 
 
 if __name__ == "__main__":

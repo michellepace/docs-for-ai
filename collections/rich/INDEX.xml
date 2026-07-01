@@ -1,7 +1,7 @@
 <docs_index>
   <source>
     <title>Panel</title>
-    <description>PLACEHOLDER</description>
+    <description>Draw bordered boxes around any renderable using constructor `box` styles, `title` and `subtitle` captions, plus `expand=False` or the `Panel.fit()` classmethod to shrink the frame to its content width.</description>
     <source_url>https://rich.readthedocs.io/en/stable/panel.html</source_url>
     <local_file>panel.rst</local_file>
     <curated_at>2026-07-01</curated_at>

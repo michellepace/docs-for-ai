@@ -13,5 +13,5 @@ def format_path_for_display(path: Path) -> str:
 
 
 def normalise_collection_dir(raw: str) -> Path:
-    """Collection dir from a CLI arg, tolerating a trailing slash."""
-    return Path(raw.rstrip("/"))
+    """Collection dir from a CLI arg; `Path` already tolerates a trailing slash."""
+    return Path(raw)

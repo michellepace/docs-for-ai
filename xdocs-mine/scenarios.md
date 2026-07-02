@@ -2,6 +2,7 @@
 title: Scenarios — Aspirational "TO Be" - simply
 note: rough notes, mine
 updated: 2026-07-01
+---
 
 Desired scenarios for simplifying.
 

@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 import pytest
 
 from docs_for_ai import curate_doc
-from docs_for_ai.paths import format_path_for_display
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -58,14 +57,6 @@ def run_script(*args: str, cwd: Path | None = None) -> tuple[int, str]:
     return result.returncode, result.stdout + result.stderr
 
 
-def _index_source_fields(output: str, verb: str) -> dict[str, str]:
-    """Parse key=value fields from the '✅ {verb} index source|...' line."""
-    line = next(
-        ln for ln in output.splitlines() if ln.startswith(f"✅ {verb} index source|")
-    )
-    return dict(part.split("=", 1) for part in line.split("|") if "=" in part)
-
-
 class TestInputValidation:
     """Fast tests for argument, URL, and directory-state validation (no API calls)."""
 
@@ -76,11 +67,12 @@ class TestInputValidation:
         assert "required" in output
 
     def test_fails_when_url_is_invalid(self, tmp_path: Path) -> None:
-        """Script rejects malformed URLs with INVALID_URL error."""
+        """A malformed URL is rejected non-zero, naming the offending URL."""
         exit_code, output = run_script(str(tmp_path), "horse-donkey-cow")
 
         assert exit_code != 0
-        assert "❌ Error: INVALID_URL|horse-donkey-cow" in output
+        assert "Invalid URL" in output
+        assert "horse-donkey-cow" in output
 
     def test_fails_when_source_url_is_uv_docs_site(self, tmp_path: Path) -> None:
         """A uv hosted-docs URL is rejected, pointing to the GitHub blob source."""
@@ -89,11 +81,11 @@ class TestInputValidation:
         )
 
         assert exit_code != 0
-        assert "❌ Error: USE_GITHUB_BLOB|" in output
+        assert "Unsupported uv URL" in output
         assert "collections/uv/INDEX.xml" in output
 
     def test_nonempty_noncollection_directory_fails(self, tmp_path: Path) -> None:
-        """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
+        """A non-empty directory without INDEX.xml is refused, naming the directory."""
         invalid_dir = tmp_path / "not_a_collection"
 
         invalid_dir.mkdir()
@@ -102,20 +94,17 @@ class TestInputValidation:
         exit_code, output = run_script(str(invalid_dir), URL_FIRECRAWL)
 
         assert exit_code != 0
-        assert (
-            "❌ Error: INVALID_COLLECTION|"
-            "Directory non-empty and missing INDEX.xml. "
-            "Rejected to prevent inadvertent file overwrites|"
-        ) in output
+        assert "Unsafe collection dir" in output
+        assert str(invalid_dir) in output
 
     def test_github_url_rejected_before_any_fetch(self, tmp_path: Path) -> None:
-        """A non-blob GitHub URL exits GITHUB_BLOB before any fetch, writing no files."""
+        """A non-blob GitHub URL is refused before any fetch, writing no files."""
         new_dir = tmp_path / "uv"
         exit_code, output = run_script(str(new_dir), URL_GH_RAW)
 
         assert exit_code != 0
-        assert "❌ Error: GITHUB_BLOB|" in output
-        assert "✅ Fetched content|" not in output
+        assert "Not a GitHub blob URL" in output
+        assert "✅ Fetched:" not in output
         assert not (new_dir / "INDEX.xml").exists()
         assert not (new_dir / "README.md").exists()
 
@@ -162,7 +151,7 @@ class TestMarkdownDirectPath:
         assert "<local_file>hello-there-hi.md</local_file>" in index
         assert "<title>Hello</title>" in index
 
-        assert "🎉 Curation Success!|" in capsys.readouterr().out
+        assert "🏁 Success! curated doc" in capsys.readouterr().out
 
 
 class TestCanonicalCollapse:
@@ -240,6 +229,72 @@ class TestCanonicalCollapse:
         assert [p.name for p in collection.glob("*.rst")] == ["panel.rst"]
 
 
+def _forbid_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+    """Stand in for `firecrawl_scrape.scrape` to prove the network is never touched."""
+    msg = "FireCrawl must not be called for a .md URL"
+    raise AssertionError(msg)
+
+
+def test_new_directory_is_initialised_as_a_collection_once(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A new collection is scaffolded once; re-curating never re-scaffolds it."""
+
+    def _fake_fetch(_url: str) -> str:
+        return "# Doc\n\nbody\n"
+
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _fake_fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
+
+    collection = tmp_path / "zustand"
+    first_url = "https://z.test/a.md"
+    second_url = "https://z.test/b.md"
+
+    monkeypatch.setattr("sys.argv", ["curate_doc.py", str(collection), first_url])
+    curate_doc.main()
+
+    readme = collection / "README.md"
+    assert readme.exists()
+    assert (collection / "INDEX.xml").exists()
+    assert (collection / "a.md").exists()
+
+    # A user edit to the README survives re-curation, proving the collection is
+    # not re-scaffolded when a second doc is added.
+    readme.write_text("EDITED")
+
+    monkeypatch.setattr("sys.argv", ["curate_doc.py", str(collection), second_url])
+    curate_doc.main()
+
+    assert readme.read_text() == "EDITED"
+    assert (collection / "b.md").exists()
+
+
+def test_recurating_a_url_updates_the_existing_source(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Re-curating a URL (or its slash twin) updates the source, never duplicating."""
+    monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
+    monkeypatch.setattr(
+        curate_doc.firecrawl_scrape,
+        "scrape",
+        lambda _url, _max_attempts=2: ("# Body\n\ntext\n", "Updating State"),
+    )
+
+    collection = tmp_path / "zustand"
+    url = "https://example.com/docs/updating-state"
+
+    for source_url in (url, url, f"{url}/"):
+        monkeypatch.setattr("sys.argv", ["curate_doc.py", str(collection), source_url])
+        curate_doc.main()
+
+    index = (collection / "INDEX.xml").read_text()
+    assert index.count("<source>") == 1
+    assert f"<source_url>{url}</source_url>" in index
+    assert "<title>Updating State</title>" in index
+
+
 class TestFilenameCollisionGuard:
     """Two DIFFERENT canonical URLs that slugify to one filename fail loud."""
 
@@ -249,7 +304,7 @@ class TestFilenameCollisionGuard:
         monkeypatch: pytest.MonkeyPatch,
         capsys: pytest.CaptureFixture[str],
     ) -> None:
-        """A 2nd URL colliding on `local_file` exits FILENAME_COLLISION, no clobber."""
+        """A 2nd URL colliding on `local_file` fails loud, leaving the first intact."""
         monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
         monkeypatch.setattr(
             curate_doc.firecrawl_scrape,
@@ -275,7 +330,9 @@ class TestFilenameCollisionGuard:
             curate_doc.main()
 
         assert excinfo.value.code == 1
-        assert "❌ Error: FILENAME_COLLISION|" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "Filename collision" in out
+        assert "foo-bar.md" in out
         # No partial state: the file keeps the first doc, index still one <source>.
         assert (collection / "foo-bar.md").read_text() == "# First\n"
         assert (collection / "INDEX.xml").read_text().count("<source>") == 1
@@ -287,7 +344,6 @@ class TestFetchDocumentRouting:
     def test_github_blob_routes_to_raw_fetch(
         self,
         monkeypatch: pytest.MonkeyPatch,
-        capsys: pytest.CaptureFixture[str],
     ) -> None:
         """A GitHub blob `.md` URL fetches from raw and never reaches FireCrawl."""
         fetched_urls: list[str] = []
@@ -309,7 +365,6 @@ class TestFetchDocumentRouting:
         # GitHub is matched first, fetched from raw, named from the blob path.
         assert fetched_urls == [URL_GH_RAW]
         assert doc.filename == "getting-started-first-steps.md"
-        assert "✅ Detected GitHub source|" in capsys.readouterr().out
 
     @pytest.mark.parametrize(
         ("blob_url", "raw_url", "filename"),
@@ -536,111 +591,6 @@ class TestFetchDocumentRouting:
         assert doc.title == "Panel"
 
 
-@pytest.mark.firecrawl
-class TestDirectoryScenarios:
-    """Integration tests for different directory states (requires API)."""
-
-    def test_nonexistent_directory_creates_new_collection(self, tmp_path: Path) -> None:
-        """Nonexistent target path is created (not just initialised in place)."""
-        new_dir = tmp_path / "new_collection"
-
-        exit_code, output = run_script(str(new_dir), URL_FIRECRAWL)
-
-        assert exit_code == 0
-
-        readme_path = new_dir / "README.md"
-        index_path = new_dir / "INDEX.xml"
-
-        assert (
-            f"✅ Created curation readme|{format_path_for_display(readme_path)}|"
-            in output
-        )
-        assert (
-            f"✅ Created curation index|{format_path_for_display(index_path)}|" in output
-        )
-        assert readme_path.exists()
-        assert index_path.exists()
-
-        # Filename is deterministic from the URL path.
-        doc = new_dir / "learn-guides-updating-state.md"
-        assert doc.exists()
-        assert doc.name in output
-
-        assert "✅ Added index source|" in output
-        assert "🎉 Curation Success!|" in output
-
-    def test_existing_collection_adds_document_without_creating_readme(
-        self, tmp_path: Path
-    ) -> None:
-        """README is written once at collection creation, not per added document."""
-        existing_dir = tmp_path / "existing_collection"
-
-        existing_dir.mkdir()
-        index_path = existing_dir / "INDEX.xml"
-        index_path.write_text("<docs_index>\n</docs_index>\n")
-        (existing_dir / "existing_file.md").write_text("# Existing content")
-
-        exit_code, output = run_script(str(existing_dir), URL_FIRECRAWL)
-
-        assert exit_code == 0
-
-        # Filename is deterministic from the URL path.
-        assert (existing_dir / "learn-guides-updating-state.md").exists()
-
-        assert "✅ Added index source|" in output
-        assert "🎉 Curation Success!|" in output
-
-        readme_path = existing_dir / "README.md"
-        assert not readme_path.exists()
-        readme_created_count = output.count("README.md")
-        assert readme_created_count == 0
-
-    def test_curating_same_url_twice_updates_existing_source(
-        self, tmp_path: Path
-    ) -> None:
-        """Re-curating a URL (or its trailing-slash variant) updates, not duplicates."""
-        collection_dir = tmp_path / "test_collection"
-
-        exit_code1, output1 = run_script(str(collection_dir), URL_FIRECRAWL)
-        assert exit_code1 == 0
-        assert "✅ Added index source|" in output1
-        fields1 = _index_source_fields(output1, "Added")
-        assert fields1["local_file"] == "learn-guides-updating-state.md"
-        assert fields1["description"] == "PLACEHOLDER"
-        assert fields1["title"]
-        assert "💡 Source description pending|" in output1
-        assert "🎉 Curation Success!|created and indexed new document|" in output1
-
-        # Re-curating the SAME URL must UPDATE, not error.
-        exit_code2, output2 = run_script(str(collection_dir), URL_FIRECRAWL)
-        assert exit_code2 == 0
-        assert "✅ Updated index source|" in output2
-        fields2 = _index_source_fields(output2, "Updated")
-        assert fields2["local_file"] == "learn-guides-updating-state.md"
-        assert fields2["description"] == "PLACEHOLDER"
-        assert fields2["title"]
-        assert "💡 Source description pending|" in output2
-        assert "🎉 Curation Success!|overwrote and re-indexed document|" in output2
-
-        index_path = collection_dir / "INDEX.xml"
-        index_content = index_path.read_text()
-        source_count = index_content.count("<source>")
-        assert source_count == 1, f"Expected 1 source, found {source_count}"
-
-        # Trailing-slash variant must hit the same UPDATE path.
-        url_variant = URL_FIRECRAWL + "/"
-        exit_code3, output3 = run_script(str(collection_dir), url_variant)
-        assert exit_code3 == 0
-        assert "✅ Updated index source|" in output3
-
-        # Still one source: the slash variant normalised to the same URL.
-        index_content = index_path.read_text()
-        source_count = index_content.count("<source>")
-        assert source_count == 1, (
-            f"Expected 1 source after slash variant, found {source_count}"
-        )
-
-
 class TestGithubSourcePath:
     """Real-network end-to-end tests for the GitHub blob path (curate + 404)."""
 
@@ -651,9 +601,7 @@ class TestGithubSourcePath:
         exit_code, output = run_script(str(new_dir), URL_GH_BLOB)
 
         assert exit_code == 0
-        assert "✅ Detected GitHub source|" in output
-        assert "✅ Fetched content|" in output
-        assert "🎉 Curation Success!|" in output
+        assert "🏁 Success! curated doc" in output
 
         doc = new_dir / "getting-started-first-steps.md"
         assert doc.exists()
@@ -669,12 +617,12 @@ class TestGithubSourcePath:
 
     @pytest.mark.github
     def test_404_fails_without_mutation(self, tmp_path: Path) -> None:
-        """404 blob URL exits non-zero with FETCH_NOT_FOUND and leaves no files."""
+        """A 404 blob URL exits non-zero identifying the 404, and leaves no files."""
         new_dir = tmp_path / "uv"
         exit_code, output = run_script(str(new_dir), URL_GH_BLOB_404)
 
         assert exit_code != 0
-        assert "❌ Error: FETCH_NOT_FOUND|" in output
+        assert "404 not found" in output
         md_files = list(new_dir.glob("*.md")) if new_dir.exists() else []
         assert md_files == []
         assert not (new_dir / "INDEX.xml").exists()

@@ -22,12 +22,11 @@ def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
     for local_file, description in descriptions.items():
         count = len(description.split())
         if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
-            print(f"✅ '{local_file}' description is {count} words")
+            print(f"✅ {local_file}: {count} words")
         else:
             print(
-                f"❌ Error: '{local_file}' description is {count} words "
-                f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})",
-                file=sys.stderr,
+                f"❌ {local_file}: {count} words "
+                f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})"
             )
             failed = True
     if failed:
@@ -54,10 +53,7 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
             local_file, description = entry
             descriptions[local_file] = description
         else:
-            print(
-                f"Warning: filename '{entry[0]}' has no description, skipping",
-                file=sys.stderr,
-            )
+            print(f"⚠️ No description for {entry[0]}: skipping")
 
     return descriptions
 
@@ -70,17 +66,11 @@ def _validate_collection_inputs(
     descriptions_path = Path(temp_descriptions_file)
 
     if not index_path.exists():
-        print(
-            f"❌ Error: Not a valid collection - {index_path} not found",
-            file=sys.stderr,
-        )
+        print(f"❌ Not a collection: {index_path} not found")
         sys.exit(1)
 
     if not descriptions_path.exists():
-        print(
-            f"❌ Error: Descriptions file '{descriptions_path}' does not exist",
-            file=sys.stderr,
-        )
+        print(f"❌ Descriptions file not found: {descriptions_path}")
         sys.exit(1)
 
     return index_path, descriptions_path
@@ -90,9 +80,9 @@ def _cleanup_temp_file(descriptions_path: Path) -> None:
     """Delete the temporary descriptions file, warning if it can't be removed."""
     try:
         descriptions_path.unlink()
-        print(f"🗑️  Cleaned up temporary file: {descriptions_path}")
+        print(f"🗑️ Cleaned up: {descriptions_path}")
     except OSError as exc:
-        print(f"Warning: Could not delete {descriptions_path}: {exc}", file=sys.stderr)
+        print(f"⚠️ Could not delete {descriptions_path}: {exc}")
 
 
 def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> int:
@@ -112,7 +102,7 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 
         new_desc = descriptions[file_elem.text]
         if desc_elem.text == new_desc:
-            print(f"ℹ️  Unchanged: {file_elem.text}")  # noqa: RUF001
+            print(f"ℹ️ Unchanged: {file_elem.text}")  # noqa: RUF001
             continue
 
         desc_elem.text = new_desc
@@ -121,9 +111,9 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 
     if updated_count > 0:
         write_index(root, index_path)
-        print(f"\n🎉 Updated {updated_count} description(s) in {index_path}")
+        print(f"\n🏁 Updated {updated_count} description(s) in {index_path}")
     else:
-        print(f"\nℹ️  No descriptions needed updating in {index_path}")  # noqa: RUF001
+        print(f"\nℹ️ No updates needed: {index_path}")  # noqa: RUF001
 
     return updated_count
 
@@ -150,13 +140,13 @@ def main() -> None:
     descriptions = parse_descriptions_file(descriptions_path)
 
     if not descriptions:
-        print("❌ Error: No descriptions found in file", file=sys.stderr)
+        print(f"❌ No descriptions found: {descriptions_path}")
         sys.exit(1)
 
     # Reject before touching INDEX.xml if out of the word-count band
     _validate_word_counts(descriptions)
 
-    print(f"📋 Parsed {len(descriptions)} description(s) from {descriptions_path}")
+    print(f"✅ Parsed: {len(descriptions)} description(s)")
     print()
 
     updated_count = update_descriptions(index_path, descriptions)

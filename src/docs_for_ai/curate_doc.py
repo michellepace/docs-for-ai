@@ -24,7 +24,7 @@ def _validate_url(url: str) -> None:
     """Validate URL has scheme and netloc, exit if invalid."""
     parsed = urlparse(url)
     if not parsed.scheme or not parsed.netloc:
-        print(f"❌ Error: INVALID_URL|{url}|")
+        print(f"❌ Invalid URL: {url}")
         sys.exit(1)
 
 
@@ -32,10 +32,8 @@ def _reject_uv_docs_url(url: str) -> None:
     """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
     if url.startswith("https://docs.astral.sh/uv/"):
         print(
-            "❌ Error: USE_GITHUB_BLOB|"
-            "Use the GitHub blob URL for this source; "
-            "see collections/uv/INDEX.xml for the canonical mapping|"
-            f"{url}|"
+            "❌ Unsupported uv URL: use the GitHub blob "
+            f"(see collections/uv/INDEX.xml) — {url}"
         )
         sys.exit(1)
 
@@ -47,36 +45,25 @@ def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
         and any(collection_dir.iterdir())
     ):
         print(
-            f"❌ Error: INVALID_COLLECTION|"
-            f"Directory non-empty and missing INDEX.xml. "
-            f"Rejected to prevent inadvertent file overwrites|{collection_dir}|"
+            f"❌ Unsafe collection dir: non-empty and missing INDEX.xml "
+            f"— {collection_dir}"
         )
         sys.exit(1)
 
 
-def _create_readme(collection_dir: Path, source_url: str) -> None:
-    """Create README.md for a new collection with overview and source link."""
-    parsed_url = urlparse(source_url)
-    source_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
-    readme_content = f"""# {collection_dir.name} Documentation
+def _initialise_collection(collection_dir: Path, source_url: str) -> None:
+    """Scaffold a new collection."""
+    site = urlparse(source_url)
+    readme = f"""# {collection_dir.name} Documentation
 
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: <{source_site_url}>
+- Curation Source: <{site.scheme}://{site.netloc}>
 """
-    readme_path = collection_dir / "README.md"
-    readme_path.write_text(readme_content)
-    print(f"✅ Created curation readme|{format_path_for_display(readme_path)}|")
-
-
-def _create_empty_index(collection_dir: Path) -> None:
-    """Create empty INDEX.xml structure."""
-    root = ET.Element("docs_index")
-
-    index_path = collection_dir / "INDEX.xml"
-    write_index(root, index_path)
-    print(f"✅ Created curation index|{format_path_for_display(index_path)}|")
+    (collection_dir / "README.md").write_text(readme)
+    write_index(ET.Element("docs_index"), collection_dir / "INDEX.xml")
+    print(f"✅ Collection: {collection_dir.name} (initialised)")
 
 
 def _add_or_update_source_in_index(
@@ -103,21 +90,26 @@ def _add_or_update_source_in_index(
             is_update = True
             break
 
+    curated_at = date.today().isoformat()
+
     source = ET.SubElement(root, "source")
     ET.SubElement(source, "title").text = title
     ET.SubElement(source, "description").text = PLACEHOLDER_DESCRIPTION
     ET.SubElement(source, "source_url").text = source_url
     ET.SubElement(source, "local_file").text = local_file
-    ET.SubElement(source, "curated_at").text = date.today().isoformat()
+    ET.SubElement(source, "curated_at").text = curated_at
 
     write_index(root, index_path)
 
-    verb = "Updated" if is_update else "Added"
-    fields = (
-        f"title={title}|local_file={local_file}|description={PLACEHOLDER_DESCRIPTION}|"
-    )
-    print(f"✅ {verb} index source|{format_path_for_display(index_path)}|{fields}")
-    print("💡 Source description pending|")
+    label = "Reindexed" if is_update else "Indexed"
+    print(f"✅ {label}: {format_path_for_display(index_path)}")
+    print("   <source>")
+    print(f"     <title>{title}</title>")
+    print(f"     <description>{PLACEHOLDER_DESCRIPTION}</description>")
+    print(f"     <source_url>{source_url}</source_url>")
+    print(f"     <local_file>{local_file}</local_file>")
+    print(f"     <curated_at>{curated_at}</curated_at>")
+    print("   </source>")
 
     return is_update
 
@@ -132,8 +124,8 @@ def _reject_filename_collision(
         existing_url = (source.findtext("source_url") or "").rstrip("/")
         if existing_file == filename and existing_url != source_url:
             print(
-                f"❌ Error: FILENAME_COLLISION|"
-                f"{filename} already curated from {existing_url}|{source_url}|"
+                f"❌ Filename collision: {filename} already curated from "
+                f"{existing_url} — {source_url}"
             )
             sys.exit(1)
 
@@ -163,9 +155,9 @@ def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
     file_existed = file_path.exists()
     file_path.write_text(doc.content)
     if file_existed:
-        print(f"✅ Overwrote doc|{format_path_for_display(file_path)}|")
+        print(f"✅ Overwrote: {format_path_for_display(file_path)}")
     else:
-        print(f"✅ Created doc|{format_path_for_display(file_path)}|")
+        print(f"✅ Created: {format_path_for_display(file_path)}")
 
 
 def _parse_args() -> argparse.Namespace:
@@ -199,7 +191,7 @@ def main() -> None:
     _reject_uv_docs_url(source_url)
     _validate_collection_dir(collection_dir, index_path)
 
-    print(f"✅ Curating from|{source_url}|")
+    print("Curating…")
 
     collection_dir.mkdir(parents=True, exist_ok=True)
     index_exists = index_path.exists()
@@ -213,19 +205,16 @@ def main() -> None:
     doc = fetch_document(route)
 
     if not index_exists:
-        _create_readme(collection_dir, source_url)
-        _create_empty_index(collection_dir)
+        _initialise_collection(collection_dir, source_url)
 
     _write_fetched_document(collection_dir, doc)
 
     # doc.source_url is canonical: query/fragment-free, no trailing `.md`
-    # (blob form for GitHub). The raw input is kept only for the steps above.
-    is_update = _add_or_update_source_in_index(
+    _add_or_update_source_in_index(
         collection_dir, doc.title, doc.source_url, doc.filename
     )
 
-    verb = "overwrote and re-indexed" if is_update else "created and indexed new"
-    print(f"🎉 Curation Success!|{verb} document|{doc.source_url}|\n")
+    print("🏁 Success! curated doc (🚩 description pending)\n")
 
 
 if __name__ == "__main__":

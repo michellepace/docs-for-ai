@@ -94,6 +94,61 @@ def test_temp_file_is_kept_when_no_descriptions_are_applied(
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
+def test_missing_index_reports_not_a_collection(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A dir without INDEX.xml aborts non-zero, naming the missing index on stdout."""
+    descriptions_file = tmp_path / "description.txt"
+    descriptions_file.write_text(
+        f"doc-a.md\n{' '.join(['word'] * 25)}\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        "sys.argv", ["update_descriptions.py", str(tmp_path), str(descriptions_file)]
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Not a collection" in out
+    assert str(tmp_path / "INDEX.xml") in out
+
+
+def test_missing_descriptions_file_is_reported(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An absent descriptions file aborts non-zero, naming the path on stdout."""
+    (tmp_path / "INDEX.xml").write_text(INDEX_XML, encoding="utf-8")
+    missing = tmp_path / "nope.txt"
+    monkeypatch.setattr(
+        "sys.argv", ["update_descriptions.py", str(tmp_path), str(missing)]
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Descriptions file not found" in out
+    assert str(missing) in out
+
+
+def test_empty_descriptions_file_reports_none_found(
+    index_and_descriptions: tuple[Path, Path],
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A descriptions file with no filename/description pairs aborts on stdout."""
+    _, descriptions_file = index_and_descriptions
+    descriptions_file.write_text("\n\n", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    assert "No descriptions found" in capsys.readouterr().out
+
+
 def test_replaces_description_for_matching_file(tmp_path: Path) -> None:
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text(INDEX_XML, encoding="utf-8")

@@ -11,6 +11,7 @@ from docs_for_ai.sync_index import (
     delete_orphan_files,
     format_descriptions_status,
     get_changed_curated_files,
+    main,
     prune_stale_index_sources,
     restore_unchanged_descriptions,
 )
@@ -252,8 +253,39 @@ def test_cli_exits_with_clear_error_on_malformed_xml(tmp_path: Path) -> None:
     )
 
     assert result.returncode != 0
-    assert "❌ Error: INVALID_XML|" in result.stdout + result.stderr
+    assert "Invalid XML" in result.stdout + result.stderr
     assert "INDEX.xml" in result.stdout + result.stderr
+
+
+def test_main_exits_when_collection_directory_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A non-existent collection dir aborts non-zero, naming the dir on stdout."""
+    missing = tmp_path / "no-such-collection"
+    monkeypatch.setattr("sys.argv", ["sync-index", str(missing)])
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Collection directory not found" in out
+    assert str(missing) in out
+
+
+def test_main_exits_when_index_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A dir without INDEX.xml aborts non-zero, naming the missing index on stdout."""
+    monkeypatch.setattr("sys.argv", ["sync-index", str(tmp_path)])
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Not a collection" in out
+    assert str(tmp_path / "INDEX.xml") in out
 
 
 @pytest.mark.firecrawl

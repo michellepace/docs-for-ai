@@ -1,8 +1,9 @@
-"""FireCrawl scrape path: the offline retry-parsing helper."""
+"""FireCrawl scrape path: offline helpers (retry parsing, missing-key guard)."""
 
+import pytest
 from firecrawl.v2.utils.error_handler import RateLimitError
 
-from docs_for_ai.firecrawl_scrape import parse_retry_seconds
+from docs_for_ai.firecrawl_scrape import _get_firecrawl_client, parse_retry_seconds
 
 
 class TestParseRetrySeconds:
@@ -17,3 +18,21 @@ class TestParseRetrySeconds:
         """No retry-after pattern falls back to the per-minute default of 60."""
         error = RateLimitError("Rate limit exceeded.")
         assert parse_retry_seconds(error) == 60
+
+
+class TestGetFirecrawlClient:
+    """The client guards on the API key before any network use."""
+
+    def test_missing_api_key_exits_naming_the_variable(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """No API key aborts non-zero, naming the variable to set (no client built)."""
+        monkeypatch.delenv("API_KEY_MCP_FIRECRAWL", raising=False)
+
+        with pytest.raises(SystemExit) as exc:
+            _get_firecrawl_client()
+
+        assert exc.value.code == 1
+        out = capsys.readouterr().out
+        assert "Missing API key" in out
+        assert "API_KEY_MCP_FIRECRAWL" in out

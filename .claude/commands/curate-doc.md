@@ -84,7 +84,7 @@ Analyse `$collection` and `$source_url` against the existing collections and dec
 uv run --directory ~/.claude/docs-for-ai curate-doc "collections/$collection" "$source_url"
 ```
 
-Errors print actionable info. Propose fixes but await user approval; proceed ONLY on `🎉 Curation Success!`.
+Errors print actionable info. Propose fixes but await user approval; proceed ONLY on `🏁 Success!`.
 
 ## Step 3. Generate the description
 
@@ -109,15 +109,15 @@ Report success in this format, filling each slot from the script's output above:
 <success_message_format>
 
 ```
-## 🎉 Curation Success!
+## ✨ Curation Success!
 
 🎯 What happened
-- Source URL: <canonical URL from the 🎉 line — not your raw input>
-- [Created/Overwrote] document: `<path, verbatim from the ✅ doc line>`
-- [Added/Updated] index: `<path, verbatim from the ✅ index line>`
-- Generated index description:
+- Source URL: <canonical `source_url` from `<source>` block — not your raw input>
+- [Created/Overwrote] doc: `<path, verbatim from ✅ line>`
+- [Indexed/Reindexed] index: `<path, verbatim from ✅ line>`
+- Generated index description <N> words ✓
 
-"_<description from Step 3>_" = <N> words ✓
+"_<description from Step 3>_"
 ```
 
 </success_message_format>

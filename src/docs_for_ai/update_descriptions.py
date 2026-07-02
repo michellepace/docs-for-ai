@@ -121,7 +121,7 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 
     if updated_count > 0:
         write_index(root, index_path)
-        print(f"\n🎉 Updated {updated_count} description(s) in {index_path}")
+        print(f"\n🏁 Updated {updated_count} description(s) in {index_path}")
     else:
         print(f"\nℹ️  No descriptions needed updating in {index_path}")  # noqa: RUF001
 

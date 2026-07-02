@@ -218,9 +218,7 @@ class TestResolveRoute:
         """Registry transform → raw `.md`/`.rst.txt` as-is → FireCrawl, in precedence."""
         assert resolve_route(url, RULES) == expected
 
-    def test_github_blob_resolves_to_raw_route(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_github_blob_resolves_to_raw_route(self) -> None:
         """A GitHub blob URL resolves to its raw twin, ahead of the registry."""
         url = "https://github.com/o/r/blob/main/docs/guide.md"
         assert resolve_route(url, RULES) == (
@@ -229,7 +227,6 @@ class TestResolveRoute:
             url,
             "guide.md",
         )
-        assert "✅ Detected GitHub source|" in capsys.readouterr().out
 
 
 class TestFilenameFromCanonicalUrl:
@@ -494,7 +491,7 @@ class TestFetchText:
         )
         text = fetch_text(url)
         assert len(text) > 0
-        assert "✅ Fetched content|" in capsys.readouterr().out
+        assert "✅ Fetched:" in capsys.readouterr().out
 
     def test_404_fails_with_not_found(self, capsys: pytest.CaptureFixture[str]) -> None:
         url = (

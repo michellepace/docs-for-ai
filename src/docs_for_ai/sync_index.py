@@ -238,9 +238,29 @@ def _cleanup_backup(backup_path: Path) -> None:
 def main() -> None:
     """Sync INDEX.xml, curate all docs, output structured results."""
     parser = argparse.ArgumentParser(
-        description="Sync a collection's INDEX.xml and re-curate all its docs"
+        description=(
+            "Re-sync a docs collection to its INDEX.xml, "
+            "refreshing every doc from source."
+        ),
+        epilog="""\
+INDEX.xml is the source of truth. This reconciles the files on disk to it,
+then re-fetches each listed doc from its source_url so content is current.
+
+what it changes (destructive — commit or stash first):
+  - Drops INDEX sources that are malformed or whose local_file is missing.
+  - Deletes orphan doc files not listed in INDEX.xml (README.md is kept).
+  - Re-curates every listed source, overwriting its doc file with fresh content.
+  - Keeps existing descriptions for docs whose content is unchanged; flags docs
+    whose content changed as needing a new description.
+
+output: a structured report (sync counts, per-doc curation results, content
+        changes, docs still needing descriptions) — consumed by /recurate-docs.
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("collection_dir", help="Target collection directory")
+    parser.add_argument(
+        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+    )
     args = parser.parse_args()
 
     collection_dir = normalise_collection_dir(args.collection_dir)

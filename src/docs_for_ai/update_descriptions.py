@@ -124,11 +124,20 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 def main() -> None:
     """Parse arguments and update descriptions in INDEX.xml."""
     parser = argparse.ArgumentParser(
-        description="Update a collection's INDEX.xml descriptions from a file",
-        epilog=DESCRIPTIONS_FILE_FORMAT,
+        description=(
+            "Apply descriptions from a file to a collection's INDEX.xml, "
+            "matched by filename."
+        ),
+        epilog=(
+            f"{DESCRIPTIONS_FILE_FORMAT}\n\n"
+            "A description outside that word band fails the run; "
+            "INDEX.xml is left untouched."
+        ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("collection_dir", help="Target collection directory")
+    parser.add_argument(
+        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+    )
     parser.add_argument(
         "temp_descriptions_file",
         help="Descriptions file (deleted after a successful update)",

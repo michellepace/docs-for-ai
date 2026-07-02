@@ -163,7 +163,17 @@ def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
 def _parse_args() -> argparse.Namespace:
     """Parse CLI arguments: target collection directory and source URL."""
     parser = argparse.ArgumentParser(
-        description="Curate a source document into a collection directory"
+        description=(
+            "Fetch a doc from a URL, save it into a collection, "
+            "and register it in INDEX.xml."
+        ),
+        epilog="""\
+notes:
+  - Re-curating a URL overwrites its doc and replaces its INDEX entry.
+  - The INDEX entry's description is left as a placeholder to fill in later.
+  - The collection is initialised if the directory doesn't exist.
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "collection_dir",

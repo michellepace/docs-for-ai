@@ -255,7 +255,7 @@ what it changes (destructive — commit or stash first):
     whose content changed as needing a new description.
 
 output: a structured report (sync counts, per-doc curation results, content
-        changes, docs still needing descriptions) — consumed by /recurate-docs.
+        changes, docs still needing descriptions).
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

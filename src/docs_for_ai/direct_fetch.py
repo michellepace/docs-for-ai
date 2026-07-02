@@ -38,9 +38,16 @@ RAW_SUFFIXES: dict[str, tuple[DocFormat, str]] = {
 }
 
 
-def _fail(code: str, detail: str, url: str) -> NoReturn:
-    """Emit a structured error line and exit."""
-    print(f"❌ Error: {code}|{detail}|{url}|")
+def _fail(label: str, detail: str = "", locus: str = "") -> NoReturn:
+    """Print a human-readable error line and exit."""
+    message = f"❌ {label}"
+    if detail:
+        message += f": {detail}"
+        if locus:
+            message += f" — {locus}"
+    elif locus:
+        message += f": {locus}"
+    print(message)
     sys.exit(1)
 
 
@@ -217,7 +224,7 @@ def load_direct_fetch_rules(
     unknown = [name for name in rules if name not in TRANSFORMS]
     if unknown:
         joined = ", ".join(unknown)
-        _fail("UNKNOWN_TRANSFORM", f"not a known transform: {joined}", str(path))
+        _fail("Unknown transform", joined, str(path))
     return _normalise_prefixes(rules)
 
 
@@ -226,7 +233,7 @@ def github_blob_to_raw_url(url: str) -> str:
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
         _fail(
-            "GITHUB_BLOB",
+            "Not a GitHub blob URL",
             "expected https://github.com/<user>/<repo>/blob/(main|master)/"
             "<path>.(md|mdx|qmd)",
             url,
@@ -242,7 +249,7 @@ def github_filename_from_blob_url(url: str) -> str:
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
-        _fail("GITHUB_BLOB", "not a github blob .md/.mdx/.qmd URL", url)
+        _fail("Not a GitHub blob URL", locus=url)
     segments = match.group(4).split("/")
     # Avoid a redundant "docs-" filename prefix.
     if segments and segments[0] == "docs":
@@ -250,8 +257,8 @@ def github_filename_from_blob_url(url: str) -> str:
     filename = "-".join(segments).lower() + "." + match.group(5).lower()
     if not FILENAME_RE.match(filename):
         _fail(
-            "GITHUB_FILENAME",
-            f"derived '{filename}' fails ^[a-z0-9-]+\\.(?:md|mdx|qmd)$",
+            "Bad derived filename",
+            f"'{filename}' fails ^[a-z0-9-]+\\.(?:md|mdx|qmd)$",
             url,
         )
     return filename
@@ -347,9 +354,9 @@ def fetch_text(fetch_url: str) -> str:
             text = response.read().decode("utf-8")
     except urllib.error.HTTPError as exc:
         if exc.code == HTTP_NOT_FOUND:
-            _fail("FETCH_NOT_FOUND", "404 not found", fetch_url)
-        _fail("FETCH_FAILED", f"HTTP {exc.code}", fetch_url)
+            _fail("Fetch failed", "404 not found", fetch_url)
+        _fail("Fetch failed", f"HTTP {exc.code}", fetch_url)
     except (urllib.error.URLError, OSError, UnicodeDecodeError) as exc:
-        _fail("FETCH_FAILED", str(exc), fetch_url)
+        _fail("Fetch failed", str(exc), fetch_url)
     print(f"✅ Fetched: {len(text):,} chars")
     return text

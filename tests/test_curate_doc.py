@@ -67,11 +67,12 @@ class TestInputValidation:
         assert "required" in output
 
     def test_fails_when_url_is_invalid(self, tmp_path: Path) -> None:
-        """Script rejects malformed URLs with INVALID_URL error."""
+        """A malformed URL is rejected non-zero, naming the offending URL."""
         exit_code, output = run_script(str(tmp_path), "horse-donkey-cow")
 
         assert exit_code != 0
-        assert "❌ Error: INVALID_URL|horse-donkey-cow" in output
+        assert "Invalid URL" in output
+        assert "horse-donkey-cow" in output
 
     def test_fails_when_source_url_is_uv_docs_site(self, tmp_path: Path) -> None:
         """A uv hosted-docs URL is rejected, pointing to the GitHub blob source."""
@@ -80,11 +81,11 @@ class TestInputValidation:
         )
 
         assert exit_code != 0
-        assert "❌ Error: USE_GITHUB_BLOB|" in output
+        assert "Unsupported uv URL" in output
         assert "collections/uv/INDEX.xml" in output
 
     def test_nonempty_noncollection_directory_fails(self, tmp_path: Path) -> None:
-        """Non-empty directory without INDEX.xml fails with INVALID_COLLECTION error."""
+        """A non-empty directory without INDEX.xml is refused, naming the directory."""
         invalid_dir = tmp_path / "not_a_collection"
 
         invalid_dir.mkdir()
@@ -93,19 +94,16 @@ class TestInputValidation:
         exit_code, output = run_script(str(invalid_dir), URL_FIRECRAWL)
 
         assert exit_code != 0
-        assert (
-            "❌ Error: INVALID_COLLECTION|"
-            "Directory non-empty and missing INDEX.xml. "
-            "Rejected to prevent inadvertent file overwrites|"
-        ) in output
+        assert "Unsafe collection dir" in output
+        assert str(invalid_dir) in output
 
     def test_github_url_rejected_before_any_fetch(self, tmp_path: Path) -> None:
-        """A non-blob GitHub URL exits GITHUB_BLOB before any fetch, writing no files."""
+        """A non-blob GitHub URL is refused before any fetch, writing no files."""
         new_dir = tmp_path / "uv"
         exit_code, output = run_script(str(new_dir), URL_GH_RAW)
 
         assert exit_code != 0
-        assert "❌ Error: GITHUB_BLOB|" in output
+        assert "Not a GitHub blob URL" in output
         assert "✅ Fetched:" not in output
         assert not (new_dir / "INDEX.xml").exists()
         assert not (new_dir / "README.md").exists()
@@ -306,7 +304,7 @@ class TestFilenameCollisionGuard:
         monkeypatch: pytest.MonkeyPatch,
         capsys: pytest.CaptureFixture[str],
     ) -> None:
-        """A 2nd URL colliding on `local_file` exits FILENAME_COLLISION, no clobber."""
+        """A 2nd URL colliding on `local_file` fails loud, leaving the first intact."""
         monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
         monkeypatch.setattr(
             curate_doc.firecrawl_scrape,
@@ -332,7 +330,9 @@ class TestFilenameCollisionGuard:
             curate_doc.main()
 
         assert excinfo.value.code == 1
-        assert "❌ Error: FILENAME_COLLISION|" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "Filename collision" in out
+        assert "foo-bar.md" in out
         # No partial state: the file keeps the first doc, index still one <source>.
         assert (collection / "foo-bar.md").read_text() == "# First\n"
         assert (collection / "INDEX.xml").read_text().count("<source>") == 1
@@ -617,12 +617,12 @@ class TestGithubSourcePath:
 
     @pytest.mark.github
     def test_404_fails_without_mutation(self, tmp_path: Path) -> None:
-        """404 blob URL exits non-zero with FETCH_NOT_FOUND and leaves no files."""
+        """A 404 blob URL exits non-zero identifying the 404, and leaves no files."""
         new_dir = tmp_path / "uv"
         exit_code, output = run_script(str(new_dir), URL_GH_BLOB_404)
 
         assert exit_code != 0
-        assert "❌ Error: FETCH_NOT_FOUND|" in output
+        assert "404 not found" in output
         md_files = list(new_dir.glob("*.md")) if new_dir.exists() else []
         assert md_files == []
         assert not (new_dir / "INDEX.xml").exists()

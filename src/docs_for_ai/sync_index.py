@@ -73,7 +73,7 @@ def _curate_doc(collection_dir: Path, source_url: str) -> bool:
     # Absolute path prevents PATH hijacking (ruff S607)
     uv_path = shutil.which("uv")
     if not uv_path:
-        print("❌ Error: 'uv' executable not found in PATH", file=sys.stderr)
+        print("❌ uv not found: not in PATH")
         return False
 
     result = subprocess.run(
@@ -89,7 +89,7 @@ def _print_git_content_changes(collection_dir: Path) -> None:
     """Print git diff --stat for the collection, wrapped in report tags."""
     git_path = shutil.which("git")
     if not git_path:
-        print("⚠️  Git not found - skipping change detection")
+        print("⚠️ Git not found: skipping change detection")
         return
 
     result = subprocess.run(
@@ -128,7 +128,7 @@ def _validate_and_backup_index(index_path: Path) -> Path:
     try:
         ET.parse(index_path)
     except ET.ParseError as e:
-        print(f"❌ Error: INVALID_XML|{e}|{index_path}|", file=sys.stderr)
+        print(f"❌ Invalid XML: {e} — {index_path}")
         sys.exit(1)
 
     backup_path = index_path.with_suffix(".xml.backup")
@@ -232,7 +232,7 @@ def _cleanup_backup(backup_path: Path) -> None:
     try:
         backup_path.unlink(missing_ok=True)
     except OSError as e:
-        print(f"⚠️  Could not delete backup: {e}", file=sys.stderr)
+        print(f"⚠️ Could not delete backup: {e}")
 
 
 def main() -> None:
@@ -249,17 +249,11 @@ def main() -> None:
     index_path = collection_dir / "INDEX.xml"
 
     if not collection_dir.exists() or not collection_dir.is_dir():
-        print(
-            f"❌ Error: Collection directory '{collection_dir}' does not exist",
-            file=sys.stderr,
-        )
+        print(f"❌ Collection directory not found: {collection_dir}")
         sys.exit(1)
 
     if not index_path.exists():
-        print(
-            f"❌ Error: Not a valid collection - {index_path} not found",
-            file=sys.stderr,
-        )
+        print(f"❌ Not a collection: {index_path} not found")
         sys.exit(1)
 
     backup_path = _validate_and_backup_index(index_path)

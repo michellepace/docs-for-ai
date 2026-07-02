@@ -67,7 +67,9 @@ class TestLoadDirectFetchRules:
         with pytest.raises(SystemExit) as exc:
             load_direct_fetch_rules(rules_file)
         assert exc.value.code == 1
-        assert "❌ Error: UNKNOWN_TRANSFORM" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "Unknown transform" in out
+        assert "mystery-transform" in out
 
 
 # Registry prefixes for the offline routing tests below. A FetchRoute is a
@@ -340,11 +342,11 @@ class TestGithubBlobToRawUrl:
     def test_non_blob_url_fails(
         self, url: str, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        """Raw, repo root, tree/, other branch, unsupported ext all exit GITHUB_BLOB."""
+        """Raw, repo root, tree/, other branch, unsupported ext are all refused."""
         with pytest.raises(SystemExit) as exc:
             github_blob_to_raw_url(url)
         assert exc.value.code == 1
-        assert "GITHUB_BLOB" in capsys.readouterr().out
+        assert "Not a GitHub blob URL" in capsys.readouterr().out
 
 
 class TestGithubFilenameFromBlobUrl:
@@ -389,11 +391,16 @@ class TestGithubFilenameFromBlobUrl:
     def test_pattern_violating_name_fails(
         self, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        """A name breaking the filename pattern exits with GITHUB_FILENAME."""
+        """A derived name breaking the filename pattern fails as a bad filename.
+
+        Distinct from the no-match branch; the label is the only signal of which fired.
+        """
         with pytest.raises(SystemExit) as exc:
             github_filename_from_blob_url("https://github.com/o/r/blob/main/docs/a_b.md")
         assert exc.value.code == 1
-        assert "GITHUB_FILENAME" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "Bad derived filename" in out
+        assert "a_b.md" in out
 
 
 class TestExtractMarkdownTitle:
@@ -501,7 +508,7 @@ class TestFetchText:
         with pytest.raises(SystemExit) as exc:
             fetch_text(url)
         assert exc.value.code == 1
-        assert "❌ Error: FETCH_NOT_FOUND|" in capsys.readouterr().out
+        assert "404 not found" in capsys.readouterr().out
 
 
 @pytest.mark.readthedocs

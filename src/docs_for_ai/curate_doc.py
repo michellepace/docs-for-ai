@@ -24,7 +24,7 @@ def _validate_url(url: str) -> None:
     """Validate URL has scheme and netloc, exit if invalid."""
     parsed = urlparse(url)
     if not parsed.scheme or not parsed.netloc:
-        print(f"❌ Error: INVALID_URL|{url}|")
+        print(f"❌ Invalid URL: {url}")
         sys.exit(1)
 
 
@@ -32,10 +32,8 @@ def _reject_uv_docs_url(url: str) -> None:
     """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
     if url.startswith("https://docs.astral.sh/uv/"):
         print(
-            "❌ Error: USE_GITHUB_BLOB|"
-            "Use the GitHub blob URL for this source; "
-            "see collections/uv/INDEX.xml for the canonical mapping|"
-            f"{url}|"
+            "❌ Unsupported uv URL: use the GitHub blob "
+            f"(see collections/uv/INDEX.xml) — {url}"
         )
         sys.exit(1)
 
@@ -47,9 +45,8 @@ def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
         and any(collection_dir.iterdir())
     ):
         print(
-            f"❌ Error: INVALID_COLLECTION|"
-            f"Directory non-empty and missing INDEX.xml. "
-            f"Rejected to prevent inadvertent file overwrites|{collection_dir}|"
+            f"❌ Unsafe collection dir: non-empty and missing INDEX.xml "
+            f"— {collection_dir}"
         )
         sys.exit(1)
 
@@ -127,8 +124,8 @@ def _reject_filename_collision(
         existing_url = (source.findtext("source_url") or "").rstrip("/")
         if existing_file == filename and existing_url != source_url:
             print(
-                f"❌ Error: FILENAME_COLLISION|"
-                f"{filename} already curated from {existing_url}|{source_url}|"
+                f"❌ Filename collision: {filename} already curated from "
+                f"{existing_url} — {source_url}"
             )
             sys.exit(1)
 

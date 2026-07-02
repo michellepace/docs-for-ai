@@ -252,7 +252,7 @@ def test_cli_exits_with_clear_error_on_malformed_xml(tmp_path: Path) -> None:
     )
 
     assert result.returncode != 0
-    assert "❌ Error: INVALID_XML|" in result.stdout + result.stderr
+    assert "Invalid XML" in result.stdout + result.stderr
     assert "INDEX.xml" in result.stdout + result.stderr
 
 

@@ -253,9 +253,9 @@ def test_cli_exits_with_clear_error_on_malformed_xml(tmp_path: Path) -> None:
         check=False,
     )
 
-    assert result.returncode != 0
-    assert "Invalid XML" in result.stdout + result.stderr
-    assert "INDEX.xml" in result.stdout + result.stderr
+    assert result.returncode == 1
+    assert "Invalid XML" in result.stdout
+    assert "INDEX.xml" in result.stdout
 
 
 def test_main_exits_when_collection_directory_missing(

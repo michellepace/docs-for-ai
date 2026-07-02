@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from itertools import batched
 from pathlib import Path
 
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import write_index
 from docs_for_ai.paths import normalise_collection_dir
 
@@ -16,9 +17,9 @@ LINES_PER_ENTRY = 2  # filename line + description line
 type DescriptionsByFile = dict[str, str]
 
 
-def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
-    """Ensure description is within [min, max] band."""
-    failed = False
+def _validate_word_counts(descriptions: DescriptionsByFile) -> bool:
+    """True when every description is within band."""
+    all_in_band = True
     for local_file, description in descriptions.items():
         count = len(description.split())
         if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
@@ -28,9 +29,8 @@ def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
                 f"❌ {local_file}: {count} words "
                 f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})"
             )
-            failed = True
-    if failed:
-        sys.exit(1)
+            all_in_band = False
+    return all_in_band
 
 
 def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
@@ -55,17 +55,17 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
 def _validate_collection_inputs(
     collection_dir: Path, temp_descriptions_file: str
 ) -> tuple[Path, Path]:
-    """Resolve and validate the INDEX.xml and descriptions paths, or exit."""
+    """Resolve and validate the INDEX.xml and descriptions paths, or raise."""
     index_path = collection_dir / "INDEX.xml"
     descriptions_path = Path(temp_descriptions_file)
 
     if not index_path.exists():
-        print(f"❌ Not a collection: {index_path} not found")
-        sys.exit(1)
+        msg = f"Not a collection: {index_path} not found"
+        raise CurationError(msg)
 
     if not descriptions_path.exists():
-        print(f"❌ Descriptions file not found: {descriptions_path}")
-        sys.exit(1)
+        msg = f"Descriptions file not found: {descriptions_path}"
+        raise CurationError(msg)
 
     return index_path, descriptions_path
 
@@ -112,6 +112,32 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
     return updated_count
 
 
+def _run_update(collection_dir: Path, temp_descriptions_file: str) -> None:
+    """Apply a descriptions file to INDEX.xml."""
+    index_path, descriptions_path = _validate_collection_inputs(
+        collection_dir, temp_descriptions_file
+    )
+
+    descriptions = parse_descriptions_file(descriptions_path)
+
+    if not descriptions:
+        msg = f"No descriptions found: {descriptions_path}"
+        raise CurationError(msg)
+
+    # Reject before touching INDEX.xml if out of the word-count band
+    if not _validate_word_counts(descriptions):
+        msg = "Word count(s) out of band: rewrite the flagged description(s) and rerun"
+        raise CurationError(msg)
+
+    print(f"✅ Parsed: {len(descriptions)} description(s)")
+    print()
+
+    updated_count = update_descriptions(index_path, descriptions)
+
+    if updated_count > 0:
+        _cleanup_temp_file(descriptions_path)
+
+
 def main() -> None:
     """Parse arguments and update descriptions in INDEX.xml."""
     parser = argparse.ArgumentParser(
@@ -137,27 +163,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    collection_dir = normalise_collection_dir(args.collection_dir)
-    index_path, descriptions_path = _validate_collection_inputs(
-        collection_dir, args.temp_descriptions_file
-    )
-
-    descriptions = parse_descriptions_file(descriptions_path)
-
-    if not descriptions:
-        print(f"❌ No descriptions found: {descriptions_path}")
+    try:
+        _run_update(
+            normalise_collection_dir(args.collection_dir), args.temp_descriptions_file
+        )
+    except CurationError as exc:
+        print(f"❌ {exc}")
         sys.exit(1)
-
-    # Reject before touching INDEX.xml if out of the word-count band
-    _validate_word_counts(descriptions)
-
-    print(f"✅ Parsed: {len(descriptions)} description(s)")
-    print()
-
-    updated_count = update_descriptions(index_path, descriptions)
-
-    if updated_count > 0:
-        _cleanup_temp_file(descriptions_path)
 
 
 if __name__ == "__main__":

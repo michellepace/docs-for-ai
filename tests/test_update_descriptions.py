@@ -61,6 +61,7 @@ def test_word_band_gates_whether_a_description_is_applied(
 
 def test_one_out_of_band_entry_blocks_the_whole_batch(
     index_and_descriptions: tuple[Path, Path],
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     index_path, descriptions_file = index_and_descriptions
 
@@ -70,8 +71,15 @@ def test_one_out_of_band_entry_blocks_the_whole_batch(
         f"doc-a.md\n{in_band}\ndoc-b.md\ntoo short\n", encoding="utf-8"
     )
 
-    with pytest.raises(SystemExit):
+    with pytest.raises(SystemExit) as exc:
         main()
+
+    # The per-file report names each verdict — the repair loop keys off these lines
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "✅ doc-a.md: 25 words" in out
+    assert "❌ doc-b.md: 2 words (need 20-30)" in out
+    assert "❌ Word count(s) out of band" in out
 
     # doc-a's valid update is withheld because a sibling failed validation
     assert "old description" in index_path.read_text(encoding="utf-8")

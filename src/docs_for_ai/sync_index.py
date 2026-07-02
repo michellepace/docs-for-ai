@@ -122,12 +122,12 @@ def _print_curation_summary(
 
 
 def _validate_and_backup_index(index_path: Path) -> Path:
-    """Validate XML structure (exit on parse error), then create a backup file."""
+    """Validate XML structure, then create a backup file."""
     try:
         ET.parse(index_path)
     except ET.ParseError as e:
-        print(f"❌ Invalid XML: {e} — {index_path}")
-        sys.exit(1)
+        msg = f"Invalid XML: {e} — {index_path}"
+        raise CurationError(msg) from e
 
     backup_path = index_path.with_suffix(".xml.backup")
     shutil.copy2(index_path, backup_path)
@@ -233,45 +233,17 @@ def _cleanup_backup(backup_path: Path) -> None:
         print(f"⚠️ Could not delete backup: {e}")
 
 
-def main() -> None:
-    """Sync INDEX.xml, curate all docs, output structured results."""
-    parser = argparse.ArgumentParser(
-        description=(
-            "Re-sync a docs collection to its INDEX.xml, "
-            "refreshing every doc from source."
-        ),
-        epilog="""\
-INDEX.xml is the source of truth. This reconciles the files on disk to it,
-then re-fetches each listed doc from its source_url so content is current.
-
-what it changes (destructive — commit or stash first):
-  - Drops INDEX sources that are malformed or whose local_file is missing.
-  - Deletes orphan doc files not listed in INDEX.xml (README.md is kept).
-  - Re-curates every listed source: overwrites its doc file with fresh content,
-    and refreshes that source's <title> and <curated_at> date in INDEX.xml.
-  - Keeps existing descriptions for docs whose content is unchanged; flags docs
-    whose content changed as needing a new description.
-
-output: a structured report (sync counts, per-doc curation results, content
-        changes, docs still needing descriptions).
-""",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    parser.add_argument(
-        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
-    )
-    args = parser.parse_args()
-
-    collection_dir = normalise_collection_dir(args.collection_dir)
+def _run_sync(collection_dir: Path) -> None:
+    """Sync one collection to its INDEX.xml."""
     index_path = collection_dir / "INDEX.xml"
 
     if not collection_dir.exists() or not collection_dir.is_dir():
-        print(f"❌ Collection directory not found: {collection_dir}")
-        sys.exit(1)
+        msg = f"Collection directory not found: {collection_dir}"
+        raise CurationError(msg)
 
     if not index_path.exists():
-        print(f"❌ Not a collection: {index_path} not found")
-        sys.exit(1)
+        msg = f"Not a collection: {index_path} not found"
+        raise CurationError(msg)
 
     backup_path = _validate_and_backup_index(index_path)
 
@@ -311,6 +283,42 @@ output: a structured report (sync counts, per-doc curation results, content
     print(format_descriptions_status(collection_dir, restored_count, changed_files))
 
     _cleanup_backup(backup_path)
+
+
+def main() -> None:
+    """Sync INDEX.xml, curate all docs, output structured results."""
+    parser = argparse.ArgumentParser(
+        description=(
+            "Re-sync a docs collection to its INDEX.xml, "
+            "refreshing every doc from source."
+        ),
+        epilog="""\
+INDEX.xml is the source of truth. This reconciles the files on disk to it,
+then re-fetches each listed doc from its source_url so content is current.
+
+what it changes (destructive — commit or stash first):
+  - Drops INDEX sources that are malformed or whose local_file is missing.
+  - Deletes orphan doc files not listed in INDEX.xml (README.md is kept).
+  - Re-curates every listed source: overwrites its doc file with fresh content,
+    and refreshes that source's <title> and <curated_at> date in INDEX.xml.
+  - Keeps existing descriptions for docs whose content is unchanged; flags docs
+    whose content changed as needing a new description.
+
+output: a structured report (sync counts, per-doc curation results, content
+        changes, docs still needing descriptions).
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+    )
+    args = parser.parse_args()
+
+    try:
+        _run_sync(normalise_collection_dir(args.collection_dir))
+    except CurationError as exc:
+        print(f"❌ {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

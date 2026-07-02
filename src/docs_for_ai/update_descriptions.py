@@ -1,4 +1,4 @@
-"""Update INDEX.xml descriptions from a descriptions file."""
+"""Update INDEX.xml descriptions. See `update-descriptions --help` for behaviour."""
 
 import argparse
 import sys
@@ -12,12 +12,6 @@ from docs_for_ai.paths import normalise_collection_dir
 DESCRIP_MIN_WORDS = 20
 DESCRIP_MAX_WORDS = 30
 LINES_PER_ENTRY = 2  # filename line + description line
-
-DESCRIPTIONS_FILE_FORMAT = (
-    "descriptions file format — one pair of lines per INDEX source:\n"
-    "  <filename>\n"
-    f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)"
-)
 
 type DescriptionsByFile = dict[str, str]
 
@@ -40,10 +34,7 @@ def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
 
 
 def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
-    """Parse a descriptions file into a {local_file: description} mapping.
-
-    See DESCRIPTIONS_FILE_FORMAT for the expected line layout.
-    """
+    """Parse a descriptions file into a {local_file: description} mapping."""
     non_blank_lines = [
         line.strip()
         for line in descriptions_path.read_text().splitlines()
@@ -129,7 +120,9 @@ def main() -> None:
             "matched by filename."
         ),
         epilog=(
-            f"{DESCRIPTIONS_FILE_FORMAT}\n\n"
+            "descriptions file format — one pair of lines per INDEX source:\n"
+            "  <filename>\n"
+            f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)\n\n"
             "A description outside that word band fails the run; "
             "INDEX.xml is left untouched."
         ),

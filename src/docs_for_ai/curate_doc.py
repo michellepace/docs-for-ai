@@ -1,9 +1,4 @@
-"""Curate one source URL into a collection directory.
-
-Saves the curated doc as a file and registers it in INDEX.xml. GitHub blobs and
-URLs under a direct-fetch registry prefix are fetched directly, as are raw
-`.md`/`.rst.txt` URLs; all other URLs are scraped via FireCrawl.
-"""
+"""Curate one source URL into a collection. See `curate-doc --help` for behaviour."""
 
 import argparse
 import sys
@@ -169,6 +164,7 @@ def _parse_args() -> argparse.Namespace:
         ),
         epilog="""\
 notes:
+  - Fetch precedence: GitHub raw → .md/.rst.txt twin → FireCrawl (last resort).
   - Re-curating a URL overwrites its doc and replaces its INDEX entry.
   - The INDEX entry's description is left as a placeholder to fill in later.
   - The collection is initialised if the directory doesn't exist.

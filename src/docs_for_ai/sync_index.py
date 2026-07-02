@@ -1,4 +1,4 @@
-"""Sync INDEX.xml, re-curate all docs, output results for batch processing."""
+"""Sync INDEX.xml and re-curate all docs. See `sync-index --help` for behaviour."""
 
 import argparse
 import shutil
@@ -249,7 +249,8 @@ then re-fetches each listed doc from its source_url so content is current.
 what it changes (destructive — commit or stash first):
   - Drops INDEX sources that are malformed or whose local_file is missing.
   - Deletes orphan doc files not listed in INDEX.xml (README.md is kept).
-  - Re-curates every listed source, overwriting its doc file with fresh content.
+  - Re-curates every listed source: overwrites its doc file with fresh content,
+    and refreshes that source's <title> and <curated_at> date in INDEX.xml.
   - Keeps existing descriptions for docs whose content is unchanged; flags docs
     whose content changed as needing a new description.
 

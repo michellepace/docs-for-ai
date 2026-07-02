@@ -13,29 +13,23 @@ allowed-tools:
   - Write
 ---
 
-Re-curate every document in `$collection` and batch-regenerate its descriptions.
+Re-curate every document in `$collection` and regenerate its INDEX.xml descriptions.
 
 ## Context
 
-Curated collections route an LLM reader to the right doc via INDEX.xml descriptions, instead of searching whole documentation sites. **Your task:** write a description for each doc the sync script flags with a PLACEHOLDER.
+INDEX.xml descriptions route an LLM reader to the right doc, instead of searching whole doc sites. The `sync-index` script re-curates the docs; **your task** is to write a description for each doc it flags with a PLACEHOLDER.
 
 ## Workflow
 
 ### 1. Validate argument
 
-!`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
+Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Validate `$collection` against `<existing_collections>`; reject if absent, and suggest the closest match if it looks like a typo.
+Validate `$collection` against `<existing_collections>`: reject if it's missing or unknown, suggesting the closest match when it looks like a typo. Keep messages emoji-led, brief, and kind — fail with a suggested fix, or show success and proceed.
 
-<example_validation_success>
+<validation_failure>
 
-```
-## 🙂 Super! Re-curating the `$collection` collection...
-```
-
-</example_validation_success>
-
-<example_validation_failure>
+Shape: `## 🤔 <one-line diagnosis>`, a `-` bullet or two (what you saw + the corrected `/recurate-docs …`), then one warm line. Anchor example (missing arg):
 
 ```
 ## 🤔 Missing argument!
@@ -45,7 +39,15 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and s
 [Friendly recommendation/suggestion in 1 short sentence]
 ```
 
-</example_validation_failure>
+</validation_failure>
+
+<validation_success>
+
+```
+## 🙂 Super! Re-curating the `$collection` collection...
+```
+
+</validation_success>
 
 ### 2. Run sync and curate
 

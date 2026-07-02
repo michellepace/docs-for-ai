@@ -19,52 +19,28 @@ Your task is to curate a source URL `$source_url` into a collection `$collection
 
 Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-The collection `$collection` may already exist else will be created. Parse the user's arguments first. Here are just a few examples what new users can inadvertently get wrong - you are to help them do what they intend:
+Parse `$collection` and `$source_url`, then weigh them against the existing collections. Spot what a new user likely got wrong and steer them to what they *intended* — `$collection` may already exist, or be created fresh. Keep every message emoji-led, brief, and kind. On a problem, fail with a suggested fix and ask to confirm; otherwise show success and proceed.
 
 <validation_failure>
 
-- Missing args (generic):
+Every failure has the same shape: `## 🤔 <one-line diagnosis>`, then 1–3 `-` bullets (what you saw + the corrected `/curate-doc …` to run), then one warm line asking to confirm. The cases differ only in what you detect:
 
-  ```
-  ## 🤔 Missing arguments!
-  - Usage: `/curate-doc <collection> <url>`
-  - Existing collections: `shiny`, `uv`, `tailwind`
-  - Example: `/curate-doc shiny https://shiny.posit.co/py/docs/overview.html`
+- **Missing args** — show usage, list existing collections, add a runnable example.
+- **No collection, URL given** — infer a collection name from the URL; propose it as new.
+- **Typo** — `$collection` is near an existing one (`shiyy` → `shiny`); suggest the match.
+- **Semantic mismatch** — `$collection` exists but the URL is plainly another tech; point to the right one.
 
-  [Friendly suggestion. Ask for confirmation.]
-  ```
+Anchor example (semantic mismatch):
 
-- Missing args (URL as `$collection`, smart inference):
+```
+## 🤔 Mmm.. are you sure you meant `shiny`?
+- Collection: `shiny`
+- URL: `https://tailwindcss.com/docs/installation`
+- This looks like Tailwind CSS docs, not Shiny
+- Did you mean: `/curate-doc tailwind https://tailwindcss.com/docs/installation` ?
 
-  ```
-  ## 🤔 You didn't give me a collection?
-  - URL detected: `https://vite.dev/guide/cli.html`
-  - My Suggestion: A new `vite` collection looks ideal!
-  - Try: `/curate-doc vite https://vite.dev/guide/cli.html`
-
-  [Shall we proceed with `vite` as a new collection? It will get created automatically 🙂]
-  ```
-
-- Typo detection:
-
-  ```
-  ## 🤔 Collection "shiyy" doesn't exist, but you have "shiny"!
-  - Did you mean: `/curate-doc shiny https://example.com/docs` ?
-
-  [Friendly suggestion. Ask for confirmation.]
-  ```
-
-- Semantic mismatch:
-
-  ```
-  ## 🤔 Mmm.. are you sure you meant `shiny`?
-  - Collection: `shiny`
-  - URL: `https://tailwindcss.com/docs/installation`
-  - This appears to be Tailwind CSS docs, not Shiny
-  - Did you mean: `/curate-doc tailwind https://tailwindcss.com/docs/installation` ?
-
-  [Friendly recommendation in 1-2 short sentence, ask for confirmation]
-  ```
+[Friendly recommendation in 1–2 short sentences, ask for confirmation]
+```
 
 </validation_failure>
 
@@ -75,8 +51,6 @@ The collection `$collection` may already exist else will be created. Parse the u
 ```
 
 </validation_success>
-
-Analyse `$collection` and `$source_url` against the existing collections and decide whether to fail validation. Match the examples above — emoji-led, brief, kind to an overwhelmed new user. On failure, suggest a fix and ask for confirmation; otherwise output a success message and proceed.
 
 ## Step 2. Run the script
 

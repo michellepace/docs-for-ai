@@ -64,7 +64,7 @@ Errors print actionable info. Propose fixes but await user approval; proceed ONL
 
 Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then:
 
-1. Analyse the curated doc and draft a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+1. Read the **full** curated doc (however large), then draft a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
     ```text
     overview-shiny-for-python.md
     Description for doc on single line

@@ -61,7 +61,7 @@ INDEX.xml is the source of truth: the script re-curates exactly the sources it l
 
 Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
 
-1. Analyse the doc and draft a [20, 30]-word description (strict)
+1. Read the **full** doc (however large), then draft a [20, 30]-word description (strict)
 2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
 
    ```text

@@ -8,6 +8,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import NamedTuple
 
+from docs_for_ai import curate_doc
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
@@ -69,20 +71,16 @@ def delete_orphan_files(collection_dir: Path, indexed_files: set[str]) -> list[s
 
 
 def _curate_doc(collection_dir: Path, source_url: str) -> bool:
-    """Run curate-doc for one source via subprocess; return True on success."""
-    # Absolute path prevents PATH hijacking (ruff S607)
-    uv_path = shutil.which("uv")
-    if not uv_path:
-        print("❌ uv not found: not in PATH")
+    """Curate one source in-process; print its failure line and return False."""
+    try:
+        curate_doc.curate(collection_dir, source_url)
+    except CurationError as exc:
+        print(f"❌ {exc}")
         return False
-
-    result = subprocess.run(
-        [uv_path, "run", "curate-doc", str(collection_dir), source_url],
-        check=False,
-        capture_output=False,  # let curate output stream through
-        text=True,
-    )
-    return result.returncode == 0
+    except Exception as exc:  # noqa: BLE001 — one doc's crash must not abort the sync
+        print(f"❌ Unexpected error: {type(exc).__name__}: {exc} — {source_url}")
+        return False
+    return True
 
 
 def _print_git_content_changes(collection_dir: Path) -> None:

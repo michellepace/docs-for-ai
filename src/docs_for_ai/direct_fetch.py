@@ -1,7 +1,6 @@
 """Resolve a doc URL to a fetch route (precedence order), fetch and extract its title."""
 
 import re
-import sys
 import tomllib
 import urllib.error
 import urllib.request
@@ -9,6 +8,8 @@ from itertools import pairwise
 from pathlib import Path
 from typing import Literal, NamedTuple, NoReturn
 from urllib.parse import urlparse, urlunparse
+
+from docs_for_ai.errors import CurationError
 
 # A directly-fetched doc's format; None on a route means "scrape via FireCrawl".
 DocFormat = Literal["markdown", "rst"]
@@ -39,16 +40,15 @@ RAW_SUFFIXES: dict[str, tuple[DocFormat, str]] = {
 
 
 def _fail(label: str, detail: str = "", locus: str = "") -> NoReturn:
-    """Print a human-readable error line and exit."""
-    message = f"❌ {label}"
+    """Raise CurationError with a `label[: detail][ — locus]` message."""
+    message = label
     if detail:
         message += f": {detail}"
         if locus:
             message += f" — {locus}"
     elif locus:
         message += f": {locus}"
-    print(message)
-    sys.exit(1)
+    raise CurationError(message)
 
 
 def is_github_url(url: str) -> bool:
@@ -342,7 +342,7 @@ def extract_title(content: str, doc_format: DocFormat, url: str) -> str:
 
 
 def fetch_text(fetch_url: str) -> str:
-    """Fetch text from `fetch_url`; exits on 404 or network failure."""
+    """Fetch text from `fetch_url`; raises CurationError on 404 or network failure."""
     # S310: doc URL is operator-supplied via the CLI
     request = urllib.request.Request(  # noqa: S310
         fetch_url, headers={"User-Agent": USER_AGENT}

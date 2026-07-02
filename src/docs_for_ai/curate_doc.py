@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple
 from urllib.parse import urlparse
 
 from docs_for_ai import direct_fetch, firecrawl_scrape
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
@@ -16,21 +17,21 @@ if TYPE_CHECKING:
 
 
 def _validate_url(url: str) -> None:
-    """Validate URL has scheme and netloc, exit if invalid."""
+    """Validate URL has scheme and netloc, raise if invalid."""
     parsed = urlparse(url)
     if not parsed.scheme or not parsed.netloc:
-        print(f"❌ Invalid URL: {url}")
-        sys.exit(1)
+        msg = f"Invalid URL: {url}"
+        raise CurationError(msg)
 
 
 def _reject_uv_docs_url(url: str) -> None:
     """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
     if url.startswith("https://docs.astral.sh/uv/"):
-        print(
-            "❌ Unsupported uv URL: use the GitHub blob "
+        msg = (
+            "Unsupported uv URL: use the GitHub blob "
             f"(see collections/uv/INDEX.xml) — {url}"
         )
-        sys.exit(1)
+        raise CurationError(msg)
 
 
 def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
@@ -39,11 +40,8 @@ def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
         and not index_path.exists()
         and any(collection_dir.iterdir())
     ):
-        print(
-            f"❌ Unsafe collection dir: non-empty and missing INDEX.xml "
-            f"— {collection_dir}"
-        )
-        sys.exit(1)
+        msg = f"Unsafe collection dir: non-empty and missing INDEX.xml — {collection_dir}"
+        raise CurationError(msg)
 
 
 def _initialise_collection(collection_dir: Path, source_url: str) -> None:
@@ -112,17 +110,17 @@ def _add_or_update_source_in_index(
 def _reject_filename_collision(
     collection_dir: Path, filename: str, source_url: str
 ) -> None:
-    """Exit if `filename` already belongs to a DIFFERENT source_url in INDEX.xml."""
+    """Raise if `filename` already belongs to a DIFFERENT source_url in INDEX.xml."""
     root = ET.parse(collection_dir / "INDEX.xml").getroot()
     for source in root.findall("source"):
         existing_file = source.findtext("local_file")
         existing_url = (source.findtext("source_url") or "").rstrip("/")
         if existing_file == filename and existing_url != source_url:
-            print(
-                f"❌ Filename collision: {filename} already curated from "
+            msg = (
+                f"Filename collision: {filename} already curated from "
                 f"{existing_url} — {source_url}"
             )
-            sys.exit(1)
+            raise CurationError(msg)
 
 
 class FetchedDoc(NamedTuple):
@@ -182,19 +180,16 @@ notes:
     return parser.parse_args()
 
 
-def main() -> None:
-    """Curate a single source URL into a collection directory."""
-    args = _parse_args()
-
-    source_url: str = args.source_url.rstrip("/")
-    collection_dir = normalise_collection_dir(args.collection_dir)
+def curate(collection_dir: Path, source_url: str) -> None:
+    """Curate one source URL into a collection; raises CurationError on failure."""
+    source_url = source_url.rstrip("/")
     index_path = collection_dir / "INDEX.xml"
+
+    print(f"📥 Curating… {source_url}")
 
     _validate_url(source_url)
     _reject_uv_docs_url(source_url)
     _validate_collection_dir(collection_dir, index_path)
-
-    print("Curating…")
 
     collection_dir.mkdir(parents=True, exist_ok=True)
     index_exists = index_path.exists()
@@ -218,6 +213,16 @@ def main() -> None:
     )
 
     print("🏁 Success! curated doc (🚩 description pending)\n")
+
+
+def main() -> None:
+    """Curate a single source URL into a collection directory."""
+    args = _parse_args()
+    try:
+        curate(normalise_collection_dir(args.collection_dir), args.source_url)
+    except CurationError as exc:
+        print(f"❌ {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

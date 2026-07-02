@@ -53,7 +53,10 @@ Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding 
 ## Common Commands
 
 ```shell
-uv run curate-doc <collection> <url> # Curate from a URL into collection
+# Entry points
+uv run curate-doc --help          # Curate a doc from a URL
+uv run sync-index --help          # Sync INDEX.xml & re-curate
+uv run update-descriptions --help # Update INDEX.xml descriptions
 
 # Quality (see pyproject.toml)
 uv run ruff check --fix           # Lint and auto-fix

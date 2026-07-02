@@ -238,11 +238,9 @@ def _cleanup_backup(backup_path: Path) -> None:
 def main() -> None:
     """Sync INDEX.xml, curate all docs, output structured results."""
     parser = argparse.ArgumentParser(
-        description="Sync INDEX.xml, re-curate all docs, output batch processing data"
+        description="Sync a collection's INDEX.xml and re-curate all its docs"
     )
-    parser.add_argument(
-        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
-    )
+    parser.add_argument("collection_dir", help="Target collection directory")
     args = parser.parse_args()
 
     collection_dir = normalise_collection_dir(args.collection_dir)

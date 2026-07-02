@@ -163,18 +163,15 @@ def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
 def _parse_args() -> argparse.Namespace:
     """Parse CLI arguments: target collection directory and source URL."""
     parser = argparse.ArgumentParser(
-        description="Add or update documentation in a collection directory"
+        description="Curate a source document into a collection directory"
     )
     parser.add_argument(
         "collection_dir",
-        help="Collection directory (e.g. collections/tailwind/)",
+        help="Target collection directory (created if it doesn't exist)",
     )
     parser.add_argument(
         "source_url",
-        help=(
-            "Web URL to curate (direct fetch for `.md`/GitHub blobs and "
-            "registered sites, else FireCrawl scrape)"
-        ),
+        help="Web URL of the document to curate",
     )
     return parser.parse_args()
 

@@ -13,6 +13,12 @@ DESCRIP_MIN_WORDS = 20
 DESCRIP_MAX_WORDS = 30
 LINES_PER_ENTRY = 2  # filename line + description line
 
+DESCRIPTIONS_FILE_FORMAT = (
+    "descriptions file format — one pair of lines per INDEX source:\n"
+    "  <filename>\n"
+    f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)"
+)
+
 type DescriptionsByFile = dict[str, str]
 
 
@@ -34,12 +40,9 @@ def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
 
 
 def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
-    """Parse a descriptions file of alternating local_file / description lines.
+    """Parse a descriptions file into a {local_file: description} mapping.
 
-    file1.md
-    Description text file 1
-    file2.md
-    Description text file 2
+    See DESCRIPTIONS_FILE_FORMAT for the expected line layout.
     """
     non_blank_lines = [
         line.strip()
@@ -121,14 +124,14 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 def main() -> None:
     """Parse arguments and update descriptions in INDEX.xml."""
     parser = argparse.ArgumentParser(
-        description="Update INDEX.xml descriptions from descriptions file"
+        description="Update a collection's INDEX.xml descriptions from a file",
+        epilog=DESCRIPTIONS_FILE_FORMAT,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
-    )
+    parser.add_argument("collection_dir", help="Target collection directory")
     parser.add_argument(
         "temp_descriptions_file",
-        help="Temporary descriptions file (deleted after a successful update)",
+        help="Descriptions file (deleted after a successful update)",
     )
     args = parser.parse_args()
 

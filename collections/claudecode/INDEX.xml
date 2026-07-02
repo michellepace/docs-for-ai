@@ -70,13 +70,6 @@
     <curated_at>2026-07-02</curated_at>
   </source>
   <source>
-    <title>Plugins reference</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
-    <local_file>en-plugins-reference.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
     <title>Create and distribute a plugin marketplace</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/plugin-marketplaces</source_url>
@@ -84,17 +77,24 @@
     <curated_at>2026-07-02</curated_at>
   </source>
   <source>
-    <title>Extend Claude with skills</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/skills</source_url>
-    <local_file>en-skills.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
     <title>Create custom subagents</title>
     <description>PLACEHOLDER</description>
     <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
     <local_file>en-sub-agents.md</local_file>
+    <curated_at>2026-07-02</curated_at>
+  </source>
+  <source>
+    <title>Plugins reference</title>
+    <description>`plugin.json` manifest schema, component types (skills, agents, hooks, MCP/LSP servers, monitors, themes), `userConfig` and `channels`, `${CLAUDE_PLUGIN_ROOT}`/`${CLAUDE_PLUGIN_DATA}` variables, installation scopes, `@skills-dir` plugins, `claude plugin` CLI, caching, version management, and debugging.</description>
+    <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
+    <local_file>en-plugins-reference.md</local_file>
+    <curated_at>2026-07-02</curated_at>
+  </source>
+  <source>
+    <title>Extend Claude with skills</title>
+    <description>`SKILL.md` frontmatter, `disable-model-invocation`/`user-invocable` invocation control, personal/project/plugin/enterprise precedence, `$ARGUMENTS` substitutions, `!command` dynamic injection, `context: fork` subagents, `allowed-tools`, `skillOverrides`, bundled skills, and `skill-creator` evals.</description>
+    <source_url>https://code.claude.com/docs/en/skills</source_url>
+    <local_file>en-skills.md</local_file>
     <curated_at>2026-07-02</curated_at>
   </source>
 </docs_index>

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 def _validate_url(url: str) -> None:
-    """Validate URL has scheme and netloc, raise if invalid."""
+    """Validate URL has scheme and netloc."""
     parsed = urlparse(url)
     if not parsed.scheme or not parsed.netloc:
         msg = f"Invalid URL: {url}"
@@ -110,7 +110,7 @@ def _add_or_update_source_in_index(
 def _reject_filename_collision(
     collection_dir: Path, filename: str, source_url: str
 ) -> None:
-    """Raise if `filename` already belongs to a DIFFERENT source_url in INDEX.xml."""
+    """Reject `filename` already belonging to a DIFFERENT source_url in INDEX.xml."""
     root = ET.parse(collection_dir / "INDEX.xml").getroot()
     for source in root.findall("source"):
         existing_file = source.findtext("local_file")
@@ -181,7 +181,7 @@ notes:
 
 
 def curate(collection_dir: Path, source_url: str) -> None:
-    """Curate one source URL into a collection; raises CurationError on failure."""
+    """Curate one source URL into a collection."""
     source_url = source_url.rstrip("/")
     index_path = collection_dir / "INDEX.xml"
 

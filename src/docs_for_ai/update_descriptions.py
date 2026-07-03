@@ -55,7 +55,7 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
 def _validate_collection_inputs(
     collection_dir: Path, temp_descriptions_file: str
 ) -> tuple[Path, Path]:
-    """Resolve and validate the INDEX.xml and descriptions paths, or raise."""
+    """Resolve and validate the INDEX.xml and descriptions paths."""
     index_path = collection_dir / "INDEX.xml"
     descriptions_path = Path(temp_descriptions_file)
 

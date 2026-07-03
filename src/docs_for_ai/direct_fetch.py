@@ -40,7 +40,7 @@ RAW_SUFFIXES: dict[str, tuple[DocFormat, str]] = {
 
 
 def _fail(label: str, detail: str = "", locus: str = "") -> NoReturn:
-    """Raise CurationError with a `label[: detail][ — locus]` message."""
+    """Fail with a `label[: detail][ — locus]` message."""
     message = label
     if detail:
         message += f": {detail}"
@@ -245,7 +245,7 @@ def github_blob_to_raw_url(url: str) -> str:
 def github_filename_from_blob_url(url: str) -> str:
     """Derive a filename from a GitHub blob URL's path, keeping its extension.
 
-    Strips a leading `docs/`, lowercases, hyphen-joins; bad names exit GITHUB_FILENAME.
+    Strips a leading `docs/`, lowercases, hyphen-joins.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -342,7 +342,7 @@ def extract_title(content: str, doc_format: DocFormat, url: str) -> str:
 
 
 def fetch_text(fetch_url: str) -> str:
-    """Fetch text from `fetch_url`; raises CurationError on 404 or network failure."""
+    """Fetch text from `fetch_url`."""
     # S310: doc URL is operator-supplied via the CLI
     request = urllib.request.Request(  # noqa: S310
         fetch_url, headers={"User-Agent": USER_AGENT}

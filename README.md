@@ -33,10 +33,12 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 # 5. Install dependencies and git hooks (commit/push)
 uv sync && uv run pre-commit install
 
-# 6. Symlink slash commands so they work anywhere
+# 6. Make the slash commands work anywhere
 mkdir -p ~/.claude/commands
-ln -s "$PWD" ~/.claude/docs-for-ai # anchor (run from repo root)
-ln -s ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
+# make an anchor so slash command scripts work (run from repo root)
+ln -sfn "$PWD" ~/.claude/docs-for-ai
+# make "/ask-docs" etc. work from anywhere
+ln -sf ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 ```
 
 To direct-fetch a site instead of scraping it — faster, cleaner, free — add its URL prefix to the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml): `append-md` for `.md` twins (page + `.md`, e.g. `https://nextjs.org/docs/`) or `readthedocs` for Sphinx sites. GitHub blob URLs and `.md` URLs are always direct.

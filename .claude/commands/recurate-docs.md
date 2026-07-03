@@ -1,5 +1,5 @@
 ---
-description: Re-curate all docs in collection and regenerate descriptions
+description: Re-curate a collection's docs and descriptions
 disable-model-invocation: true
 argument-hint: <collection>
 arguments: [collection]
@@ -13,29 +13,23 @@ allowed-tools:
   - Write
 ---
 
-Re-curate every document in `$collection` and batch-regenerate its descriptions.
+Re-curate every document in `$collection` and regenerate its INDEX.xml descriptions.
 
 ## Context
 
-Curated collections route an LLM reader to the right doc via INDEX.xml descriptions, instead of searching whole documentation sites. **Your task:** write a description for each doc the sync script flags with a PLACEHOLDER.
+INDEX.xml descriptions route an LLM reader to the right doc, instead of searching whole doc sites. The `sync-index` script re-curates the docs; **your task** is to write a description for each doc it flags with a PLACEHOLDER.
 
 ## Workflow
 
 ### 1. Validate argument
 
-!`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
+Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Validate `$collection` against `<existing_collections>`; reject if absent, and suggest the closest match if it looks like a typo.
+Validate `$collection` against `<existing_collections>`: reject if it's missing or unknown, suggesting the closest match when it looks like a typo. Keep messages emoji-led, brief, and kind — fail with a suggested fix, or show success and proceed.
 
-<example_validation_success>
+<validation_failure>
 
-```
-## 🙂 Super! Re-curating the `$collection` collection...
-```
-
-</example_validation_success>
-
-<example_validation_failure>
+Shape: `## 🤔 <one-line diagnosis>`, a `-` bullet or two (what you saw + the corrected `/recurate-docs …`), then one warm line. Anchor example (missing arg):
 
 ```
 ## 🤔 Missing argument!
@@ -45,7 +39,15 @@ Validate `$collection` against `<existing_collections>`; reject if absent, and s
 [Friendly recommendation/suggestion in 1 short sentence]
 ```
 
-</example_validation_failure>
+</validation_failure>
+
+<validation_success>
+
+```
+## 🙂 Super! Re-curating the `$collection` collection...
+```
+
+</validation_success>
 
 ### 2. Run sync and curate
 
@@ -55,15 +57,17 @@ uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 
 INDEX.xml is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a PLACEHOLDER description on each new or content-changed doc. Read its output as it runs.
 
-### 3. Generate descriptions for PLACEHOLDER entries only
+### 3. Write descriptions for PLACEHOLDER entries only
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
+Read the rules first: `~/.claude/docs-for-ai/.claude/references/description-rules.md` — its rules and examples govern every description below.
 
-1. Analyse the doc and draft a [20, 30]-word description (strict)
-2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
+Then work through each file the script flagged PLACEHOLDER, one at a time. Each write feeds on two reads — those rules, plus the **full** doc (from the absolute `~/...` path exactly as printed, however large):
+
+1. Write a [20, 30]-word description (strict).
+2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`, keyed by the **bare filename** (the INDEX `<local_file>`, e.g. `en-hooks.md`) — not the absolute path, which `update-descriptions` won't match:
 
    ```text
-   getting-started-installation.md
+   getting-started.md
    Description for this file here
    ```
 

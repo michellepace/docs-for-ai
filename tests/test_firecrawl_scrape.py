@@ -3,6 +3,7 @@
 import pytest
 from firecrawl.v2.utils.error_handler import RateLimitError
 
+from docs_for_ai.errors import CurationError
 from docs_for_ai.firecrawl_scrape import _get_firecrawl_client, parse_retry_seconds
 
 
@@ -23,16 +24,13 @@ class TestParseRetrySeconds:
 class TestGetFirecrawlClient:
     """The client guards on the API key before any network use."""
 
-    def test_missing_api_key_exits_naming_the_variable(
-        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    def test_missing_api_key_raises_naming_the_variable(
+        self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """No API key aborts non-zero, naming the variable to set (no client built)."""
+        """No API key raises, naming the variable to set (no client built)."""
         monkeypatch.delenv("API_KEY_MCP_FIRECRAWL", raising=False)
 
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(
+            CurationError, match="Missing API key: set API_KEY_MCP_FIRECRAWL"
+        ):
             _get_firecrawl_client()
-
-        assert exc.value.code == 1
-        out = capsys.readouterr().out
-        assert "Missing API key" in out
-        assert "API_KEY_MCP_FIRECRAWL" in out

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.sync_index import (
     delete_orphan_files,
@@ -252,9 +253,9 @@ def test_cli_exits_with_clear_error_on_malformed_xml(tmp_path: Path) -> None:
         check=False,
     )
 
-    assert result.returncode != 0
-    assert "Invalid XML" in result.stdout + result.stderr
-    assert "INDEX.xml" in result.stdout + result.stderr
+    assert result.returncode == 1
+    assert "Invalid XML" in result.stdout
+    assert "INDEX.xml" in result.stdout
 
 
 def test_main_exits_when_collection_directory_missing(
@@ -286,6 +287,57 @@ def test_main_exits_when_index_missing(
     out = capsys.readouterr().out
     assert "Not a collection" in out
     assert str(tmp_path / "INDEX.xml") in out
+
+
+@pytest.mark.parametrize(
+    ("failure", "expected_error_line"),
+    [
+        (
+            CurationError("Fetch failed: 404 not found — https://example.com/b"),
+            "❌ Fetch failed: 404 not found — https://example.com/b",
+        ),
+        (RuntimeError("boom"), "❌ Unexpected error: RuntimeError: boom"),
+    ],
+    ids=["curation-error", "unexpected-crash"],
+)
+def test_sync_curates_each_source_in_process_and_isolates_failures(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    failure: Exception,
+    expected_error_line: str,
+) -> None:
+    """One doc's failure is reported and counted; the sync still completes."""
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    (collection_dir / "doc-a.md").write_text("# A")
+    (collection_dir / "doc-b.md").write_text("# B")
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [
+            make_source("doc-a.md", "https://example.com/a", "Description A"),
+            make_source("doc-b.md", "https://example.com/b", "Description B"),
+        ],
+    )
+
+    curated_urls: list[str] = []
+
+    def fake_curate(_collection_dir: Path, source_url: str) -> None:
+        curated_urls.append(source_url)
+        if source_url == "https://example.com/b":
+            raise failure
+
+    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake_curate)
+    monkeypatch.setattr("sys.argv", ["sync-index", str(collection_dir)])
+
+    main()
+
+    out = capsys.readouterr().out
+    assert curated_urls == ["https://example.com/a", "https://example.com/b"]
+    assert "- Successful|1" in out
+    assert "- Failed|1" in out
+    assert "### Failed URLs\n- https://example.com/b" in out
+    assert expected_error_line in out
 
 
 @pytest.mark.firecrawl

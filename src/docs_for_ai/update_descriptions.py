@@ -1,4 +1,4 @@
-"""Update INDEX.xml descriptions from a descriptions file."""
+"""Update INDEX.xml descriptions. See `update-descriptions --help` for behaviour."""
 
 import argparse
 import sys
@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from itertools import batched
 from pathlib import Path
 
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import write_index
 from docs_for_ai.paths import normalise_collection_dir
 
@@ -16,9 +17,9 @@ LINES_PER_ENTRY = 2  # filename line + description line
 type DescriptionsByFile = dict[str, str]
 
 
-def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
-    """Ensure description is within [min, max] band."""
-    failed = False
+def _validate_word_counts(descriptions: DescriptionsByFile) -> bool:
+    """True when every description is within band."""
+    all_in_band = True
     for local_file, description in descriptions.items():
         count = len(description.split())
         if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
@@ -28,19 +29,12 @@ def _validate_word_counts(descriptions: DescriptionsByFile) -> None:
                 f"❌ {local_file}: {count} words "
                 f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})"
             )
-            failed = True
-    if failed:
-        sys.exit(1)
+            all_in_band = False
+    return all_in_band
 
 
 def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
-    """Parse a descriptions file of alternating local_file / description lines.
-
-    file1.md
-    Description text file 1
-    file2.md
-    Description text file 2
-    """
+    """Parse a descriptions file into a {local_file: description} mapping."""
     non_blank_lines = [
         line.strip()
         for line in descriptions_path.read_text().splitlines()
@@ -61,17 +55,17 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
 def _validate_collection_inputs(
     collection_dir: Path, temp_descriptions_file: str
 ) -> tuple[Path, Path]:
-    """Resolve and validate the INDEX.xml and descriptions paths, or exit."""
+    """Resolve and validate the INDEX.xml and descriptions paths."""
     index_path = collection_dir / "INDEX.xml"
     descriptions_path = Path(temp_descriptions_file)
 
     if not index_path.exists():
-        print(f"❌ Not a collection: {index_path} not found")
-        sys.exit(1)
+        msg = f"Not a collection: {index_path} not found"
+        raise CurationError(msg)
 
     if not descriptions_path.exists():
-        print(f"❌ Descriptions file not found: {descriptions_path}")
-        sys.exit(1)
+        msg = f"Descriptions file not found: {descriptions_path}"
+        raise CurationError(msg)
 
     return index_path, descriptions_path
 
@@ -118,33 +112,22 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
     return updated_count
 
 
-def main() -> None:
-    """Parse arguments and update descriptions in INDEX.xml."""
-    parser = argparse.ArgumentParser(
-        description="Update INDEX.xml descriptions from descriptions file"
-    )
-    parser.add_argument(
-        "collection_dir", help="Collection directory (e.g. collections/shiny/)"
-    )
-    parser.add_argument(
-        "temp_descriptions_file",
-        help="Temporary descriptions file (deleted after a successful update)",
-    )
-    args = parser.parse_args()
-
-    collection_dir = normalise_collection_dir(args.collection_dir)
+def _run_update(collection_dir: Path, temp_descriptions_file: str) -> None:
+    """Apply a descriptions file to INDEX.xml."""
     index_path, descriptions_path = _validate_collection_inputs(
-        collection_dir, args.temp_descriptions_file
+        collection_dir, temp_descriptions_file
     )
 
     descriptions = parse_descriptions_file(descriptions_path)
 
     if not descriptions:
-        print(f"❌ No descriptions found: {descriptions_path}")
-        sys.exit(1)
+        msg = f"No descriptions found: {descriptions_path}"
+        raise CurationError(msg)
 
     # Reject before touching INDEX.xml if out of the word-count band
-    _validate_word_counts(descriptions)
+    if not _validate_word_counts(descriptions):
+        msg = "Word count(s) out of band: rewrite the flagged description(s) and rerun"
+        raise CurationError(msg)
 
     print(f"✅ Parsed: {len(descriptions)} description(s)")
     print()
@@ -153,6 +136,40 @@ def main() -> None:
 
     if updated_count > 0:
         _cleanup_temp_file(descriptions_path)
+
+
+def main() -> None:
+    """Parse arguments and update descriptions in INDEX.xml."""
+    parser = argparse.ArgumentParser(
+        description=(
+            "Apply descriptions from a file to a collection's INDEX.xml, "
+            "matched by filename."
+        ),
+        epilog=(
+            "descriptions file format — one pair of lines per INDEX source:\n"
+            "  <filename>\n"
+            f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)\n\n"
+            "A description outside that word band fails the run; "
+            "INDEX.xml is left untouched."
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+    )
+    parser.add_argument(
+        "temp_descriptions_file",
+        help="Descriptions file (deleted after a successful update)",
+    )
+    args = parser.parse_args()
+
+    try:
+        _run_update(
+            normalise_collection_dir(args.collection_dir), args.temp_descriptions_file
+        )
+    except CurationError as exc:
+        print(f"❌ {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

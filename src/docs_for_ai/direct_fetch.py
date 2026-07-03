@@ -1,7 +1,6 @@
 """Resolve a doc URL to a fetch route (precedence order), fetch and extract its title."""
 
 import re
-import sys
 import tomllib
 import urllib.error
 import urllib.request
@@ -9,6 +8,8 @@ from itertools import pairwise
 from pathlib import Path
 from typing import Literal, NamedTuple, NoReturn
 from urllib.parse import urlparse, urlunparse
+
+from docs_for_ai.errors import CurationError
 
 # A directly-fetched doc's format; None on a route means "scrape via FireCrawl".
 DocFormat = Literal["markdown", "rst"]
@@ -39,16 +40,15 @@ RAW_SUFFIXES: dict[str, tuple[DocFormat, str]] = {
 
 
 def _fail(label: str, detail: str = "", locus: str = "") -> NoReturn:
-    """Print a human-readable error line and exit."""
-    message = f"❌ {label}"
+    """Fail with a `label[: detail][ — locus]` message."""
+    message = label
     if detail:
         message += f": {detail}"
         if locus:
             message += f" — {locus}"
     elif locus:
         message += f": {locus}"
-    print(message)
-    sys.exit(1)
+    raise CurationError(message)
 
 
 def is_github_url(url: str) -> bool:
@@ -245,7 +245,7 @@ def github_blob_to_raw_url(url: str) -> str:
 def github_filename_from_blob_url(url: str) -> str:
     """Derive a filename from a GitHub blob URL's path, keeping its extension.
 
-    Strips a leading `docs/`, lowercases, hyphen-joins; bad names exit GITHUB_FILENAME.
+    Strips a leading `docs/`, lowercases, hyphen-joins.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -342,7 +342,7 @@ def extract_title(content: str, doc_format: DocFormat, url: str) -> str:
 
 
 def fetch_text(fetch_url: str) -> str:
-    """Fetch text from `fetch_url`; exits on 404 or network failure."""
+    """Fetch text from `fetch_url`."""
     # S310: doc URL is operator-supplied via the CLI
     request = urllib.request.Request(  # noqa: S310
         fetch_url, headers={"User-Agent": USER_AGENT}

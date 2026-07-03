@@ -1,13 +1,11 @@
-"""FireCrawl scrape path, dispatched from curate-doc orchestrator.
-
-Failures use the `❌ Label: detail — url` print-and-exit convention.
-"""
+"""FireCrawl scrape path, dispatched from curate-doc orchestrator."""
 
 import re
-import sys
 import time
 import warnings
 from os import environ
+
+from docs_for_ai.errors import CurationError
 
 # Mute upstream firecrawl pydantic field-shadow warning.
 with warnings.catch_warnings():
@@ -27,8 +25,8 @@ def _get_firecrawl_client() -> Firecrawl:
     """Get Firecrawl client with API key from environment."""
     api_key = environ.get("API_KEY_MCP_FIRECRAWL")
     if not api_key:
-        print("❌ Missing API key: set API_KEY_MCP_FIRECRAWL")
-        sys.exit(1)
+        msg = "Missing API key: set API_KEY_MCP_FIRECRAWL"
+        raise CurationError(msg)
     return Firecrawl(api_key=api_key)
 
 
@@ -53,8 +51,8 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> tuple[str, str]:
     )
 
     if not result or not result.markdown:
-        print(f"❌ No content scraped: {url}")
-        sys.exit(1)
+        msg = f"No content scraped: {url}"
+        raise CurationError(msg)
 
     title = "Untitled"
     if result.metadata:
@@ -74,6 +72,10 @@ def scrape(url: str, max_attempts: int = 2) -> tuple[str, str]:
         try:
             return _perform_scrape(firecrawl, url)
 
+        except CurationError:
+            # Already a structured failure (e.g. empty content) — don't re-wrap
+            raise
+
         except RateLimitError as e:
             if attempt < max_attempts - 1:
                 wait_time = parse_retry_seconds(e) + 2  # Add 2s safety buffer
@@ -82,24 +84,24 @@ def scrape(url: str, max_attempts: int = 2) -> tuple[str, str]:
                 continue
 
             # Final attempt exhausted
-            print(f"❌ Rate limited: no content after {max_attempts} attempts — {url}")
-            sys.exit(1)
+            msg = f"Rate limited: no content after {max_attempts} attempts — {url}"
+            raise CurationError(msg) from e
 
         except FirecrawlError as e:
             # All other Firecrawl API errors
-            print(f"❌ Firecrawl error: {e} — {url}")
-            sys.exit(1)
+            msg = f"Firecrawl error: {e} — {url}"
+            raise CurationError(msg) from e
 
         except OSError as e:
             # Network/connection failures (timeouts, DNS errors, etc.)
-            print(f"❌ Network error: {e} — {url}")
-            sys.exit(1)
+            msg = f"Network error: {e} — {url}"
+            raise CurationError(msg) from e
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             # Unexpected errors (ValueError, RuntimeError, SDK bugs, etc.)
-            print(f"❌ Unexpected error: {type(e).__name__}: {e} — {url}")
-            sys.exit(1)
+            msg = f"Unexpected error: {type(e).__name__}: {e} — {url}"
+            raise CurationError(msg) from e
 
     # Defensive fallback (unreachable in normal execution)
-    print(f"❌ Network error: failed after {max_attempts} attempts — {url}")
-    sys.exit(1)
+    msg = f"Network error: failed after {max_attempts} attempts — {url}"
+    raise CurationError(msg)

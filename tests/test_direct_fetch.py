@@ -17,6 +17,7 @@ from docs_for_ai.direct_fetch import (
     load_direct_fetch_rules,
     resolve_route,
 )
+from docs_for_ai.errors import CurationError
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -59,17 +60,12 @@ class TestLoadDirectFetchRules:
             "readthedocs": ["https://rich.readthedocs.io/en/stable/"],
         }
 
-    def test_unknown_transform_key_fails_loud(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_unknown_transform_key_fails_loud(self, tmp_path: Path) -> None:
         rules_file = tmp_path / "direct-fetch-rules.toml"
         rules_file.write_text('mystery-transform = ["https://x.io/"]\n')
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(CurationError, match="Unknown transform") as exc:
             load_direct_fetch_rules(rules_file)
-        assert exc.value.code == 1
-        out = capsys.readouterr().out
-        assert "Unknown transform" in out
-        assert "mystery-transform" in out
+        assert "mystery-transform" in str(exc.value)
 
 
 # Registry prefixes for the offline routing tests below. A FetchRoute is a
@@ -339,14 +335,10 @@ class TestGithubBlobToRawUrl:
             "https://github.com/astral-sh/uv/blob/main/docs/x.rst",
         ],
     )
-    def test_non_blob_url_fails(
-        self, url: str, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_non_blob_url_fails(self, url: str) -> None:
         """Raw, repo root, tree/, other branch, unsupported ext are all refused."""
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(CurationError, match="Not a GitHub blob URL"):
             github_blob_to_raw_url(url)
-        assert exc.value.code == 1
-        assert "Not a GitHub blob URL" in capsys.readouterr().out
 
 
 class TestGithubFilenameFromBlobUrl:
@@ -388,19 +380,14 @@ class TestGithubFilenameFromBlobUrl:
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
         assert github_filename_from_blob_url(blob_url) == expected
 
-    def test_pattern_violating_name_fails(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_pattern_violating_name_fails(self) -> None:
         """A derived name breaking the filename pattern fails as a bad filename.
 
         Distinct from the no-match branch; the label is the only signal of which fired.
         """
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(CurationError, match="Bad derived filename") as exc:
             github_filename_from_blob_url("https://github.com/o/r/blob/main/docs/a_b.md")
-        assert exc.value.code == 1
-        out = capsys.readouterr().out
-        assert "Bad derived filename" in out
-        assert "a_b.md" in out
+        assert "a_b.md" in str(exc.value)
 
 
 class TestExtractMarkdownTitle:
@@ -500,15 +487,13 @@ class TestFetchText:
         assert len(text) > 0
         assert "✅ Fetched:" in capsys.readouterr().out
 
-    def test_404_fails_with_not_found(self, capsys: pytest.CaptureFixture[str]) -> None:
+    def test_404_fails_with_not_found(self) -> None:
         url = (
             "https://raw.githubusercontent.com/astral-sh/uv/main/"
             "docs/zzz-does-not-exist-xyz.md"
         )
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(CurationError, match="404 not found"):
             fetch_text(url)
-        assert exc.value.code == 1
-        assert "404 not found" in capsys.readouterr().out
 
 
 @pytest.mark.readthedocs

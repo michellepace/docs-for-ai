@@ -60,25 +60,19 @@ uv run --directory ~/.claude/docs-for-ai curate-doc "collections/$collection" "$
 
 Errors print actionable info. Propose fixes but await user approval; proceed ONLY on `🏁 Success!`.
 
-## Step 3. Write the description
+## Step 3. Generate the description
 
-Two reads feed the write:
+Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then:
 
-1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
-2. The **full** curated doc (however large) — what you're describing.
-
-Then write a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
-
-```text
-overview-shiny-for-python.md
-Description for doc on single line
-```
-
-Apply it:
-
-```shell
-uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
-```
+1. Read the **full** curated doc (however large), then draft a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
+    ```text
+    overview-shiny-for-python.md
+    Description for doc on single line
+    ```
+2. Apply it:
+    ```shell
+    uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
+    ```
 
 Word count is enforced; on error, rewrite the description and rerun until it passes.
 
@@ -95,7 +89,7 @@ Report success in this format, filling each slot from the script's output above:
 - Source URL: <canonical `source_url` from `<source>` block — not your raw input>
 - [Created/Overwrote] doc: `<path, verbatim from ✅ line>`
 - [Indexed/Reindexed] index: `<path, verbatim from ✅ line>`
-- Wrote index description <N> words ✓
+- Generated index description <N> words ✓
 
 "_<description from Step 3>_"
 ```

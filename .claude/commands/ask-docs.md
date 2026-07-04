@@ -64,7 +64,7 @@ If the question doesn't fit this collection, suggest a better-matching one from 
 
 ## Web fallback (only after local docs are exhausted)
 
-Prefer Firecrawl; use WebSearch / WebFetch (lossy on code/config) only if it's unavailable.
+Prefer Firecrawl; use `WebSearch` / `WebFetch` (lossy on code/config) only if it's unavailable.
 
 - **Known URL:** `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
 - **Discover the page:** `firecrawl_search` for ranked URLs (no `scrapeOptions` — inline scraping overflows), then `firecrawl_scrape` the 1–2 best hits.

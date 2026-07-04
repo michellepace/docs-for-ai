@@ -34,12 +34,26 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 uv sync && uv run pre-commit install
 
 # 6. Make the slash commands work anywhere
-# make an anchor so slash command scripts work (run from repo root)
+# anchor (run from repo root)
 ln -sfn "$PWD" ~/.claude/docs-for-ai
-# make "/ask-docs" etc. work from anywhere
+# make all slash commands work from anywhere
 mkdir -p ~/.claude/commands
 ln -sf ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
+
+printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
 ```
+
+**7. Let Claude read your collections from anywhere.** Add one line to your user settings (`~/.claude/settings.json`):
+
+```json
+{
+  "permissions": {
+    "additionalDirectories": ["<paste the path printed by step 6>"]
+  }
+}
+```
+
+Use the absolute path printed by step 6 (`readlink -f`), not `~/.claude/docs-for-ai` — permissions are checked against the resolved path.
 
 To direct-fetch a site instead of scraping it — faster, cleaner, free — add its URL prefix to the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml): `append-md` for `.md` twins (page + `.md`, e.g. `https://nextjs.org/docs/`) or `readthedocs` for Sphinx sites. GitHub blob URLs and `.md` URLs are always direct.
 

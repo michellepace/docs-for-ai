@@ -8,17 +8,16 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git status *)",
-      "Bash(grep *)",
-      "Bash(ls *)",
       "Bash(npx markdownlint-cli2 *)",
       "Bash(pre-commit run *)",
       "Bash(pwd)",
-      "Bash(uv *)",
-      "Bash(wc *)"
+      "Bash(uv *)"
     ],
     "deny": [
       "Read(**/.env)",
-      "Read(**/.envrc)"
+      "Read(**/.envrc)",
+      "Bash(uv publish*)",
+      "Bash(uv auth token*)"
     ]
   },
   "enabledPlugins": {

@@ -34,10 +34,10 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 uv sync && uv run pre-commit install
 
 # 6. Make the slash commands work anywhere
-mkdir -p ~/.claude/commands
 # make an anchor so slash command scripts work (run from repo root)
 ln -sfn "$PWD" ~/.claude/docs-for-ai
 # make "/ask-docs" etc. work from anywhere
+mkdir -p ~/.claude/commands
 ln -sf ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 ```
 

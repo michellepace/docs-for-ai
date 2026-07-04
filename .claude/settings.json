@@ -8,24 +8,22 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git status *)",
-      "Bash(grep *)",
-      "Bash(ls *)",
       "Bash(npx markdownlint-cli2 *)",
       "Bash(pre-commit run *)",
       "Bash(pwd)",
-      "Bash(uv *)",
-      "Bash(wc *)"
+      "Bash(uv *)"
     ],
     "deny": [
       "Read(**/.env)",
-      "Read(**/.envrc)"
+      "Read(**/.envrc)",
+      "Bash(uv publish*)",
+      "Bash(uv auth token*)"
     ]
   },
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,
     "claude-code-utils@my-claude-marketplace": false,
     "superpowers@claude-plugins-official": false,
-    "playground@claude-plugins-official": false,
     "ponytail@ponytail": false,
     "pyright-lsp@claude-plugins-official": true
   },

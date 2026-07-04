@@ -1,5 +1,5 @@
 ---
-description: Re-curate all docs in collection and regenerate descriptions
+description: Re-curate a collection's docs and descriptions
 disable-model-invocation: true
 argument-hint: <collection>
 arguments: [collection]
@@ -13,11 +13,11 @@ allowed-tools:
   - Write
 ---
 
-Re-curate every document in `$collection` and regenerate its INDEX.xml descriptions.
+Re-curate every document in `$collection` and regenerate its `INDEX.xml` descriptions.
 
 ## Context
 
-INDEX.xml descriptions route an LLM reader to the right doc, instead of searching whole doc sites. The `sync-index` script re-curates the docs; **your task** is to write a description for each doc it flags with a PLACEHOLDER.
+`INDEX.xml` descriptions route an LLM reader to the right doc, instead of searching whole doc sites. The `sync-index` script re-curates the docs; **your task** is to write a description for each doc it flags with a `PLACEHOLDER`.
 
 ## Workflow
 
@@ -55,21 +55,23 @@ Shape: `## 🤔 <one-line diagnosis>`, a `-` bullet or two (what you saw + the c
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
-INDEX.xml is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a PLACEHOLDER description on each new or content-changed doc. Read its output as it runs.
+`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
 
-### 3. Generate descriptions for PLACEHOLDER entries only
+### 3. Write descriptions for `PLACEHOLDER` entries only
 
-Read `~/.claude/docs-for-ai/.claude/references/source-descriptions.md` and follow its rules and examples. Then, for each file the script flagged PLACEHOLDER (use the path **exactly as printed** — absolute `~/...`):
+Read the rules first: `~/.claude/docs-for-ai/.claude/references/description-rules.md` — its rules and examples govern every description below.
 
-1. Read the **full** doc (however large), then draft a [20, 30]-word description (strict)
-2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`:
+Then work through each file the script flagged `PLACEHOLDER`, one at a time. Each write feeds on two reads — those rules, plus the **full** doc (from the absolute `~/...` path exactly as printed, however large):
+
+1. Write a [20, 30]-word description (strict).
+2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`, keyed by the **bare filename** (the INDEX `<local_file>`, e.g. `en-hooks.md`) — not the absolute path, which `update-descriptions` won't match:
 
    ```text
-   getting-started-installation.md
+   getting-started.md
    Description for this file here
    ```
 
-### 4. Update INDEX.xml
+### 4. Update `INDEX.xml`
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"

@@ -1,100 +1,37 @@
 <docs_index>
   <source>
-    <title>Best practices for Claude Code</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/best-practices</source_url>
-    <local_file>en-best-practices.md</local_file>
-    <curated_at>2026-07-02</curated_at>
+    <title>Glossary</title>
+    <description>Terminology reference defining core concepts including the agentic loop, `CLAUDE.md`, compaction, hooks, skills, subagents versus agent teams, MCP, permission modes, sessions, and checkpoints, each linking to its in-depth page.</description>
+    <source_url>https://code.claude.com/docs/en/glossary</source_url>
+    <local_file>en-glossary.md</local_file>
+    <curated_at>2026-07-04</curated_at>
   </source>
   <source>
-    <title>Agent SDK overview</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/agent-sdk/overview</source_url>
-    <local_file>en-agent-sdk-overview.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Agent SDK reference - Python</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
-    <local_file>en-agent-sdk-python.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Agent SDK reference - TypeScript</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/agent-sdk/typescript</source_url>
-    <local_file>en-agent-sdk-typescript.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Use Claude Code with Chrome (beta)</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/chrome</source_url>
-    <local_file>en-chrome.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Run Claude Code programmatically</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/headless</source_url>
-    <local_file>en-headless.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Automate actions with hooks</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/hooks-guide</source_url>
-    <local_file>en-hooks-guide.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Hooks reference</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/hooks</source_url>
-    <local_file>en-hooks.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Customize keyboard shortcuts</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/keybindings</source_url>
-    <local_file>en-keybindings.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Create plugins</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/plugins</source_url>
-    <local_file>en-plugins.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Create and distribute a plugin marketplace</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/plugin-marketplaces</source_url>
-    <local_file>en-plugin-marketplaces.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Create custom subagents</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
-    <local_file>en-sub-agents.md</local_file>
-    <curated_at>2026-07-02</curated_at>
-  </source>
-  <source>
-    <title>Plugins reference</title>
-    <description>`plugin.json` manifest schema, component types (skills, agents, hooks, MCP/LSP servers, monitors, themes), `userConfig` and `channels`, `${CLAUDE_PLUGIN_ROOT}`/`${CLAUDE_PLUGIN_DATA}` variables, installation scopes, `@skills-dir` plugins, `claude plugin` CLI, caching, version management, and debugging.</description>
-    <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
-    <local_file>en-plugins-reference.md</local_file>
-    <curated_at>2026-07-02</curated_at>
+    <title>Configure permissions</title>
+    <description>How `allow`/`ask`/`deny` rules resolve deny-first, permission modes like `acceptEdits`/`plan`/`bypassPermissions`, per-tool specifiers (`Bash` globs, gitignore-anchored `Read`/`Edit`, `WebFetch(domain:)`), `PreToolUse` hooks, and managed-settings precedence.</description>
+    <source_url>https://code.claude.com/docs/en/permissions</source_url>
+    <local_file>en-permissions.md</local_file>
+    <curated_at>2026-07-04</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
-    <description>`SKILL.md` frontmatter, `disable-model-invocation`/`user-invocable` invocation control, personal/project/plugin/enterprise precedence, `$ARGUMENTS` substitutions, `!command` dynamic injection, `context: fork` subagents, `allowed-tools`, `skillOverrides`, bundled skills, and `skill-creator` evals.</description>
+    <description>`SKILL.md` frontmatter for authoring skills, invocation control (`disable-model-invocation`/`user-invocable`), location precedence across personal/project/plugin, `$ARGUMENTS` and `!command` injection, `context: fork` subagents, and evaluation with `skill-creator`.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <curated_at>2026-07-02</curated_at>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Run Claude Code programmatically</title>
+    <description>Non-interactive `claude -p` for CI and scripts: `--bare` skips hooks/plugins/MCP auto-discovery, `--output-format json` with `--json-schema` structures results, `--allowedTools`/permission-modes auto-approve, stdin piping, and `--continue`/`--resume` for multi-turn sessions.</description>
+    <source_url>https://code.claude.com/docs/en/headless</source_url>
+    <local_file>en-headless.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Create custom subagents</title>
+    <description>Defining specialized delegates in `.claude/agents/` with YAML frontmatter (`tools`, `model`, `permissionMode`, `skills`, `memory`, `hooks`); scope precedence, built-in Explore/Plan agents, automatic versus `@`-mention/`--agent` delegation, and `/fork` inheriting the conversation.</description>
+    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
+    <local_file>en-sub-agents.md</local_file>
+    <curated_at>2026-07-04</curated_at>
   </source>
 </docs_index>

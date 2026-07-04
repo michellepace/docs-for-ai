@@ -215,7 +215,7 @@ def format_descriptions_status(
     lines = [
         "\n## Index Descriptions Status",
         f"- ✅ Restored (whitespace-only changes)|{restored_count} files",
-        f"- ⚠️ {PLACEHOLDER_DESCRIPTION} in INDEX.xml (needs description)"
+        f"- 🚩 {PLACEHOLDER_DESCRIPTION} in INDEX.xml (needs description)"
         f"|{len(changed_files)} files",
     ]
     lines.extend(

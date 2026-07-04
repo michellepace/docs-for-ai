@@ -3,7 +3,7 @@ title: AI SDK
 product: ai-sdk
 url: /docs/ai-sdk
 canonical_url: "https://vercel.com/docs/ai-sdk"
-last_updated: 2026-01-03
+last_updated: 2026-06-17
 type: integration
 prerequisites:
   []
@@ -15,9 +15,13 @@ install_vercel_plugin: npx plugins add vercel/vercel-plugin
 
 # AI SDK
 
-The [AI SDK](https://sdk.vercel.ai) is the TypeScript toolkit designed to help developers build AI-powered applications with [Next.js](https://sdk.vercel.ai/docs/getting-started/nextjs-app-router), [Vue](https://sdk.vercel.ai/docs/getting-started/nuxt), [Svelte](https://sdk.vercel.ai/docs/getting-started/svelte), [Node.js](https://sdk.vercel.ai/docs/getting-started/nodejs), and more. Integrating LLMs into applications is complicated and heavily dependent on the specific model provider you use.
+## What the AI SDK provides
 
-The AI SDK abstracts away the differences between model providers, eliminates boilerplate code for building chatbots, and allows you to go beyond text output to generate rich, interactive components.
+- **Unified provider API.** Switch between models by changing two lines of code
+- **Structured outputs.** Generate type-safe JSON with `generateObject` and `streamObject`
+- **Tool calling.** Let models interact with external systems
+- **Streaming first.** Stream text, objects, and UI to your frontend
+- **Framework support.** Works with React, Next.js, Vue, Svelte, and Node.js
 
 ## Generating text
 
@@ -124,10 +128,13 @@ See the [AI SDK Getting Started](https://sdk.vercel.ai/docs/getting-started) gui
 
 ## More resources
 
-- [AI SDK documentation](https://ai-sdk.dev/docs)
-- [AI SDK examples](https://ai-sdk.dev/cookbook)
-- [AI SDK guides](https://ai-sdk.dev/cookbook/guides)
-- [AI SDK templates](https://vercel.com/templates?type=ai)
+**AI SDK documentation**: Read the official AI SDK reference and guides. [Learn more →](https://ai-sdk.dev/docs)
+
+**AI SDK examples**: Browse runnable examples for common patterns. [Learn more →](https://ai-sdk.dev/cookbook)
+
+**AI SDK guides**: Step-by-step guides for building AI features. [Learn more →](https://ai-sdk.dev/cookbook/guides)
+
+**AI SDK templates**: Start from a production-ready Vercel template. [Learn more →](https://vercel.com/templates?type=ai)
 
 
 ---

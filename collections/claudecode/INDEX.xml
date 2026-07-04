@@ -1,0 +1,37 @@
+<docs_index>
+  <source>
+    <title>Glossary</title>
+    <description>Terminology reference defining core concepts including the agentic loop, `CLAUDE.md`, compaction, hooks, skills, subagents versus agent teams, MCP, permission modes, sessions, and checkpoints, each linking to its in-depth page.</description>
+    <source_url>https://code.claude.com/docs/en/glossary</source_url>
+    <local_file>en-glossary.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Configure permissions</title>
+    <description>How `allow`/`ask`/`deny` rules resolve deny-first, permission modes like `acceptEdits`/`plan`/`bypassPermissions`, per-tool specifiers (`Bash` globs, gitignore-anchored `Read`/`Edit`, `WebFetch(domain:)`), `PreToolUse` hooks, and managed-settings precedence.</description>
+    <source_url>https://code.claude.com/docs/en/permissions</source_url>
+    <local_file>en-permissions.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Extend Claude with skills</title>
+    <description>`SKILL.md` frontmatter for authoring skills, invocation control (`disable-model-invocation`/`user-invocable`), location precedence across personal/project/plugin, `$ARGUMENTS` and `!command` injection, `context: fork` subagents, and evaluation with `skill-creator`.</description>
+    <source_url>https://code.claude.com/docs/en/skills</source_url>
+    <local_file>en-skills.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Run Claude Code programmatically</title>
+    <description>Non-interactive `claude -p` for CI and scripts: `--bare` skips hooks/plugins/MCP auto-discovery, `--output-format json` with `--json-schema` structures results, `--allowedTools`/permission-modes auto-approve, stdin piping, and `--continue`/`--resume` for multi-turn sessions.</description>
+    <source_url>https://code.claude.com/docs/en/headless</source_url>
+    <local_file>en-headless.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+  <source>
+    <title>Create custom subagents</title>
+    <description>Defining specialized delegates in `.claude/agents/` with YAML frontmatter (`tools`, `model`, `permissionMode`, `skills`, `memory`, `hooks`); scope precedence, built-in Explore/Plan agents, automatic versus `@`-mention/`--agent` delegation, and `/fork` inheriting the conversation.</description>
+    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
+    <local_file>en-sub-agents.md</local_file>
+    <curated_at>2026-07-04</curated_at>
+  </source>
+</docs_index>

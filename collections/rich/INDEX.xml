@@ -1,9 +1,16 @@
 <docs_index>
   <source>
+    <title>Layout</title>
+    <description>`Layout` class splitting the terminal into nested `name`-addressable regions via `split_column`/`split_row`, each set with `update`; size by fixed `size` or flexible `ratio`/`minimum_size`, toggle `visible`, pair with `Live` for fullscreen apps.</description>
+    <source_url>https://rich.readthedocs.io/en/stable/layout.html</source_url>
+    <local_file>layout.rst</local_file>
+    <curated_at>2026-07-05</curated_at>
+  </source>
+  <source>
     <title>Panel</title>
-    <description>Draw bordered boxes around any renderable using constructor `box` styles, `title` and `subtitle` captions, plus `expand=False` or the `Panel.fit()` classmethod to shrink the frame to its content width.</description>
+    <description>`rich.panel.Panel` draws a border around any renderable; the `box` argument picks the style, `expand=False` or `Panel.fit()` shrinks it to content, and `title`/`subtitle` label the top and bottom edges.</description>
     <source_url>https://rich.readthedocs.io/en/stable/panel.html</source_url>
     <local_file>panel.rst</local_file>
-    <curated_at>2026-07-01</curated_at>
+    <curated_at>2026-07-05</curated_at>
   </source>
 </docs_index>

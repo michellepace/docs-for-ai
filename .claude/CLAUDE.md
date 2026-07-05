@@ -56,7 +56,7 @@ Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding 
 # Entry points
 uv run curate-doc --help          # Fetch a doc from a URL into a collection
 uv run sync-index --help          # Re-sync a collection to its INDEX.xml
-uv run update-descriptions --help # Apply descriptions to a collection's INDEX.xml
+uv run update-descriptions --help # Pipe filename/description pair(s) into INDEX.xml
 
 # Quality (see pyproject.toml)
 uv run ruff check --fix           # Lint and auto-fix

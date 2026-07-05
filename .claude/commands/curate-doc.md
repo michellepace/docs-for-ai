@@ -8,9 +8,7 @@ allowed-tools:
   - Bash(printf *)
   - Bash(uv run --directory * curate-doc *)
   - Bash(uv run --directory * update-descriptions *)
-  - Bash(wc *)
   - Read
-  - Write
 ---
 
 Your task is to curate a source URL `$source_url` into a collection `$collection`.
@@ -19,18 +17,20 @@ Your task is to curate a source URL `$source_url` into a collection `$collection
 
 Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Parse `$collection` and `$source_url`, then weigh them against the existing collections. Spot what a new user likely got wrong and steer them to what they *intended* — `$collection` may already exist, or be created fresh. Keep every message emoji-led, brief, and kind. On a problem, fail with a suggested fix and ask to confirm; otherwise show success and proceed.
+Weigh `$collection` and `$source_url` against the existing collections — `$collection` may already exist or be new. Spot what the user likely got wrong and steer them to what they *intended*.
+
+Print your verdict before any tool call: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
 
 <validation_failure>
 
-Every failure has the same shape: `## 🤔 <one-line diagnosis>`, then 1–3 `-` bullets (what you saw + the corrected `/curate-doc …` to run), then one warm line asking to confirm. The cases differ only in what you detect:
+Be friendly and brief, and include the corrected `/curate-doc …` to run — the example below shows the spirit, not a template. Cases:
 
 - **Missing args** — show usage, list existing collections, add a runnable example.
 - **No collection, URL given** — infer a collection name from the URL; propose it as new.
 - **Typo** — `$collection` is near an existing one (`shiyy` → `shiny`); suggest the match.
 - **Semantic mismatch** — `$collection` exists but the URL is plainly another tech; point to the right one.
 
-Anchor example (semantic mismatch):
+Example (semantic mismatch):
 
 ```
 ## 🤔 Mmm.. are you sure you meant `shiny`?
@@ -67,20 +67,16 @@ Two reads feed the write:
 1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
 2. The **full** curated doc (however large) — what you're describing.
 
-Then write a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
-
-```text
-overview-shiny-for-python.md
-Description for doc on single line
-```
-
-Apply it:
+Then pipe a [20, 30]-word description (strict) straight in — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
-uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
+uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
+overview-shiny-for-python.md
+Description for doc on single line
+EOF
 ```
 
-Word count is enforced; on error, rewrite the description and rerun until it passes.
+Word count is enforced; on ❌, rewrite the description and rerun until it passes.
 
 ## Step 4. Report success
 

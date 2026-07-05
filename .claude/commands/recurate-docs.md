@@ -8,9 +8,7 @@ allowed-tools:
   - Bash(printf *)
   - Bash(uv run --directory * sync-index *)
   - Bash(uv run --directory * update-descriptions *)
-  - Bash(wc *)
   - Read
-  - Write
 ---
 
 Re-curate every document in `$collection` and regenerate its `INDEX.xml` descriptions.
@@ -21,22 +19,24 @@ Re-curate every document in `$collection` and regenerate its `INDEX.xml` descrip
 
 ## Workflow
 
-### 1. Validate argument
+### Step 1. Validate argument
 
 Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
-Validate `$collection` against `<existing_collections>`: reject if it's missing or unknown, suggesting the closest match when it looks like a typo. Keep messages emoji-led, brief, and kind — fail with a suggested fix, or show success and proceed.
+Validate `$collection` against `<existing_collections>`: reject if it's missing or unknown; suggest the closest match for a typo.
+
+Print your verdict before any tool call: on a problem, fail with a suggested fix and stop; on success, print the success message, then start Step 2.
 
 <validation_failure>
 
-Shape: `## 🤔 <one-line diagnosis>`, a `-` bullet or two (what you saw + the corrected `/recurate-docs …`), then one warm line. Anchor example (missing arg):
+Be friendly and brief, and include the corrected `/recurate-docs …` — in the spirit of this example:
 
 ```
 ## 🤔 Missing argument!
 - Usage: `/recurate-docs <collection>`
 - Existing: `shiny`, `uv`, `tailwind`
 
-[Friendly recommendation/suggestion in 1 short sentence]
+[Friendly suggestion in 1 short sentence]
 ```
 
 </validation_failure>
@@ -49,7 +49,7 @@ Shape: `## 🤔 <one-line diagnosis>`, a `-` bullet or two (what you saw + the c
 
 </validation_success>
 
-### 2. Run sync and curate
+### Step 2. Run sync and curate
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
@@ -57,31 +57,28 @@ uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 
 `INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
 
-### 3. Write descriptions for `PLACEHOLDER` entries only
+### Step 3. Write and apply descriptions for `PLACEHOLDER` entries only
 
 Read the rules first: `~/.claude/docs-for-ai/.claude/references/description-rules.md` — its rules and examples govern every description below.
 
-Then work through each file the script flagged `PLACEHOLDER`, one at a time. Each write feeds on two reads — those rules, plus the **full** doc (from the absolute `~/...` path exactly as printed, however large):
+Then work through each file the script flagged `PLACEHOLDER`, one at a time. Each description feeds on two reads — those rules, plus the **full** doc (from the absolute `~/...` path exactly as printed, however large). Write a [20, 30]-word description (strict) per doc.
 
-1. Write a [20, 30]-word description (strict).
-2. Append it to `~/.claude/docs-for-ai/collections/$collection/descriptions.txt`, keyed by the **bare filename** (the INDEX `<local_file>`, e.g. `en-hooks.md`) — not the absolute path, which `update-descriptions` won't match:
-
-   ```text
-   getting-started.md
-   Description for this file here
-   ```
-
-### 4. Update `INDEX.xml`
+Apply them all in **one** command — a quoted heredoc, one filename/description line pair per `PLACEHOLDER` entry, keyed by the INDEX `<local_file>`, e.g. `en-hooks.md`:
 
 ```shell
-uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/descriptions.txt"
+uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
+getting-started.md
+Description for this file here
+en-hooks.md
+Description for the hooks doc here
+EOF
 ```
 
-Word count is enforced; rewrite the flagged description(s) and rerun until it passes.
+Word count is enforced; on ❌, rewrite the flagged description(s) and rerun with only those.
 
 **Verify before proceeding:** no `PLACEHOLDER` remains in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
 
-### 5. Report completion
+### Step 4. Report completion
 
 Report from the script's output, in this format:
 

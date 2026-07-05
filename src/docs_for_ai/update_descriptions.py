@@ -4,11 +4,14 @@ import argparse
 import sys
 import xml.etree.ElementTree as ET
 from itertools import batched
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import write_index
 from docs_for_ai.paths import normalise_collection_dir
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 DESCRIP_MIN_WORDS = 20
 DESCRIP_MAX_WORDS = 30
@@ -17,29 +20,9 @@ LINES_PER_ENTRY = 2  # filename line + description line
 type DescriptionsByFile = dict[str, str]
 
 
-def _validate_word_counts(descriptions: DescriptionsByFile) -> bool:
-    """True when every description is within band."""
-    all_in_band = True
-    for local_file, description in descriptions.items():
-        count = len(description.split())
-        if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
-            print(f"✅ {local_file}: {count} words")
-        else:
-            print(
-                f"❌ {local_file}: {count} words "
-                f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})"
-            )
-            all_in_band = False
-    return all_in_band
-
-
-def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
-    """Parse a descriptions file into a {local_file: description} mapping."""
-    non_blank_lines = [
-        line.strip()
-        for line in descriptions_path.read_text().splitlines()
-        if line.strip()
-    ]
+def parse_descriptions(text: str) -> DescriptionsByFile:
+    """Parse filename/description line pairs into a {local_file: description} mapping."""
+    non_blank_lines = [line.strip() for line in text.splitlines() if line.strip()]
 
     descriptions: DescriptionsByFile = {}
     for entry in batched(non_blank_lines, LINES_PER_ENTRY, strict=False):
@@ -52,31 +35,20 @@ def parse_descriptions_file(descriptions_path: Path) -> DescriptionsByFile:
     return descriptions
 
 
-def _validate_collection_inputs(
-    collection_dir: Path, temp_descriptions_file: str
-) -> tuple[Path, Path]:
-    """Resolve and validate the INDEX.xml and descriptions paths."""
-    index_path = collection_dir / "INDEX.xml"
-    descriptions_path = Path(temp_descriptions_file)
-
-    if not index_path.exists():
-        msg = f"Not a collection: {index_path} not found"
-        raise CurationError(msg)
-
-    if not descriptions_path.exists():
-        msg = f"Descriptions file not found: {descriptions_path}"
-        raise CurationError(msg)
-
-    return index_path, descriptions_path
-
-
-def _cleanup_temp_file(descriptions_path: Path) -> None:
-    """Delete the temporary descriptions file, warning if it can't be removed."""
-    try:
-        descriptions_path.unlink()
-        print(f"🗑️ Cleaned up: {descriptions_path}")
-    except OSError as exc:
-        print(f"⚠️ Could not delete {descriptions_path}: {exc}")
+def _in_band_descriptions(descriptions: DescriptionsByFile) -> DescriptionsByFile:
+    """Print a per-file word-count verdict; return only descriptions within band."""
+    in_band: DescriptionsByFile = {}
+    for local_file, description in descriptions.items():
+        count = len(description.split())
+        if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
+            print(f"✅ {local_file}: {count} words")
+            in_band[local_file] = description
+        else:
+            print(
+                f"❌ {local_file}: {count} words "
+                f"(need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS})"
+            )
+    return in_band
 
 
 def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> int:
@@ -112,61 +84,67 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
     return updated_count
 
 
-def _run_update(collection_dir: Path, temp_descriptions_file: str) -> None:
-    """Apply a descriptions file to INDEX.xml."""
-    index_path, descriptions_path = _validate_collection_inputs(
-        collection_dir, temp_descriptions_file
-    )
+def _run_update(collection_dir: Path, descriptions_text: str) -> None:
+    """Apply piped descriptions to the collection's INDEX.xml."""
+    index_path = collection_dir / "INDEX.xml"
+    if not index_path.exists():
+        msg = f"Not a collection: {index_path} not found"
+        raise CurationError(msg)
 
-    descriptions = parse_descriptions_file(descriptions_path)
-
+    descriptions = parse_descriptions(descriptions_text)
     if not descriptions:
-        msg = f"No descriptions found: {descriptions_path}"
+        msg = "No descriptions found on stdin (see --help for the format)"
         raise CurationError(msg)
 
-    # Reject before touching INDEX.xml if out of the word-count band
-    if not _validate_word_counts(descriptions):
-        msg = "Word count(s) out of band: rewrite the flagged description(s) and rerun"
-        raise CurationError(msg)
-
-    print(f"✅ Parsed: {len(descriptions)} description(s)")
+    in_band = _in_band_descriptions(descriptions)
     print()
 
-    updated_count = update_descriptions(index_path, descriptions)
+    if in_band:
+        update_descriptions(index_path, in_band)
 
-    if updated_count > 0:
-        _cleanup_temp_file(descriptions_path)
+    if len(in_band) < len(descriptions):
+        msg = (
+            "Word count(s) out of band: rewrite the flagged description(s) "
+            "and rerun with only those"
+        )
+        raise CurationError(msg)
+
+
+def _read_piped_stdin() -> str:
+    """Return stdin content, rejecting an interactive terminal with nothing piped."""
+    if sys.stdin.isatty():
+        msg = "No descriptions piped to stdin: pipe a heredoc (see --help)"
+        raise CurationError(msg)
+    return sys.stdin.read()
 
 
 def main() -> None:
-    """Parse arguments and update descriptions in INDEX.xml."""
+    """Parse arguments and apply stdin descriptions to a collection's INDEX.xml."""
     parser = argparse.ArgumentParser(
         description=(
-            "Apply descriptions from a file to a collection's INDEX.xml, "
-            "matched by filename."
+            "Apply descriptions from stdin to a collection's INDEX.xml, "
+            "matched by <local_file> filename."
         ),
         epilog=(
-            "descriptions file format — one pair of lines per INDEX source:\n"
-            "  <filename>\n"
-            f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)\n\n"
-            "A description outside that word band fails the run; "
-            "INDEX.xml is left untouched."
+            "stdin format — one line pair per INDEX source, "
+            "piped via a quoted heredoc:\n"
+            "  update-descriptions collections/<name> <<'EOF'\n"
+            "  <local_file>    (bare filename, not a path)\n"
+            f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)\n"
+            "  ...             (repeat the line pair per source)\n"
+            "  EOF\n\n"
+            "Out-of-band descriptions are flagged (exit 1); in-band siblings "
+            "still apply. Unmatched filenames are skipped without error."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "collection_dir", help="Target collection directory (must contain INDEX.xml)"
     )
-    parser.add_argument(
-        "temp_descriptions_file",
-        help="Descriptions file (deleted after a successful update)",
-    )
     args = parser.parse_args()
 
     try:
-        _run_update(
-            normalise_collection_dir(args.collection_dir), args.temp_descriptions_file
-        )
+        _run_update(normalise_collection_dir(args.collection_dir), _read_piped_stdin())
     except CurationError as exc:
         print(f"❌ {exc}")
         sys.exit(1)

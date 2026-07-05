@@ -8,9 +8,7 @@ allowed-tools:
   - Bash(printf *)
   - Bash(uv run --directory * curate-doc *)
   - Bash(uv run --directory * update-descriptions *)
-  - Bash(wc *)
   - Read
-  - Write
 ---
 
 Your task is to curate a source URL `$source_url` into a collection `$collection`.
@@ -67,20 +65,16 @@ Two reads feed the write:
 1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
 2. The **full** curated doc (however large) — what you're describing.
 
-Then write a [20, 30]-word description (strict) into `~/.claude/docs-for-ai/collections/$collection/description.txt`:
-
-```text
-overview-shiny-for-python.md
-Description for doc on single line
-```
-
-Apply it:
+Then pipe a [20, 30]-word description (strict) straight in — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
-uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" "collections/$collection/description.txt"
+uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
+overview-shiny-for-python.md
+Description for doc on single line
+EOF
 ```
 
-Word count is enforced; on error, rewrite the description and rerun until it passes.
+Word count is enforced; on ❌, rewrite the description and rerun until it passes.
 
 ## Step 4. Report success
 

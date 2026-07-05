@@ -1,14 +1,11 @@
-"""update_descriptions.py: INDEX.xml description updates."""
+"""update_descriptions.py: INDEX.xml description updates from stdin."""
 
+import io
 from typing import TYPE_CHECKING
 
 import pytest
 
-from docs_for_ai.update_descriptions import (
-    main,
-    parse_descriptions_file,
-    update_descriptions,
-)
+from docs_for_ai.update_descriptions import main, parse_descriptions
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -24,52 +21,46 @@ INDEX_XML = """<docs_index>
 </docs_index>
 """
 
+IN_BAND = " ".join(["word"] * 25)
+
 
 @pytest.fixture
-def index_and_descriptions(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> tuple[Path, Path]:
-    """A one-source INDEX.xml and a temp descriptions path, wired into sys.argv."""
+def index_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """A one-source INDEX.xml collection, wired into sys.argv."""
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text(INDEX_XML, encoding="utf-8")
-    descriptions_file = tmp_path / "description.txt"
-    monkeypatch.setattr(
-        "sys.argv", ["update_descriptions.py", str(tmp_path), str(descriptions_file)]
-    )
-    return index_path, descriptions_file
+    monkeypatch.setattr("sys.argv", ["update-descriptions", str(tmp_path)])
+    return index_path
+
+
+def pipe_stdin(monkeypatch: pytest.MonkeyPatch, text: str) -> None:
+    monkeypatch.setattr("sys.stdin", io.StringIO(text))
 
 
 def test_word_band_gates_whether_a_description_is_applied(
-    index_and_descriptions: tuple[Path, Path],
+    index_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    index_path, descriptions_file = index_and_descriptions
-
-    # Out of band: aborts, leaving INDEX.xml and the temp file untouched
-    descriptions_file.write_text("doc-a.md\nfar too short\n", encoding="utf-8")
+    # Out of band: rejected, INDEX.xml untouched
+    pipe_stdin(monkeypatch, "doc-a.md\nfar too short\n")
     with pytest.raises(SystemExit):
         main()
     assert "old description" in index_path.read_text(encoding="utf-8")
-    assert descriptions_file.exists()
 
     # In band: applied
-    descriptions_file.write_text(
-        f"doc-a.md\n{' '.join(['word'] * 25)}\n", encoding="utf-8"
-    )
+    pipe_stdin(monkeypatch, f"doc-a.md\n{IN_BAND}\n")
     main()
-    assert "old description" not in index_path.read_text(encoding="utf-8")
+    content = index_path.read_text(encoding="utf-8")
+    assert f"<description>{IN_BAND}</description>" in content
+    assert "old description" not in content
 
 
-def test_one_out_of_band_entry_blocks_the_whole_batch(
-    index_and_descriptions: tuple[Path, Path],
+def test_out_of_band_entry_is_flagged_without_blocking_in_band_siblings(
+    index_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    index_path, descriptions_file = index_and_descriptions
-
     # doc-a is in band and matches the index; doc-b is out of band
-    in_band = " ".join(["word"] * 25)
-    descriptions_file.write_text(
-        f"doc-a.md\n{in_band}\ndoc-b.md\ntoo short\n", encoding="utf-8"
-    )
+    pipe_stdin(monkeypatch, f"doc-a.md\n{IN_BAND}\ndoc-b.md\ntoo short\n")
 
     with pytest.raises(SystemExit) as exc:
         main()
@@ -79,40 +70,30 @@ def test_one_out_of_band_entry_blocks_the_whole_batch(
     out = capsys.readouterr().out
     assert "✅ doc-a.md: 25 words" in out
     assert "❌ doc-b.md: 2 words (need 20-30)" in out
-    assert "❌ Word count(s) out of band" in out
 
-    # doc-a's valid update is withheld because a sibling failed validation
-    assert "old description" in index_path.read_text(encoding="utf-8")
+    # doc-a's in-band update is applied; only doc-b needs a rewrite and rerun
+    assert "old description" not in index_path.read_text(encoding="utf-8")
 
 
-def test_temp_file_is_kept_when_no_descriptions_are_applied(
-    index_and_descriptions: tuple[Path, Path],
+def test_unmatched_filename_applies_nothing_and_succeeds(
+    index_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
-    index_path, descriptions_file = index_and_descriptions
-
     # In-band words, but the local_file matches nothing in INDEX.xml
-    descriptions_file.write_text(
-        f"doc-missing.md\n{' '.join(['word'] * 25)}\n", encoding="utf-8"
-    )
+    pipe_stdin(monkeypatch, f"doc-missing.md\n{IN_BAND}\n")
 
     main()
 
-    # Nothing was applied, so the generated descriptions must not be discarded
-    assert descriptions_file.exists()
+    assert "No updates needed" in capsys.readouterr().out
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
 def test_missing_index_reports_not_a_collection(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A dir without INDEX.xml aborts non-zero, naming the missing index on stdout."""
-    descriptions_file = tmp_path / "description.txt"
-    descriptions_file.write_text(
-        f"doc-a.md\n{' '.join(['word'] * 25)}\n", encoding="utf-8"
-    )
-    monkeypatch.setattr(
-        "sys.argv", ["update_descriptions.py", str(tmp_path), str(descriptions_file)]
-    )
+    monkeypatch.setattr("sys.argv", ["update-descriptions", str(tmp_path)])
+    pipe_stdin(monkeypatch, f"doc-a.md\n{IN_BAND}\n")
 
     with pytest.raises(SystemExit) as exc:
         main()
@@ -123,32 +104,11 @@ def test_missing_index_reports_not_a_collection(
     assert str(tmp_path / "INDEX.xml") in out
 
 
-def test_missing_descriptions_file_is_reported(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+@pytest.mark.usefixtures("index_path")
+def test_empty_stdin_reports_no_descriptions(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """An absent descriptions file aborts non-zero, naming the path on stdout."""
-    (tmp_path / "INDEX.xml").write_text(INDEX_XML, encoding="utf-8")
-    missing = tmp_path / "nope.txt"
-    monkeypatch.setattr(
-        "sys.argv", ["update_descriptions.py", str(tmp_path), str(missing)]
-    )
-
-    with pytest.raises(SystemExit) as exc:
-        main()
-
-    assert exc.value.code == 1
-    out = capsys.readouterr().out
-    assert "Descriptions file not found" in out
-    assert str(missing) in out
-
-
-def test_empty_descriptions_file_reports_none_found(
-    index_and_descriptions: tuple[Path, Path],
-    capsys: pytest.CaptureFixture[str],
-) -> None:
-    """A descriptions file with no filename/description pairs aborts on stdout."""
-    _, descriptions_file = index_and_descriptions
-    descriptions_file.write_text("\n\n", encoding="utf-8")
+    pipe_stdin(monkeypatch, "\n\n")
 
     with pytest.raises(SystemExit) as exc:
         main()
@@ -157,33 +117,34 @@ def test_empty_descriptions_file_reports_none_found(
     assert "No descriptions found" in capsys.readouterr().out
 
 
-def test_replaces_description_for_matching_file(tmp_path: Path) -> None:
-    index_path = tmp_path / "INDEX.xml"
-    index_path.write_text(INDEX_XML, encoding="utf-8")
-
-    updated_count = update_descriptions(index_path, {"doc-a.md": "new description"})
-
-    assert updated_count == 1
-    content = index_path.read_text(encoding="utf-8")
-    assert "<description>new description</description>" in content
-    assert "old description" not in content
-
-
-def test_parse_pairs_lines_skipping_blanks_and_drops_unpaired_filename(
-    tmp_path: Path,
+@pytest.mark.usefixtures("index_path")
+def test_interactive_run_without_piped_stdin_is_rejected(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    descriptions_file = tmp_path / "descriptions.txt"
-    descriptions_file.write_text(
+    class InteractiveStdin(io.StringIO):
+        def isatty(self) -> bool:
+            return True
+
+    monkeypatch.setattr("sys.stdin", InteractiveStdin())
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    assert "stdin" in capsys.readouterr().out
+
+
+def test_parse_pairs_lines_skipping_blanks_and_drops_unpaired_filename() -> None:
+    text = (
         "\n"
         "doc-a.md\n"
         "Description for A\n"
         "\n"
         "doc-b.md\n"
         "Description for B\n"
-        "doc-c.md\n",  # trailing filename with no description is dropped
-        encoding="utf-8",
+        "doc-c.md\n"  # trailing filename with no description is dropped
     )
 
-    result = parse_descriptions_file(descriptions_file)
+    result = parse_descriptions(text)
 
     assert result == {"doc-a.md": "Description for A", "doc-b.md": "Description for B"}

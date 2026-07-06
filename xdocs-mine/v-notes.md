@@ -1,6 +1,7 @@
 ---
 title: Vocabulary notes
 updated: 2026-07-02
+status: draft / rough
 ---
 
 

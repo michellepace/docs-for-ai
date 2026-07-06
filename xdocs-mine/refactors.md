@@ -1,6 +1,7 @@
 ---
 title: potential future refactors (unvalidated / rough)
 updated: 2026-07-03
+status: draft / rough
 ---
 
 ## Test Markers

@@ -71,30 +71,6 @@ def _curate_doc(collection_dir: Path, source_url: str) -> bool:
     return True
 
 
-def _print_git_content_changes(collection_dir: Path) -> None:
-    """Print git diff --stat for the collection, wrapped in report tags."""
-    git_path = shutil.which("git")
-    if not git_path:
-        print("⚠️ Git not found: skipping change detection")
-        return
-
-    result = subprocess.run(
-        [git_path, "diff", "--stat", "-w", "."],
-        check=False,
-        capture_output=True,
-        text=True,
-        cwd=collection_dir,
-    )
-
-    print("\n### Git Content Changes (git diff --stat -w)")
-    print("<GIT_CONTENT_CHANGES>")
-    if result.stdout.strip():
-        print(result.stdout.rstrip())
-    else:
-        print("No content changes detected")
-    print("</GIT_CONTENT_CHANGES>")
-
-
 def _print_curation_summary(
     curated_sources: list[IndexSource],
     failed_urls: list[str],
@@ -233,7 +209,6 @@ def _run_sync(collection_dir: Path) -> None:
         sys.stdout.flush()
 
     _print_curation_summary(index_sources, failed_urls)
-    _print_git_content_changes(collection_dir)
 
     changed_files = get_changed_curated_files(collection_dir, indexed_files)
     restored_count = restore_unchanged_descriptions(
@@ -266,8 +241,8 @@ what it changes (destructive — commit or stash first):
 
 what it never does: remove an INDEX source.
 
-output: a structured report (sync counts, per-doc curation results, content
-        changes, docs still needing descriptions).
+output: a structured report (sync counts, per-doc curation results, and
+        docs still needing descriptions).
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

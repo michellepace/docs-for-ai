@@ -62,8 +62,8 @@ uv run update-descriptions --help # Pipe filename/description pair(s) into INDEX
 uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code
-uv run pre-commit run --all-files # Run pre-commit hooks manually
+uv run pre-commit run --all-files # Run manually
 
-# Run Non-Network Tests (see pyproject.toml)
-uv run pytest -m "not firecrawl and not github and not readthedocs"
+# Run Tests — includes non-network + free direct fetch
+uv run pytest -m "not firecrawl"
 ```

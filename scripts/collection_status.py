@@ -69,7 +69,7 @@ def find_orphans(collection_dir: Path, indexed_files: set[str]) -> tuple[str, ..
     return tuple(
         path.name
         for path in sorted(collection_dir.iterdir())
-        if path.is_file() and path.name not in keep and not path.name.endswith(".backup")
+        if path.is_file() and path.name not in keep and not path.name.startswith(".")
     )
 
 

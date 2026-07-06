@@ -55,7 +55,7 @@ Be friendly and brief, and include the corrected `/recurate-docs …` — in the
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
-`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
+`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists — and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
 
 ### Step 3. Write and apply descriptions for `PLACEHOLDER` entries only
 
@@ -89,7 +89,6 @@ Report from the script's output, in this format:
 
 📊 Statistics
 - Collection:            `$collection`
-- Stale sources removed: [N]
 - Total docs:            [M]
 - Successfully curated:  [X]
 - Failed to curate:      [Y]

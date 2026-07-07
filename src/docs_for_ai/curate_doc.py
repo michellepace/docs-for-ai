@@ -138,31 +138,38 @@ def _success_note(outcome: DocOutcome, description: str) -> str:
 
 def _add_or_update_source_in_index(
     collection_dir: Path, title: str, source_url: str, local_file: str, description: str
-) -> bool:
-    """Add or replace the source for `source_url` in INDEX.xml.
-
-    Returns `is_update` — True if an existing entry was replaced.
-    """
+) -> None:
+    """Rewrite an existing entry in place, append a new one."""
     index_path = collection_dir / "INDEX.xml"
 
     root = ET.parse(index_path).getroot()
-
-    is_update = False
-
-    for existing_source in root.findall("source"):
-        if _urls_match(existing_source.findtext("source_url"), source_url):
-            root.remove(existing_source)
-            is_update = True
-            break
-
     curated_at = date.today().isoformat()
 
-    source = ET.SubElement(root, "source")
-    ET.SubElement(source, "title").text = title
-    ET.SubElement(source, "description").text = description
-    ET.SubElement(source, "source_url").text = source_url
-    ET.SubElement(source, "local_file").text = local_file
-    ET.SubElement(source, "curated_at").text = curated_at
+    fields = {
+        "title": title,
+        "description": description,
+        "source_url": source_url,
+        "local_file": local_file,
+        "curated_at": curated_at,
+    }
+
+    source = next(
+        (
+            s
+            for s in root.findall("source")
+            if _urls_match(s.findtext("source_url"), source_url)
+        ),
+        None,
+    )
+    is_update = source is not None
+    if source is None:
+        source = ET.SubElement(root, "source")
+
+    for tag, value in fields.items():
+        child = source.find(tag)
+        if child is None:
+            child = ET.SubElement(source, tag)
+        child.text = value
 
     write_index(root, index_path)
 
@@ -175,8 +182,6 @@ def _add_or_update_source_in_index(
     print(f"     <local_file>{local_file}</local_file>")
     print(f"     <curated_at>{curated_at}</curated_at>")
     print("   </source>")
-
-    return is_update
 
 
 def _reject_filename_collision(

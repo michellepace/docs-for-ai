@@ -323,6 +323,28 @@ def test_curate_same_url_again_updates_the_existing_source(
     assert "<title>Updating State</title>" in index
 
 
+def test_curate_same_url_again_keeps_the_sources_position(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A re-curated entry is rewritten in place, not relocated to the bottom."""
+    collection = tmp_path / "coll"
+    stub_direct_fetch(monkeypatch, "# Doc\n\nbody\n")
+    for name in ("alpha", "beta", "gamma"):
+        curate_doc.curate(collection, f"https://example.com/docs/{name}.md")
+
+    # The MIDDLE entry — relocating the last one would leave order unchanged.
+    stub_direct_fetch(monkeypatch, "# Beta v2\n\nbody\n")
+    curate_doc.curate(collection, "https://example.com/docs/beta.md")
+
+    sources = ET.parse(collection / "INDEX.xml").getroot().findall("source")
+    assert [s.findtext("local_file") for s in sources] == [
+        "alpha.md",
+        "beta.md",
+        "gamma.md",
+    ]
+    assert sources[1].findtext("title") == "Beta v2"  # rewritten in place
+
+
 def test_curate_page_and_md_twin_collapse_to_one_source(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

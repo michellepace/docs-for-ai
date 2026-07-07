@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+**Ignore `xdocs-mine/` unless I reference it** — personal notes, often stale.
+
 ## Overview
 
 Curated documentation collections — fetched directly when possible, else scraped via FireCrawl. Each collection's INDEX.xml routes an LLM reader to the right doc (via `/ask-docs`).

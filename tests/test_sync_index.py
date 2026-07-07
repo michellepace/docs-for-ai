@@ -1,15 +1,13 @@
-"""sync_index tests: INDEX.xml is the source of truth — reconcile, re-fetch, restore."""
+"""sync_index tests: INDEX.xml is the truth — reconcile, re-fetch, keep-if-unchanged."""
 
 import subprocess
 import xml.etree.ElementTree as ET
+from collections import Counter
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 import pytest
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
+from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.sync_index import format_descriptions_status, main
@@ -53,20 +51,13 @@ def read_sources_by_file(index_path: Path) -> dict[str, str]:
     }
 
 
-def init_git_repo(repo_dir: Path) -> None:
-    for cmd in [
-        ["git", "init"],
-        ["git", "config", "user.email", "test@example.com"],
-        ["git", "config", "user.name", "Test User"],
-    ]:
-        subprocess.run(cmd, cwd=repo_dir, check=True, capture_output=True)
-
-
-def git_commit_all(repo_dir: Path, message: str) -> None:
-    subprocess.run(["git", "add", "."], cwd=repo_dir, check=True, capture_output=True)
-    subprocess.run(
-        ["git", "commit", "-m", message], cwd=repo_dir, check=True, capture_output=True
-    )
+def set_index_description(index_path: Path, local_file: str, description: str) -> None:
+    root = ET.parse(index_path).getroot()
+    for source in root.findall("source"):
+        desc_elem = source.find("description")
+        if source.findtext("local_file") == local_file and desc_elem is not None:
+            desc_elem.text = description
+    write_index(root, index_path)
 
 
 def run_sync(
@@ -80,46 +71,45 @@ def run_sync(
     return capsys.readouterr().out
 
 
-def set_index_description(index_path: Path, local_file: str, description: str) -> None:
-    """Overwrite one source's <description> in INDEX.xml."""
-    root = ET.parse(index_path).getroot()
-    for source in root.findall("source"):
-        desc_elem = source.find("description")
-        if source.findtext("local_file") == local_file and desc_elem is not None:
-            desc_elem.text = description
-    write_index(root, index_path)
+def _forbid_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+    """Stand in for `firecrawl_scrape.scrape` to prove the network is never touched."""
+    msg = "FireCrawl must not be called during a sync test"
+    raise AssertionError(msg)
 
 
-def make_fake_curate(docs: dict[str, tuple[str, str]]) -> Callable[[Path, str], None]:
-    """Faithful curate stand-in, given `{source_url: (local_file, content)}`.
+def stub_fetches(
+    monkeypatch: pytest.MonkeyPatch, docs: dict[str, str | Exception]
+) -> None:
+    """Serve canned content for https://example.com/* fetch URLs, offline.
 
-    Like the real curate, it writes the doc file AND resets the source's
-    INDEX description to PLACEHOLDER.
+    Keys are FETCH urls — the `append-md` rule fetches `<canonical>.md`.
+    An Exception value is raised instead of returned.
     """
 
-    def fake_curate(collection_dir: Path, source_url: str) -> None:
-        local_file, content = docs[source_url]
-        (collection_dir / local_file).write_text(content)
-        set_index_description(
-            collection_dir / "INDEX.xml", local_file, PLACEHOLDER_DESCRIPTION
-        )
+    def fetch(url: str) -> str:
+        content = docs[url]
+        if isinstance(content, Exception):
+            raise content
+        return content
 
-    return fake_curate
+    monkeypatch.setattr(
+        curate_doc.direct_fetch,
+        "load_direct_fetch_rules",
+        lambda: {"append-md": ["https://example.com/"]},
+    )
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
 
 
-def create_committed_collection(
-    tmp_path: Path, doc_content: str, description: str
-) -> Path:
-    """Git-tracked collection holding one indexed, committed doc ('doc.md')."""
+def create_collection(tmp_path: Path, doc_content: str, description: str) -> Path:
+    """A collection holding one indexed doc ('doc.md') sourced from …/doc."""
     collection_dir = tmp_path / "collection"
     collection_dir.mkdir()
-    init_git_repo(tmp_path)
     (collection_dir / "doc.md").write_text(doc_content)
     create_index_xml(
         collection_dir / "INDEX.xml",
         [make_source("doc.md", "https://example.com/doc", description)],
     )
-    git_commit_all(tmp_path, "Initial commit")
     return collection_dir
 
 
@@ -130,17 +120,28 @@ def test_status_lists_placeholder_files_as_home_paths(
     monkeypatch.setattr(Path, "home", lambda: home)
     collection_dir = home / "repo" / "collections" / "shiny"
 
-    output = format_descriptions_status(collection_dir, 0, {"b.md", "a.md"})
+    output = format_descriptions_status(collection_dir, Counter(), 0, {"b.md", "a.md"})
 
     assert "  - ~/repo/collections/shiny/a.md" in output
     assert "  - ~/repo/collections/shiny/b.md" in output
 
 
 def test_status_omits_file_lines_when_no_placeholders() -> None:
-    output = format_descriptions_status(Path("collections/shiny"), 3, set())
+    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
 
     assert "(needs description)|0 files" in output
     assert "  - " not in output
+
+
+def test_status_prints_every_outcome_line_even_at_zero() -> None:
+    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
+
+    assert "- ✅ Kept (content unchanged)|0" in output
+    assert "- ✅ Kept (whitespace-only change)|0" in output
+    assert "- ⚠️ Kept unverified (file recreated)|0" in output
+    assert "- 🚩 Reset to PLACEHOLDER (content changed)|0" in output
+    assert "- 🚩 New source (PLACEHOLDER)|0" in output
+    assert "- ❌ Failed (description untouched)|0" in output
 
 
 def test_sync_exits_when_collection_directory_missing(
@@ -188,70 +189,109 @@ def test_sync_exits_when_index_xml_malformed(
     assert "INDEX.xml" in out
 
 
-def test_sync_restores_description_when_refetched_content_is_unchanged(
+def test_sync_keeps_description_when_refetched_content_is_unchanged(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    collection_dir = create_committed_collection(
+    collection_dir = create_collection(
         tmp_path, "# Doc\n\nStable content.\n", "Curated description"
     )
-    fake = make_fake_curate(
-        {"https://example.com/doc": ("doc.md", "# Doc\n\nStable content.\n")}
+    stub_fetches(
+        monkeypatch, {"https://example.com/doc.md": "# Doc\n\nStable content.\n"}
     )
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake)
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == "Curated description"
-    assert "✅ Restored (whitespace-only changes)|1 files" in out
+    assert "- ✅ Kept (content unchanged)|1" in out
     assert "(needs description)|0 files" in out
 
 
-def test_sync_restores_description_when_refetch_changes_only_whitespace(
+def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    collection_dir = create_committed_collection(
+    collection_dir = create_collection(
         tmp_path, "# Doc\n\nStable content.\n", "Curated description"
     )
-    # Re-fetch adds only trailing spaces — git diff -w must see no change.
-    fake = make_fake_curate(
-        {"https://example.com/doc": ("doc.md", "# Doc\n\nStable content.   \n")}
+    # Inserted blank lines defeated `git diff -w`; whitespace-normalised compare must not.
+    stub_fetches(
+        monkeypatch, {"https://example.com/doc.md": "# Doc\n\n\n\nStable content.\n"}
     )
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake)
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == "Curated description"
-    assert "✅ Restored (whitespace-only changes)|1 files" in out
+    assert "- ✅ Kept (whitespace-only change)|1" in out
     assert "(needs description)|0 files" in out
 
 
-def test_sync_keeps_placeholder_and_flags_doc_when_content_changed(
+def test_sync_resets_description_when_refetched_content_changed(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    collection_dir = create_committed_collection(
+    """No git repo anywhere: change detection must not depend on git state."""
+    collection_dir = create_collection(
         tmp_path, "# Doc\n\nOriginal content.\n", "Curated description"
     )
-    fake = make_fake_curate(
-        {"https://example.com/doc": ("doc.md", "# Doc\n\nRewritten content.\n")}
-    )
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake)
+    stub_fetches(monkeypatch, {"https://example.com/doc.md": "# Doc\n\nRewritten.\n"})
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == PLACEHOLDER_DESCRIPTION
-    assert "✅ Restored (whitespace-only changes)|0 files" in out
+    assert "- 🚩 Reset to PLACEHOLDER (content changed)|1" in out
     status_section = out.split("## Index Descriptions Status")[1]
     assert "(needs description)|1 files" in status_section
     assert "doc.md" in status_section
+
+
+def test_sync_flags_kept_placeholder_description(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [
+            make_source(
+                "fresh-doc.md", "https://example.com/fresh-doc", PLACEHOLDER_DESCRIPTION
+            )
+        ],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/fresh-doc.md": "# Fetched fresh"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    status_section = out.split("## Index Descriptions Status")[1]
+    assert "(needs description)|1 files" in status_section
+    assert "fresh-doc.md" in status_section
+
+
+def test_sync_keeps_description_regenerated_after_reset(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, "# Doc\n\nOld content.\n", "Old description"
+    )
+    stub_fetches(monkeypatch, {"https://example.com/doc.md": "# Doc\n\nNew content.\n"})
+    run_sync(collection_dir, monkeypatch, capsys)  # content changed → PLACEHOLDER
+    index_path = collection_dir / "INDEX.xml"
+    set_index_description(index_path, "doc.md", "Generated after sync")
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert read_descriptions_by_file(index_path)["doc.md"] == "Generated after sync"
+    assert "- ✅ Kept (content unchanged)|1" in out
 
 
 def test_sync_fetches_missing_file_instead_of_pruning_entry(
@@ -261,23 +301,22 @@ def test_sync_fetches_missing_file_instead_of_pruning_entry(
 ) -> None:
     collection_dir = tmp_path / "collection"
     collection_dir.mkdir()
+    index_path = collection_dir / "INDEX.xml"
     create_index_xml(
-        collection_dir / "INDEX.xml",
-        [make_source("missing-doc.md", "https://example.com/missing", "Description")],
+        index_path,
+        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
     )
-
-    def fake_curate(target_dir: Path, _source_url: str) -> None:
-        (target_dir / "missing-doc.md").write_text("# Fetched fresh")
-
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake_curate)
+    stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     assert (collection_dir / "missing-doc.md").read_text() == "# Fetched fresh"
-    assert read_sources_by_file(collection_dir / "INDEX.xml") == {
-        "missing-doc.md": "https://example.com/missing"
+    assert read_sources_by_file(index_path) == {
+        "missing-doc.md": "https://example.com/missing-doc"
     }
     assert "- Successful|1" in out
+    assert "- ⚠️ Kept unverified (file recreated)|1" in out
+    assert read_descriptions_by_file(index_path)["missing-doc.md"] == "Description"
 
 
 def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
@@ -294,9 +333,9 @@ def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
         (collection_dir / name).write_text("content")
     create_index_xml(
         collection_dir / "INDEX.xml",
-        [make_source("doc-a.md", "https://example.com/a", "Description A")],
+        [make_source("doc-a.md", "https://example.com/doc-a", "Description A")],
     )
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", lambda *_: None)
+    stub_fetches(monkeypatch, {"https://example.com/doc-a.md": "content"})
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
@@ -308,8 +347,8 @@ def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
     ("failure", "expected_error_line"),
     [
         (
-            CurationError("Fetch failed: 404 not found — https://example.com/a"),
-            "❌ Fetch failed: 404 not found — https://example.com/a",
+            CurationError("Fetch failed: 404 not found — https://example.com/doc-a"),
+            "❌ Fetch failed: 404 not found — https://example.com/doc-a",
         ),
         (RuntimeError("boom"), "❌ Unexpected error: RuntimeError: boom"),
     ],
@@ -330,70 +369,34 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     create_index_xml(
         collection_dir / "INDEX.xml",
         [
-            make_source("doc-a.md", "https://example.com/a", "Description A"),
-            make_source("doc-b.md", "https://example.com/b", "Description B"),
+            make_source("doc-a.md", "https://example.com/doc-a", "Description A"),
+            make_source("doc-b.md", "https://example.com/doc-b", "Description B"),
         ],
     )
-
-    curated_urls: list[str] = []
-
-    def fake_curate(_collection_dir: Path, source_url: str) -> None:
-        curated_urls.append(source_url)
-        if source_url == "https://example.com/a":
-            raise failure
-
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake_curate)
+    stub_fetches(
+        monkeypatch,
+        {"https://example.com/doc-a.md": failure, "https://example.com/doc-b.md": "# B"},
+    )
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    assert curated_urls == ["https://example.com/a", "https://example.com/b"]
     assert "- Successful|1" in out
     assert "- Failed|1" in out
-    assert "### Failed URLs\n- https://example.com/a" in out
+    assert "### Failed URLs\n- https://example.com/doc-a" in out
     assert expected_error_line in out
+    assert "- ❌ Failed (description untouched)|1" in out
 
     # The failed source survives untouched in INDEX.xml, ready for retry.
     index_path = collection_dir / "INDEX.xml"
     assert read_sources_by_file(index_path) == {
-        "doc-a.md": "https://example.com/a",
-        "doc-b.md": "https://example.com/b",
+        "doc-a.md": "https://example.com/doc-a",
+        "doc-b.md": "https://example.com/doc-b",
     }
     assert read_descriptions_by_file(index_path)["doc-a.md"] == "Description A"
 
 
-def test_sync_flags_fresh_fetched_placeholder_doc_in_status(
-    tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
-) -> None:
-    """Fresh files are untracked, invisible to git diff — the 🚩 list must flag them."""
-    collection_dir = tmp_path / "collection"
-    collection_dir.mkdir()
-    create_index_xml(
-        collection_dir / "INDEX.xml",
-        [
-            make_source(
-                "fresh-doc.md", "https://example.com/fresh", PLACEHOLDER_DESCRIPTION
-            )
-        ],
-    )
-
-    def fake_curate(target_dir: Path, _source_url: str) -> None:
-        (target_dir / "fresh-doc.md").write_text("# Fetched fresh")
-
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake_curate)
-
-    out = run_sync(collection_dir, monkeypatch, capsys)
-
-    status_section = out.split("## Index Descriptions Status")[1]
-    assert "(needs description)|1 files" in status_section
-    assert "fresh-doc.md" in status_section
-
-
 @pytest.mark.github
 def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) -> None:
-    # Restore isn't asserted: outside the repo, sync_index.py's git-diff finds
-    # no changed files and restores every description unconditionally.
     blob_url = (
         "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
     )
@@ -441,4 +444,8 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
     final_sources = read_sources_by_file(index_path)
     assert final_sources == {local_file: blob_url}, (
         f"INDEX.xml entry lost or rewritten after sync.\nSources now: {final_sources}"
+    )
+    assert read_descriptions_by_file(index_path)[local_file] == PLACEHOLDER_DESCRIPTION, (
+        "The sentinel guarantees a real content change, so the stale description "
+        "must reset to PLACEHOLDER"
     )

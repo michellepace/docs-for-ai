@@ -1,12 +1,14 @@
 """Tests for curate_doc.py; network tests gated by `firecrawl`/`github` markers."""
 
 import subprocess
+import xml.etree.ElementTree as ET
 from datetime import date
 from typing import TYPE_CHECKING
 
 import pytest
 
 from docs_for_ai import curate_doc
+from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -16,28 +18,12 @@ URL_FIRECRAWL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
 URL_GH_BLOB = (
     "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
 )
-URL_GH_RAW = (
+URL_GH_RAW_TWIN = (
     "https://raw.githubusercontent.com/astral-sh/uv/main/"
     "docs/getting-started/first-steps.md"
 )
 URL_GH_BLOB_404 = (
     "https://github.com/astral-sh/uv/blob/main/docs/zzz-does-not-exist-xyz.md"
-)
-
-URL_GH_BLOB_MDX = (
-    "https://github.com/biomejs/website/blob/main/"
-    "src/content/docs/guides/getting-started.mdx"
-)
-URL_GH_RAW_MDX = (
-    "https://raw.githubusercontent.com/biomejs/website/main/"
-    "src/content/docs/guides/getting-started.mdx"
-)
-URL_GH_BLOB_QMD = (
-    "https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd"
-)
-URL_GH_RAW_QMD = (
-    "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
-    "get-started/deploy-cloud.qmd"
 )
 
 
@@ -100,7 +86,7 @@ class TestInputValidation:
     def test_github_url_rejected_before_any_fetch(self, tmp_path: Path) -> None:
         """A non-blob GitHub URL is refused before any fetch, writing no files."""
         new_dir = tmp_path / "uv"
-        exit_code, output = run_script(str(new_dir), URL_GH_RAW)
+        exit_code, output = run_script(str(new_dir), URL_GH_RAW_TWIN)
 
         assert exit_code != 0
         assert "Not a GitHub blob URL" in output
@@ -118,11 +104,8 @@ class TestMarkdownDirectPath:
         monkeypatch: pytest.MonkeyPatch,
         capsys: pytest.CaptureFixture[str],
     ) -> None:
-        """A `.md` URL is curated offline end-to-end; FireCrawl is never called."""
-        # The one in-process test: rather than fetching over the network we hand
-        # main() a fixed markdown string, then assert FireCrawl is never reached.
-        # This isolates the `.md` routing branch — there is no stable non-GitHub
-        # `.md` URL to point a live test at.
+        # No stable non-GitHub `.md` URL exists to point a live test at, so this
+        # stubs the fetch in-process and asserts the `.md` branch never FireCrawls.
 
         def _fake_fetch(_url: str) -> str:
             return "# Hello\n\nbody\n"
@@ -196,7 +179,6 @@ class TestCanonicalCollapse:
     def test_readthedocs_html_then_source_twin_yields_one_source(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """`.html` page then its `_sources` twin yield one file and one source."""
         monkeypatch.setattr(
             curate_doc.direct_fetch,
             "load_direct_fetch_rules",
@@ -295,6 +277,134 @@ def test_recurating_a_url_updates_the_existing_source(
     assert "<title>Updating State</title>" in index
 
 
+def set_index_description(index_path: Path, local_file: str, description: str) -> None:
+    root = ET.parse(index_path).getroot()
+    for source in root.findall("source"):
+        desc_elem = source.find("description")
+        if source.findtext("local_file") == local_file and desc_elem is not None:
+            desc_elem.text = description
+    write_index(root, index_path)
+
+
+def read_index_description(index_path: Path, local_file: str) -> str:
+    root = ET.parse(index_path).getroot()
+    for source in root.findall("source"):
+        if source.findtext("local_file") == local_file:
+            return source.findtext("description", "")
+    return ""
+
+
+class TestKeepDescriptionIfUnchanged:
+    """curate() decides each description's fate at write time, not post-hoc."""
+
+    URL = "https://example.com/docs/hello.md"  # canonical …/hello → hello.md
+    CONTENT = "# Hello\n\nFirst paragraph.\n\nSecond paragraph.\n"
+
+    def curate_stubbed(
+        self, collection: Path, content: str, monkeypatch: pytest.MonkeyPatch
+    ) -> curate_doc.CurationResult:
+        """Curate self.URL offline, serving `content` as the fetched document."""
+        monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", lambda _url: content)
+        monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
+        return curate_doc.curate(collection, self.URL)
+
+    def test_recurating_identical_content_keeps_existing_description(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        index_path = collection / "INDEX.xml"
+        set_index_description(index_path, "hello.md", "Generated description")
+
+        result = self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+
+        assert read_index_description(index_path, "hello.md") == "Generated description"
+        assert result.outcome == curate_doc.DocOutcome.UNCHANGED
+
+    def test_recurating_with_only_inserted_blank_lines_keeps_description(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        index_path = collection / "INDEX.xml"
+        set_index_description(index_path, "hello.md", "Generated description")
+        respaced = self.CONTENT.replace("\n\nSecond", "\n\n\n\nSecond")
+
+        result = self.curate_stubbed(collection, respaced, monkeypatch)
+
+        assert read_index_description(index_path, "hello.md") == "Generated description"
+        assert result.outcome == curate_doc.DocOutcome.WHITESPACE_ONLY
+
+    def test_recurating_changed_content_resets_description_to_placeholder(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        index_path = collection / "INDEX.xml"
+        set_index_description(index_path, "hello.md", "Generated description")
+        changed = self.CONTENT.replace("Second paragraph.", "Rewritten paragraph.")
+
+        result = self.curate_stubbed(collection, changed, monkeypatch)
+
+        assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
+        assert result.outcome == curate_doc.DocOutcome.CHANGED
+
+    def test_recurating_missing_file_keeps_description_and_reports_recreated(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        index_path = collection / "INDEX.xml"
+        set_index_description(index_path, "hello.md", "Generated description")
+        (collection / "hello.md").unlink()
+
+        result = self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+
+        assert read_index_description(index_path, "hello.md") == "Generated description"
+        assert result.outcome == curate_doc.DocOutcome.RECREATED
+        assert "file recreated, unverified" in capsys.readouterr().out
+
+    def test_carried_placeholder_still_reports_description_pending(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        capsys.readouterr()  # discard the first curation's output
+
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+
+        index_path = collection / "INDEX.xml"
+        assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
+        assert "🚩 description pending" in capsys.readouterr().out
+
+    def test_comparison_reads_the_entrys_recorded_local_file(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A renamed doc file with identical content still keeps its description."""
+        collection = tmp_path / "coll"
+        self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+        index_path = collection / "INDEX.xml"
+        set_index_description(index_path, "hello.md", "Generated description")
+        root = ET.parse(index_path).getroot()
+        for source in root.findall("source"):
+            local_file_elem = source.find("local_file")
+            assert local_file_elem is not None
+            local_file_elem.text = "renamed.md"
+        write_index(root, index_path)
+        (collection / "hello.md").rename(collection / "renamed.md")
+
+        result = self.curate_stubbed(collection, self.CONTENT, monkeypatch)
+
+        assert read_index_description(index_path, "hello.md") == "Generated description"
+        assert result.outcome == curate_doc.DocOutcome.UNCHANGED
+
+
 class TestFilenameCollisionGuard:
     """Two DIFFERENT canonical URLs that slugify to one filename fail loud."""
 
@@ -304,7 +414,6 @@ class TestFilenameCollisionGuard:
         monkeypatch: pytest.MonkeyPatch,
         capsys: pytest.CaptureFixture[str],
     ) -> None:
-        """A 2nd URL colliding on `local_file` fails loud, leaving the first intact."""
         monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
         monkeypatch.setattr(
             curate_doc.firecrawl_scrape,
@@ -363,20 +472,29 @@ class TestFetchDocumentRouting:
         doc = curate_doc.fetch_document(route)
 
         # GitHub is matched first, fetched from raw, named from the blob path.
-        assert fetched_urls == [URL_GH_RAW]
+        assert fetched_urls == [URL_GH_RAW_TWIN]
         assert doc.filename == "getting-started-first-steps.md"
 
     @pytest.mark.parametrize(
         ("blob_url", "raw_url", "filename"),
         [
-            (
-                URL_GH_BLOB_MDX,
-                URL_GH_RAW_MDX,
+            pytest.param(
+                "https://github.com/biomejs/website/blob/main/"
+                "src/content/docs/guides/getting-started.mdx",
+                "https://raw.githubusercontent.com/biomejs/website/main/"
+                "src/content/docs/guides/getting-started.mdx",
                 "src-content-docs-guides-getting-started.mdx",
+                id="mdx",
             ),
-            (URL_GH_BLOB_QMD, URL_GH_RAW_QMD, "get-started-deploy-cloud.qmd"),
+            pytest.param(
+                "https://github.com/posit-dev/py-shiny-site/blob/main/"
+                "get-started/deploy-cloud.qmd",
+                "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+                "get-started/deploy-cloud.qmd",
+                "get-started-deploy-cloud.qmd",
+                id="qmd",
+            ),
         ],
-        ids=["mdx", "qmd"],
     )
     def test_github_blob_preserves_mdx_qmd_extension(
         self,
@@ -422,7 +540,6 @@ class TestFetchDocumentRouting:
         route = curate_doc.direct_fetch.resolve_route(url, {})
         doc = curate_doc.fetch_document(route)
 
-        # The else-branch reached FireCrawl with the source URL; direct fetch raised.
         assert scraped_urls == [url]
         # A URL with no matching registry rule is stored verbatim as its own canonical.
         assert doc.source_url == url

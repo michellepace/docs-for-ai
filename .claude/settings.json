@@ -5,6 +5,7 @@
       "Bash(claude mcp get *)",
       "Bash(claude mcp list)",
       "Bash(echo *)",
+      "Bash(gh repo view *)",
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git status *)",

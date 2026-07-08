@@ -5,6 +5,7 @@ argument-hint: <collection>
 arguments: [collection]
 allowed-tools:
   - Bash(find *)
+  - Bash(git diff *)
   - Bash(printf *)
   - Bash(uv run --directory * sync-index *)
   - Bash(uv run --directory * update-descriptions *)
@@ -55,7 +56,7 @@ Be friendly and brief, and include the corrected `/recurate-docs …` — in the
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
-`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists, prunes entries whose file is missing, and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
+`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists — and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
 
 ### Step 3. Write and apply descriptions for `PLACEHOLDER` entries only
 
@@ -80,6 +81,8 @@ Word count is enforced; on ❌, rewrite the flagged description(s) and rerun wit
 
 ### Step 4. Report completion
 
+For the content-changes line, run `git diff --stat -w -- collections/$collection` yourself and list the changed doc files (ignore `INDEX.xml` — that's the descriptions you just wrote).
+
 Report from the script's output, in this format:
 
 <example_summary_message>
@@ -89,14 +92,13 @@ Report from the script's output, in this format:
 
 📊 Statistics
 - Collection:            `$collection`
-- Stale sources removed: [N]
 - Total docs:            [M]
 - Successfully curated:  [X]
 - Failed to curate:      [Y]
 - Descriptions updated:  [D]
 
 💡 Collection Content Changes for `$collection`:
-- [List files from the <GIT_CONTENT_CHANGES> block here]
+- [changed doc files, from `git diff --stat -w`]
 
 *NB: excludes files with only whitespace changes*
 ```

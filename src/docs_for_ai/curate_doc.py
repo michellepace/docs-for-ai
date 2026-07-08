@@ -4,6 +4,7 @@ import argparse
 import sys
 import xml.etree.ElementTree as ET
 from datetime import date
+from enum import StrEnum
 from typing import TYPE_CHECKING, NamedTuple
 from urllib.parse import urlparse
 
@@ -14,6 +15,30 @@ from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+
+class DocOutcome(StrEnum):
+    """Fate of a source's description, decided at write time."""
+
+    NEW = "new"  # no INDEX entry for this canonical URL
+    UNCHANGED = "unchanged"  # fetched bytes identical to the entry's doc file
+    WHITESPACE_ONLY = "whitespace-only"  # differs only in whitespace
+    CHANGED = "changed"  # real content change — description resets
+    RECREATED = "recreated"  # entry exists but its doc file is missing
+
+
+class CurationResult(NamedTuple):
+    """One curation's outcome and the doc file it wrote."""
+
+    outcome: DocOutcome
+    local_file: str
+
+
+class _ExistingEntry(NamedTuple):
+    """The INDEX.xml entry already recording a canonical URL, pre-curation."""
+
+    local_file: str
+    description: str
 
 
 def _validate_url(url: str) -> None:
@@ -54,43 +79,97 @@ Curated docs for targeted AI context.
 - Curation Index: [INDEX.xml](INDEX.xml)
 - Curation Source: <{site.scheme}://{site.netloc}>
 """
-    (collection_dir / "README.md").write_text(readme)
+    (collection_dir / "README.md").write_text(readme, encoding="utf-8")
     write_index(ET.Element("docs_index"), collection_dir / "INDEX.xml")
     print(f"✅ Collection: {collection_dir.name} (initialised)")
 
 
-def _add_or_update_source_in_index(
-    collection_dir: Path, title: str, source_url: str, local_file: str
-) -> bool:
-    """Add or replace the source for `source_url` in INDEX.xml.
+def _urls_match(entry_url: str | None, canonical_url: str) -> bool:
+    """The one URL-matching rule: trailing-slash-insensitive equality."""
+    return entry_url is not None and entry_url.rstrip("/") == canonical_url
 
-    Returns `is_update` — True if an existing entry was replaced.
-    """
+
+def _find_existing_entry(index_path: Path, canonical_url: str) -> _ExistingEntry | None:
+    """The INDEX entry recording `canonical_url`, or None if not yet curated."""
+    root = ET.parse(index_path).getroot()
+    for source in root.findall("source"):
+        if _urls_match(source.findtext("source_url"), canonical_url):
+            return _ExistingEntry(
+                source.findtext("local_file", ""), source.findtext("description", "")
+            )
+    return None
+
+
+def _classify_outcome(
+    collection_dir: Path, existing: _ExistingEntry | None, fetched_content: str
+) -> DocOutcome:
+    """Compare fetched content against the entry's recorded doc file."""
+    if existing is None:
+        return DocOutcome.NEW
+    comparison_file = collection_dir / existing.local_file
+    if not comparison_file.is_file():
+        return DocOutcome.RECREATED
+    current = comparison_file.read_text(encoding="utf-8")
+    if current == fetched_content:
+        return DocOutcome.UNCHANGED
+    if current.split() == fetched_content.split():
+        return DocOutcome.WHITESPACE_ONLY
+    return DocOutcome.CHANGED
+
+
+def _decide_description(outcome: DocOutcome, existing: _ExistingEntry | None) -> str:
+    """Keep the existing description unless content really changed (or is new)."""
+    keep = {DocOutcome.UNCHANGED, DocOutcome.WHITESPACE_ONLY, DocOutcome.RECREATED}
+    if outcome in keep and existing is not None and existing.description:
+        return existing.description
+    return PLACEHOLDER_DESCRIPTION
+
+
+def _success_note(outcome: DocOutcome, description: str) -> str:
+    """One-line description fate for the final success message."""
+    if description == PLACEHOLDER_DESCRIPTION:
+        return "🚩 description pending"
+    if outcome is DocOutcome.RECREATED:
+        return "⚠️ description kept — file recreated, unverified"
+    if outcome is DocOutcome.WHITESPACE_ONLY:
+        return "✅ description kept — whitespace-only change"
+    return "✅ description kept — content unchanged"
+
+
+def _add_or_update_source_in_index(
+    collection_dir: Path, title: str, source_url: str, local_file: str, description: str
+) -> None:
+    """Rewrite an existing entry in place, append a new one."""
     index_path = collection_dir / "INDEX.xml"
 
     root = ET.parse(index_path).getroot()
-
-    is_update = False
-
-    for existing_source in root.findall("source"):
-        existing_url_elem = existing_source.find("source_url")
-        if (
-            existing_url_elem is not None
-            and existing_url_elem.text is not None
-            and existing_url_elem.text.rstrip("/") == source_url
-        ):
-            root.remove(existing_source)
-            is_update = True
-            break
-
     curated_at = date.today().isoformat()
 
-    source = ET.SubElement(root, "source")
-    ET.SubElement(source, "title").text = title
-    ET.SubElement(source, "description").text = PLACEHOLDER_DESCRIPTION
-    ET.SubElement(source, "source_url").text = source_url
-    ET.SubElement(source, "local_file").text = local_file
-    ET.SubElement(source, "curated_at").text = curated_at
+    fields = {
+        "title": title,
+        "description": description,
+        "source_url": source_url,
+        "local_file": local_file,
+        "curated_at": curated_at,
+    }
+
+    source = next(
+        (
+            s
+            for s in root.findall("source")
+            if _urls_match(s.findtext("source_url"), source_url)
+        ),
+        None,
+    )
+    is_update = source is not None
+    if source is None:
+        source = ET.SubElement(root, "source")
+
+    for tag, value in fields.items():
+        child = source.find(tag)
+        if child is None:
+            child = ET.SubElement(source, tag)
+        child.text = value
 
     write_index(root, index_path)
 
@@ -98,13 +177,11 @@ def _add_or_update_source_in_index(
     print(f"✅ {label}: {format_path_for_display(index_path)}")
     print("   <source>")
     print(f"     <title>{title}</title>")
-    print(f"     <description>{PLACEHOLDER_DESCRIPTION}</description>")
+    print(f"     <description>{description}</description>")
     print(f"     <source_url>{source_url}</source_url>")
     print(f"     <local_file>{local_file}</local_file>")
     print(f"     <curated_at>{curated_at}</curated_at>")
     print("   </source>")
-
-    return is_update
 
 
 def _reject_filename_collision(
@@ -146,7 +223,7 @@ def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
     """Write the fetched document to its file."""
     file_path = collection_dir / doc.filename
     file_existed = file_path.exists()
-    file_path.write_text(doc.content)
+    file_path.write_text(doc.content, encoding="utf-8")
     if file_existed:
         print(f"✅ Overwrote: {format_path_for_display(file_path)}")
     else:
@@ -164,7 +241,9 @@ def _parse_args() -> argparse.Namespace:
 notes:
   - Fetch precedence: GitHub raw → .md/.rst.txt twin → FireCrawl (last resort).
   - Re-curating a URL overwrites its doc and replaces its INDEX entry.
-  - The INDEX entry's description is left as a placeholder to fill in later.
+  - A new or content-changed doc gets a PLACEHOLDER description to fill in later;
+    if the re-fetched content is unchanged (ignoring whitespace), the existing
+    description is kept.
   - The collection is initialised if the directory doesn't exist.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -180,8 +259,12 @@ notes:
     return parser.parse_args()
 
 
-def curate(collection_dir: Path, source_url: str) -> None:
-    """Curate one source URL into a collection."""
+def curate(collection_dir: Path, source_url: str) -> CurationResult:
+    """Curate one source URL into a collection.
+
+    A description survives unless content really changed: the fetched document is
+    compared (before the overwrite) against the doc file its INDEX entry records.
+    """
     source_url = source_url.rstrip("/")
     index_path = collection_dir / "INDEX.xml"
 
@@ -200,19 +283,28 @@ def curate(collection_dir: Path, source_url: str) -> None:
     if index_exists:
         _reject_filename_collision(collection_dir, route.filename, route.canonical_url)
 
+    existing = (
+        _find_existing_entry(index_path, route.canonical_url) if index_exists else None
+    )
+
     doc = fetch_document(route)
 
     if not index_exists:
         _initialise_collection(collection_dir, source_url)
 
+    outcome = _classify_outcome(collection_dir, existing, doc.content)
+
     _write_fetched_document(collection_dir, doc)
+
+    description = _decide_description(outcome, existing)
 
     # doc.source_url is canonical: query/fragment-free, no trailing `.md`
     _add_or_update_source_in_index(
-        collection_dir, doc.title, doc.source_url, doc.filename
+        collection_dir, doc.title, doc.source_url, doc.filename, description
     )
 
-    print("🏁 Success! curated doc (🚩 description pending)\n")
+    print(f"🏁 Success! curated doc ({_success_note(outcome, description)})\n")
+    return CurationResult(outcome, doc.filename)
 
 
 def main() -> None:

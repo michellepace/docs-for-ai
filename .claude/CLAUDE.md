@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+**Ignore `xdocs-mine/` unless I reference it** — personal notes, often stale.
+
 ## Overview
 
 Curated documentation collections — fetched directly when possible, else scraped via FireCrawl. Each collection's INDEX.xml routes an LLM reader to the right doc (via `/ask-docs`).
@@ -62,8 +64,9 @@ uv run update-descriptions --help # Pipe filename/description pair(s) into INDEX
 uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code
-uv run pre-commit run --all-files # Run pre-commit hooks manually
+uv run pre-commit run --all-files # Run manually
 
-# Run Non-Network Tests (see pyproject.toml)
-uv run pytest -m "not firecrawl and not github and not readthedocs"
+# Run Tests
+uv run pytest -m "not firecrawl"  # free suite: non-network + direct_fetch
+uv run pytest -m direct_fetch     # just the free direct_fetch network tests
 ```

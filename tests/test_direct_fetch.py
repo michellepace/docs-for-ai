@@ -474,7 +474,7 @@ def test_filename_and_title_strip_the_same_suffixes(suffix: str) -> None:
     assert extract_md_title("no heading here\n", url) == "Name"
 
 
-@pytest.mark.github
+@pytest.mark.direct_fetch
 class TestFetchText:
     """Source fetch over HTTP, with structured 404/network failure."""
 
@@ -496,7 +496,7 @@ class TestFetchText:
             fetch_text(url)
 
 
-@pytest.mark.readthedocs
+@pytest.mark.direct_fetch
 @pytest.mark.parametrize(
     ("page", "expected_title"),
     [
@@ -516,7 +516,7 @@ def test_real_rich_page_resolves_fetches_and_titles(
     assert extract_rst_title(content, route.canonical_url) == expected_title
 
 
-@pytest.mark.readthedocs
+@pytest.mark.direct_fetch
 def test_real_rich_raw_rst_source_reverse_maps_to_page() -> None:
     url = "https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt"
     route = resolve_route(url, load_direct_fetch_rules())

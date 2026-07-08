@@ -1,7 +1,7 @@
 ---
 title: Scenarios — Aspirational "TO Be" - simply
-note: rough notes, mine
 updated: 2026-07-01
+status: draft / rough
 ---
 
 Desired scenarios for simplifying.

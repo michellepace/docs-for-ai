@@ -18,6 +18,8 @@ from rich.table import Table
 
 PLACEHOLDER = "PLACEHOLDER"
 COLLECTIONS_DIR = "collections"
+# Collection files that are never orphans (mirrors sync-index).
+NON_DOC_FILES = {"INDEX.xml", "README.md"}
 
 
 @dataclass(frozen=True)
@@ -28,6 +30,7 @@ class CollectionStats:
     total: int
     populated: int
     date_counts: Counter[str]
+    orphans: tuple[str, ...] = ()
     error: str | None = None
 
     @property
@@ -47,14 +50,27 @@ def analyse_index(index_path: Path) -> CollectionStats:
     sources = root.findall("source")
     populated = 0
     date_counts: Counter[str] = Counter()
+    indexed_files: set[str] = set()
     for source in sources:
         description = (source.findtext("description") or "").strip()
         if description and description != PLACEHOLDER:
             populated += 1
         curated = (source.findtext("curated_at") or "").strip() or "(missing)"
         date_counts[curated] += 1
+        indexed_files.add((source.findtext("local_file") or "").strip())
 
-    return CollectionStats(name, len(sources), populated, date_counts)
+    orphans = find_orphans(index_path.parent, indexed_files)
+    return CollectionStats(name, len(sources), populated, date_counts, orphans)
+
+
+def find_orphans(collection_dir: Path, indexed_files: set[str]) -> tuple[str, ...]:
+    """On-disk files with no INDEX.xml <local_file> (same rule as sync-index)."""
+    keep = indexed_files | NON_DOC_FILES
+    return tuple(
+        path.name
+        for path in sorted(collection_dir.iterdir())
+        if path.is_file() and path.name not in keep and not path.name.startswith(".")
+    )
 
 
 def format_dates(date_counts: Counter[str]) -> str:
@@ -74,11 +90,17 @@ def find_indexes(root: Path) -> list[Path]:
 
 def build_table(stats: list[CollectionStats]) -> Table:
     """Build the rich table (plus a totals footer row)."""
-    table = Table(title="📦 Collection INDEX.xml status", show_footer=True)
+    table = Table(
+        title="INDEX.xml <description> fields — populated vs PLACEHOLDER",
+        title_justify="left",
+        caption='PLACEHOLDER = <description> is empty or the literal "PLACEHOLDER"',
+        caption_justify="left",
+        show_footer=True,
+    )
     table.add_column("Collection", style="bold cyan", footer="TOTAL")
     table.add_column("Sources", justify="right")
     table.add_column("Populated", justify="right", style="green")
-    table.add_column("Placeholder", justify="right")
+    table.add_column("PLACEHOLDER", justify="right")
     table.add_column("Curated date(s)")
 
     total_sources = sum(s.total for s in stats)
@@ -140,11 +162,19 @@ def main() -> int:
         console.print(f"[red]No {COLLECTIONS_DIR}/*/INDEX.xml found under {root}[/red]")
         return 1
 
+    console.print("\n[bold]📦 Collection status report[/bold]")
+    console.print(f"{len(indexes)} collections under {root}\n")
+
     stats = [analyse_index(path) for path in indexes]
     console.print(build_table(stats))
-    console.print(
-        f"\n[dim]{len(stats)} collections scanned under {root}[/dim]",
-    )
+
+    console.print("\n[bold]Orphan files[/bold] (on disk but not in INDEX.xml)")
+    orphans = [f"{COLLECTIONS_DIR}/{s.name}/{f}" for s in stats for f in s.orphans]
+    if orphans:
+        for orphan in orphans:
+            console.print(f"  [yellow]{orphan}[/yellow]")
+    else:
+        console.print("  [green]None[/green]")
     return 0
 
 

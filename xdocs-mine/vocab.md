@@ -1,6 +1,7 @@
 ---
 title: Vocabulary
 updated: 2026-07-02
+status: draft / rough
 ---
 
 The domain language of this project — the *words*, not the code. One canonical

@@ -1,21 +1,16 @@
-"""Tests for sync_index: pruning, description restore, and re-curate round-trips."""
+"""sync_index tests: INDEX.xml is the truth — reconcile, re-fetch, keep-if-unchanged."""
 
 import subprocess
 import xml.etree.ElementTree as ET
+from collections import Counter
 from pathlib import Path
 
 import pytest
 
+from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
-from docs_for_ai.sync_index import (
-    delete_orphan_files,
-    format_descriptions_status,
-    get_changed_curated_files,
-    main,
-    prune_stale_index_sources,
-    restore_unchanged_descriptions,
-)
+from docs_for_ai.sync_index import format_descriptions_status, main
 
 
 def make_source(local_file: str, source_url: str, description: str) -> dict[str, str]:
@@ -42,178 +37,80 @@ def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:
 
 def read_descriptions_by_file(index_path: Path) -> dict[str, str]:
     root = ET.parse(index_path).getroot()
-    descriptions: dict[str, str] = {}
-
-    for source in root.findall("source"):
-        local_file_elem = source.find("local_file")
-        desc_elem = source.find("description")
-        if local_file_elem is None or desc_elem is None:
-            continue
-        local_file = local_file_elem.text
-        description = desc_elem.text
-        if local_file is not None and description is not None:
-            descriptions[local_file] = description
-
-    return descriptions
-
-
-def init_git_repo(repo_dir: Path) -> None:
-    for cmd in [
-        ["git", "init"],
-        ["git", "config", "user.email", "test@example.com"],
-        ["git", "config", "user.name", "Test User"],
-    ]:
-        subprocess.run(cmd, cwd=repo_dir, check=True, capture_output=True)
-
-
-def git_commit_all(repo_dir: Path, message: str) -> None:
-    subprocess.run(["git", "add", "."], cwd=repo_dir, check=True, capture_output=True)
-    subprocess.run(
-        ["git", "commit", "-m", message], cwd=repo_dir, check=True, capture_output=True
-    )
-
-
-def test_prune_removes_stale_sources_and_keeps_existing(tmp_path: Path) -> None:
-    (tmp_path / "doc-a.md").write_text("# Doc A")
-    (tmp_path / "doc-b.md").write_text("# Doc B")
-
-    sources = [
-        make_source("doc-a.md", "https://example.com/a", "Description A"),
-        make_source("doc-b.md", "https://example.com/b", "Description B"),
-        make_source("gone-1.md", "https://example.com/stale1", "Stale"),
-        make_source("gone-2.md", "https://example.com/stale2", "Stale"),
-    ]
-    index_path = tmp_path / "INDEX.xml"
-    create_index_xml(index_path, sources)
-
-    live_sources, removed_count = prune_stale_index_sources(index_path, tmp_path)
-
-    assert removed_count == 2
-    assert ("doc-a.md", "https://example.com/a") in live_sources
-    assert ("doc-b.md", "https://example.com/b") in live_sources
-
-    descriptions = read_descriptions_by_file(index_path)
-    assert set(descriptions) == {"doc-a.md", "doc-b.md"}
-
-
-def test_prune_keeps_arbitrary_extension_when_file_exists(tmp_path: Path) -> None:
-    (tmp_path / "doc.abc").write_text("# x")
-    index_path = tmp_path / "INDEX.xml"
-    create_index_xml(index_path, [make_source("doc.abc", "https://e/doc.abc", "D")])
-
-    live_sources, removed_count = prune_stale_index_sources(index_path, tmp_path)
-
-    assert removed_count == 0
-    assert {source.local_file for source in live_sources} == {"doc.abc"}
-
-
-def test_delete_orphan_files_removes_unindexed_but_keeps_readme(tmp_path: Path) -> None:
-    (tmp_path / "doc-a.md").write_text("# Doc A")
-    (tmp_path / "orphan.md").write_text("# Orphan")
-    (tmp_path / "README.md").write_text("# Readme")
-
-    deleted = delete_orphan_files(tmp_path, {"doc-a.md"})
-
-    assert deleted == ["orphan.md"]
-    assert (tmp_path / "doc-a.md").exists()
-    assert (tmp_path / "README.md").exists()
-    assert not (tmp_path / "orphan.md").exists()
-
-
-def test_changed_files_ignores_whitespace_only_edit(tmp_path: Path) -> None:
-    collection_dir = tmp_path / "collection"
-    collection_dir.mkdir()
-    init_git_repo(tmp_path)
-
-    md_file = collection_dir / "test-doc.md"
-    md_file.write_text("# Test Document\n\nSome content here.\n")
-    git_commit_all(tmp_path, "Initial commit")
-
-    # Whitespace-only edit: git diff -w must report no change.
-    md_file.write_text("# Test Document\n\nSome content here.   \n")
-
-    assert get_changed_curated_files(collection_dir, {"test-doc.md"}) == set()
-
-
-def test_changed_files_reports_only_indexed_files(tmp_path: Path) -> None:
-    collection_dir = tmp_path / "collection"
-    collection_dir.mkdir()
-    init_git_repo(tmp_path)
-
-    indexed_doc = collection_dir / "indexed-doc.md"
-    stray_doc = collection_dir / "stray-doc.md"
-    indexed_doc.write_text("# Indexed\n\nOriginal content.\n")
-    stray_doc.write_text("# Stray\n\nOriginal content.\n")
-    git_commit_all(tmp_path, "Initial commit")
-
-    # Real content change to both files; only the indexed one is in scope.
-    indexed_doc.write_text("# Indexed\n\nRewritten content.\n")
-    stray_doc.write_text("# Stray\n\nRewritten content.\n")
-
-    assert get_changed_curated_files(collection_dir, {"indexed-doc.md"}) == {
-        "indexed-doc.md"
+    return {
+        source.findtext("local_file", ""): source.findtext("description", "")
+        for source in root.findall("source")
     }
 
 
-def test_restore_replaces_placeholder_for_unchanged_file(tmp_path: Path) -> None:
-    backup_path = tmp_path / "INDEX.xml.backup"
-    create_index_xml(
-        backup_path,
-        [
-            make_source("doc-a.md", "https://example.com/a", "Original A"),
-            make_source("doc-b.md", "https://example.com/b", "Original B"),
-        ],
+def read_sources_by_file(index_path: Path) -> dict[str, str]:
+    root = ET.parse(index_path).getroot()
+    return {
+        source.findtext("local_file", ""): source.findtext("source_url", "")
+        for source in root.findall("source")
+    }
+
+
+def set_index_description(index_path: Path, local_file: str, description: str) -> None:
+    root = ET.parse(index_path).getroot()
+    for source in root.findall("source"):
+        desc_elem = source.find("description")
+        if source.findtext("local_file") == local_file and desc_elem is not None:
+            desc_elem.text = description
+    write_index(root, index_path)
+
+
+def run_sync(
+    collection_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> str:
+    """Run `sync-index <collection_dir>` in-process and return its stdout."""
+    monkeypatch.setattr("sys.argv", ["sync-index", str(collection_dir)])
+    main()
+    return capsys.readouterr().out
+
+
+def _forbid_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
+    """Stand in for `firecrawl_scrape.scrape` to prove the network is never touched."""
+    msg = "FireCrawl must not be called during a sync test"
+    raise AssertionError(msg)
+
+
+def stub_fetches(
+    monkeypatch: pytest.MonkeyPatch, docs: dict[str, str | Exception]
+) -> None:
+    """Serve canned content for https://example.com/* fetch URLs, offline.
+
+    Keys are FETCH urls — the `append-md` rule fetches `<canonical>.md`.
+    An Exception value is raised instead of returned.
+    """
+
+    def fetch(url: str) -> str:
+        content = docs[url]
+        if isinstance(content, Exception):
+            raise content
+        return content
+
+    monkeypatch.setattr(
+        curate_doc.direct_fetch,
+        "load_direct_fetch_rules",
+        lambda: {"append-md": ["https://example.com/"]},
     )
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
 
-    index_path = tmp_path / "INDEX.xml"
+
+def create_collection(tmp_path: Path, doc_content: str, description: str) -> Path:
+    """A collection holding one indexed doc ('doc.md') sourced from …/doc."""
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    (collection_dir / "doc.md").write_text(doc_content)
     create_index_xml(
-        index_path,
-        [
-            make_source("doc-a.md", "https://example.com/a", PLACEHOLDER_DESCRIPTION),
-            make_source("doc-b.md", "https://example.com/b", PLACEHOLDER_DESCRIPTION),
-        ],
+        collection_dir / "INDEX.xml",
+        [make_source("doc.md", "https://example.com/doc", description)],
     )
-
-    restored = restore_unchanged_descriptions(index_path, backup_path, set())
-
-    assert restored == 2
-    descriptions = read_descriptions_by_file(index_path)
-    assert descriptions["doc-a.md"] == "Original A"
-    assert descriptions["doc-b.md"] == "Original B"
-
-
-def test_restore_keeps_placeholder_for_changed_file(tmp_path: Path) -> None:
-    backup_path = tmp_path / "INDEX.xml.backup"
-    create_index_xml(
-        backup_path, [make_source("doc-a.md", "https://example.com/a", "Original A")]
-    )
-
-    index_path = tmp_path / "INDEX.xml"
-    create_index_xml(
-        index_path,
-        [make_source("doc-a.md", "https://example.com/a", PLACEHOLDER_DESCRIPTION)],
-    )
-
-    restored = restore_unchanged_descriptions(index_path, backup_path, {"doc-a.md"})
-
-    assert restored == 0
-    assert read_descriptions_by_file(index_path)["doc-a.md"] == PLACEHOLDER_DESCRIPTION
-
-
-def test_restore_skips_when_backup_is_placeholder(tmp_path: Path) -> None:
-    # A placeholder in the backup is not a real description, so nothing to restore.
-    source = make_source("doc-a.md", "https://example.com/a", PLACEHOLDER_DESCRIPTION)
-
-    backup_path = tmp_path / "INDEX.xml.backup"
-    create_index_xml(backup_path, [source])
-
-    index_path = tmp_path / "INDEX.xml"
-    create_index_xml(index_path, [source])
-
-    restored = restore_unchanged_descriptions(index_path, backup_path, set())
-
-    assert restored == 0
-    assert read_descriptions_by_file(index_path)["doc-a.md"] == PLACEHOLDER_DESCRIPTION
+    return collection_dir
 
 
 def test_status_lists_placeholder_files_as_home_paths(
@@ -223,45 +120,33 @@ def test_status_lists_placeholder_files_as_home_paths(
     monkeypatch.setattr(Path, "home", lambda: home)
     collection_dir = home / "repo" / "collections" / "shiny"
 
-    output = format_descriptions_status(collection_dir, 0, {"b.md", "a.md"})
+    output = format_descriptions_status(collection_dir, Counter(), 0, {"b.md", "a.md"})
 
     assert "  - ~/repo/collections/shiny/a.md" in output
     assert "  - ~/repo/collections/shiny/b.md" in output
 
 
-def test_status_omits_file_lines_when_nothing_changed(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    home = tmp_path.resolve()
-    monkeypatch.setattr(Path, "home", lambda: home)
-    collection_dir = home / "repo" / "collections" / "shiny"
-
-    output = format_descriptions_status(collection_dir, 3, set())
+def test_status_omits_file_lines_when_no_placeholders() -> None:
+    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
 
     assert "(needs description)|0 files" in output
     assert "  - " not in output
 
 
-def test_cli_exits_with_clear_error_on_malformed_xml(tmp_path: Path) -> None:
-    index_path = tmp_path / "INDEX.xml"
-    index_path.write_text("This is not XML at all")
+def test_status_prints_every_outcome_line_even_at_zero() -> None:
+    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
 
-    result = subprocess.run(
-        ["uv", "run", "sync-index", str(tmp_path)],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-
-    assert result.returncode == 1
-    assert "Invalid XML" in result.stdout
-    assert "INDEX.xml" in result.stdout
+    assert "- ✅ Kept (content unchanged)|0" in output
+    assert "- ✅ Kept (whitespace-only change)|0" in output
+    assert "- ⚠️ Kept unverified (file recreated)|0" in output
+    assert "- 🚩 Reset to PLACEHOLDER (content changed)|0" in output
+    assert "- 🚩 New source (PLACEHOLDER)|0" in output
+    assert "- ❌ Failed (description untouched)|0" in output
 
 
-def test_main_exits_when_collection_directory_missing(
+def test_sync_exits_when_collection_directory_missing(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A non-existent collection dir aborts non-zero, naming the dir on stdout."""
     missing = tmp_path / "no-such-collection"
     monkeypatch.setattr("sys.argv", ["sync-index", str(missing)])
 
@@ -274,10 +159,9 @@ def test_main_exits_when_collection_directory_missing(
     assert str(missing) in out
 
 
-def test_main_exits_when_index_missing(
+def test_sync_exits_when_index_missing(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A dir without INDEX.xml aborts non-zero, naming the missing index on stdout."""
     monkeypatch.setattr("sys.argv", ["sync-index", str(tmp_path)])
 
     with pytest.raises(SystemExit) as exc:
@@ -289,25 +173,195 @@ def test_main_exits_when_index_missing(
     assert str(tmp_path / "INDEX.xml") in out
 
 
+def test_sync_exits_when_index_xml_malformed(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    index_path = tmp_path / "INDEX.xml"
+    index_path.write_text("This is not XML at all")
+    monkeypatch.setattr("sys.argv", ["sync-index", str(tmp_path)])
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Invalid XML" in out
+    assert "INDEX.xml" in out
+
+
+def test_sync_keeps_description_when_refetched_content_is_unchanged(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, "# Doc\n\nStable content.\n", "Curated description"
+    )
+    stub_fetches(
+        monkeypatch, {"https://example.com/doc.md": "# Doc\n\nStable content.\n"}
+    )
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
+    assert descriptions["doc.md"] == "Curated description"
+    assert "- ✅ Kept (content unchanged)|1" in out
+    assert "(needs description)|0 files" in out
+
+
+def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, "# Doc\n\nStable content.\n", "Curated description"
+    )
+    # Inserted blank lines defeated `git diff -w`; whitespace-normalised compare must not.
+    stub_fetches(
+        monkeypatch, {"https://example.com/doc.md": "# Doc\n\n\n\nStable content.\n"}
+    )
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
+    assert descriptions["doc.md"] == "Curated description"
+    assert "- ✅ Kept (whitespace-only change)|1" in out
+    assert "(needs description)|0 files" in out
+
+
+def test_sync_resets_description_when_refetched_content_changed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """No git repo anywhere: change detection must not depend on git state."""
+    collection_dir = create_collection(
+        tmp_path, "# Doc\n\nOriginal content.\n", "Curated description"
+    )
+    stub_fetches(monkeypatch, {"https://example.com/doc.md": "# Doc\n\nRewritten.\n"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
+    assert descriptions["doc.md"] == PLACEHOLDER_DESCRIPTION
+    assert "- 🚩 Reset to PLACEHOLDER (content changed)|1" in out
+    status_section = out.split("## Index Descriptions Status")[1]
+    assert "(needs description)|1 files" in status_section
+    assert "doc.md" in status_section
+
+
+def test_sync_flags_kept_placeholder_description(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [
+            make_source(
+                "fresh-doc.md", "https://example.com/fresh-doc", PLACEHOLDER_DESCRIPTION
+            )
+        ],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/fresh-doc.md": "# Fetched fresh"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    status_section = out.split("## Index Descriptions Status")[1]
+    assert "(needs description)|1 files" in status_section
+    assert "fresh-doc.md" in status_section
+
+
+def test_sync_keeps_description_regenerated_after_reset(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, "# Doc\n\nOld content.\n", "Old description"
+    )
+    stub_fetches(monkeypatch, {"https://example.com/doc.md": "# Doc\n\nNew content.\n"})
+    run_sync(collection_dir, monkeypatch, capsys)  # content changed → PLACEHOLDER
+    index_path = collection_dir / "INDEX.xml"
+    set_index_description(index_path, "doc.md", "Generated after sync")
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert read_descriptions_by_file(index_path)["doc.md"] == "Generated after sync"
+    assert "- ✅ Kept (content unchanged)|1" in out
+
+
+def test_sync_fetches_missing_file_instead_of_pruning_entry(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    index_path = collection_dir / "INDEX.xml"
+    create_index_xml(
+        index_path,
+        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert (collection_dir / "missing-doc.md").read_text() == "# Fetched fresh"
+    assert read_sources_by_file(index_path) == {
+        "missing-doc.md": "https://example.com/missing-doc"
+    }
+    assert "- Successful|1" in out
+    assert "- ⚠️ Kept unverified (file recreated)|1" in out
+    assert read_descriptions_by_file(index_path)["missing-doc.md"] == "Description"
+
+
+def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The survivors cover every keep rule: indexed doc, protected file, dotfile."""
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    survivors = {"doc-a.md", "README.md", "INDEX.xml", ".gitkeep"}
+    orphans = {"orphan.md", "notes.txt"}
+    for name in (survivors | orphans) - {"INDEX.xml"}:
+        (collection_dir / name).write_text("content")
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [make_source("doc-a.md", "https://example.com/doc-a", "Description A")],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/doc-a.md": "content"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert {p.name for p in collection_dir.iterdir()} == survivors
+    assert "- Orphan files deleted (not in INDEX)|2" in out
+
+
 @pytest.mark.parametrize(
     ("failure", "expected_error_line"),
     [
         (
-            CurationError("Fetch failed: 404 not found — https://example.com/b"),
-            "❌ Fetch failed: 404 not found — https://example.com/b",
+            CurationError("Fetch failed: 404 not found — https://example.com/doc-a"),
+            "❌ Fetch failed: 404 not found — https://example.com/doc-a",
         ),
         (RuntimeError("boom"), "❌ Unexpected error: RuntimeError: boom"),
     ],
     ids=["curation-error", "unexpected-crash"],
 )
-def test_sync_curates_each_source_in_process_and_isolates_failures(
+def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
     failure: Exception,
     expected_error_line: str,
 ) -> None:
-    """One doc's failure is reported and counted; the sync still completes."""
+    """The first doc's failure doesn't abort the sync: the second doc still curates."""
     collection_dir = tmp_path / "collection"
     collection_dir.mkdir()
     (collection_dir / "doc-a.md").write_text("# A")
@@ -315,99 +369,34 @@ def test_sync_curates_each_source_in_process_and_isolates_failures(
     create_index_xml(
         collection_dir / "INDEX.xml",
         [
-            make_source("doc-a.md", "https://example.com/a", "Description A"),
-            make_source("doc-b.md", "https://example.com/b", "Description B"),
+            make_source("doc-a.md", "https://example.com/doc-a", "Description A"),
+            make_source("doc-b.md", "https://example.com/doc-b", "Description B"),
         ],
     )
+    stub_fetches(
+        monkeypatch,
+        {"https://example.com/doc-a.md": failure, "https://example.com/doc-b.md": "# B"},
+    )
 
-    curated_urls: list[str] = []
+    out = run_sync(collection_dir, monkeypatch, capsys)
 
-    def fake_curate(_collection_dir: Path, source_url: str) -> None:
-        curated_urls.append(source_url)
-        if source_url == "https://example.com/b":
-            raise failure
-
-    monkeypatch.setattr("docs_for_ai.curate_doc.curate", fake_curate)
-    monkeypatch.setattr("sys.argv", ["sync-index", str(collection_dir)])
-
-    main()
-
-    out = capsys.readouterr().out
-    assert curated_urls == ["https://example.com/a", "https://example.com/b"]
     assert "- Successful|1" in out
     assert "- Failed|1" in out
-    assert "### Failed URLs\n- https://example.com/b" in out
+    assert "### Failed URLs\n- https://example.com/doc-a" in out
     assert expected_error_line in out
+    assert "- ❌ Failed (description untouched)|1" in out
 
-
-@pytest.mark.firecrawl
-def test_cli_recurate_keeps_or_restores_descriptions(tmp_path: Path) -> None:
-    """Placeholder kept when content changed; description restored when unchanged."""
-    collection_dir = tmp_path / "test_collection"
-    collection_dir.mkdir()
-    init_git_repo(tmp_path)
-
+    # The failed source survives untouched in INDEX.xml, ready for retry.
     index_path = collection_dir / "INDEX.xml"
-    create_index_xml(
-        index_path,
-        [
-            make_source(
-                "learn-guides-updating-state.md",
-                "https://zustand.docs.pmnd.rs/learn/guides/updating-state",
-                "Original description for updating state",
-            )
-        ],
-    )
-
-    # Filename is derived from the source URL, so re-curate overwrites this file in place.
-    (collection_dir / "learn-guides-updating-state.md").write_text(
-        "# Dummy content to be replaced"
-    )
-    (collection_dir / "README.md").write_text("# Test Collection")
-    git_commit_all(tmp_path, "Initial commit")
-
-    result = subprocess.run(
-        ["uv", "run", "sync-index", str(collection_dir)],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-
-    assert result.returncode == 0
-
-    git_status = subprocess.run(
-        ["git", "diff", "--name-only"],
-        cwd=collection_dir,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-
-    descriptions = read_descriptions_by_file(index_path)
-
-    # Curated filename may differ from the seeded 'updating-state.md'.
-    assert len(descriptions) == 1, "Should have exactly one source"
-    actual_filename = next(iter(descriptions.keys()))
-
-    md_files_changed = [
-        line
-        for line in git_status.stdout.split("\n")
-        if line.endswith(".md") and not line.endswith("README.md")
-    ]
-
-    if md_files_changed:
-        assert descriptions[actual_filename] == PLACEHOLDER_DESCRIPTION
-        assert "✅ Restored (whitespace-only changes)|0" in result.stdout
-    else:
-        # Cache returned identical content, so the description was restored.
-        assert descriptions[actual_filename] == "Original description for updating state"
-        assert "✅ Restored (whitespace-only changes)|1" in result.stdout
+    assert read_sources_by_file(index_path) == {
+        "doc-a.md": "https://example.com/doc-a",
+        "doc-b.md": "https://example.com/doc-b",
+    }
+    assert read_descriptions_by_file(index_path)["doc-a.md"] == "Description A"
 
 
-@pytest.mark.github
+@pytest.mark.direct_fetch
 def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) -> None:
-    # Restore isn't asserted: outside the repo, sync_index.py's git-diff finds
-    # no changed files and restores every description unconditionally.
     blob_url = (
         "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
     )
@@ -417,7 +406,6 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
     collection_dir = tmp_path / "uv-test"
     collection_dir.mkdir()
 
-    # Write the stale .md file — sync_index.py must overwrite this.
     (collection_dir / local_file).write_text(
         f"# {stale_sentinel}\n\nthis must be overwritten\n"
     )
@@ -435,13 +423,11 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
         check=False,
     )
 
-    # Signal 1: sync completed without error.
     assert result.returncode == 0, (
         f"sync_index.py exited {result.returncode}:\n"
         f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
     )
 
-    # Signal 2: stale sentinel is gone; real upstream content is present.
     md_text = (collection_dir / local_file).read_text()
     assert stale_sentinel not in md_text, (
         f"Stale sentinel still present in {local_file} — "
@@ -455,13 +441,11 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
         f"got a possible error page / wrong content:\n{md_text[:300]}"
     )
 
-    # Signal 3: source_url and local_file entries survive in INDEX.xml.
-    final_index_text = index_path.read_text()
-    assert f"<source_url>{blob_url}</source_url>" in final_index_text, (
-        f"source_url missing from INDEX.xml after sync.\n"
-        f"INDEX.xml contents:\n{final_index_text}"
+    final_sources = read_sources_by_file(index_path)
+    assert final_sources == {local_file: blob_url}, (
+        f"INDEX.xml entry lost or rewritten after sync.\nSources now: {final_sources}"
     )
-    assert f"<local_file>{local_file}</local_file>" in final_index_text, (
-        f"local_file entry missing from INDEX.xml after sync.\n"
-        f"INDEX.xml contents:\n{final_index_text}"
+    assert read_descriptions_by_file(index_path)[local_file] == PLACEHOLDER_DESCRIPTION, (
+        "The sentinel guarantees a real content change, so the stale description "
+        "must reset to PLACEHOLDER"
     )

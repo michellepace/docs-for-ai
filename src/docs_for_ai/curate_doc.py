@@ -79,7 +79,7 @@ Curated docs for targeted AI context.
 - Curation Index: [INDEX.xml](INDEX.xml)
 - Curation Source: <{site.scheme}://{site.netloc}>
 """
-    (collection_dir / "README.md").write_text(readme)
+    (collection_dir / "README.md").write_text(readme, encoding="utf-8")
     write_index(ET.Element("docs_index"), collection_dir / "INDEX.xml")
     print(f"✅ Collection: {collection_dir.name} (initialised)")
 
@@ -223,7 +223,7 @@ def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
     """Write the fetched document to its file."""
     file_path = collection_dir / doc.filename
     file_existed = file_path.exists()
-    file_path.write_text(doc.content)
+    file_path.write_text(doc.content, encoding="utf-8")
     if file_existed:
         print(f"✅ Overwrote: {format_path_for_display(file_path)}")
     else:

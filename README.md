@@ -5,7 +5,7 @@ Curate and index documentation from any website into collections like `tailwind/
 Each collection is curated from source docs — fetched directly where possible (`.md` URLs, GitHub blobs, or sites in the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml)), and scraped via FireCrawl as a last resort. Its `INDEX.xml` is a routing signal an LLM reader uses for targeted context retrieval.
 
 <div align="center">
-  <img src="images/example_usage.jpg" alt="Terminal showing three-step workflow: (1) Running /curate-doc biome command, (2) Curation success output showing curated documentation and generated INDEX.xml entry, (3) Use /ask-docs to query docs. Handwritten annotations highlight each step." width="940">
+  <img src="images/example_usage.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
   <p><em>Three Steps: (1) run <code>/curate-doc</code> on a URL → (2) the doc is curated and indexed → (3) <code>/ask-docs</code> to query it</em></p>
 </div>
 

@@ -538,7 +538,7 @@ def test_curate_rejects_filename_collision_without_clobbering(
     assert (collection / "INDEX.xml").read_text().count("<source>") == 1
 
 
-@pytest.mark.github
+@pytest.mark.direct_fetch
 def test_cli_curates_github_blob_and_stores_blob_url(tmp_path: Path) -> None:
     """A blob URL is fetched (from raw) and stored verbatim as blob in INDEX + .md."""
     new_dir = tmp_path / "uv"
@@ -558,7 +558,7 @@ def test_cli_curates_github_blob_and_stores_blob_url(tmp_path: Path) -> None:
     assert "<description>PLACEHOLDER</description>" in index
 
 
-@pytest.mark.github
+@pytest.mark.direct_fetch
 def test_cli_github_404_fails_without_writing_files(tmp_path: Path) -> None:
     new_dir = tmp_path / "uv"
     exit_code, output = run_script(str(new_dir), URL_GH_BLOB_404)

@@ -66,6 +66,7 @@ uv run pyright                    # Type checking
 uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run manually
 
-# Run Tests — includes non-network + free direct fetch
-uv run pytest -m "not firecrawl"
+# Run Tests
+uv run pytest -m "not firecrawl"  # free suite: non-network + direct_fetch
+uv run pytest -m direct_fetch     # just the free direct_fetch network tests
 ```

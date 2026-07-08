@@ -395,7 +395,7 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     assert read_descriptions_by_file(index_path)["doc-a.md"] == "Description A"
 
 
-@pytest.mark.github
+@pytest.mark.direct_fetch
 def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) -> None:
     blob_url = (
         "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"

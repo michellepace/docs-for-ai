@@ -1,8 +1,12 @@
 # Write Doc Descriptions for `INDEX.xml`
 
-Each `<source>` entry in a collection's `INDEX.xml` indexes one curated doc. Write that entry's `<description>` — nothing else.
+Each `<source>` entry in a collection's `INDEX.xml` indexes one curated doc.
+Write that entry's `<description>` — nothing else.
 
-The description is a **routing signal** — a future Claude session reads all entries' `<title>` + `<description>` at once, picks the docs relevant to a user's question, and answers from those. Optimise for that, then apply the quality rules (`<quality-rules>`) and examples (`<reference-examples>`).
+The description is a **routing signal** — a future Claude session reads all
+entries' `<title>` + `<description>` at once, picks the docs relevant to a
+user's question, and answers from those. Optimise for that, then apply the
+quality rules (`<quality-rules>`) and examples (`<reference-examples>`).
 
 <quality-rules>
 - Route by meaning, not term overlap: an LLM *reads* this to pick a file (there is no keyword index), so state relationships rather than a bag of nouns. Orient first — what the doc is / when to reach for it — then embed the top few discriminating terms. Avoid a table-of-contents of disconnected fragments; the `<good>` examples bind terms with relationships (`.venv` managed by `run`/`sync`; `uv.lock` versus `pylock.toml`), they don't just enumerate.
@@ -67,9 +71,11 @@ Same `claudecode` skills source — keyword-dump, then the fix:
 <description>`SKILL.md` frontmatter, `disable-model-invocation`/`user-invocable` invocation control, personal/project/plugin/enterprise precedence, `$ARGUMENTS` substitutions, `!command` dynamic injection, `context: fork` subagents, `allowed-tools`, `skillOverrides`, bundled skills, and `skill-creator` evals.</description>
 ```
 
-- ❌ a table of contents — disconnected fragments with no relationships for the router to read
+- ❌ a table of contents — disconnected fragments with no relationships for the
+  router to read
 - ❌ no orientation — never says what the doc is or when to reach for it
-- ❌ mixed granularity — `allowed-tools` (one field) sits as a peer of `frontmatter` (its parent)
+- ❌ mixed granularity — `allowed-tools` (one field) sits as a peer of
+  `frontmatter` (its parent)
 
 ```xml
 <!-- ✅ good -->

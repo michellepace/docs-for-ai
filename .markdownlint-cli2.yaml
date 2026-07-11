@@ -10,13 +10,11 @@ ignores:
 # Disable rules
 config:
   default: true # Enable all rules by default
+  MD004: false  # don't enforce one bullet marker (violates mdformat)
   MD013: false  # don't enforce a maximum line length
   MD024: false  # don't forbid duplicate heading content
-  MD031: false  # don't require blank lines around code blocks
-  MD032: false  # don't require blank lines around lists
   MD033: false  # don't forbid inline HTML
   MD034: false  # don't forbid bare URLs
-  MD035: false  # don't enforce consistent horizontal rule style
   MD036: false  # don't forbid emphasis instead of a heading
   MD040: false  # don't require language on fenced code blocks
   MD041: false  # don't require first line to be H1 heading

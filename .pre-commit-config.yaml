@@ -16,11 +16,19 @@ repos:
         exclude: ^\.vscode/         # .vscode/*.json is JSONC
       - id: check-toml
 
+  - repo: local
+    hooks:
+      - id: mdformat                # wrap/format markdown (.mdformat.toml)
+        name: mdformat
+        entry: uv run mdformat
+        language: system
+        types: [markdown]
+
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.22.1
     hooks:
-      - id: markdownlint-cli2       # lint + autofix markdown
-        args: [--fix]               # see .markdownlint-cli2.yaml
+      - id: markdownlint-cli2       # final format (.markdownlint-cli2.yaml)
+        args: [--fix]               # autofix
 
   - repo: https://github.com/ComPWA/taplo-pre-commit
     rev: v0.9.3
@@ -92,6 +100,6 @@ repos:
 # 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
 # 2. `pass_filenames: false` runs hook against the whole project
 # 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 4. mdformat used for wrapping, markdownlint-cli2 owns final .md format
 
-# Install hooks (must): default_install_hook_types installs both stages.
-#   uv run pre-commit install
+# Install hooks (must): uv run pre-commit install

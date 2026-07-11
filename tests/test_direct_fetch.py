@@ -478,14 +478,13 @@ def test_filename_and_title_strip_the_same_suffixes(suffix: str) -> None:
 class TestFetchText:
     """Source fetch over HTTP, with structured 404/network failure."""
 
-    def test_fetches_real_source(self, capsys: pytest.CaptureFixture[str]) -> None:
+    def test_fetches_real_source(self) -> None:
         url = (
             "https://raw.githubusercontent.com/astral-sh/uv/main/"
             "docs/getting-started/first-steps.md"
         )
         text = fetch_text(url)
         assert len(text) > 0
-        assert "✅ Fetched:" in capsys.readouterr().out
 
     def test_404_fails_with_not_found(self) -> None:
         url = (

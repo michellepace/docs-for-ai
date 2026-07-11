@@ -12,6 +12,12 @@ def format_path_for_display(path: Path) -> str:
     return str(resolved)
 
 
+def collection_label(collection_dir: Path) -> str:
+    """`parent/name` report-header label, resolving so a bare arg still renders."""
+    resolved = collection_dir.resolve()
+    return f"{resolved.parent.name}/{resolved.name}"
+
+
 def normalise_collection_dir(raw: str) -> Path:
     """Collection dir from a CLI arg; `Path` already tolerates a trailing slash."""
     return Path(raw)

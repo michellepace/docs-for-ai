@@ -3,13 +3,16 @@
 import argparse
 import sys
 import xml.etree.ElementTree as ET
-from collections import Counter
 from typing import TYPE_CHECKING, NamedTuple
 
 from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION
-from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
+from docs_for_ai.paths import (
+    collection_label,
+    format_path_for_display,
+    normalise_collection_dir,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -22,8 +25,35 @@ class IndexSource(NamedTuple):
     source_url: str
 
 
+class SyncFailure(NamedTuple):
+    """One source that failed to curate."""
+
+    source_url: str
+    error: str
+
+
+class SyncReport(NamedTuple):
+    """Everything one sync run produced, ready for `format_sync_report`."""
+
+    collection_dir: Path
+    total_sources: int
+    successes: list[curate_doc.CurationResult]
+    failures: list[SyncFailure]
+    orphans_deleted: int
+    placeholder_files: set[str]
+
+
 # Collection files that must survive a sync.
 _PROTECTED_FILES = {"INDEX.xml", "README.md"}
+
+# Reason tag per description-resetting outcome; any other placeholder in
+# INDEX.xml was carried over from an earlier run.
+_PLACEHOLDER_REASONS = {
+    curate_doc.DocOutcome.NEW: "new source",
+    curate_doc.DocOutcome.CHANGED: "content changed",
+    curate_doc.DocOutcome.RECREATED: "file recreated",
+}
+_CARRIED_OVER_REASON = "kept placeholder"
 
 
 def read_index_sources(index_path: Path) -> list[IndexSource]:
@@ -57,32 +87,18 @@ def delete_orphan_files(collection_dir: Path, indexed_files: set[str]) -> list[s
     return deleted
 
 
-def _curate_doc(
+def _curate_or_error(
     collection_dir: Path, source_url: str
-) -> curate_doc.CurationResult | None:
-    """Curate one source in-process; print its failure line and return None."""
+) -> curate_doc.CurationResult | SyncFailure:
+    """Curate one source in-process; a failure returns its `SyncFailure`."""
     try:
         return curate_doc.curate(collection_dir, source_url)
     except CurationError as exc:
-        print(f"❌ {exc}")
-        return None
+        return SyncFailure(source_url, str(exc))
     except Exception as exc:  # noqa: BLE001 — one doc's crash must not abort the sync
-        print(f"❌ Unexpected error: {type(exc).__name__}: {exc} — {source_url}")
-        return None
-
-
-def _print_curation_summary(
-    curated_sources: list[IndexSource],
-    failed_urls: list[str],
-) -> None:
-    print("\n### Curation Summary")
-    print(f"- Successful|{len(curated_sources) - len(failed_urls)}")
-    print(f"- Failed|{len(failed_urls)}")
-
-    if failed_urls:
-        print("\n### Failed URLs")
-        for url in failed_urls:
-            print(f"- {url}")
+        return SyncFailure(
+            source_url, f"Unexpected error: {type(exc).__name__}: {exc} — {source_url}"
+        )
 
 
 def files_needing_description(index_path: Path) -> set[str]:
@@ -95,29 +111,51 @@ def files_needing_description(index_path: Path) -> set[str]:
     }
 
 
-def format_descriptions_status(
-    collection_dir: Path,
-    outcome_counts: Counter[curate_doc.DocOutcome],
-    failed_count: int,
-    placeholder_files: set[str],
-) -> str:
-    """Build the `## Index Descriptions Status` report, listing files as `~/...` paths."""
-    outcome = curate_doc.DocOutcome
+def _placeholder_reasons(results: list[curate_doc.CurationResult]) -> dict[str, str]:
+    """Reason tag per curated file whose outcome reset its description."""
+    return {
+        result.local_file: _PLACEHOLDER_REASONS[result.outcome]
+        for result in results
+        if result.outcome in _PLACEHOLDER_REASONS
+    }
+
+
+def format_sync_report(report: SyncReport) -> str:
+    """Build the end-of-run report: counts, then actionable sections only."""
+    curated = len(report.successes)
     lines = [
-        "\n## Index Descriptions Status",
-        f"- ✅ Kept (content unchanged)|{outcome_counts[outcome.UNCHANGED]}",
-        f"- ✅ Kept (whitespace-only change)|{outcome_counts[outcome.WHITESPACE_ONLY]}",
-        f"- ⚠️ Kept unverified (file recreated)|{outcome_counts[outcome.RECREATED]}",
-        f"- 🚩 Reset to PLACEHOLDER (content changed)|{outcome_counts[outcome.CHANGED]}",
-        f"- 🚩 New source (PLACEHOLDER)|{outcome_counts[outcome.NEW]}",
-        f"- ❌ Failed (description untouched)|{failed_count}",
-        f"- 🚩 {PLACEHOLDER_DESCRIPTION} in INDEX.xml (needs description)"
-        f"|{len(placeholder_files)} files",
+        f"SYNC {collection_label(report.collection_dir)}",
+        f"sources {report.total_sources} · curated {curated}"
+        f" · failed {len(report.failures)} · orphans deleted {report.orphans_deleted}",
     ]
-    lines.extend(
-        f"  - {format_path_for_display(collection_dir / filename)}"
-        for filename in sorted(placeholder_files)
-    )
+
+    if report.failures:
+        lines += ["", f"FAILED ({len(report.failures)})"]
+        for failure in report.failures:
+            # Error messages often end "— <url>"; the line above already shows it.
+            error = failure.error.removesuffix(f" — {failure.source_url}")
+            lines += [f"  {failure.source_url}", f"    {error}"]
+
+    if report.placeholder_files:
+        reasons = _placeholder_reasons(report.successes)
+        paths = {
+            filename: format_path_for_display(report.collection_dir / filename)
+            for filename in sorted(report.placeholder_files)
+        }
+        width = max(len(path) for path in paths.values())
+        lines += ["", f"NEEDS DESCRIPTION ({len(paths)})"]
+        lines += [
+            f"  {path:<{width}}  ({reasons.get(filename, _CARRIED_OVER_REASON)})"
+            for filename, path in paths.items()
+        ]
+
+    needed = len(report.placeholder_files)
+    noun = "description" if needed == 1 else "descriptions"
+    lines += [
+        "",
+        f"🏁 Sync complete: {curated}/{report.total_sources} curated,"
+        f" {needed} {noun} needed",
+    ]
     return "\n".join(lines)
 
 
@@ -138,40 +176,37 @@ def _run_sync(collection_dir: Path) -> None:
     indexed_files = {source.local_file for source in index_sources}
     deleted_orphans = delete_orphan_files(collection_dir, indexed_files)
 
-    print("\n## SYNC INDEX.xml (source of truth)")
-    print(f"- Index sources ready to curate|{len(index_sources)}")
-    print(f"- Orphan files deleted (not in INDEX)|{len(deleted_orphans)}")
-    sys.stdout.flush()
-
-    print(f"\n## CURATING INDEX SOURCES ({len(index_sources)} total)")
-    sys.stdout.flush()
-    failed_urls: list[str] = []
-    results: list[curate_doc.CurationResult] = []
+    successes: list[curate_doc.CurationResult] = []
+    failures: list[SyncFailure] = []
+    total = len(index_sources)
 
     for position, source in enumerate(index_sources, 1):
-        print(f"### 🔄 Doc {position} of {len(index_sources)}: {source.local_file}")
-        sys.stdout.flush()
-        result = _curate_doc(collection_dir, source.source_url)
-
-        if result is None:
-            failed_urls.append(source.source_url)
+        attempt = _curate_or_error(collection_dir, source.source_url)
+        if isinstance(attempt, SyncFailure):
+            failures.append(attempt)
+            print(
+                f"[{position}/{total}] {'FAIL':<6}{source.local_file} — {attempt.error}"
+            )
         else:
-            results.append(result)
+            successes.append(attempt)
+            print(f"[{position}/{total}] {'ok':<6}{attempt.local_file}")
         sys.stdout.flush()
 
-    _print_curation_summary(index_sources, failed_urls)
-
-    outcome_counts = Counter(result.outcome for result in results)
-    placeholder_files = files_needing_description(index_path)
-    print(
-        format_descriptions_status(
-            collection_dir, outcome_counts, len(failed_urls), placeholder_files
-        )
+    if index_sources:
+        print()
+    report = SyncReport(
+        collection_dir=collection_dir,
+        total_sources=total,
+        successes=successes,
+        failures=failures,
+        orphans_deleted=len(deleted_orphans),
+        placeholder_files=files_needing_description(index_path),
     )
+    print(format_sync_report(report))
 
 
 def main() -> None:
-    """Sync INDEX.xml, curate all docs, output structured results."""
+    """Sync INDEX.xml, curate all docs, print ticks then one report."""
     parser = argparse.ArgumentParser(
         description=(
             "Re-sync a docs collection to its INDEX.xml, "
@@ -188,13 +223,13 @@ what it changes (destructive — commit or stash first):
     (recreating missing files), and refreshes that source's <title> and
     <curated_at> date in INDEX.xml.
   - Keeps existing descriptions for docs whose content is unchanged (ignoring
-    whitespace); resets a changed doc's description to PLACEHOLDER, and flags
-    every source whose description is still PLACEHOLDER.
+    whitespace); resets a changed or recreated doc's description to PLACEHOLDER,
+    and flags every source whose description is still PLACEHOLDER.
 
 what it never does: remove an INDEX source.
 
-output: a structured report (sync counts, per-source description outcomes, and
-        docs still needing descriptions).
+output: one tick line per doc while curating, then a report — counts,
+        failed sources, and docs still needing descriptions.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

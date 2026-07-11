@@ -16,7 +16,7 @@ from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 if TYPE_CHECKING:
     from pathlib import Path
 
-URL_FIRECRAWL = "https://zustand.docs.pmnd.rs/learn/guides/updating-state"
+URL_FIRECRAWL = "https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions"
 
 URL_GH_BLOB = (
     "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
@@ -312,11 +312,13 @@ def test_curate_same_url_again_updates_the_existing_source(
     collection = tmp_path / "zustand"
     url = "https://example.com/docs/updating-state"
 
+    out = ""
     for source_url in (url, url, f"{url}/"):
-        run_curate(collection, source_url, monkeypatch, capsys)
+        out = run_curate(collection, source_url, monkeypatch, capsys)
 
     # Every spelling reaches FireCrawl as the slash-trimmed canonical URL.
     assert scraped_urls == [url, url, url]
+    assert "chars, firecrawl" in out
     index = (collection / "INDEX.xml").read_text()
     assert index.count("<source>") == 1
     assert f"<source_url>{url}</source_url>" in index
@@ -445,11 +447,10 @@ def test_curate_resets_description_when_content_changed(
     assert result.outcome == curate_doc.DocOutcome.CHANGED
 
 
-def test_curate_keeps_description_when_doc_file_recreated(
-    tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
+def test_curate_resets_description_when_doc_file_recreated(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    """No doc file to verify the fetched content against — the keep is a guess."""
     collection = tmp_path / "coll"
     curate_offline(collection, DOC_CONTENT, monkeypatch)
     index_path = collection / "INDEX.xml"
@@ -458,9 +459,8 @@ def test_curate_keeps_description_when_doc_file_recreated(
 
     result = curate_offline(collection, DOC_CONTENT, monkeypatch)
 
-    assert read_index_description(index_path, "hello.md") == "Generated description"
+    assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
     assert result.outcome == curate_doc.DocOutcome.RECREATED
-    assert "file recreated, unverified" in capsys.readouterr().out
 
 
 def test_curate_reports_pending_when_placeholder_carried_over(
@@ -470,13 +470,80 @@ def test_curate_reports_pending_when_placeholder_carried_over(
 ) -> None:
     collection = tmp_path / "coll"
     curate_offline(collection, DOC_CONTENT, monkeypatch)
-    capsys.readouterr()  # discard the first curation's output
 
-    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
 
     index_path = collection / "INDEX.xml"
     assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
-    assert "🚩 description pending" in capsys.readouterr().out
+    assert "description: PLACEHOLDER (pending)" in out
+
+
+def test_cli_report_shows_created_doc_and_constant_success_gate(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    content = "word " * 250  # >999 chars pins the thousands separator
+    stub_direct_fetch(monkeypatch, content)
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert out.startswith("CURATE ")
+    assert "collection: initialised" in out
+    assert "hello.md (created)" in out
+    assert "INDEX.xml (indexed)" in out
+    assert "url:    https://example.com/docs/hello\n" in out
+    assert "fetch:  1,250 chars, direct" in out
+    assert "description: PLACEHOLDER (pending)" in out
+    assert out.endswith("\n\n🏁 Success! curated doc\n")
+
+
+def test_cli_report_shows_kept_description_on_unchanged_recuration(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "hello.md (overwrote)" in out
+    assert "INDEX.xml (reindexed)" in out
+    assert "collection: initialised" not in out
+    assert "description: kept — content unchanged" in out
+
+
+def test_cli_report_shows_pending_description_when_file_recreated(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+    (collection / "hello.md").unlink()
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "description: PLACEHOLDER (pending)" in out
+
+
+def test_cli_report_shows_kept_description_on_whitespace_only_change(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+    stub_direct_fetch(monkeypatch, DOC_CONTENT.replace("\n\nSecond", "\n\n\n\nSecond"))
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "description: kept — whitespace-only change" in out
 
 
 def test_curate_compares_against_the_entrys_recorded_local_file(
@@ -581,7 +648,9 @@ def test_cli_curates_via_firecrawl_scrape(tmp_path: Path) -> None:
     assert "🏁 Success! curated doc" in output
 
     index = (new_dir / "INDEX.xml").read_text()
-    assert "<title>Updating state - Zustand</title>" in index
+    assert "<title>Practice with no store actions - Zustand</title>" in index
     assert f"<source_url>{URL_FIRECRAWL}</source_url>" in index
-    assert "<local_file>learn-guides-updating-state.md</local_file>" in index
+    assert (
+        "<local_file>learn-guides-practice-with-no-store-actions.md</local_file>" in index
+    )
     assert f"<description>{PLACEHOLDER_DESCRIPTION}</description>" in index

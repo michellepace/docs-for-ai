@@ -12,15 +12,9 @@ allowed-tools:
   - Read
 ---
 
-Re-curate every document in `$collection` and regenerate its `INDEX.xml` descriptions.
+Your task is to re-curate every document in `$collection` and regenerate its `INDEX.xml` descriptions. The `sync-index` script re-curates the docs; you write a routing description for each doc its report lists under `NEEDS DESCRIPTION`.
 
-## Context
-
-`INDEX.xml` descriptions route an LLM reader to the right doc, instead of searching whole doc sites. The `sync-index` script re-curates the docs; **your task** is to write a description for each doc it flags with a `PLACEHOLDER`.
-
-## Workflow
-
-### Step 1. Validate argument
+## Step 1. Validate argument
 
 Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
 
@@ -50,21 +44,22 @@ Be friendly and brief, and include the corrected `/recurate-docs …` — in the
 
 </validation_success>
 
-### Step 2. Run sync and curate
+## Step 2. Run the script
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 ```
 
-`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists — and leaves a `PLACEHOLDER` description on each new or content-changed doc. Read its output as it runs.
+`INDEX.xml` is the source of truth: the script re-curates exactly the sources it lists.
 
-### Step 3. Write and apply descriptions for `PLACEHOLDER` entries only
+## Step 3. Write the descriptions — `NEEDS DESCRIPTION` entries only
 
-Read the rules first: `~/.claude/docs-for-ai/.claude/references/description-rules.md` — its rules and examples govern every description below.
+Two reads feed every write:
 
-Then work through each file the script flagged `PLACEHOLDER`, one at a time. Each description feeds on two reads — those rules, plus the **full** doc (from the absolute `~/...` path exactly as printed, however large). Write a [20, 30]-word description (strict) per doc.
+1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
+2. The **full** doc, from the `~/...` path exactly as the report prints it (however large).
 
-Apply them all in **one** command — a quoted heredoc, one filename/description line pair per `PLACEHOLDER` entry, keyed by the INDEX `<local_file>`, e.g. `en-hooks.md`:
+Then pipe one [20, 30]-word description (strict) per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
@@ -79,11 +74,9 @@ Word count is enforced; on ❌, rewrite the flagged description(s) and rerun wit
 
 **Verify before proceeding:** no `PLACEHOLDER` remains in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
 
-### Step 4. Report completion
+## Step 4. Report completion
 
-For the content-changes line, run `git diff --stat -w -- collections/$collection` yourself and list the changed doc files (ignore `INDEX.xml` — that's the descriptions you just wrote).
-
-Report from the script's output, in this format:
+Report completion in this format, filling each slot from the two scripts' output above:
 
 <example_summary_message>
 
@@ -97,10 +90,8 @@ Report from the script's output, in this format:
 - Failed to curate:      [Y]
 - Descriptions updated:  [D]
 
-💡 Collection Content Changes for `$collection`:
-- [changed doc files, from `git diff --stat -w`]
-
-*NB: excludes files with only whitespace changes*
+💡 What changed in `$collection`:
+- [one line per `NEEDS DESCRIPTION` doc, from its reason tag]
 ```
 
 </example_summary_message>

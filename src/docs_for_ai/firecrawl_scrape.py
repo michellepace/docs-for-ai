@@ -57,7 +57,6 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> tuple[str, str]:
     title = "Untitled"
     if result.metadata:
         title = getattr(result.metadata, "title", "Untitled")
-    print(f"✅ Scraped: {len(result.markdown):,} chars")
     return result.markdown, title
 
 
@@ -79,6 +78,7 @@ def scrape(url: str, max_attempts: int = 2) -> tuple[str, str]:
         except RateLimitError as e:
             if attempt < max_attempts - 1:
                 wait_time = parse_retry_seconds(e) + 2  # Add 2s safety buffer
+                # The fetch layer's one print: a silent wait looks like a hang.
                 print(f"⏳ Rate limited: retrying in {wait_time}s")
                 time.sleep(wait_time)
                 continue

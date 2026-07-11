@@ -14,7 +14,7 @@ collections/
     └── *.{md,rst,mdx,qmd}  # Curated doc files
 ```
 
-Consistent `INDEX.xml` schema (one `<source>` per curated doc file):
+`INDEX.xml` is written programmatically; only `<description>` is LLM-generated via user workflow. One `<source>` per curated doc file:
 
 ```xml
 <docs_index>

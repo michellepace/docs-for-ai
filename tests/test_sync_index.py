@@ -2,7 +2,6 @@
 
 import subprocess
 import xml.etree.ElementTree as ET
-from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -10,7 +9,7 @@ import pytest
 from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
-from docs_for_ai.sync_index import format_descriptions_status, main
+from docs_for_ai.sync_index import SyncFailure, SyncReport, format_sync_report, main
 
 
 def make_source(local_file: str, source_url: str, description: str) -> dict[str, str]:
@@ -113,35 +112,87 @@ def create_collection(tmp_path: Path, doc_content: str, description: str) -> Pat
     return collection_dir
 
 
-def test_status_lists_placeholder_files_as_home_paths(
+def make_result(
+    local_file: str, outcome: curate_doc.DocOutcome
+) -> curate_doc.CurationResult:
+    """A CurationResult with report-irrelevant fields defaulted."""
+    return curate_doc.CurationResult(
+        outcome=outcome,
+        local_file=local_file,
+        doc_action="overwrote",
+        index_action="reindexed",
+        canonical_url=f"https://example.com/{local_file.removesuffix('.md')}",
+        chars=100,
+        route="direct",
+        description=PLACEHOLDER_DESCRIPTION,
+        initialised=False,
+    )
+
+
+def test_report_lists_placeholder_files_as_home_paths_with_reasons(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     home = tmp_path.resolve()
     monkeypatch.setattr(Path, "home", lambda: home)
     collection_dir = home / "repo" / "collections" / "shiny"
+    report = SyncReport(
+        collection_dir=collection_dir,
+        total_sources=2,
+        successes=[
+            make_result("a.md", curate_doc.DocOutcome.NEW),
+            make_result("b.md", curate_doc.DocOutcome.CHANGED),
+        ],
+        failures=[],
+        orphans_deleted=0,
+        placeholder_files={"b.md", "a.md"},
+    )
 
-    output = format_descriptions_status(collection_dir, Counter(), 0, {"b.md", "a.md"})
+    output = format_sync_report(report)
 
-    assert "  - ~/repo/collections/shiny/a.md" in output
-    assert "  - ~/repo/collections/shiny/b.md" in output
-
-
-def test_status_omits_file_lines_when_no_placeholders() -> None:
-    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
-
-    assert "(needs description)|0 files" in output
-    assert "  - " not in output
+    lines = output.splitlines()
+    a_line = next(line for line in lines if "a.md" in line)
+    b_line = next(line for line in lines if "b.md" in line)
+    assert a_line.startswith("  ~/repo/collections/shiny/a.md")
+    assert a_line.endswith("(new source)")
+    assert b_line.startswith("  ~/repo/collections/shiny/b.md")
+    assert b_line.endswith("(content changed)")
 
 
-def test_status_prints_every_outcome_line_even_at_zero() -> None:
-    output = format_descriptions_status(Path("collections/shiny"), Counter(), 0, set())
+def test_report_omits_empty_sections() -> None:
+    report = SyncReport(
+        collection_dir=Path("collections/shiny"),
+        total_sources=1,
+        successes=[make_result("doc.md", curate_doc.DocOutcome.UNCHANGED)],
+        failures=[],
+        orphans_deleted=0,
+        placeholder_files=set(),
+    )
 
-    assert "- ✅ Kept (content unchanged)|0" in output
-    assert "- ✅ Kept (whitespace-only change)|0" in output
-    assert "- ⚠️ Kept unverified (file recreated)|0" in output
-    assert "- 🚩 Reset to PLACEHOLDER (content changed)|0" in output
-    assert "- 🚩 New source (PLACEHOLDER)|0" in output
-    assert "- ❌ Failed (description untouched)|0" in output
+    output = format_sync_report(report)
+
+    assert "FAILED" not in output
+    assert "NEEDS DESCRIPTION" not in output
+
+
+def test_report_counts_line_and_gate_reflect_the_run() -> None:
+    report = SyncReport(
+        collection_dir=Path("collections/shiny"),
+        total_sources=3,
+        successes=[
+            make_result("a.md", curate_doc.DocOutcome.UNCHANGED),
+            make_result("b.md", curate_doc.DocOutcome.NEW),
+        ],
+        failures=[SyncFailure("https://example.com/c", "Fetch failed: 404 not found")],
+        orphans_deleted=2,
+        placeholder_files={"b.md"},
+    )
+
+    output = format_sync_report(report)
+
+    assert output.startswith("SYNC collections/shiny\n")
+    assert "sources 3 · curated 2 · failed 1 · orphans deleted 2" in output
+    assert "FAILED (1)\n  https://example.com/c\n    Fetch failed: 404" in output
+    assert output.endswith("🏁 Sync complete: 2/3 curated, 1 description needed")
 
 
 def test_sync_exits_when_collection_directory_missing(
@@ -205,8 +256,9 @@ def test_sync_keeps_description_when_refetched_content_is_unchanged(
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == "Curated description"
-    assert "- ✅ Kept (content unchanged)|1" in out
-    assert "(needs description)|0 files" in out
+    assert "[1/1] ok    doc.md" in out
+    assert "sources 1 · curated 1 · failed 0 · orphans deleted 0" in out
+    assert "NEEDS DESCRIPTION" not in out
 
 
 def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
@@ -226,8 +278,8 @@ def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == "Curated description"
-    assert "- ✅ Kept (whitespace-only change)|1" in out
-    assert "(needs description)|0 files" in out
+    assert "🏁 Sync complete: 1/1 curated, 0 descriptions needed" in out
+    assert "NEEDS DESCRIPTION" not in out
 
 
 def test_sync_resets_description_when_refetched_content_changed(
@@ -245,10 +297,9 @@ def test_sync_resets_description_when_refetched_content_changed(
 
     descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
     assert descriptions["doc.md"] == PLACEHOLDER_DESCRIPTION
-    assert "- 🚩 Reset to PLACEHOLDER (content changed)|1" in out
-    status_section = out.split("## Index Descriptions Status")[1]
-    assert "(needs description)|1 files" in status_section
-    assert "doc.md" in status_section
+    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
+    assert "doc.md" in needs_section
+    assert "(content changed)" in needs_section
 
 
 def test_sync_flags_kept_placeholder_description(
@@ -256,23 +307,17 @@ def test_sync_flags_kept_placeholder_description(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    collection_dir = tmp_path / "collection"
-    collection_dir.mkdir()
-    create_index_xml(
-        collection_dir / "INDEX.xml",
-        [
-            make_source(
-                "fresh-doc.md", "https://example.com/fresh-doc", PLACEHOLDER_DESCRIPTION
-            )
-        ],
+    """An unchanged doc whose description was never written stays flagged."""
+    collection_dir = create_collection(
+        tmp_path, "# Fetched fresh", PLACEHOLDER_DESCRIPTION
     )
-    stub_fetches(monkeypatch, {"https://example.com/fresh-doc.md": "# Fetched fresh"})
+    stub_fetches(monkeypatch, {"https://example.com/doc.md": "# Fetched fresh"})
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    status_section = out.split("## Index Descriptions Status")[1]
-    assert "(needs description)|1 files" in status_section
-    assert "fresh-doc.md" in status_section
+    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
+    assert "doc.md" in needs_section
+    assert "(kept placeholder)" in needs_section
 
 
 def test_sync_keeps_description_regenerated_after_reset(
@@ -291,7 +336,7 @@ def test_sync_keeps_description_regenerated_after_reset(
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     assert read_descriptions_by_file(index_path)["doc.md"] == "Generated after sync"
-    assert "- ✅ Kept (content unchanged)|1" in out
+    assert "NEEDS DESCRIPTION" not in out
 
 
 def test_sync_fetches_missing_file_instead_of_pruning_entry(
@@ -314,9 +359,31 @@ def test_sync_fetches_missing_file_instead_of_pruning_entry(
     assert read_sources_by_file(index_path) == {
         "missing-doc.md": "https://example.com/missing-doc"
     }
-    assert "- Successful|1" in out
-    assert "- ⚠️ Kept unverified (file recreated)|1" in out
-    assert read_descriptions_by_file(index_path)["missing-doc.md"] == "Description"
+    assert "sources 1 · curated 1 · failed 0" in out
+
+
+def test_sync_flags_recreated_doc_as_needing_description(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A recreated doc's description is unverifiable, so it is reset for rewrite."""
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    index_path = collection_dir / "INDEX.xml"
+    create_index_xml(
+        index_path,
+        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    descriptions = read_descriptions_by_file(index_path)
+    assert descriptions["missing-doc.md"] == PLACEHOLDER_DESCRIPTION
+    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
+    assert "missing-doc.md" in needs_section
+    assert "(file recreated)" in needs_section
 
 
 def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
@@ -340,17 +407,17 @@ def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
     out = run_sync(collection_dir, monkeypatch, capsys)
 
     assert {p.name for p in collection_dir.iterdir()} == survivors
-    assert "- Orphan files deleted (not in INDEX)|2" in out
+    assert "orphans deleted 2" in out
 
 
 @pytest.mark.parametrize(
-    ("failure", "expected_error_line"),
+    ("failure", "expected_error"),
     [
         (
             CurationError("Fetch failed: 404 not found — https://example.com/doc-a"),
-            "❌ Fetch failed: 404 not found — https://example.com/doc-a",
+            "Fetch failed: 404 not found",
         ),
-        (RuntimeError("boom"), "❌ Unexpected error: RuntimeError: boom"),
+        (RuntimeError("boom"), "Unexpected error: RuntimeError: boom"),
     ],
     ids=["curation-error", "unexpected-crash"],
 )
@@ -359,7 +426,7 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
     failure: Exception,
-    expected_error_line: str,
+    expected_error: str,
 ) -> None:
     """The first doc's failure doesn't abort the sync: the second doc still curates."""
     collection_dir = tmp_path / "collection"
@@ -380,11 +447,12 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    assert "- Successful|1" in out
-    assert "- Failed|1" in out
-    assert "### Failed URLs\n- https://example.com/doc-a" in out
-    assert expected_error_line in out
-    assert "- ❌ Failed (description untouched)|1" in out
+    assert "[1/2] FAIL  doc-a.md — " in out
+    assert "[2/2] ok    doc-b.md" in out
+    assert "sources 2 · curated 1 · failed 1" in out
+    # The trailing \n pins the dedup: the error line must not repeat the URL.
+    assert f"FAILED (1)\n  https://example.com/doc-a\n    {expected_error}\n" in out
+    assert "🏁 Sync complete: 1/2 curated" in out
 
     # The failed source survives untouched in INDEX.xml, ready for retry.
     index_path = collection_dir / "INDEX.xml"

@@ -133,8 +133,8 @@ def test_repiping_an_identical_description_reports_unchanged_and_succeeds(
     exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md\n{IN_BAND}\n")
 
     assert exit_code == 0
-    assert "Unchanged: doc-a.md" in out
-    assert "No updates needed" in out
+    assert "unchanged: doc-a.md" in out
+    assert "no updates needed" in out
 
 
 def test_unmatched_filename_applies_nothing_and_succeeds(
@@ -149,7 +149,7 @@ def test_unmatched_filename_applies_nothing_and_succeeds(
     )
 
     assert exit_code == 0
-    assert "No updates needed" in out
+    assert "no updates needed" in out
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
@@ -207,7 +207,7 @@ def test_parse_warns_and_drops_trailing_filename_without_description(
     result = parse_descriptions(text)
 
     assert result == {"doc-a.md": "Description for A"}
-    assert "⚠️ No description for doc-c.md: skipping" in capsys.readouterr().out
+    assert "no description for doc-c.md: skipping" in capsys.readouterr().out
 
 
 def test_cli_entry_point_propagates_exit_1_while_applying_in_band_sibling(

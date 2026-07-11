@@ -62,6 +62,8 @@ Errors print actionable info. Propose fixes but await user approval; proceed ONL
 
 ## Step 3. Write the description
 
+Skip this step if `description:` says `kept` — go to Step 4.
+
 Two reads feed the write:
 
 1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
@@ -88,12 +90,13 @@ Report success in this format, filling each slot from the script's output above:
 ## ✨ Curation Success!
 
 🎯 What happened
-- Source URL: <canonical `source_url` from `<source>` block — not your raw input>
-- [Created/Overwrote] doc: `<path, verbatim from ✅ line>`
-- [Indexed/Reindexed] index: `<path, verbatim from ✅ line>`
-- Wrote index description <N> words ✓
+- Collection: [report if it's a new collection too]
+- Source URL: `<url: line>`
+- [Created/Overwrote] doc: `<doc: path>`
+- [Indexed/Reindexed] index: `<index: path>`
+- Description: <N words ✓, or kept>
 
-"_<description from Step 3>_"
+"_<description, if written>_"
 ```
 
 </success_message_format>

@@ -143,7 +143,6 @@ def _raw_format_route(url: str) -> FetchRoute | None:
 def _github_route(url: str) -> FetchRoute:
     """A GitHub blob fetched from its raw twin; the blob URL stays canonical."""
     raw_url = github_blob_to_raw_url(url)
-    print(f"✅ GitHub source: {url}")
     return FetchRoute("markdown", raw_url, url, github_filename_from_blob_url(url))
 
 
@@ -358,5 +357,4 @@ def fetch_text(fetch_url: str) -> str:
         _fail("Fetch failed", f"HTTP {exc.code}", fetch_url)
     except (urllib.error.URLError, OSError, UnicodeDecodeError) as exc:
         _fail("Fetch failed", str(exc), fetch_url)
-    print(f"✅ Fetched: {len(text):,} chars")
     return text

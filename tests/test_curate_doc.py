@@ -312,11 +312,13 @@ def test_curate_same_url_again_updates_the_existing_source(
     collection = tmp_path / "zustand"
     url = "https://example.com/docs/updating-state"
 
+    out = ""
     for source_url in (url, url, f"{url}/"):
-        run_curate(collection, source_url, monkeypatch, capsys)
+        out = run_curate(collection, source_url, monkeypatch, capsys)
 
     # Every spelling reaches FireCrawl as the slash-trimmed canonical URL.
     assert scraped_urls == [url, url, url]
+    assert "chars, firecrawl" in out
     index = (collection / "INDEX.xml").read_text()
     assert index.count("<source>") == 1
     assert f"<source_url>{url}</source_url>" in index
@@ -445,11 +447,10 @@ def test_curate_resets_description_when_content_changed(
     assert result.outcome == curate_doc.DocOutcome.CHANGED
 
 
-def test_curate_keeps_description_when_doc_file_recreated(
-    tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
+def test_curate_resets_description_when_doc_file_recreated(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    """No doc file to verify the fetched content against — the keep is a guess."""
     collection = tmp_path / "coll"
     curate_offline(collection, DOC_CONTENT, monkeypatch)
     index_path = collection / "INDEX.xml"
@@ -458,9 +459,8 @@ def test_curate_keeps_description_when_doc_file_recreated(
 
     result = curate_offline(collection, DOC_CONTENT, monkeypatch)
 
-    assert read_index_description(index_path, "hello.md") == "Generated description"
+    assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
     assert result.outcome == curate_doc.DocOutcome.RECREATED
-    assert "file recreated, unverified" in capsys.readouterr().out
 
 
 def test_curate_reports_pending_when_placeholder_carried_over(
@@ -470,13 +470,100 @@ def test_curate_reports_pending_when_placeholder_carried_over(
 ) -> None:
     collection = tmp_path / "coll"
     curate_offline(collection, DOC_CONTENT, monkeypatch)
-    capsys.readouterr()  # discard the first curation's output
 
-    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
 
     index_path = collection / "INDEX.xml"
     assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
-    assert "🚩 description pending" in capsys.readouterr().out
+    assert "description: PLACEHOLDER (pending)" in out
+
+
+def test_curation_result_carries_the_report_fields(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    collection = tmp_path / "coll"
+
+    first = curate_offline(collection, DOC_CONTENT, monkeypatch)
+    second = curate_offline(collection, DOC_CONTENT, monkeypatch)
+
+    assert first.doc_action == "created"
+    assert first.index_action == "indexed"
+    assert first.initialised is True
+    assert first.canonical_url == "https://example.com/docs/hello"
+    assert first.chars == len(DOC_CONTENT)
+    assert first.route == "direct"
+    assert first.description == PLACEHOLDER_DESCRIPTION
+    assert second.doc_action == "overwrote"
+    assert second.index_action == "reindexed"
+    assert second.initialised is False
+
+
+def test_cli_report_shows_created_doc_and_constant_success_gate(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    content = "word " * 250  # >999 chars pins the thousands separator
+    stub_direct_fetch(monkeypatch, content)
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert out.startswith("CURATE ")
+    assert "collection: initialised" in out
+    assert "hello.md (created)" in out
+    assert "INDEX.xml (indexed)" in out
+    assert "url:    https://example.com/docs/hello\n" in out
+    assert "fetch:  1,250 chars, direct" in out
+    assert "description: PLACEHOLDER (pending)" in out
+    assert out.endswith("\n\n🏁 Success! curated doc\n")
+
+
+def test_cli_report_shows_kept_description_on_unchanged_recuration(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "hello.md (overwrote)" in out
+    assert "INDEX.xml (reindexed)" in out
+    assert "collection: initialised" not in out
+    assert "description: kept — content unchanged" in out
+
+
+def test_cli_report_shows_pending_description_when_file_recreated(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+    (collection / "hello.md").unlink()
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "description: PLACEHOLDER (pending)" in out
+
+
+def test_cli_report_shows_kept_description_on_whitespace_only_change(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, DOC_CONTENT, monkeypatch)
+    set_index_description(collection / "INDEX.xml", "hello.md", "Generated description")
+    stub_direct_fetch(monkeypatch, DOC_CONTENT.replace("\n\nSecond", "\n\n\n\nSecond"))
+
+    out = run_curate(collection, DOC_URL, monkeypatch, capsys)
+
+    assert "description: kept — whitespace-only change" in out
 
 
 def test_curate_compares_against_the_entrys_recorded_local_file(

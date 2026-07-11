@@ -5,13 +5,17 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import date
 from enum import StrEnum
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, Literal, NamedTuple
 from urllib.parse import urlparse
 
 from docs_for_ai import direct_fetch, firecrawl_scrape
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
-from docs_for_ai.paths import format_path_for_display, normalise_collection_dir
+from docs_for_ai.paths import (
+    collection_label,
+    format_path_for_display,
+    normalise_collection_dir,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -28,10 +32,17 @@ class DocOutcome(StrEnum):
 
 
 class CurationResult(NamedTuple):
-    """One curation's outcome and the doc file it wrote."""
+    """One curation's outcome and everything the CLI report prints."""
 
     outcome: DocOutcome
     local_file: str
+    doc_action: Literal["created", "overwrote"]
+    index_action: Literal["indexed", "reindexed"]
+    canonical_url: str
+    chars: int
+    route: Literal["direct", "firecrawl"]
+    description: str
+    initialised: bool
 
 
 class _ExistingEntry(NamedTuple):
@@ -81,7 +92,6 @@ Curated docs for targeted AI context.
 """
     (collection_dir / "README.md").write_text(readme, encoding="utf-8")
     write_index(ET.Element("docs_index"), collection_dir / "INDEX.xml")
-    print(f"✅ Collection: {collection_dir.name} (initialised)")
 
 
 def _urls_match(entry_url: str | None, canonical_url: str) -> bool:
@@ -118,27 +128,25 @@ def _classify_outcome(
 
 
 def _decide_description(outcome: DocOutcome, existing: _ExistingEntry | None) -> str:
-    """Keep the existing description unless content really changed (or is new)."""
-    keep = {DocOutcome.UNCHANGED, DocOutcome.WHITESPACE_ONLY, DocOutcome.RECREATED}
+    """Keep the existing description only when the fetch matches the recorded file."""
+    keep = {DocOutcome.UNCHANGED, DocOutcome.WHITESPACE_ONLY}
     if outcome in keep and existing is not None and existing.description:
         return existing.description
     return PLACEHOLDER_DESCRIPTION
 
 
-def _success_note(outcome: DocOutcome, description: str) -> str:
-    """One-line description fate for the final success message."""
+def _description_note(outcome: DocOutcome, description: str) -> str:
+    """The report's `description:` value — the fate Claude keys Step 3 off."""
     if description == PLACEHOLDER_DESCRIPTION:
-        return "🚩 description pending"
-    if outcome is DocOutcome.RECREATED:
-        return "⚠️ description kept — file recreated, unverified"
+        return "PLACEHOLDER (pending)"
     if outcome is DocOutcome.WHITESPACE_ONLY:
-        return "✅ description kept — whitespace-only change"
-    return "✅ description kept — content unchanged"
+        return "kept — whitespace-only change"
+    return "kept — content unchanged"
 
 
 def _add_or_update_source_in_index(
     collection_dir: Path, title: str, source_url: str, local_file: str, description: str
-) -> None:
+) -> Literal["indexed", "reindexed"]:
     """Rewrite an existing entry in place, append a new one."""
     index_path = collection_dir / "INDEX.xml"
 
@@ -173,15 +181,7 @@ def _add_or_update_source_in_index(
 
     write_index(root, index_path)
 
-    label = "Reindexed" if is_update else "Indexed"
-    print(f"✅ {label}: {format_path_for_display(index_path)}")
-    print("   <source>")
-    print(f"     <title>{title}</title>")
-    print(f"     <description>{description}</description>")
-    print(f"     <source_url>{source_url}</source_url>")
-    print(f"     <local_file>{local_file}</local_file>")
-    print(f"     <curated_at>{curated_at}</curated_at>")
-    print("   </source>")
+    return "reindexed" if is_update else "indexed"
 
 
 def _reject_filename_collision(
@@ -219,15 +219,16 @@ def fetch_document(route: direct_fetch.FetchRoute) -> FetchedDoc:
     return FetchedDoc(content, title, route.filename, route.canonical_url)
 
 
-def _write_fetched_document(collection_dir: Path, doc: FetchedDoc) -> None:
-    """Write the fetched document to its file."""
+def _write_fetched_document(
+    collection_dir: Path, doc: FetchedDoc
+) -> Literal["created", "overwrote"]:
+    """Write the fetched document to its file; report created vs overwrote."""
     file_path = collection_dir / doc.filename
-    file_existed = file_path.exists()
+    action: Literal["created", "overwrote"] = (
+        "overwrote" if file_path.exists() else "created"
+    )
     file_path.write_text(doc.content, encoding="utf-8")
-    if file_existed:
-        print(f"✅ Overwrote: {format_path_for_display(file_path)}")
-    else:
-        print(f"✅ Created: {format_path_for_display(file_path)}")
+    return action
 
 
 def _parse_args() -> argparse.Namespace:
@@ -241,9 +242,9 @@ def _parse_args() -> argparse.Namespace:
 notes:
   - Fetch precedence: GitHub raw → .md/.rst.txt twin → FireCrawl (last resort).
   - Re-curating a URL overwrites its doc and replaces its INDEX entry.
-  - A new or content-changed doc gets a PLACEHOLDER description to fill in later;
-    if the re-fetched content is unchanged (ignoring whitespace), the existing
-    description is kept.
+  - A new, content-changed, or recreated doc gets a PLACEHOLDER description to
+    fill in later; if the re-fetched content is unchanged (ignoring whitespace),
+    the existing description is kept.
   - The collection is initialised if the directory doesn't exist.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -262,13 +263,12 @@ notes:
 def curate(collection_dir: Path, source_url: str) -> CurationResult:
     """Curate one source URL into a collection.
 
-    A description survives unless content really changed: the fetched document is
-    compared (before the overwrite) against the doc file its INDEX entry records.
+    A description survives only when the fetched document matches the doc file its
+    INDEX entry records (compared before the overwrite, ignoring whitespace); new,
+    changed, or recreated docs reset it to PLACEHOLDER.
     """
     source_url = source_url.rstrip("/")
     index_path = collection_dir / "INDEX.xml"
-
-    print(f"📥 Curating… {source_url}")
 
     _validate_url(source_url)
     _reject_uv_docs_url(source_url)
@@ -277,44 +277,82 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
     collection_dir.mkdir(parents=True, exist_ok=True)
     index_exists = index_path.exists()
 
-    route = direct_fetch.resolve_route(source_url, direct_fetch.load_direct_fetch_rules())
+    fetch_route = direct_fetch.resolve_route(
+        source_url, direct_fetch.load_direct_fetch_rules()
+    )
 
     # Reject a colliding filename before the (paid) fetch.
     if index_exists:
-        _reject_filename_collision(collection_dir, route.filename, route.canonical_url)
+        _reject_filename_collision(
+            collection_dir, fetch_route.filename, fetch_route.canonical_url
+        )
 
     existing = (
-        _find_existing_entry(index_path, route.canonical_url) if index_exists else None
+        _find_existing_entry(index_path, fetch_route.canonical_url)
+        if index_exists
+        else None
     )
 
-    doc = fetch_document(route)
+    doc = fetch_document(fetch_route)
 
     if not index_exists:
         _initialise_collection(collection_dir, source_url)
 
     outcome = _classify_outcome(collection_dir, existing, doc.content)
 
-    _write_fetched_document(collection_dir, doc)
+    doc_action = _write_fetched_document(collection_dir, doc)
 
     description = _decide_description(outcome, existing)
 
     # doc.source_url is canonical: query/fragment-free, no trailing `.md`
-    _add_or_update_source_in_index(
+    index_action = _add_or_update_source_in_index(
         collection_dir, doc.title, doc.source_url, doc.filename, description
     )
 
-    print(f"🏁 Success! curated doc ({_success_note(outcome, description)})\n")
-    return CurationResult(outcome, doc.filename)
+    return CurationResult(
+        outcome=outcome,
+        local_file=doc.filename,
+        doc_action=doc_action,
+        index_action=index_action,
+        canonical_url=doc.source_url,
+        chars=len(doc.content),
+        route="firecrawl" if fetch_route.doc_format is None else "direct",
+        description=description,
+        initialised=not index_exists,
+    )
+
+
+def _format_curate_report(collection_dir: Path, result: CurationResult) -> str:
+    """Build the CURATE report; the 🏁 gate line is printed separately."""
+    doc_path = format_path_for_display(collection_dir / result.local_file)
+    index_path = format_path_for_display(collection_dir / "INDEX.xml")
+    lines = [f"CURATE {collection_label(collection_dir)}"]
+    if result.initialised:
+        lines.append("  collection: initialised")
+    lines.extend(
+        [
+            f"  doc:    {doc_path} ({result.doc_action})",
+            f"  index:  {index_path} ({result.index_action})",
+            f"  url:    {result.canonical_url}",
+            f"  fetch:  {result.chars:,} chars, {result.route}",
+            f"  description: {_description_note(result.outcome, result.description)}",
+        ]
+    )
+    return "\n".join(lines)
 
 
 def main() -> None:
     """Curate a single source URL into a collection directory."""
     args = _parse_args()
+    collection_dir = normalise_collection_dir(args.collection_dir)
     try:
-        curate(normalise_collection_dir(args.collection_dir), args.source_url)
+        result = curate(collection_dir, args.source_url)
     except CurationError as exc:
         print(f"❌ {exc}")
         sys.exit(1)
+    print(_format_curate_report(collection_dir, result))
+    print()
+    print("🏁 Success! curated doc")
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ def parse_descriptions(text: str) -> DescriptionsByFile:
             local_file, description = entry
             descriptions[local_file] = description
         else:
-            print(f"⚠️ No description for {entry[0]}: skipping")
+            print(f"no description for {entry[0]}: skipping")
 
     return descriptions
 
@@ -68,7 +68,7 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 
         new_desc = descriptions[file_elem.text]
         if desc_elem.text == new_desc:
-            print(f"ℹ️ Unchanged: {file_elem.text}")  # noqa: RUF001
+            print(f"unchanged: {file_elem.text}")
             continue
 
         desc_elem.text = new_desc
@@ -79,7 +79,7 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
         write_index(root, index_path)
         print(f"\n🏁 Updated {updated_count} description(s) in {index_path}")
     else:
-        print(f"\nℹ️ No updates needed: {index_path}")  # noqa: RUF001
+        print(f"no updates needed: {index_path}")
 
     return updated_count
 

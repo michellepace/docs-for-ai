@@ -1,97 +1,42 @@
 ---
-title: potential future refactors (unvalidated / rough)
-updated: 2026-07-03
-status: draft / rough
+title: potential future refactors
+updated: 2026-07-11
+status: rough notes
 ---
 
-## Test Markers
+## sync-index bug: 404-fetched-as-success
 
-Current in pyproject.toml
+A dead URL that returns an HTTP-200 error page ("Page Not Found") is fetched, titled from that page, indexed, and reported as `✅ Success`. Nothing checks the body for not-found markers:
 
-```toml
-# TESTING (PYTEST)
-# =================================
-[tool.pytest.ini_options]
-markers = [
-  "firecrawl: hits FireCrawl API (paid, network)",
-  "github: hits raw.githubusercontent.com (free, network)",
-  "readthedocs: hits rich.readthedocs.io (free, network)",
-]
-```
+- direct route only catches HTTP-*status* 404 (`direct_fetch.fetch_text`)
+- FireCrawl route only rejects *empty* content (`firecrawl_scrape`), taking the title verbatim from metadata
 
-Wanted: Firecrawl, direct_fetch (validate for github)
+So the entry's title becomes the junk body title ("Page Not Found") — not anything correct. For the repro below (and any unconfigured host) that junk title comes from FireCrawl metadata; on the direct route it'd instead come from `extract_title`. A fix has to cover both paths.
 
-## re_sync - extension agnostic
+**Fix** needs a content-validation heuristic — its own piece of work. Open question on detection: drop the entry from INDEX.xml, or keep it and just report? (INDEX.xml is the source of truth, so the file stays either way.)
 
-One thing stays true and is independent of this decision: sync_index.get_markdown_files globbing *.md only means /recurate-docs shiny and /recurate-docs biome would already drop their .qmd/.mdx entries as "stale (missing .md)". That's a pre-existing bug on the existing mixed-extension collections, not something the rich question introduces. Worth verifying and fixing on its own merits — but it's a separate errand from the .md-vs-.rst label, which I'd now leave alone.
+Repro: `uv run curate-doc temp https://vercel.com/docs/evehhhhh`
 
-## Class Markers
+## Test class markers
 
-The user's principle is clear: don't keep classes to carry markers or to satisfy a "one class per function" convention — keep a class only where grouping genuinely clarifies intent, otherwise flatten. I'll apply that principle and finalise the plan.
+13 test classes each wrap a single function-under-test — the "one class per function" convention, no real grouping. Flatten them to module-level functions.
 
-## __init__
+- located in `test_direct_fetch.py`, `test_firecrawl_scrape.py`, `test_paths.py`; 5 are single-method wrappers
+- `TestFetchText` puts `@pytest.mark.direct_fetch` on the *class*, while the two module-level tests just below it in the same file tag the marker per-function — inconsistent; flatten it too
 
-Do I need it?
+Principle: keep a class only where grouping genuinely clarifies intent, otherwise flatten.
 
-- BASE_DIR `~/.claude/docs-for-ai/` glueing
-- COLLECTION `~/.claude/docs-for-ai/`
+## Refactor out TDD scaffolding (`tests/*.py`)
 
-## test_direct_source.py
+Leftover scaffolding to clean (inspiration: `xdocs-mine/test-beck.md`, Kent Beck / sociable tests):
 
-Re-ogranise and rename. and remove duplication.
+- `_forbid_scrape`/`_forbid_fetch` interaction guards (test_curate_doc.py, test_sync_index.py) assert HOW not WHAT — partly redundant with the output assertions
+- boilerplate docstring in test_firecrawl_scrape.py ("Tests for parse_retry_seconds.")
+- `set_index_description` + description-reader helpers duplicated across test_curate_doc.py and test_sync_index.py
+- index-formatting assertions overlap between test_index_io.py and test_curate_doc.py
 
-## Rename toml twins
+## Toml registry: readthedocs
 
-markdown-twins
-sphinx-rst-twins.. does it need to be sphinx?
+readthedocs is a configured entry in `direct-fetch-rules.toml`; github is special-cased in `resolve_route` ahead of the toml loop. Idea: treat readthedocs like github (always direct-fetch, no config entry) to simplify the code.
 
-## test_curate_doc.py
-
-Doesn't seem right - test_allowlisted_suffixed_url_routes_to_firecrawl
-
-bad organisation
-
-## Tests in general
-
-Behaviour "for me"
-
-## GitHub → Toml registry→ raw-format fallback → FireCrawl
-
-```
-<scenarios>
-## Curation Scenarios
-
-Test each of these scenarios:
-- firecrawl / direct fetch
-- `<title>` value
-- `<local_file>` value
-
-(GitHub scenarios excluded)
-
-### In .toml
-
-How does this work currently
-1. /curate-doc claudecode https://code.claude.com/docs/en/best-practices
-2. /curate-doc claudecode https://code.claude.com/docs/en/best-practices.md
-
-Current (proven - see `rich` collection)
-3. /curate-doc rich https://rich.readthedocs.io/en/stable/tree.html
-4. /curate-doc rich https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
-
-### Not in .toml
-
-1. /curate mintlify https://www.mintlify.com/docs/quickstart
-2. /curate mintlify https://www.mintlify.com/docs/quickstart.md
-3. /curate-doc collection https://example.com/hello.rst.txt
-
-### I expect
-
-If a prefix is in the .toml, it's honoured, so:
-- (2) should work like (1)
-- (4) should work like (3)
-
-If URL is NOT in the `toml` AND ends in ".rst.txt" (7):
-- direct fetch
-- Unsure about `<title>` and `<local_file>`: ideally the same as (3)... depending on implementation complexity (reuse)
-</scenarios>
-```
+**Caveat — not a clean equivalence.** github is recognised host-only (`is_github_url` netloc check, no config) and its transform reconstructs the `raw.githubusercontent.com` URL from owner/repo/ref/path. But `_readthedocs_route` needs the version-pinned `prefix` (`.../en/stable/`) to build its `_sources/*.rst.txt` twin, and that twin is a Sphinx-only artifact (MkDocs-on-RTD or source-links-disabled projects have none). Promoting readthedocs to an unconfigured host rule would **not** be behaviour-preserving — reconsider before doing it.

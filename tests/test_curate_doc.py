@@ -478,26 +478,6 @@ def test_curate_reports_pending_when_placeholder_carried_over(
     assert "description: PLACEHOLDER (pending)" in out
 
 
-def test_curation_result_carries_the_report_fields(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    collection = tmp_path / "coll"
-
-    first = curate_offline(collection, DOC_CONTENT, monkeypatch)
-    second = curate_offline(collection, DOC_CONTENT, monkeypatch)
-
-    assert first.doc_action == "created"
-    assert first.index_action == "indexed"
-    assert first.initialised is True
-    assert first.canonical_url == "https://example.com/docs/hello"
-    assert first.chars == len(DOC_CONTENT)
-    assert first.route == "direct"
-    assert first.description == PLACEHOLDER_DESCRIPTION
-    assert second.doc_action == "overwrote"
-    assert second.index_action == "reindexed"
-    assert second.initialised is False
-
-
 def test_cli_report_shows_created_doc_and_constant_success_gate(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

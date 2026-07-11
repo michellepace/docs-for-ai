@@ -19,8 +19,6 @@ Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-f
 
 Weigh `$collection` and `$source_url` against the existing collections — `$collection` may already exist or be new. Spot what the user likely got wrong and steer them to what they *intended*.
 
-Print your verdict before any tool call: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
-
 <validation_failure>
 
 Be friendly and brief, and include the corrected `/curate-doc …` to run — the example below shows the spirit, not a template. Cases:
@@ -51,6 +49,8 @@ Example (semantic mismatch):
 ```
 
 </validation_success>
+
+Print your verdict BEFORE proceeding to Step 2: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
 
 ## Step 2. Run the script
 

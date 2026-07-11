@@ -1,7 +1,7 @@
 ---
 description: Re-curate a collection's docs and descriptions
 disable-model-invocation: true
-argument-hint: <collection>
+argument-hint: "<collection>"
 arguments: [collection]
 allowed-tools:
   - Bash(find *)
@@ -16,13 +16,13 @@ Your task is to re-curate every document in `$collection` and regenerate its `IN
 
 ## Step 1. Validate argument
 
-Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing_collections>\n'`
+Existing collections: !`printf '<existing-collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</existing-collections>\n'`
 
-Validate `$collection` against `<existing_collections>`: reject if it's missing or unknown; suggest the closest match for a typo.
+Validate `$collection` against `<existing-collections>`: reject if it's missing or unknown; suggest the closest match for a typo.
 
 Print your verdict before any tool call: on a problem, fail with a suggested fix and stop; on success, print the success message, then start Step 2.
 
-<validation_failure>
+<validation-failure>
 
 Be friendly and brief, and include the corrected `/recurate-docs …` — in the spirit of this example:
 
@@ -34,15 +34,15 @@ Be friendly and brief, and include the corrected `/recurate-docs …` — in the
 [Friendly suggestion in 1 short sentence]
 ```
 
-</validation_failure>
+</validation-failure>
 
-<validation_success>
+<validation-success>
 
 ```
 ## 🙂 Super! Re-curating the `$collection` collection...
 ```
 
-</validation_success>
+</validation-success>
 
 ## Step 2. Run the script
 
@@ -76,9 +76,9 @@ Word count is enforced; on ❌, rewrite the flagged description(s) and rerun wit
 
 ## Step 4. Report completion
 
-Report completion in this format, filling each slot from the two scripts' output above:
+Report completion in this format, filling each slot from the scripts' output:
 
-<example_summary_message>
+<report-format>
 
 ```
 ## ✅ Re-curate Complete!
@@ -94,4 +94,4 @@ Report completion in this format, filling each slot from the two scripts' output
 - [one line per `NEEDS DESCRIPTION` doc, from its reason tag]
 ```
 
-</example_summary_message>
+</report-format>

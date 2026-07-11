@@ -1,7 +1,7 @@
 ---
 description: Query a local doc collection for a grounded answer.
 disable-model-invocation: true
-argument-hint: [collection] [question]
+argument-hint: "[collection] [question]"
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -17,16 +17,17 @@ allowed-tools:
 # Answer from a Doc Collection
 
 Parse `$ARGUMENTS`:
+
 - **collection** = the first word
 - **question** = everything after the first word
 
-Available collections: !`printf '<available_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
+Available collections: !`printf '<available-collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available-collections>\n'`
 
 Read the collection's `INDEX.xml` to route to the relevant local files, then give a grounded, cohesive answer to the question.
 
 The collection follows this pattern:
 
-<collection_pattern>
+<collection-pattern>
 
 ```text
 ~/.claude/docs-for-ai/collections/{collection}/
@@ -52,7 +53,7 @@ The collection follows this pattern:
 
 Local file: `~/.claude/docs-for-ai/collections/{collection}/{file}`
 
-</collection_pattern>
+</collection-pattern>
 
 ## Procedure
 
@@ -60,7 +61,7 @@ Local file: `~/.claude/docs-for-ai/collections/{collection}/{file}`
 2. **Analyse** the local files of the relevant sources `~/.claude/docs-for-ai/collections/{collection}/{file}`
 3. **Answer** from those files, citing quotes. If they fall short, re-check the index for other relevant files, then **ask before any web fallback**.
 
-If the question doesn't fit this collection, suggest a better-matching one from `<available_collections>` (or a web search) before answering.
+If the question doesn't fit this collection, suggest a better-matching one from `<available-collections>` (or a web search) before answering.
 
 ## Web fallback (only after local docs are exhausted)
 
@@ -84,5 +85,4 @@ Grounded answer — well-structured and scannable, use emojis to aid readability
 - `~/.claude/docs-for-ai/collections/{collection}/{file-1}`
 - `~/.claude/docs-for-ai/collections/{collection}/{file-N}`
 - `https://..` (Web fallback only)
-
 </format>

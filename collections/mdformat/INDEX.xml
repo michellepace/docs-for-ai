@@ -1,0 +1,30 @@
+<docs_index>
+  <source>
+    <title>Installation and usage - mdformat 1.0.0 documentation</title>
+    <description>Install the CommonMark formatter via `pipx`, adding GFM/MyST support through `inject` plugins; format in place or `--check`, tune with `--wrap`/`--number`; Python `mdformat.text()`/`file()` API; `pre-commit` hook.</description>
+    <source_url>https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html</source_url>
+    <local_file>en-stable-users-installation-and-usage.md</local_file>
+    <curated_at>2026-07-11</curated_at>
+  </source>
+  <source>
+    <title>Configuration file - mdformat 1.0.0 documentation</title>
+    <description>A `.mdformat.toml` resolved up the file tree sets `wrap`, `number`, `end_of_line`, `validate`, `extensions`, and `codeformatters`; CLI args override it; Python 3.13+ adds Unix-glob `exclude` patterns.</description>
+    <source_url>https://mdformat.readthedocs.io/en/stable/users/configuration_file.html</source_url>
+    <local_file>en-stable-users-configuration-file.md</local_file>
+    <curated_at>2026-07-11</curated_at>
+  </source>
+  <source>
+    <title>Plugins - mdformat 1.0.0 documentation</title>
+    <description>Three plugin categories — code formatters (`mdformat-black`), parser extensions (`gfm`, footnotes, admonitions), and misc (`mdformat-pyproject`) — each installed then explicitly enabled via `codeformatters=` or `extensions=` in the Python API.</description>
+    <source_url>https://mdformat.readthedocs.io/en/stable/users/plugins.html</source_url>
+    <local_file>en-stable-users-plugins.md</local_file>
+    <curated_at>2026-07-11</curated_at>
+  </source>
+  <source>
+    <title>Formatting style - mdformat 1.0.0 documentation</title>
+    <description>The normalised Markdown style, tuned to minimise review diffs: ATX headings, `-` bullets, non-incrementing `1.` ordered lists, fenced code blocks, bottom-sorted reference links, and semantic-line-break word wrapping.</description>
+    <source_url>https://mdformat.readthedocs.io/en/stable/users/style.html</source_url>
+    <local_file>en-stable-users-style.md</local_file>
+    <curated_at>2026-07-11</curated_at>
+  </source>
+</docs_index>

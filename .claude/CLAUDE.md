@@ -30,6 +30,7 @@ collections/
 ```
 
 User workflow (commands in `.claude/commands/`):
+
 - `/curate-doc <collection> <url>`: curate doc into collection
 - `/ask-docs <collection> <question>`: ask a question about a collection
 - `/recurate-docs <collection>`: re-curate all docs & regenerate descriptions
@@ -60,7 +61,7 @@ uv run curate-doc --help          # Fetch a doc from a URL into a collection
 uv run sync-index --help          # Re-sync a collection to its INDEX.xml
 uv run update-descriptions --help # Pipe filename/description pair(s) into INDEX.xml
 
-# Quality (see pyproject.toml)
+# Quality
 uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code

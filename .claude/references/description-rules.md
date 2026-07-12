@@ -12,15 +12,12 @@ The description is a **routing signal** — a future Claude session reads all en
   - complement the title; surface high-value terms it lacks (e.g. "anti-patterns", "best-practices")
   - assume every sibling shares the collection's topic — don't spend words on it
 - Use backticks for code elements e.g. `config.json`
-
 </quality_rules>
 
 <reference_examples>
-
 Match the style of these good examples and avoid the bad:
 
 <good>
-
 ```xml
 <!-- uv Collection -->
 <title>Project structure and files</title>
@@ -32,11 +29,9 @@ Match the style of these good examples and avoid the bad:
 <title>Responsive design - Core concepts - Tailwind CSS</title>
 <description>Mobile-first breakpoint prefixes (`sm`–`2xl`), `max-*` range variants, custom `--breakpoint-*` themes, arbitrary values, and `@container` queries for styling utilities based on viewport or parent size.</description>
 ```
-
 </good>
 
 <bad_vs_good>
-
 Same `vercel` source — anti-pattern, then the fix:
 
 ```xml
@@ -54,11 +49,9 @@ Same `vercel` source — anti-pattern, then the fix:
 <title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
 <description>Tutorial with `App Router` pages, Prisma ORM schema and queries, Sign in with Vercel `OAuth` (PKCE, `jose` ID-token verification), `Server Actions` for drafts/publishing, and `vercel` CLI deployment.</description>
 ```
-
 </bad_vs_good>
 
 <bad_vs_good>
-
 Same `claudecode` skills source — keyword-dump, then the fix:
 
 ```xml
@@ -76,7 +69,6 @@ Same `claudecode` skills source — keyword-dump, then the fix:
 <title>Extend Claude with skills</title>
 <description>`SKILL.md` frontmatter for authoring skills, invocation control (`disable-model-invocation`/`user-invocable`), location precedence across personal/project/plugin, `$ARGUMENTS` and `!command` injection, `context: fork` subagents, and evaluation with `skill-creator`.</description>
 ```
-
 </bad_vs_good>
 
 </reference_examples>

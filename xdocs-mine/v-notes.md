@@ -4,7 +4,6 @@ updated: 2026-07-02
 status: draft / rough
 ---
 
-
 This is a genuinely good question to ask *before* moving code, and having read through `src/` I think your instinct is more correct than you're giving it credit for. Let me evaluate the plan, make one adjustment, and then show you the concrete evidence that the exercise is worth doing.
 
 ## Verdict: your sequence is right — with one adjustment
@@ -60,12 +59,12 @@ And one thing you got **right**, as a reference for what "settled" looks like: `
 
 Short, code-reference-free, one row per concept — exactly as you said:
 
-| Term| Means| Not |
-| :--- | :--- | :--- |
-| collection| a directory of curated docs for one site | not the INDEX |
-| twin| a page's directly-fetchable raw counterpart (`.md`, `.rst.txt`)| not a scrape|
+| Term | Means | Not |
+| :--- | :---- | :-- |
+| collection | a directory of curated docs for one site | not the INDEX |
+| twin | a page's directly-fetchable raw counterpart (`.md`, `.rst.txt`) | not a scrape |
 | canonical url | a doc's query/fragment-free identity, recorded as `<source_url>` | not the fetch URL |
-| … | …| … |
+| … | … | … |
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 description: Curate a source URL into a collection
 disable-model-invocation: true
-argument-hint: <collection> <url>
+argument-hint: "<collection> <url>"
 arguments: [collection, source_url]
 allowed-tools:
   - Bash(find *)
@@ -19,10 +19,7 @@ Existing collections: !`printf '<existing_collections>\n'; find ~/.claude/docs-f
 
 Weigh `$collection` and `$source_url` against the existing collections — `$collection` may already exist or be new. Spot what the user likely got wrong and steer them to what they *intended*.
 
-Print your verdict before any tool call: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
-
 <validation_failure>
-
 Be friendly and brief, and include the corrected `/curate-doc …` to run — the example below shows the spirit, not a template. Cases:
 
 - **Missing args** — show usage, list existing collections, add a runnable example.
@@ -41,16 +38,15 @@ Example (semantic mismatch):
 
 [Friendly recommendation in 1–2 short sentences, ask for confirmation]
 ```
-
 </validation_failure>
 
 <validation_success>
-
 ```
 ## 🙂 Super! Curating Shiny doc to collections/shiny/ collection...
 ```
-
 </validation_success>
+
+Print your verdict BEFORE proceeding to Step 2: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
 
 ## Step 2. Run the script
 
@@ -82,10 +78,9 @@ Word count is enforced; on ❌, rewrite the description and rerun until it passe
 
 ## Step 4. Report success
 
-Report success in this format, filling each slot from the script's output above:
+Report completion in this format, filling each slot from the scripts' output:
 
-<success_message_format>
-
+<report_format>
 ```
 ## ✨ Curation Success!
 
@@ -96,7 +91,6 @@ Report success in this format, filling each slot from the script's output above:
 - [Indexed/Reindexed] index: `<index: path>`
 - Description: <N words ✓, or kept>
 
-"_<description, if written>_"
+"*<description, if written>*"
 ```
-
-</success_message_format>
+</report_format>

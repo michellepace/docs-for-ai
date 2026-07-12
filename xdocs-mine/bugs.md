@@ -27,6 +27,7 @@ status: both validated against current code (2026-07-11) — still valid, unfixe
 Note there are **two distinct `✅` lines**: `✅ <file>: N words` (word-count only, from `_in_band_descriptions`) and `✅ Updated: <file>` (an actual write, from `update_descriptions`). The per-line word-count ✅ says nothing about whether the file exists in the index — it only ever meant "word count is fine".
 
 **Observed:**
+
 - Lone typo → `✅ typo.md: 27 words`, then `no updates needed`, exit 0.
 - Real file + typo → `🏁 Updated 1 description(s)`, exit 0; the typo vanishes without a trace.
 

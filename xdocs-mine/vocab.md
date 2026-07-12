@@ -4,11 +4,9 @@ updated: 2026-07-02
 status: draft / rough
 ---
 
-The domain language of this project — the *words*, not the code. One canonical
-term per concept, so names stay coherent across modules, tests, and docs.
+The domain language of this project — the *words*, not the code. One canonical term per concept, so names stay coherent across modules, tests, and docs.
 
-**Status: draft for review.** Rows marked ⚠ are collisions that need a decision
-(see [Open decisions](#open-decisions)). Everything else is proposed as settled.
+**Status: draft for review.** Rows marked ⚠ are collisions that need a decision (see [Open decisions](#open-decisions)). Everything else is proposed as settled.
 
 ---
 
@@ -77,28 +75,14 @@ term per concept, so names stay coherent across modules, tests, and docs.
 
 Six clashes to resolve. My recommendation on each — react and overrule freely.
 
-1. **"route" — pick one meaning.** Today the index *"routes a reader to the right
-   doc"* (user-facing prose) *and* a fetch plan is a `route` (internal type). They're
-   far apart in the code, so the cheap fix is to change the prose: say the index
-   *"points a reader to"* / *"helps a reader find"* the right doc, and keep **route**
-   for the fetch plan. → *Recommend: free up "route" for the fetch plan.*
+1. **"route" — pick one meaning.** Today the index *"routes a reader to the right doc"* (user-facing prose) *and* a fetch plan is a `route` (internal type). They're far apart in the code, so the cheap fix is to change the prose: say the index *"points a reader to"* / *"helps a reader find"* the right doc, and keep **route** for the fetch plan. → *Recommend: free up "route" for the fetch plan.*
 
-2. **"source" — split the four senses.** It currently means: the `<source>` index
-   entry, the origin web address (`source_url`), a filename+url pair, and *"source of
-   truth"*. Keep **source** for the index entry only. Reserve the origin address as
-   **canonical url**. Rename the pair to something like **indexed doc**. Drop *"source
-   of truth"* — just say **the index**. → *Recommend: "source" = the index entry, nothing else.*
+2. **"source" — split the four senses.** It currently means: the `<source>` index entry, the origin web address (`source_url`), a filename+url pair, and *"source of truth"*. Keep **source** for the index entry only. Reserve the origin address as **canonical url**. Rename the pair to something like **indexed doc**. Drop *"source of truth"* — just say **the index**. → *Recommend: "source" = the index entry, nothing else.*
 
-3. **"fetch" — narrow it.** Reserve **fetch** for direct HTTP retrieval. The broad
-   "fetch-or-scrape" step needs its own word — **acquire** (or **retrieve**). Then
-   *curate → acquire → (fetch | scrape)* reads as three clean levels. → *Recommend: "acquire" for the broad step.*
+3. **"fetch" — narrow it.** Reserve **fetch** for direct HTTP retrieval. The broad "fetch-or-scrape" step needs its own word — **acquire** (or **retrieve**). Then *curate → acquire → (fetch | scrape)* reads as three clean levels. → *Recommend: "acquire" for the broad step.*
 
-4. **transform names — one axis.** `append-md` names the *operation*; `readthedocs`
-   names the *platform*. Name both by operation (what they do to the URL), so a reader
-   predicts behaviour from the name. → *Recommend: rename by mechanism (exact names TBD together).*
+4. **transform names — one axis.** `append-md` names the *operation*; `readthedocs` names the *platform*. Name both by operation (what they do to the URL), so a reader predicts behaviour from the name. → *Recommend: rename by mechanism (exact names TBD together).*
 
-5. **`markdown` vs `md` — one spelling in names.** Use **markdown** in identifiers and
-   values; let **md** appear only as the literal file extension. → *Recommend: "markdown" everywhere but the extension.*
+5. **`markdown` vs `md` — one spelling in names.** Use **markdown** in identifiers and values; let **md** appear only as the literal file extension. → *Recommend: "markdown" everywhere but the extension.*
 
-6. **registry vs rules — one word.** Pick **rules** (plain) or **registry** (implies a
-   lookup table). → *Recommend: "rules".*
+6. **registry vs rules — one word.** Pick **rules** (plain) or **registry** (implies a lookup table). → *Recommend: "rules".*

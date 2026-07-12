@@ -1,7 +1,7 @@
 ---
 description: Query a local doc collection for a grounded answer.
 disable-model-invocation: true
-argument-hint: [collection] [question]
+argument-hint: "[collection] [question]"
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -17,6 +17,7 @@ allowed-tools:
 # Answer from a Doc Collection
 
 Parse `$ARGUMENTS`:
+
 - **collection** = the first word
 - **question** = everything after the first word
 
@@ -27,7 +28,6 @@ Read the collection's `INDEX.xml` to route to the relevant local files, then giv
 The collection follows this pattern:
 
 <collection_pattern>
-
 ```text
 ~/.claude/docs-for-ai/collections/{collection}/
 ├── INDEX.xml       # Index of all docs
@@ -51,7 +51,6 @@ The collection follows this pattern:
 ```
 
 Local file: `~/.claude/docs-for-ai/collections/{collection}/{file}`
-
 </collection_pattern>
 
 ## Procedure
@@ -73,8 +72,9 @@ Prefer Firecrawl; use `WebSearch` / `WebFetch` (lossy on code/config) only if it
 
 Use this as a guide:
 
-<format>
-# Question tersely framed
+<response_format>
+
+## Question tersely framed
 
 Grounded answer — well-structured and scannable, use emojis to aid readability
 
@@ -84,5 +84,4 @@ Grounded answer — well-structured and scannable, use emojis to aid readability
 - `~/.claude/docs-for-ai/collections/{collection}/{file-1}`
 - `~/.claude/docs-for-ai/collections/{collection}/{file-N}`
 - `https://..` (Web fallback only)
-
-</format>
+</response_format>

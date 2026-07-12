@@ -4,9 +4,7 @@
 
 ## Overview
 
-Curated documentation collections — fetched directly when possible, else scraped
-via FireCrawl. Each collection's INDEX.xml routes an LLM reader to the right doc
-(via `/ask-docs`).
+Curated documentation collections — fetched directly when possible, else scraped via FireCrawl. Each collection's INDEX.xml routes an LLM reader to the right doc (via `/ask-docs`).
 
 ```text
 collections/
@@ -16,8 +14,7 @@ collections/
     └── *.{md,rst,mdx,qmd}  # Curated doc files
 ```
 
-`INDEX.xml` is written programmatically; only `<description>` is LLM-generated
-via user workflow. One `<source>` per curated doc file:
+`INDEX.xml` is written programmatically; only `<description>` is LLM-generated via user workflow. One `<source>` per curated doc file:
 
 ```xml
 <docs_index>
@@ -40,12 +37,9 @@ User workflow (commands in `.claude/commands/`):
 
 ## Test-Driven Development (TDD)
 
-Failing test first (red → green), shaping the interface as you go. No bulk
-writing.
+Failing test first (red → green), shaping the interface as you go. No bulk writing.
 
-**Test the behaviour a caller depends on, not how the code produces it** —
-assert observable outputs and effects, so tests survive refactors and fail when
-real behaviour breaks.
+**Test the behaviour a caller depends on, not how the code produces it** — assert observable outputs and effects, so tests survive refactors and fail when real behaviour breaks.
 
 - One behaviour per test (be pragmatic not perfect)
 - Prefer pytest's `tmp_path` fixture over real files
@@ -53,15 +47,11 @@ real behaviour breaks.
 
 ## Code Design Principles
 
-Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding
-agent.
+Elegant and pragmatic choices; easy to maintain and comprehend for an AI coding agent.
 
-- **Names reveal intent** — functions, tests, variables, classes alike; coherent
-  across the codebase.
-- **Focused functions and classes** — one responsibility each, kept small;
-  compose, don't grow.
-- **Types and structure over prose** — encode meaning in signatures and data
-  shapes; docstrings only where names can't reach.
+- **Names reveal intent** — functions, tests, variables, classes alike; coherent across the codebase.
+- **Focused functions and classes** — one responsibility each, kept small; compose, don't grow.
+- **Types and structure over prose** — encode meaning in signatures and data shapes; docstrings only where names can't reach.
 
 ## Common Commands
 
@@ -76,7 +66,6 @@ uv run ruff check --fix           # Lint and auto-fix
 uv run pyright                    # Type checking
 uv run ruff format                # Format code
 uv run pre-commit run --all-files # Run manually
-uv run mdformat .                 # Wrap markdown
 
 # Run Tests
 uv run pytest -m "not firecrawl"  # free suite: non-network + direct_fetch

@@ -9,4 +9,6 @@ Curated docs for targeted AI context.
   - `reference-settings.md` — https://docs.astral.sh/uv/reference/settings/index.md
   - `environment-variables.md` — https://docs.astral.sh/uv/reference/environment/index.md
 
-What is uv? A fast, all-in-one Python package and project manager by Astral — it installs dependencies, creates virtual environments, and manages Python versions, replacing pip, virtualenv, pyenv, and pip-tools with one `pyproject.toml` + lockfile workflow.
+**What is uv?**
+
+uv is a fast, all-in-one Python package and project manager by Astral. It installs dependencies, creates virtual environments, and manages Python versions, replacing pip, virtualenv, pyenv, and pip-tools with a single `pyproject.toml` + lockfile workflow.

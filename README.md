@@ -144,18 +144,14 @@ collections/
 ## 📝 TODO
 
 Regenerate "Descriptions":
+- Get status `uv run scripts/collection_status.py`
+- Framing shifted from "semantic search" to **LLM routing**, re-curate all.
 
-- `uv run scripts/collection_status.py`
-- Framing has shifted from "semantic search" to **LLM routing**, still need to re-curate.
-- Possibly replace `/recurate-docs` via a sequential `claude -p` shell script. Gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command? Possibly related to `scripts/curate-batch.sh`?
-
-Sort out `scripts/`
-
-- delete things
+`scripts/curate-collection.sh`
+- Bulk-curates a collection from a URL file, one `claude -p` session per URL.
+- One day to replace `/recurate-docs` and `sync-index`... maybe (look deeply).
 
 direct-fetch-rules.toml
-
-- new collection → get Claude to check for a direct-fetch twin (`.md` or RST source)
+- need a new one for `collections/uv/README.md` case
 - has to read the page, 404 doesn't always work
 - test on https://www.mintlify.com/docs/quickstart
-- ✅ Read the Docs sites (e.g. rich) now fetch RST source via the `readthedocs` transform

@@ -95,7 +95,6 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-07-11 | [Official](https://mdformat.readthedocs.io) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwright/`](collections/playwright/) | 📄 [`INDEX.xml`](collections/playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-07-05 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |

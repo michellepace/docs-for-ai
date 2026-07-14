@@ -1,22 +1,60 @@
 # Curate Docs For AI (with Claude Code)
 
-Curate and index documentation from any website into collections like `tailwind/` or `horses/`, then `/ask-docs [collection] [your question]` for a grounded answer — cleaner than a web-fetch, more focussed than a web-search, and keeps AI context sharp.
-
-Each collection is curated from source docs — fetched directly where possible (`.md` URLs, GitHub blobs, or sites in the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml)), and scraped via FireCrawl as a last resort. Its `INDEX.xml` is a routing signal an LLM reader uses for targeted context retrieval.
+Curate documentation from any URL into your own collections. Then ask questions against a collection to get good, grounded answers.
 
 <div align="center">
   <img src="images/example_usage.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
-  <p><em>Three Steps: (1) run <code>/curate-doc</code> on a URL → (2) the doc is curated and indexed → (3) <code>/ask-docs</code> to query it</em></p>
+  <p><em>(1) curate the doc → (2) stored and indexed → (3) ask Qs against the collection</em></p>
 </div>
+
+**Why good answers?** The data is cleaner: curated docs beat a raw web fetch or web search. The index forces focus: each collection has an `INDEX.xml` the LLM reader uses to find the docs relevant to your question.
+
+**What is manual?** You need to hand-pick which URLs you want to curate. And every now and again, refresh.
+
+**Curated Collection:**
+
+```text
+collections/
+└── <collection>/           # eg. biome/, clerk/, uv/
+    ├── INDEX.xml           # Routing index for targeted retrieval
+    ├── README.md
+    └── *.{md,rst,mdx,qmd}  # Curated doc files
+```
+
+---
+
+## 📖 Usage
+
+| I want to… | Command |
+| :--------- | :------ |
+| Ask a collection a question | `/ask-docs <collection> <question>` |
+| Curate or refresh a doc | `/curate-doc <collection> <url>` |
+| Refresh a whole collection | `/recurate-docs <collection>` |
+
+Workflow:
+
+```bash
+# Add a doc — a new URL starts a collection or extends an existing one
+/curate-doc tailwind https://tailwindcss.com/docs/theme
+
+# Ask a question — the everyday command
+/ask-docs tailwind Is my project using utility classes correctly?
+
+# Refresh a doc — re-run the same URL to pull the latest content
+/curate-doc tailwind https://tailwindcss.com/docs/theme
+
+# Re-curate every doc in a collection at once
+/recurate-docs tailwind
+```
 
 ---
 
 ## 🚀 Setup
 
-This will setup `/ask-docs`, `/curate-doc` and `/recurate-docs` to work anywhere — not just inside this repo.
+This will set up `/ask-docs`, `/curate-doc` and `/recurate-docs` to work anywhere — not just inside your repo.
 
 ```bash
-# 1. Install UV
+# 1. Install uv
 # 👉 https://docs.astral.sh/uv/getting-started/installation/
 
 # 2. Clone repository
@@ -40,6 +78,7 @@ ln -sfn "$PWD" ~/.claude/docs-for-ai
 mkdir -p ~/.claude/commands
 ln -sf ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
 
+# print the absolute path for step 7 below
 printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
 ```
 
@@ -53,33 +92,9 @@ printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
 }
 ```
 
-Use the absolute path printed by step 6 (`readlink -f`), not `~/.claude/docs-for-ai` — permissions are checked against the resolved path.
+**Tip:** GitHub URLs are always fetched, never scraped — faster, cleaner and free. If the website you are curating from has a `.md` twin, make it direct-fetch too: add the prefix to [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml). As a last resort, FireCrawl scrapes.
 
-To direct-fetch a site instead of scraping it — faster, cleaner, free — add its URL prefix to the [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml): `append-md` for `.md` twins (page + `.md`, e.g. `https://nextjs.org/docs/`) or `readthedocs` for Sphinx sites. GitHub blob URLs and `.md` URLs are always direct.
-
-## 📖 Usage
-
-| I want to… | Command |
-| :--------- | :------ |
-| Ask a collection a question | `/ask-docs <collection> <question>` |
-| Add or refresh a doc | `/curate-doc <collection> <url>` |
-| Re-curate a whole collection | `/recurate-docs <collection>` |
-
-Example:
-
-```bash
-# Ask a question — the everyday command
-/ask-docs tailwind Is my project using utility classes correctly?
-
-# Add a doc — a new URL starts a collection or extends an existing one
-/curate-doc tailwind https://tailwindcss.com/docs/theme
-
-# Refresh a doc — re-run the same URL to pull the latest content
-/curate-doc tailwind https://tailwindcss.com/docs/theme
-
-# Re-curate every doc in a collection at once
-/recurate-docs tailwind
-```
+---
 
 ## 📦 Repo Collections
 
@@ -106,6 +121,8 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
 
+---
+
 ## 🏗️ How This Repo Works
 
 **Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes the curated doc file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
@@ -113,16 +130,6 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
 **Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
-
-**Curated Collection:**
-
-```text
-collections/
-└── <collection>/       # eg. biome/, clerk/, uv/
-    ├── INDEX.xml       # Routing index for targeted retrieval
-    ├── README.md
-    └── *.{md,rst,mdx,qmd}  # Curated doc files
-```
 
 **INDEX.xml Schema:**
 

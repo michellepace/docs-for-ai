@@ -5,6 +5,4 @@ Curated docs for targeted AI context.
 - Curation Index: [INDEX.xml](INDEX.xml)
 - Curation Source: https://platform.claude.com
 
-**What is Claude Platform?**
-
-Claude Platform gives developers API access to Anthropic's Claude models, including the Opus, Sonnet, and Haiku variants, for building AI-powered applications and agents. It offers SDKs in TypeScript and Python, prompt engineering tools, evaluation capabilities, agent skills for specialised tasks, and best practices for production-ready AI systems. Extended thinking, parallel tool execution, context management, and the Model Context Protocol (MCP) support agents that handle complex workflows, from coding assistants to business automation tools.
+**What is Claude Platform?** Anthropic's developer platform: one account, and you can call Claude from your own code. It provides the Messages API, tool use, Agent Skills, MCP connections, and agents Anthropic runs for you, plus a web console for writing prompts, running evals, and watching usage. Applications and agents are built on it; Claude Code is a separate tool that sits on top.

@@ -5,6 +5,4 @@ Curated docs for targeted AI context.
 - Curation Index: [INDEX.xml](INDEX.xml)
 - Curation Source: https://docs.marimo.io
 
-**What is Marimo?**
-
-Marimo is a reactive Python notebook environment that automatically runs dependent cells when you modify code or interact with UI elements, keeping the notebook consistent and free from hidden state. Unlike traditional notebooks, marimo notebooks are stored as pure Python files that can be executed as scripts, deployed as interactive web applications, and version-controlled with Git. It includes built-in support for SQL queries, interactive dataframes, AI-assisted code generation, and a modern editor experience with package management and deterministic execution.
+**What is Marimo?** A reactive Python notebook: edit a cell or move a slider and every dependent cell re-runs, so the notebook stays consistent and free of hidden state. Notebooks are stored as plain Python files, so they run as scripts, deploy as interactive web apps, and version-control cleanly with Git. It also has built-in SQL, interactive dataframes, and package management.

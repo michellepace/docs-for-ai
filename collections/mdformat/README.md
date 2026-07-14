@@ -3,7 +3,7 @@
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: <https://mdformat.readthedocs.io>
+- Curation Source: https://mdformat.readthedocs.io
 
 **What is mdformat?**
 

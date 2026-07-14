@@ -3,7 +3,7 @@
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: <https://platform.claude.com>
+- Curation Source: https://platform.claude.com
 
 **What is Claude Platform?**
 

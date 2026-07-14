@@ -288,7 +288,7 @@ def test_curate_initialises_a_new_collection_only_once(
         "Curated docs for targeted AI context.\n"
         "\n"
         "- Curation Index: [INDEX.xml](INDEX.xml)\n"
-        "- Curation Source: <https://z.test>\n"
+        "- Curation Source: https://z.test\n"
     )
     assert (collection / "a.md").exists()
 

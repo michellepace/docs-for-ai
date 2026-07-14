@@ -88,7 +88,7 @@ def _initialise_collection(collection_dir: Path, source_url: str) -> None:
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: <{site.scheme}://{site.netloc}>
+- Curation Source: {site.scheme}://{site.netloc}
 """
     (collection_dir / "README.md").write_text(readme, encoding="utf-8")
     write_index(ET.Element("docs_index"), collection_dir / "INDEX.xml")

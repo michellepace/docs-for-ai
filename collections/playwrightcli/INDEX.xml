@@ -1,0 +1,9 @@
+<docs_index>
+  <source>
+    <title>Coding agents</title>
+    <description>`playwright-cli` gives coding agents token-efficient browser control, chosen over Playwright MCP; covers `install --skills`, snapshot element refs, click/type/network/storage commands, named persistent sessions, and the `show` dashboard.</description>
+    <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/getting-started-cli.md</source_url>
+    <local_file>src-getting-started-cli.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+</docs_index>

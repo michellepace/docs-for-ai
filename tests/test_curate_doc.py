@@ -271,7 +271,7 @@ def test_curate_github_blob_fetches_raw_twin_preserving_extension(  # noqa: PLR0
     )
 
 
-def test_curate_initialises_a_new_collection_only_once(
+def test_curate_scaffolds_a_readme_for_a_new_collection(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -281,23 +281,32 @@ def test_curate_initialises_a_new_collection_only_once(
 
     run_curate(collection, "https://z.test/a.md", monkeypatch, capsys)
 
-    readme = collection / "README.md"
-    assert readme.read_text() == (
+    assert (collection / "README.md").read_text() == (
         "# zustand Documentation\n"
         "\n"
         "Curated docs for targeted AI context.\n"
         "\n"
         "- Curation Index: [INDEX.xml](INDEX.xml)\n"
-        "- Curation Source: <https://z.test>\n"
+        "- Curation Source: https://z.test\n"
+        "\n"
+        "**What is zustand?** [40-70 words: what it is / does, said simply]\n"
     )
     assert (collection / "a.md").exists()
 
-    # A user edit to the README survives re-curation, proving the collection is
-    # not re-scaffolded when a second doc is added.
-    readme.write_text("EDITED")
+
+def test_curate_does_not_rescaffold_an_existing_collection(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    stub_direct_fetch(monkeypatch, "# Doc\n\nbody\n")
+    collection = tmp_path / "zustand"
+    run_curate(collection, "https://z.test/a.md", monkeypatch, capsys)
+    (collection / "README.md").write_text("EDITED")
+
     run_curate(collection, "https://z.test/b.md", monkeypatch, capsys)
 
-    assert readme.read_text() == "EDITED"
+    assert (collection / "README.md").read_text() == "EDITED"
     assert (collection / "b.md").exists()
 
 

@@ -2,7 +2,7 @@
 
 Let's walk through everything that needs to happen from creating a new project to launching your app in production.
 
-This doc assumes you are building an app with Convex and React and you already have a basic React app already up and running. You can follow one of our [quickstarts](/quickstarts) to set this up.
+This doc assumes you are building an app with Convex and React and you already have a basic React app already up and running. You can follow one of our [quickstarts](/quickstart/overview.md) to set this up.
 
 ## Installing and running Convex[​](#installing-and-running-convex "Direct link to Installing and running Convex")
 
@@ -116,7 +116,7 @@ export function App() {
 }
 ```
 
-If you have other configuration like [crons](/scheduling/cron-jobs.md) or [auth](/auth.md) in your `convex/` folder, Convex ensures that they are applied and enforced on your backend.
+If you have other configuration like [crons](/scheduling/cron-jobs.md) or [auth](/auth/overview.md) in your `convex/` folder, Convex ensures that they are applied and enforced on your backend.
 
 ## Convex dashboard[​](#convex-dashboard "Direct link to Convex dashboard")
 
@@ -138,7 +138,7 @@ Logs from your functions show up [in your dashboard](/dashboard/deployments/logs
 * [Data](/dashboard/deployments/data.md) - gives you a complete data browser to spot check your data.
 * [Functions](/dashboard/deployments/functions.md) - gives you stats and run functions to debug them.
 
-There is a lot more to to the dashboard. Be sure to click around or [check out the docs](/dashboard.md).
+There is a lot more to to the dashboard. Be sure to click around or [check out the docs](/dashboard/overview.md).
 
 ## Deploying your app[​](#deploying-your-app "Direct link to Deploying your app")
 

@@ -91,18 +91,18 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-02-05 | [Official](https://code.claude.com) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Claude API & SDKs | 2026-01-07 | [Official](https://platform.claude.com) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-01-07 | [Official](https://docs.convex.dev) |
+| 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-07-11 | [Official](https://mdformat.readthedocs.io) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwright/`](collections/playwright/) | 📄 [`INDEX.xml`](collections/playwright/INDEX.xml) | Browser testing | 2025-11-07 | [Official](https://playwright.dev) |
+| 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-07-14 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-07-05 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager | 2026-05-30 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
-| 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2025-10-20 | [Official](https://vercel.com) |
+| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager | 2026-07-14 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-07-14 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
 
@@ -144,18 +144,14 @@ collections/
 ## 📝 TODO
 
 Regenerate "Descriptions":
+- Get status `uv run scripts/collection_status.py`
+- Framing shifted from "semantic search" to **LLM routing**, re-curate all.
 
-- `uv run scripts/collection_status.py`
-- Framing has shifted from "semantic search" to **LLM routing**, still need to re-curate.
-- Possibly replace `/recurate-docs` via a sequential `claude -p` shell script. Gets all the URLs → downloads / scrapes → does a diff (or git % change) and updates the index only if needed. Replace the command? Possibly related to `scripts/curate-batch.sh`?
-
-Sort out `scripts/`
-
-- delete things
+`scripts/curate-collection.sh`
+- Bulk-curates a collection from a URL file, one `claude -p` session per URL.
+- One day to replace `/recurate-docs` and `sync-index`... maybe (look deeply).
 
 direct-fetch-rules.toml
-
-- new collection → get Claude to check for a direct-fetch twin (`.md` or RST source)
+- need a new one for `collections/uv/README.md` case
 - has to read the page, 404 doesn't always work
 - test on https://www.mintlify.com/docs/quickstart
-- ✅ Read the Docs sites (e.g. rich) now fetch RST source via the `readthedocs` transform

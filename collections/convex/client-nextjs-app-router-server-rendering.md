@@ -268,6 +268,6 @@ To use `preloadQuery`, `fetchQuery`, `fetchMutation` and `fetchAction` in Server
 
 ## Consistency[​](#consistency "Direct link to Consistency")
 
-[`preloadQuery`](/api/modules/nextjs.md#preloadquery) and [`fetchQuery`](/api/modules/nextjs.md#fetchquery) use the `ConvexHTTPClient` under the hood. This client is stateless. This means that two calls to `preloadQuery` are not guaranteed to return consistent data based on the same database state. This is similar to more traditional databases, but is different from the [guaranteed consistency](/client/react.md#consistency) provided by the `ConvexReactClient`.
+[`preloadQuery`](/api/modules/nextjs.md#preloadquery) and [`fetchQuery`](/api/modules/nextjs.md#fetchquery) use the `ConvexHTTPClient` under the hood. This client is stateless. This means that two calls to `preloadQuery` are not guaranteed to return consistent data based on the same database state. This is similar to more traditional databases, but is different from the [guaranteed consistency](/client/react/overview.md#consistency) provided by the `ConvexReactClient`.
 
 To prevent rendering an inconsistent UI avoid using multiple `preloadQuery` calls on the same page.

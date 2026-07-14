@@ -1,23 +1,51 @@
 <docs_index>
   <source>
     <title>AI SDK</title>
-    <description>TypeScript toolkit for LLM apps where `generateText` swaps providers via a unified `provider/model` string, `generateObject`/`streamObject` constrain output to a `zod` schema, plus `tool()` calling and streaming to React/Next.js frontends.</description>
+    <description>Entry point for the `ai` TypeScript package, covering `generateText` with swappable provider model strings, zod-schema `generateObject` and `streamObject` structured outputs, `tool` calling, and install commands.</description>
     <source_url>https://vercel.com/docs/ai-sdk</source_url>
     <local_file>ai-sdk.md</local_file>
-    <curated_at>2026-07-05</curated_at>
+    <curated_at>2026-07-14</curated_at>
   </source>
   <source>
     <title>Build a fullstack app with Next.js 16 and Prisma Postgres</title>
-    <description>Tutorial building a blog with `App Router` pages, Prisma ORM schema and queries, Sign in with Vercel `OAuth` (PKCE, `jose` ID-token verification), `Server Actions` for drafts/publishing, and `vercel` CLI deployment.</description>
+    <description>Tutorial building a blog with Prisma schema, `prisma.config.ts`, and the `pg` adapter over Marketplace Postgres, Sign in with Vercel `OAuth` (PKCE, `jose`), Server Actions for drafts/publishing, and `vercel deploy`.</description>
     <source_url>https://vercel.com/kb/guide/nextjs-prisma-postgres</source_url>
     <local_file>kb-guide-nextjs-prisma-postgres.md</local_file>
-    <curated_at>2026-07-05</curated_at>
+    <curated_at>2026-07-14</curated_at>
   </source>
   <source>
     <title>Agent Resources</title>
-    <description>Machine-readable `llms-full.txt`, per-page `.md` Markdown Access, the `MCP` server linking AI assistants to your Vercel account, AI Gateway coding agents, Skills.sh (`npx skills add`), and CLI workflows for AI-assisted development.</description>
+    <description>Hub linking machine-readable docs (`llms-full.txt`, `.md` pages), the Vercel MCP server, AI Gateway coding agents, Skills.sh installs via `npx skills add`, and end-to-end CLI workflows.</description>
     <source_url>https://vercel.com/docs/agent-resources</source_url>
     <local_file>agent-resources.md</local_file>
-    <curated_at>2026-07-05</curated_at>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Vercel Plugin for AI Coding Agents</title>
+    <description>`npx plugins add vercel/vercel-plugin` for Claude Code, Codex, Cursor, Copilot; auto-injects session context only in Vercel/Next.js projects, plus 28 on-demand skills, 3 specialist agents, and 5 slash commands like `/vercel-plugin:deploy`.</description>
+    <source_url>https://vercel.com/docs/agent-resources/vercel-plugin</source_url>
+    <local_file>agent-resources-vercel-plugin.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Agent Skills</title>
+    <description>Official Vercel skills directory categorised by React/Next.js, AI SDK, design, browser automation, deployment, and commerce; install with `npx skills add &lt;owner/repo&gt;`, `eve` auto-detects into `agent/skills/`, browse skills.sh.</description>
+    <source_url>https://vercel.com/docs/agent-resources/skills</source_url>
+    <local_file>agent-resources-skills.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>CLI Workflows</title>
+    <description>Directory of end-to-end CLI workflow guides linking debugging production errors, deployment rollback, rolling releases, custom domains, environment variables, feature flags, and Vercel Sandbox into complete work sessions.</description>
+    <source_url>https://vercel.com/docs/agent-resources/workflows</source_url>
+    <local_file>agent-resources-workflows.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Use Vercel's MCP server</title>
+    <description>Remote OAuth MCP server at `https://mcp.vercel.com` for searching docs, managing projects/deployments, and analyzing logs; `add-mcp` install across Claude Code, Cursor, VS Code Copilot; confused-deputy protection and human-confirmation security practices.</description>
+    <source_url>https://vercel.com/docs/agent-resources/vercel-mcp</source_url>
+    <local_file>agent-resources-vercel-mcp.md</local_file>
+    <curated_at>2026-07-14</curated_at>
   </source>
 </docs_index>

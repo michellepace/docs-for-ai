@@ -49,7 +49,7 @@ This schema (which is based on our [users and auth example](https://github.com/g
 
 Generating a Schema
 
-While writing your schema, it can be helpful to consult the [Convex Dashboard](/dashboard/deployments/data.md#generating-a-schema). The "Generate Schema" button in the "Data" view suggests a schema declaration based on the data in your tables.
+While writing your schema, it can be helpful to consult the [Convex Dashboard](/dashboard/deployments/schema.md). The "View schema file" panel on the "Schema" page can generate a schema declaration based on the data in your tables.
 
 ### Validators[​](#validators "Direct link to Validators")
 
@@ -313,7 +313,7 @@ Regardless of the value of `strictTableNameTypes`, your schema will only validat
 
 ## Schema validation[​](#schema-validation "Direct link to Schema validation")
 
-Schemas are pushed automatically in [`npx convex dev`](/cli.md#run-the-convex-dev-server) and [`npx convex deploy`](/cli.md#deploy-convex-functions-to-production).
+Schemas are pushed automatically in [`npx convex dev`](/cli/reference/dev.md) and [`npx convex deploy`](/cli/reference/deploy.md).
 
 The first push after a schema is added or modified will validate that all existing documents match the schema. If there are documents that fail validation, the push will fail.
 
@@ -413,7 +413,7 @@ export default mutation({
 
 ## TypeScript types[​](#typescript-types "Direct link to TypeScript types")
 
-Once you've defined a schema, [`npx convex dev`](/cli.md#run-the-convex-dev-server) will produce new versions of [`dataModel.d.ts`](/generated-api/data-model.md) and [`server.d.ts`](/generated-api/server.md) with types based on your schema.
+Once you've defined a schema, [`npx convex dev`](/cli/reference/dev.md) will produce new versions of [`dataModel.d.ts`](/generated-api/data-model.md) and [`server.d.ts`](/generated-api/server.md) with types based on your schema.
 
 ### `Doc<TableName>`[​](#doctablename "Direct link to doctablename")
 

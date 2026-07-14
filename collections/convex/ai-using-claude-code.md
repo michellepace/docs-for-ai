@@ -1,0 +1,67 @@
+# Using Claude Code with Convex
+
+[Claude Code](https://claude.com/claude-code), Anthropic's agentic coding tool, makes it easy to write and maintain apps built with Convex. Let's walk through how to set up Claude Code for the best possible results with Convex.
+
+## Install the Convex plugin in Claude Code[​](#install-the-convex-plugin-in-claude-code "Direct link to Install the Convex plugin in Claude Code")
+
+The official Convex plugin makes Claude Code work better with your Convex project. It includes:
+
+* **Tools** that let your agent securely interact with your dev deployment (e.g. read the data/logs/insights or run functions).
+* **Hooks and monitors** that help your agent automatically identify issues in your code.
+* **Skills and specialized agents** that teach your agent how to use Convex the most effectively.
+
+To install the plugin, run the following command in Claude Code:
+
+```
+/plugin install convex@claude-plugins-official
+```
+
+## Starting a new project[​](#starting-a-new-project "Direct link to Starting a new project")
+
+From an empty directory, launch Claude Code with what you want to build:
+
+```
+claude "build me a todo app with Convex" --permission-mode auto
+```
+
+Claude Code handles the rest. It runs `npm create convex@latest` and `npx convex dev --once`, which [auto-provisions a local backend](/cli/agent-mode.md#local-backend) without prompting for login because the agent's shell is non-interactive.
+
+After the initial setup, leave `npx convex dev` running in a separate terminal so Claude Code always sees up-to-date generated types. Without it the agent can get stuck in a linting loop.
+
+If you'd rather scaffold the project yourself first and then bring in Claude Code, the manual sequence is:
+
+```
+npm create convex@latest my-app
+
+cd my-app
+
+claude
+```
+
+## Adding to an existing project[​](#adding-to-an-existing-project "Direct link to Adding to an existing project")
+
+If your project already has Convex set up, [install the Convex plugin](#install-the-convex-plugin) to make Claude Code Convex-aware.
+
+Now start asking Claude Code questions like:
+
+* Evaluate my convex schema and suggest improvements
+* What are this app's public endpoints?
+* Run the `my_convex_function` query
+
+## Running Claude Code with Convex in the cloud[​](#running-claude-code-with-convex-in-the-cloud "Direct link to Running Claude Code with Convex in the cloud")
+
+When running Claude Code in a remote environment (e.g. Claude Code on a CI runner or a cloud VM), use Convex's [Agent Mode](/cli/agent-mode.md) so the agent can iterate on code, run tests, and call one-off functions without needing full deployment permissions.
+
+A good setup script:
+
+```
+npm i
+
+npx convex dev --once
+```
+
+In non-interactive shells (the typical case for an agent's setup script), `npx convex` won't prompt the agent to log in. It provisions a local deployment automatically. See [Agent Mode → Local backend](/cli/agent-mode.md#local-backend) for details.
+
+This command requires "full" internet access to download the Convex binary.
+
+For per-agent cloud dev deployments scoped to a single throwaway deploy key, see [Cloud dev deployments per agent](/ai/overview.md#cloud-dev-deployments-per-agent).

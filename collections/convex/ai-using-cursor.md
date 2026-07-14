@@ -1,8 +1,30 @@
 # Using Cursor with Convex
 
-[Cursor](https://cursor.com), the AI code editor, makes it easy to write and maintain apps built with Convex. Let's walk through how to setup Cursor for the best possible results with Convex.
+[Cursor](https://cursor.com), the AI code editor, makes it easy to write and maintain apps built with Convex. Let's walk through how to set up Cursor for the best possible results with Convex.
 
-## Add Convex `.cursor/rules`[​](#add-convex-cursorrules "Direct link to add-convex-cursorrules")
+## Install the Convex plugin in Cursor[​](#install-the-convex-plugin-in-cursor "Direct link to Install the Convex plugin in Cursor")
+
+The official Convex plugin makes Cursor work better with your Convex project. It includes:
+
+* **Tools** that let your agent securely interact with your dev deployment (e.g. read the data/logs/insights or run functions).
+* **Development hooks** that help your agent automatically identify issues in your code.
+* **Rules, skills, and specialized agents** that teach your agent how to use Convex the most effectively.
+
+To install the plugin, go to the *Customize* page of the Agents window, search for the *Convex* plugin and click *Add*.
+
+Installing the Cursor plugin from the Agents window
+
+Alternatively, you can run `/add-plugin convex` from an agent conversation.
+
+Using Cursor Cloud Agents / Cursor CLI
+
+Cursor plugins aren't available in Cloud Agents or the Cursor CLI. In those environments, we recommend installing rules and the MCP server manually.
+
+## Manual setup[​](#manual-setup "Direct link to Manual setup")
+
+If you'd rather not install the plugin, you can wire up rules and the MCP server yourself.
+
+### Add Convex `.cursor/rules`[​](#add-convex-cursorrules "Direct link to add-convex-cursorrules")
 
 To get the best results from Cursor put the model specific `.mdc` files in your project's `.cursor/rules` directory.
 
@@ -12,17 +34,17 @@ To get the best results from Cursor put the model specific `.mdc` files in your 
 
 We're constantly working on improving the quality of these rules for Convex by using rigorous evals. You can help by [contributing to our evals repo](https://github.com/get-convex/convex-evals).
 
-## Setup the Convex MCP Server[​](#setup-the-convex-mcp-server "Direct link to Setup the Convex MCP Server")
+### Setup the Convex MCP Server[​](#setup-the-convex-mcp-server "Direct link to Setup the Convex MCP Server")
 
 The Convex CLI comes with a [Convex Model Context Protocol](/ai/convex-mcp-server.md) (MCP) server built in. The Convex MCP server gives your AI coding agent access to the your Convex deployment to query and optimize your project.
 
-### Quick Install[​](#quick-install "Direct link to Quick Install")
+#### Quick Install[​](#quick-install "Direct link to Quick Install")
 
 You can click this handy deep-link below:
 
 [![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=convex\&config=eyJjb21tYW5kIjoibnB4IC15IGNvbnZleEBsYXRlc3QgbWNwIHN0YXJ0In0%3D)
 
-### Manual Install[​](#manual-install "Direct link to Manual Install")
+#### Manual Install[​](#manual-install "Direct link to Manual Install")
 
 To get started with Cursor, open "Cursor Settings > Tools & Integrations", click on "New MCP Server", and add a "convex" section to "mcpServers" in the `mcp.json` file that's opened.
 

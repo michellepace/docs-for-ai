@@ -130,7 +130,7 @@ Equivalent to the `--excludes` command-line argument. If set, uv will use this a
 
 added in `0.2.12`
 
-Equivalent to the `--exclude-newer` command-line argument. If set, uv will exclude distributions published after the specified date.
+Equivalent to the `--exclude-newer` command-line argument. If set, uv will exclude distributions published after the specified date. Set to `false` to disable `exclude-newer`.
 
 ### [`UV_EXTRA_INDEX_URL`](#uv_extra_index_url)
 
@@ -448,6 +448,24 @@ added in `0.5.7`
 
 Skip writing `uv` installer metadata files (e.g., `INSTALLER`, `REQUESTED`, and `direct_url.json`) to site-packages `.dist-info` directories.
 
+### [`UV_NO_INSTALL_LOCAL`](#uv_no_install_local)
+
+added in `0.11.20`
+
+Equivalent to the `--no-install-local` command-line argument. If set, uv will skip the current project, workspace members, and any other local (path or editable) packages, installing only remote dependencies.
+
+### [`UV_NO_INSTALL_PROJECT`](#uv_no_install_project)
+
+added in `0.11.20`
+
+Equivalent to the `--no-install-project` command-line argument. If set, uv will install the project's dependencies but not the project itself.
+
+### [`UV_NO_INSTALL_WORKSPACE`](#uv_no_install_workspace)
+
+added in `0.11.20`
+
+Equivalent to the `--no-install-workspace` command-line argument. If set, uv will install workspace dependencies but not workspace members (including the current project).
+
 ### [`UV_NO_MANAGED_PYTHON`](#uv_no_managed_python)
 
 added in `0.6.8`
@@ -556,7 +574,7 @@ See the [project documentation](../../concepts/projects/config/#project-environm
 
 added in `0.4.30`
 
-Don't upload a file if it already exists on the index. The value is the URL of the index.
+Equivalent to the `--check-url` command-line argument in `uv publish`. Don't upload a file if it already exists on the index. The value is the URL of the index.
 
 ### [`UV_PUBLISH_INDEX`](#uv_publish_index)
 
@@ -1138,6 +1156,12 @@ added in `0.8.15`
 
 Specifies the directory where uv stores pyx credentials.
 
+### [`RUFF`](#ruff)
+
+added in `0.11.22`
+
+The path to the Ruff binary used by `uv format`.
+
 ### [`RUST_BACKTRACE`](#rust_backtrace)
 
 added in `0.7.22`
@@ -1225,6 +1249,12 @@ Path to system-level configuration directory on Windows systems.
 added in `0.0.5`
 
 Use to create the tracing durations file via the `tracing-durations-export` feature.
+
+### [`TY`](#ty)
+
+added in `0.11.22`
+
+The path to the ty binary used by `uv check`.
 
 ### [`USERPROFILE`](#userprofile)
 

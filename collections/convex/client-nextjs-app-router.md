@@ -16,9 +16,9 @@ Follow the [Next.js Quickstart](/quickstart/nextjs.md) to add Convex to a new or
 
 ## Calling Convex functions from client code[​](#calling-convex-functions-from-client-code "Direct link to Calling Convex functions from client code")
 
-To fetch and edit the data in your database from client code, use hooks of the [Convex React library](/client/react.md).
+To fetch and edit the data in your database from client code, use hooks of the [Convex React library](/client/react/overview.md).
 
-## [Convex React library documentation](/client/react.md)
+[Convex React library documentation](/client/react/overview.md)
 
 ## Server rendering (SSR)[​](#server-rendering-ssr "Direct link to Server rendering (SSR)")
 

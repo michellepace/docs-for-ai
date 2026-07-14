@@ -231,7 +231,11 @@ Alternatively see the [Pages Router](/client/nextjs/pages-router/quickstart.md) 
 
        <main className="flex min-h-screen flex-col items-center justify-between p-24">
 
-         {tasks?.map(({ _id, text }) => <div key={_id}>{text}</div>)}
+         {tasks?.map(({ _id, text }) => (
+
+           <div key={_id}>{text}</div>
+
+         ))}
 
        </main>
 

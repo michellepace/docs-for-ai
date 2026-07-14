@@ -26,7 +26,7 @@ It's a good idea to test your app continuously in a controlled environment. No m
 
 Manually run a function in dev to quickly see if things are working:
 
-* [Run functions from the command line](/cli.md#run-convex-functions)
+* [Run functions from the command line](/cli/reference/run.md)
 * [Run functions from the dashboard](/dashboard/deployments/functions.md#running-functions)
 
 ### Preview deployments[​](#preview-deployments "Direct link to Preview deployments")
@@ -35,4 +35,4 @@ Manually run a function in dev to quickly see if things are working:
 
 ### Staging environment[​](#staging-environment "Direct link to Staging environment")
 
-You can set up a separate project as a staging environment to test against. See [Deploying Your App to Production](/production.md#staging-environment).
+You can set up a separate project as a staging environment to test against. See [Deploying Your App to Production](/production/overview.md#staging-environment).

@@ -1,149 +1,149 @@
 <docs_index>
   <source>
-    <title>AI Code Generation</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/ai</source_url>
-    <local_file>ai.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Convex MCP Server</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/ai/convex-mcp-server</source_url>
-    <local_file>ai-convex-mcp-server.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Using Cursor with Convex</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/ai/using-cursor</source_url>
-    <local_file>ai-using-cursor.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Next.js</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/client/nextjs/app-router</source_url>
-    <local_file>client-nextjs-app-router.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Next.js Server Rendering</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/client/nextjs/app-router/server-rendering</source_url>
-    <local_file>client-nextjs-app-router-server-rendering.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Database</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/database</source_url>
-    <local_file>database.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Document IDs</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/database/document-ids</source_url>
-    <local_file>database-document-ids.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Schemas</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/database/schemas</source_url>
-    <local_file>database-schemas.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Data Types</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/database/types</source_url>
-    <local_file>database-types.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>ESLint rules</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/eslint</source_url>
-    <local_file>eslint.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>dataModel.d.ts</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/generated-api/data-model</source_url>
-    <local_file>generated-api-data-model.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Next.js Quickstart</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/quickstart/nextjs</source_url>
-    <local_file>quickstart-nextjs.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Testing</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/testing</source_url>
-    <local_file>testing.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Continuous Integration</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/testing/ci</source_url>
-    <local_file>testing-ci.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Testing Local Backend</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/testing/convex-backend</source_url>
-    <local_file>testing-convex-backend.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>convex-test</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/testing/convex-test</source_url>
-    <local_file>testing-convex-test.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
     <title>Convex Overview</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/understanding</source_url>
-    <local_file>understanding.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Best Practices</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/understanding/best-practices</source_url>
-    <local_file>understanding-best-practices.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>TypeScript</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/understanding/best-practices/typescript</source_url>
-    <local_file>understanding-best-practices-typescript.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Dev workflow</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://docs.convex.dev/understanding/workflow</source_url>
-    <local_file>understanding-workflow.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://docs.convex.dev/understanding/overview</source_url>
+    <local_file>understanding-overview.md</local_file>
+    <curated_at>2026-07-14</curated_at>
   </source>
   <source>
     <title>The Zen of Convex</title>
     <description>PLACEHOLDER</description>
     <source_url>https://docs.convex.dev/understanding/zen</source_url>
     <local_file>understanding-zen.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Dev workflow</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/workflow</source_url>
+    <local_file>understanding-workflow.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Best Practices</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/best-practices</source_url>
+    <local_file>understanding-best-practices.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>TypeScript</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/understanding/best-practices/typescript</source_url>
+    <local_file>understanding-best-practices-typescript.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Next.js Quickstart</title>
+    <description>Tutorial scaffolding a Next.js App Router app with `npm create convex@latest`, wiring a Convex dev deployment (`npx convex dev`), and rendering a `query` function via `useQuery()` behind `ConvexProvider`/`ConvexReactClient`.</description>
+    <source_url>https://docs.convex.dev/quickstart/nextjs</source_url>
+    <local_file>quickstart-nextjs.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Next.js</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/client/nextjs/app-router</source_url>
+    <local_file>client-nextjs-app-router.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Next.js Server Rendering</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/client/nextjs/app-router/server-rendering</source_url>
+    <local_file>client-nextjs-app-router-server-rendering.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Schemas</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database/schemas</source_url>
+    <local_file>database-schemas.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Data Types</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database/types</source_url>
+    <local_file>database-types.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Document IDs</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/database/document-ids</source_url>
+    <local_file>database-document-ids.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>dataModel.d.ts</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/generated-api/data-model</source_url>
+    <local_file>generated-api-data-model.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>AI Agents</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/agents/overview</source_url>
+    <local_file>agents-overview.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Testing</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/overview</source_url>
+    <local_file>testing-overview.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>convex-test</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/convex-test</source_url>
+    <local_file>testing-convex-test.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Testing Local Backend</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/convex-backend</source_url>
+    <local_file>testing-convex-backend.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Continuous Integration</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/testing/ci</source_url>
+    <local_file>testing-ci.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>ESLint rules</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/eslint</source_url>
+    <local_file>eslint.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Convex MCP Server</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/ai/convex-mcp-server</source_url>
+    <local_file>ai-convex-mcp-server.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Using Claude Code with Convex</title>
+    <description>Installing official `convex` plugin, scaffolding with `npm create convex@latest` and `npx convex dev --once`, keeping `dev` running to avoid lint loops, and CI/cloud setup via Agent Mode's local backend.</description>
+    <source_url>https://docs.convex.dev/ai/using-claude-code</source_url>
+    <local_file>ai-using-claude-code.md</local_file>
+    <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Using Cursor with Convex</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://docs.convex.dev/ai/using-cursor</source_url>
+    <local_file>ai-using-cursor.md</local_file>
+    <curated_at>2026-07-14</curated_at>
   </source>
 </docs_index>

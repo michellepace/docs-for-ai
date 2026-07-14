@@ -8,7 +8,7 @@ The Zen of Convex is a set of guidelines & best practices developers have discov
 
 ## Performance<!-- -->
 
-### Double down on the [sync engine](/tutorial/.md#how-convex-works)
+### Double down on the [sync engine](/tutorial/overview.md#how-convex-works)
 
 There's a reason why a deterministic, reactive database is the beating heart of Convex: the more you center your apps around its properties, the better your projects will fare over time. Your projects will be easier to understand and refactor. Your app's performance will stay screaming fast. You won't have any consistency or state management problems.
 

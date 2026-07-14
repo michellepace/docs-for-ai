@@ -6,31 +6,41 @@ The Convex [Model Context Protocol](https://docs.cursor.com/context/model-contex
 
 Add the following command to your MCP servers configuration:
 
-`npx -y convex@latest mcp start`
+```
+npx -y convex@latest mcp start
+```
 
-For Cursor you can use this quick link to install:
+Or see editor-specific instructions:
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=convex\&config=eyJjb21tYW5kIjoibnB4IC15IGNvbnZleEBsYXRlc3QgbWNwIHN0YXJ0In0%3D)
-
-or see editor specific instructions:
-
-* [Cursor](/ai/using-cursor.md#setup-the-convex-mcp-server)
-* [Claude Code](/ai/using-claude-code.md#setup-the-convex-mcp-server)
 * [Codex](/ai/using-codex.md#setup-the-convex-mcp-server)
-* [Conductor](/ai/using-conductor.md#setup-the-convex-mcp-server)
-* [VS Code](/ai/using-github-copilot.md#setup-the-convex-mcp-server)
+* [GitHub Copilot](/ai/using-github-copilot.md#setup-the-convex-mcp-server)
+* [![](/assets/images/conductor-logo-fa2224a9c0b89cba358b3a954a8e9051.png)](/ai/using-conductor.md#setup-the-convex-mcp-server)
+
+  [Conductor](/ai/using-conductor.md#setup-the-convex-mcp-server)
+
+When using  Claude Code or  Cursor, we recommend installing the [Convex plugin](/ai/overview.md#plugins), which automatically starts the MCP server.
 
 ## Configuration Options[​](#configuration-options "Direct link to Configuration Options")
 
-The MCP server supports several command-line options to customize its behavior:
+The MCP server supports several command-line options to customize its behavior.
+
+info
+
+For the full list of options, see the [`npx convex mcp` CLI reference](/cli/reference/mcp.md).
 
 ### Project Directory[​](#project-directory "Direct link to Project Directory")
 
-By default, the MCP server can run for multiple projects, and each tool call specifies its project directory. To run the server for a single project instead, use:
+The tools provided by the MCP server require agents to select a deployment. To find the right deployment to use, agents use the `status` tool.
+
+By default, `status` uses the current project directory. If you want to use another project directory by default or run `npx convex mcp` from a folder that is not a Convex project, you can change the project `status` uses with the `--project-dir` flag:
 
 ```
 npx -y convex@latest mcp start --project-dir /path/to/project
 ```
+
+warning
+
+Setting `--project-dir` doesn’t prevent agents from manually providing a custom `projectDir` in the `status` tool call. It also does not prevent the agent from running tools in deployments that belong to other projects. If you need to enforce security boundaries, check out [*Security*](#security).
 
 ### Deployment Selection[​](#deployment-selection "Direct link to Deployment Selection")
 
@@ -104,4 +114,52 @@ Available tools that can be disabled: `data`, `envGet`, `envList`, `envRemove`, 
 * **`envSet`**: Sets a new environment variable or updates an existing one
 * **`envRemove`**: Removes an environment variable from the deployment
 
-[Read more about how to use the Convex MCP Server](https://stack.convex.dev/convex-mcp-server)
+## Security[​](#security "Direct link to Security")
+
+The MCP server is safe by default: in [production deployments](/production/multiple-deployments.md#deployment-types), agents can’t access PII, and they can only perform read-only operations.
+
+If necessary, you can customize the MCP server settings to grant more permissions in production deployments, or limit the MCP server to a single deployment.
+
+info
+
+If your agent is allowed to run `npx convex` commands independently, they will be run with the full authorization of your credentials, unless you use a [scoped deploy key](/cli/deploy-key-types.md#deployment-token).
+
+### Allowed tools by deployment type[​](#allowed-tools-by-deployment-type "Direct link to Allowed tools by deployment type")
+
+By default, the MCP server only allows **operations on [non-production deployments](/production/multiple-deployments.md#deployment-types)** and **safe operations on [production deployments](/production/multiple-deployments.md#deployment-types)** (i.e. actions that are read-only and don’t expose PII or environment variables).
+
+You can start the MCP server with `--cautiously-allow-production-pii` or `--dangerously-enable-production-deployments` to allow your agents to perform more actions on production deployments.
+
+<!-- -->
+
+| Tool category                                                                          | Default | `--cautiously-allow-production-pii` | `--dangerously-enable-production-deployments` |
+| :------------------------------------------------------------------------------------- | :-----: | :---------------------------------: | :-------------------------------------------: |
+| [**Non-production deployments**](/production/multiple-deployments.md#deployment-types) |         |                                     |                                               |
+| All operations                                                                         |    ✅   |                  ✅                 |                       ✅                      |
+| [**Production deployments**](/production/multiple-deployments.md#deployment-types)     |         |                                     |                                               |
+| Non-PII read-only operations<br />(`insights`, `tables`, `functionSpec`)               |    ✅   |                  ✅                 |                       ✅                      |
+| PII read-only operations<br />(`data`, `logs`, `runOneoffQuery`)                       |    ❌   |                  ✅                 |                       ✅                      |
+| Reading environment variables<br />(`envGet`, `envList`)                               |    ❌   |                  ❌                 |                       ✅                      |
+| Write operations<br />(`run`, `envSet`, `envRemove`)                                   |    ❌   |                  ❌                 |                       ✅                      |
+
+If you want to disable access to particular tools, you can also use the `--disable-tools` CLI flag.
+
+### Limit access to a specific deployment[​](#limit-access-to-a-specific-deployment "Direct link to Limit access to a specific deployment")
+
+By default, the MCP server uses the user’s global authentication credentials (set up through `npx convex login`) to access deployments. As a result, agents using the MCP can access all projects that your Convex account has access to.
+
+If you want to restrict the MCP server to a particular deployment, [generate a deploy key](/cli/deploy-key-types.md#deployment-token) and set the `CONVEX_DEPLOY_KEY` environment variable.
+
+```
+CONVEX_DEPLOY_KEY="dev:happy-capybara-849|…=" npx -y convex@latest mcp start
+```
+
+Limitation
+
+The `insights` tool is not available when the MCP server is started with `CONVEX_DEPLOY_KEY` (for both production and non-production deployments).
+
+Related posts from
+
+<!-- -->
+
+[![Stack](/img/stack-logo-dark.svg)![Stack](/img/stack-logo-light.svg)](https://stack.convex.dev/)

@@ -91,7 +91,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-02-05 | [Official](https://code.claude.com) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Claude API & SDKs | 2026-01-07 | [Official](https://platform.claude.com) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-01-07 | [Official](https://docs.convex.dev) |
+| 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-07-11 | [Official](https://mdformat.readthedocs.io) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |

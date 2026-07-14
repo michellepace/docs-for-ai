@@ -1,6 +1,6 @@
 # convex-test
 
-The [`convex-test`](https://www.npmjs.com/package/convex-test) library provides a mock implementation of the Convex backend in JavaScript. It enables fast automated testing of the logic in your [functions](/functions.md).
+The [`convex-test`](https://www.npmjs.com/package/convex-test) library provides a mock implementation of the Convex backend in JavaScript. It enables fast automated testing of the logic in your [functions](/functions/overview.md).
 
 ## Example[​](#example "Direct link to Example")
 
@@ -356,7 +356,7 @@ If you don't have a schema, call `convexTest()` with no argument.
 
 ### Call functions[​](#call-functions "Direct link to Call functions")
 
-Your test can call public and internal Convex [functions](/functions.md) in your project:
+Your test can call public and internal Convex [functions](/functions/overview.md) in your project:
 
 convex/myFunctions.test.ts
 
@@ -390,7 +390,7 @@ test("functions", async () => {
 
 ### Modify data outside of functions[​](#modify-data-outside-of-functions "Direct link to Modify data outside of functions")
 
-Sometimes you might want to directly [write](/database/writing-data.md) to the mock database or [file storage](/file-storage.md) from your test, without needing a declared function in your project. You can use the `t.run` method which takes a handler that is given a `ctx` that allows reading from and writing to the mock backend:
+Sometimes you might want to directly [write](/database/writing-data.md) to the mock database or [file storage](/file-storage/overview.md) from your test, without needing a declared function in your project. You can use the `t.run` method which takes a handler that is given a `ctx` that allows reading from and writing to the mock backend:
 
 convex/tasks.test.ts
 
@@ -652,7 +652,7 @@ Check out more examples in [this file](https://github.com/get-convex/convex-test
 
 ### Authentication[​](#authentication "Direct link to Authentication")
 
-To test functions which depend on the current [authenticated](/auth.md) user identity you can create a version of the `t` accessor with given [user identity attributes](/api/interfaces/server.UserIdentity.md). If you don't provide them, `issuer`, `subject` and `tokenIdentifier` will be generated automatically:
+To test functions which depend on the current [authenticated](/auth/overview.md) user identity you can create a version of the `t` accessor with given [user identity attributes](/api/interfaces/server.UserIdentity.md). If you don't provide them, `issuer`, `subject` and `tokenIdentifier` will be generated automatically:
 
 convex/tasks.test.ts
 
@@ -820,7 +820,7 @@ Some of the ways the mock differs:
 
   <!-- -->
 
-  * [Text search](/search.md) returns all documents that include a word for which at least one word in the searched string is a prefix. It does not sort the results by relevance.
+  * [Text search](/search/overview.md) returns all documents that include a word for which at least one word in the searched string is a prefix. It does not sort the results by relevance.
   * [Vector search](/search/vector-search.md) returns results sorted by cosine similarity, but doesn't use an efficient vector index in its implementation.
   * There is no support for [cron jobs](/scheduling/cron-jobs.md), you should trigger your functions manually from the test.
 

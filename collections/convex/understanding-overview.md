@@ -10,11 +10,11 @@ The following diagram shows the standard three-tier app architecture that Convex
 
 ## Database[​](#database "Direct link to Database")
 
-The [database](/database.md) is at the core of Convex. The Convex database is automatically provisioned when you create your project. There is no connection setup or cluster management.
+The [database](/database/overview.md) is at the core of Convex. The Convex database is automatically provisioned when you create your project. There is no connection setup or cluster management.
 
 info
 
-In Convex, your database queries are just [TypeScript code](/database/reading-data/.md) written in your [server functions](/functions.md). There is no SQL to write. There are no ORMs needed.
+In Convex, your database queries are just [TypeScript code](/database/reading-data/.md) written in your [server functions](/functions/overview.md). There is no SQL to write. There are no ORMs needed.
 
 The Convex database is reactive. Whenever any data on which a query depends changes, the query is rerun, and client subscriptions are updated.
 
@@ -24,7 +24,7 @@ The Convex cloud offering runs on top of PlanetScale using MySQL as its persiste
 
 ## Server functions[​](#server-functions "Direct link to Server functions")
 
-When you create a new Convex project, you automatically get a `convex/` folder where you write your [server functions](/functions.md). This is where all your backend application logic and database query code live.
+When you create a new Convex project, you automatically get a `convex/` folder where you write your [server functions](/functions/overview.md). This is where all your backend application logic and database query code live.
 
 Example TypeScript server functions that read (query) and write (mutation) to the database.
 
@@ -84,7 +84,7 @@ Convex also provides standard general-purpose serverless functions called action
 
 You can also durably schedule Convex functions via the [scheduler](/scheduling/scheduled-functions.md) or [cron jobs](/scheduling/cron-jobs.md). Scheduling lets you build workflows like emailing a new user a day later if they haven't performed an onboarding task.
 
-You call your Convex functions via [client libraries](/client/react.md) or directly via [HTTP](/http-api/.md#functions-api).
+You call your Convex functions via [client libraries](/client/react/overview.md) or directly via [HTTP](/http-api/.md#functions-api).
 
 ## Client libraries[​](#client-libraries "Direct link to Client libraries")
 
@@ -114,7 +114,7 @@ When calling query functions, the client library subscribes to the results of th
 
 The client library also queues up mutations in memory to send to the server. As mutations execute and cause query results to update, the client library keeps your app state consistent. It updates all subscriptions to the same logical moment in time in the database.
 
-Convex provides client libraries for nearly all popular web and native app frameworks. Client libraries connect to your Convex deployment via WebSockets. You can then call your public Convex functions [through the library](/client/react.md#fetching-data). You can also use Convex with [HTTP directly](/http-api/.md#functions-api), you just won't get the automatic subscriptions.
+Convex provides client libraries for nearly all popular web and native app frameworks. Client libraries connect to your Convex deployment via WebSockets. You can then call your public Convex functions [through the library](/client/react/overview.md#fetching-data). You can also use Convex with [HTTP directly](/http-api/.md#functions-api), you just won't get the automatic subscriptions.
 
 ## Putting it all together[​](#putting-it-all-together "Direct link to Putting it all together")
 

@@ -25,7 +25,7 @@
     <description>Non-interactive `claude -p` for CI and scripts: `--bare` skips hooks/plugins/MCP auto-discovery, `--output-format json` with `--json-schema` structures results, `--allowedTools`/permission-modes auto-approve, stdin piping, and `--continue`/`--resume` for multi-turn sessions.</description>
     <source_url>https://code.claude.com/docs/en/headless</source_url>
     <local_file>en-headless.md</local_file>
-    <curated_at>2026-07-04</curated_at>
+    <curated_at>2026-07-14</curated_at>
   </source>
   <source>
     <title>Create custom subagents</title>

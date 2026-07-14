@@ -7,11 +7,4 @@ Curated docs for targeted AI context.
 
 **What is mdformat?**
 
-Mdformat is an opinionated Markdown formatter that can be used to enforce a consistent style in Markdown files. Mdformat is a Unix-style command-line tool as well as a Python library. The features/opinions of the formatter include:
-- Consistent indentation and whitespace across the board
-- Always use ATX style headings
-- Move all link references to the bottom of the document (sorted by label)
-- Reformat indented code blocks as fenced code blocks
-- Use `1.` as the ordered list marker if possible, also for noninitial list items
-
-Mdformat will not change word wrapping by default.
+Mdformat is an opinionated Markdown formatter, available as both a Unix-style command-line tool and a Python library, that enforces a consistent style across Markdown files. It standardises indentation and whitespace, always uses ATX-style headings, moves all link references to the bottom of the document sorted by label, reformats indented code blocks as fenced code blocks, and uses `1.` as the ordered list marker where possible, including for non-initial list items. Word wrapping is left unchanged by default.

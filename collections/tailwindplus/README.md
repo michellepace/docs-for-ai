@@ -3,7 +3,7 @@
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: https://tailwindcss.com
+- Curation Source: https://tailwindcss.com/plus
 
 **What is Tailwind Plus?**
 

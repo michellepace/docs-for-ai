@@ -23,10 +23,10 @@
   },
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,
-    "claude-code-utils@my-claude-marketplace": false,
+    "pyright-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": false,
     "ponytail@ponytail": false,
-    "pyright-lsp@claude-plugins-official": true
+    "mattpocock-skills@mattpocock": false
   },
   "extraKnownMarketplaces": {
     "my-claude-marketplace": {
@@ -45,6 +45,12 @@
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
       }
     }
   }

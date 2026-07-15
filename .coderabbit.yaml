@@ -4,4 +4,5 @@ reviews:
   # "!" EXCLUDE from reviews
   path_filters:
     - "!collections/**"
-    - "!xdocs-mine/**"
+    - "!docs-x/**"
+    - "!docs/**"

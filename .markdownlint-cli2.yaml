@@ -1,11 +1,6 @@
-globs:
-  - "**/*.md" # All .md files; pruned by ignores below
-
+gitignore: true
 ignores:
-  - ".venv/**"
-  - ".pytest_cache/**"
-  - "__pycache__/**"
-  - "collections/**" # all curated doc collections
+  - "collections/**"
 
 # Disable rules
 config:

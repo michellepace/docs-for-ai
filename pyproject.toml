@@ -1,6 +1,6 @@
 [build-system]
 # Packaged for the [project.scripts] CLIs only; never published.
-requires = ["uv_build>=0.11.25,<0.12"]
+requires = ["uv_build>=0.11.29,<0.12"]
 build-backend = "uv_build"
 
 [project]
@@ -9,7 +9,7 @@ version = "0.1.0"
 description = "Curate and index clean docs for targeted AI context"
 requires-python = ">=3.14"
 dependencies = [
-  "firecrawl-py>=4.30.3", # scrape docs to markdown
+  "firecrawl-py>=4.32.1", # scrape docs to markdown
 ]
 
 [project.scripts]
@@ -23,7 +23,7 @@ dev = [
   "pyright>=1.1.411",
   "pytest>=9.1.1",
   "rich>=15.0.0",
-  "ruff>=0.15.20",
+  "ruff>=0.15.22",
 ]
 
 

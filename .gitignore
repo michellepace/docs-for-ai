@@ -5,6 +5,9 @@
 __pycache__/
 *.py[oc]
 
+# Build artifacts (uv build)
+dist/
+
 # Virtual environments
 .venv
 

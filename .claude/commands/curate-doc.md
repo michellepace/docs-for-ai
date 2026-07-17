@@ -65,6 +65,8 @@ Two reads feed the write:
 1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
 2. The **full** curated doc (however large) — what you're describing.
 
+The report's `title:` line is the `<title>` your description must complement.
+
 Then pipe a [20, 30]-word description (strict) straight in — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell

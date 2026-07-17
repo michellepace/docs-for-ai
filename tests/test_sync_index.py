@@ -124,6 +124,7 @@ def make_result(
         canonical_url=f"https://example.com/{local_file.removesuffix('.md')}",
         chars=100,
         route="direct",
+        title=local_file,
         description=PLACEHOLDER_DESCRIPTION,
         initialised=False,
     )
@@ -144,7 +145,7 @@ def test_report_lists_placeholder_files_as_home_paths_with_reasons(
         ],
         failures=[],
         orphans_deleted=0,
-        placeholder_files={"b.md", "a.md"},
+        placeholder_files={"b.md": "Beta guide", "a.md": "Alpha guide"},
     )
 
     output = format_sync_report(report)
@@ -156,6 +157,8 @@ def test_report_lists_placeholder_files_as_home_paths_with_reasons(
     assert a_line.endswith("(new source)")
     assert b_line.startswith("  ~/repo/collections/shiny/b.md")
     assert b_line.endswith("(content changed)")
+    assert lines[lines.index(a_line) + 1] == "    title: Alpha guide"
+    assert lines[lines.index(b_line) + 1] == "    title: Beta guide"
 
 
 def test_report_omits_empty_sections() -> None:
@@ -165,7 +168,7 @@ def test_report_omits_empty_sections() -> None:
         successes=[make_result("doc.md", curate_doc.DocOutcome.UNCHANGED)],
         failures=[],
         orphans_deleted=0,
-        placeholder_files=set(),
+        placeholder_files={},
     )
 
     output = format_sync_report(report)
@@ -184,7 +187,7 @@ def test_report_counts_line_and_gate_reflect_the_run() -> None:
         ],
         failures=[SyncFailure("https://example.com/c", "Fetch failed: 404 not found")],
         orphans_deleted=2,
-        placeholder_files={"b.md"},
+        placeholder_files={"b.md": "Beta guide"},
     )
 
     output = format_sync_report(report)
@@ -318,6 +321,7 @@ def test_sync_flags_kept_placeholder_description(
     needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
     assert "doc.md" in needs_section
     assert "(kept placeholder)" in needs_section
+    assert "    title: Fetched fresh" in needs_section
 
 
 def test_sync_keeps_description_regenerated_after_reset(

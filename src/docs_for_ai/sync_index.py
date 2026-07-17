@@ -40,7 +40,7 @@ class SyncReport(NamedTuple):
     successes: list[curate_doc.CurationResult]
     failures: list[SyncFailure]
     orphans_deleted: int
-    placeholder_files: set[str]
+    placeholder_files: dict[str, str]  # local_file → its INDEX.xml <title>
 
 
 # Collection files that must survive a sync.
@@ -101,11 +101,11 @@ def _curate_or_error(
         )
 
 
-def files_needing_description(index_path: Path) -> set[str]:
-    """Local files whose INDEX.xml description is still the placeholder."""
+def files_needing_description(index_path: Path) -> dict[str, str]:
+    """Local file → INDEX.xml title, for sources still holding the placeholder."""
     index_root = ET.parse(index_path).getroot()
     return {
-        source.findtext("local_file", "")
+        source.findtext("local_file", ""): source.findtext("title", "")
         for source in index_root.findall("source")
         if source.findtext("description") == PLACEHOLDER_DESCRIPTION
     }
@@ -144,10 +144,11 @@ def format_sync_report(report: SyncReport) -> str:
         }
         width = max(len(path) for path in paths.values())
         lines += ["", f"NEEDS DESCRIPTION ({len(paths)})"]
-        lines += [
-            f"  {path:<{width}}  ({reasons.get(filename, _CARRIED_OVER_REASON)})"
-            for filename, path in paths.items()
-        ]
+        for filename, path in paths.items():
+            lines += [
+                f"  {path:<{width}}  ({reasons.get(filename, _CARRIED_OVER_REASON)})",
+                f"    title: {report.placeholder_files[filename]}",
+            ]
 
     needed = len(report.placeholder_files)
     noun = "description" if needed == 1 else "descriptions"

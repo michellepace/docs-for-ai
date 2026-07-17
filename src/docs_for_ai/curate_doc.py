@@ -41,6 +41,7 @@ class CurationResult(NamedTuple):
     canonical_url: str
     chars: int
     route: Literal["direct", "firecrawl"]
+    title: str
     description: str
     initialised: bool
 
@@ -319,6 +320,7 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
         canonical_url=doc.source_url,
         chars=len(doc.content),
         route="firecrawl" if fetch_route.doc_format is None else "direct",
+        title=doc.title,
         description=description,
         initialised=not index_exists,
     )
@@ -337,6 +339,7 @@ def _format_curate_report(collection_dir: Path, result: CurationResult) -> str:
             f"  index:  {index_path} ({result.index_action})",
             f"  url:    {result.canonical_url}",
             f"  fetch:  {result.chars:,} chars, {result.route}",
+            f"  title:  {result.title}",
             f"  description: {_description_note(result.outcome, result.description)}",
         ]
     )

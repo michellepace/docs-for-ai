@@ -504,6 +504,7 @@ def test_cli_report_shows_created_doc_and_constant_success_gate(
     assert "INDEX.xml (indexed)" in out
     assert "url:    https://example.com/docs/hello\n" in out
     assert "fetch:  1,250 chars, direct" in out
+    assert "title:  Hello\n" in out
     assert "description: PLACEHOLDER (pending)" in out
     assert out.endswith("\n\n🏁 Success! curated doc\n")
 
@@ -522,6 +523,7 @@ def test_cli_report_shows_kept_description_on_unchanged_recuration(
     assert "hello.md (overwrote)" in out
     assert "INDEX.xml (reindexed)" in out
     assert "collection: initialised" not in out
+    assert "title:  Hello\n" in out
     assert "description: kept — content unchanged" in out
 
 

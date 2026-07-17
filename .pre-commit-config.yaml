@@ -8,7 +8,7 @@ repos:
       - id: check-merge-conflict    # block on merge markers
         fail_fast: true
       - id: trailing-whitespace
-        exclude: ^collections/      # curated corpus — keep faithful to source
+        exclude: ^collections/      # curated corpus
       - id: end-of-file-fixer
         exclude: ^collections/      # curated corpus
       - id: check-yaml
@@ -17,7 +17,7 @@ repos:
       - id: check-toml
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.0
+    rev: v0.23.1
     hooks:
       - id: markdownlint-cli2       # final format (.markdownlint-cli2.yaml)
         args: [--fix]               # autofix
@@ -40,7 +40,7 @@ repos:
       - id: shellcheck              # lint shell (read-only, after shfmt)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.25
+    rev: 0.11.29
     hooks:
       - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 
@@ -92,6 +92,5 @@ repos:
 # 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
 # 2. `pass_filenames: false` runs hook against the whole project
 # 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
-# 4. markdownlint-cli2 (--fix) owns .md formatting
 
 # Install hooks (must): uv run pre-commit install

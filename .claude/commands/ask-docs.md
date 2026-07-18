@@ -1,7 +1,7 @@
 ---
-description: Query a local doc collection for a grounded answer.
+description: Get a grounded answer against a doc collection.
 disable-model-invocation: true
-argument-hint: "[collection] [question]"
+argument-hint: "[collection] \"your question\""
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -9,6 +9,7 @@ allowed-tools:
   - Grep
   - mcp__firecrawl__firecrawl_scrape
   - mcp__firecrawl__firecrawl_search
+  - mcp__firecrawl__firecrawl_search_feedback
   - Read
   - WebFetch
   - WebSearch
@@ -16,72 +17,44 @@ allowed-tools:
 
 # Answer from a Doc Collection
 
-Parse `$ARGUMENTS`:
-
-- **collection** = the first word
-- **question** = everything after the first word
+Your task is to provide a grounded answer to a user's question against the applicable curated documentation collection.
 
 Available collections: !`printf '<available_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
 
-Read the collection's `INDEX.xml` to route to the relevant local files, then give a grounded, cohesive answer to the question.
+## Step 1. Parse Arguments
 
-The collection follows this pattern:
+Parse `$ARGUMENTS`: **collection** = first word, **question** = everything after.
 
-<collection_pattern>
-```text
-~/.claude/docs-for-ai/collections/{collection}/
-├── INDEX.xml       # Index of all docs
-├── README.md
-├── curated-doc.md  # Indexed doc
-└── ...
-```
+If the question clearly belongs to another collection from `<available_collections>` (or only the web can answer it), halt to confirm a sensible alternative — use "🤔 ..." for visibility.
 
-`INDEX.xml` schema:
+## Step 2. Research a grounded answer
 
-```xml
-<docs_index>
-  <source>
-    <title>{use as routing signal}</title>
-    <description>{use as routing signal}</description>
-    <source_url>{URL}</source_url>
-    <local_file>{file}</local_file>
-  </source>
-  <!-- Multiple <source> entries, one per curated doc file -->
-</docs_index>
-```
+1. Read `~/.claude/docs-for-ai/collections/{collection}/INDEX.xml` — the authoritative manifest. Route by each source's `<title>` and `<description>`; its `<local_file>` names a doc in the same directory.
 
-Local file: `~/.claude/docs-for-ai/collections/{collection}/{file}`
-</collection_pattern>
+2. Answer from the relevant docs. If they fall short, re-check the index for other files, then **ask before any web fallback**.
 
-## Procedure
+<web_fallback>
+Fallback to the web when the curated collection is insufficient to answer the question and the user has agreed.
 
-1. **Read `INDEX.xml` first** — it's the authoritative manifest. Use each source's `<title>` and `<description>` to route.
-2. **Analyse** the local files of the relevant sources `~/.claude/docs-for-ai/collections/{collection}/{file}`
-3. **Answer** from those files, citing quotes. If they fall short, re-check the index for other relevant files, then **ask before any web fallback**.
+Always prefer Firecrawl:
+- Known URL: `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
+- Discovery: `firecrawl_search` (`includeDomains`: bare hostname(s) from `<source_url>`; drop the filter if that returns nothing useful). Omit `scrapeOptions` — it embeds every result's full text in one huge response. Then `firecrawl_scrape` the 1–3 best hits.
 
-If the question doesn't fit this collection, suggest a better-matching one from `<available_collections>` (or a web search) before answering.
+Fallback to `WebSearch`/`WebFetch` (lossy on code/config) only if Firecrawl is unavailable.
+</web_fallback>
 
-## Web fallback (only after local docs are exhausted)
+## Step 3. Craft the answer
 
-Prefer Firecrawl; use `WebSearch` / `WebFetch` (lossy on code/config) only if it's unavailable.
-
-- **Known URL:** `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
-- **Discover the page:** `firecrawl_search` for ranked URLs (no `scrapeOptions` — inline scraping overflows), then `firecrawl_scrape` the 1–2 best hits.
-
-## Response format
-
-Use this as a guide:
+Grounded answer — coherent, scannable, and well-structured for a TUI like Claude Code. Include key quotation(s) when directly relevant; use emojis strategically for scannability.
 
 <response_format>
+```
+# Question tersely framed
 
-## Question tersely framed
-
-Grounded answer — well-structured and scannable, use emojis to aid readability
+[grounded answer]
 
 ## References used
-
-- Index: `~/.claude/docs-for-ai/collections/{collection}/INDEX.xml`
-- `~/.claude/docs-for-ai/collections/{collection}/{file-1}`
-- `~/.claude/docs-for-ai/collections/{collection}/{file-N}`
-- `https://..` (Web fallback only)
+- Index and each local file read (full paths)
+- Web URLs (fallback only)
+```
 </response_format>

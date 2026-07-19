@@ -1,0 +1,44 @@
+<docs_index>
+  <source>
+    <title>Introduction</title>
+    <description>Getting-started entry point for the web-data API: `search`, `scrape`, and `interact` primitives returning LLM-ready markdown/JSON, plus MCP-server and `firecrawl-cli` setup for coding agents and Python/Node SDKs.</description>
+    <source_url>https://docs.firecrawl.dev/introduction</source_url>
+    <local_file>introduction.md</local_file>
+    <curated_at>2026-07-18</curated_at>
+  </source>
+  <source>
+    <title>Build with AI</title>
+    <description>AI-agent onboarding: install skills via `firecrawl-cli init`, get credentials through dashboard/CLI or WorkOS ID-JAG, drive the `search`/`scrape`/`crawl`/`map`/`interact` tools, self-recover via `/support/ask`, plus MCP server and `llms.txt` docs.</description>
+    <source_url>https://docs.firecrawl.dev/ai-onboarding</source_url>
+    <local_file>ai-onboarding.md</local_file>
+    <curated_at>2026-07-18</curated_at>
+  </source>
+  <source>
+    <title>Firecrawl MCP Server</title>
+    <description>Client setup for Cursor, Claude Code/Desktop, VS Code, and n8n via the keyless hosted `mcp.firecrawl.dev` URL or local `npx firecrawl-mcp`; catalogs scrape, map, search, crawl, extract, agent, and interact tools.</description>
+    <source_url>https://docs.firecrawl.dev/mcp-server</source_url>
+    <local_file>mcp-server.md</local_file>
+    <curated_at>2026-07-18</curated_at>
+  </source>
+  <source>
+    <title>Skills + CLI</title>
+    <description>Every `firecrawl` subcommand (`scrape`, `search`, `map`, `crawl`, `interact`, `monitor`, `agent`) plus `login` auth, keyless free tier, JSON `--schema` extraction, self-hosted `--api-url`, and `firecrawl-cli init` to install skills into coding agents.</description>
+    <source_url>https://docs.firecrawl.dev/sdks/cli</source_url>
+    <local_file>sdks-cli.md</local_file>
+    <curated_at>2026-07-18</curated_at>
+  </source>
+  <source>
+    <title>Advanced Scraping Guide</title>
+    <description>Complete option reference across `/scrape`, `/crawl`, `/map`, and async `/v2/agent` endpoints: `formats` (`json`, `screenshot`), sequential browser `actions`, PDF `parsers` modes, `onlyMainContent` tag filtering, sitemap crawl scope, and `FirecrawlAgent` whitelisting.</description>
+    <source_url>https://docs.firecrawl.dev/advanced-scraping-guide</source_url>
+    <local_file>advanced-scraping-guide.md</local_file>
+    <curated_at>2026-07-18</curated_at>
+  </source>
+  <source>
+    <title>Python</title>
+    <description>`firecrawl-py` reference covering sync `Firecrawl` and `AsyncFirecrawl` clients, `scrape`, `crawl`, `parse` methods, `PaginationConfig` auto-pagination, `watcher` job monitoring, and cloud browser sessions with CDP Playwright control.</description>
+    <source_url>https://docs.firecrawl.dev/sdks/python</source_url>
+    <local_file>sdks-python.md</local_file>
+    <curated_at>2026-07-19</curated_at>
+  </source>
+</docs_index>

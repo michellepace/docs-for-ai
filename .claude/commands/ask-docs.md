@@ -9,13 +9,10 @@ allowed-tools:
   - Grep
   - mcp__firecrawl__firecrawl_scrape
   - mcp__firecrawl__firecrawl_search
-  - mcp__firecrawl__firecrawl_search_feedback
   - Read
   - WebFetch
   - WebSearch
 ---
-
-# Answer from a Doc Collection
 
 Your task is to provide a grounded answer to a user's question against the applicable curated documentation collection.
 
@@ -34,13 +31,13 @@ If the question clearly belongs to another collection from `<available_collectio
 2. Answer from the relevant docs. If they fall short, re-check the index for other files, then **ask before any web fallback**.
 
 <web_fallback>
-Fallback to the web when the curated collection is insufficient to answer the question and the user has agreed.
+Fallback to the web only when the curated collection is insufficient and the user has agreed.
 
 Always prefer Firecrawl:
-- Known URL: `firecrawl_scrape` (`formats: ["markdown"]`, `onlyMainContent: true`).
-- Discovery: `firecrawl_search` (`includeDomains`: bare hostname(s) from `<source_url>`; drop the filter if that returns nothing useful). Omit `scrapeOptions` — it embeds every result's full text in one huge response. Then `firecrawl_scrape` the 1–3 best hits.
+- Known URL: `firecrawl_scrape` with just the `url` — always markdown, never `json` extraction (grounding needs the page text).
+- Discovery: `firecrawl_search` with `includeDomains` as bare hostname(s) from `<source_url>` (drop the filter if nothing useful returns). Never add `scrapeOptions` — it embeds every result's full text. Pick the 1–3 best hits, then scrape them.
 
-Fallback to `WebSearch`/`WebFetch` (lossy on code/config) only if Firecrawl is unavailable.
+ONLY if Firecrawl is unavailable, fall back to your lossy/noisy `WebSearch`/`WebFetch`.
 </web_fallback>
 
 ## Step 3. Craft the answer

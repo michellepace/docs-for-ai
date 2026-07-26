@@ -272,7 +272,7 @@ def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
     collection_dir = create_collection(
         tmp_path, "# Doc\n\nStable content.\n", "Curated description"
     )
-    # Inserted blank lines defeated `git diff -w`; whitespace-normalised compare must not.
+    # Blank-line inserts defeat `git diff -w`; whitespace-normalised compare must not.
     stub_fetches(
         monkeypatch, {"https://example.com/doc.md": "# Doc\n\n\n\nStable content.\n"}
     )
@@ -353,7 +353,11 @@ def test_sync_fetches_missing_file_instead_of_pruning_entry(
     index_path = collection_dir / "INDEX.xml"
     create_index_xml(
         index_path,
-        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+        [
+            make_source(
+                "missing-doc.md", "https://example.com/missing-doc", "Description"
+            )
+        ],
     )
     stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
 
@@ -377,7 +381,11 @@ def test_sync_flags_recreated_doc_as_needing_description(
     index_path = collection_dir / "INDEX.xml"
     create_index_xml(
         index_path,
-        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+        [
+            make_source(
+                "missing-doc.md", "https://example.com/missing-doc", "Description"
+            )
+        ],
     )
     stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
 
@@ -446,7 +454,10 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     )
     stub_fetches(
         monkeypatch,
-        {"https://example.com/doc-a.md": failure, "https://example.com/doc-b.md": "# B"},
+        {
+            "https://example.com/doc-a.md": failure,
+            "https://example.com/doc-b.md": "# B",
+        },
     )
 
     out = run_sync(collection_dir, monkeypatch, capsys)
@@ -517,7 +528,9 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
     assert final_sources == {local_file: blob_url}, (
         f"INDEX.xml entry lost or rewritten after sync.\nSources now: {final_sources}"
     )
-    assert read_descriptions_by_file(index_path)[local_file] == PLACEHOLDER_DESCRIPTION, (
+    assert (
+        read_descriptions_by_file(index_path)[local_file] == PLACEHOLDER_DESCRIPTION
+    ), (
         "The sentinel guarantees a real content change, so the stale description "
         "must reset to PLACEHOLDER"
     )

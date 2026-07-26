@@ -115,7 +115,10 @@ class TestResolveRoute:
                 f"{MD}/v2.0/api",
                 ("markdown", f"{MD}/v2.0/api.md", f"{MD}/v2.0/api", "v2-0-api.md"),
             ),
-            (f"{MD}/page.html", (None, f"{MD}/page.html", f"{MD}/page.html", "page.md")),
+            (
+                f"{MD}/page.html",
+                (None, f"{MD}/page.html", f"{MD}/page.html", "page.md"),
+            ),
             (f"{MD}/page.mdx", (None, f"{MD}/page.mdx", f"{MD}/page.mdx", "page.md")),
             (
                 f"{RTD}/panel.html",
@@ -213,7 +216,7 @@ class TestResolveRoute:
     def test_routes_url(
         self, url: str, expected: tuple[str | None, str, str, str]
     ) -> None:
-        """Registry transform → raw `.md`/`.rst.txt` as-is → FireCrawl, in precedence."""
+        """Registry transform → raw `.md`/`.rst.txt` → FireCrawl, in precedence."""
         assert resolve_route(url, RULES) == expected
 
     def test_github_blob_resolves_to_raw_route(self) -> None:
@@ -228,7 +231,7 @@ class TestResolveRoute:
 
 
 class TestFilenameFromCanonicalUrl:
-    """Non-GitHub URL-path → filename derivation (slugified, doc/view suffix stripped)."""
+    """Non-GitHub URL path → filename (slugified, doc/view suffix stripped)."""
 
     @pytest.mark.parametrize(
         ("url", "ext", "expected"),
@@ -386,7 +389,9 @@ class TestGithubFilenameFromBlobUrl:
         Distinct from the no-match branch; the label is the only signal of which fired.
         """
         with pytest.raises(CurationError, match="Bad derived filename") as exc:
-            github_filename_from_blob_url("https://github.com/o/r/blob/main/docs/a_b.md")
+            github_filename_from_blob_url(
+                "https://github.com/o/r/blob/main/docs/a_b.md"
+            )
         assert "a_b.md" in str(exc.value)
 
 
@@ -401,8 +406,16 @@ class TestExtractMarkdownTitle:
                 "x",
                 "Working on projects",
             ),
-            ('---\ntitle: "Managing dependencies"\n---\n', "x", "Managing dependencies"),
-            ("---\ntitle: 'Managing dependencies'\n---\n", "x", "Managing dependencies"),
+            (
+                '---\ntitle: "Managing dependencies"\n---\n',
+                "x",
+                "Managing dependencies",
+            ),
+            (
+                "---\ntitle: 'Managing dependencies'\n---\n",
+                "x",
+                "Managing dependencies",
+            ),
             ("---\ndescription: x\n---\n# Python versions\n", "x", "Python versions"),
             ("---\ntitle: ''\n---\n# Real Heading\n", "x", "Real Heading"),
             ("# First steps\n\nbody\n", "x", "First steps"),

@@ -72,7 +72,9 @@ def test_in_band_description_is_applied_with_success_verdict(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
     description = words(word_count)
 
-    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n")
+    exit_code, out = run_cli(
+        monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n"
+    )
 
     assert exit_code == 0
     assert f"✅ doc-a.md: {word_count} words" in out
@@ -93,7 +95,9 @@ def test_out_of_band_description_is_flagged_and_withheld(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
     description = words(word_count)
 
-    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n")
+    exit_code, out = run_cli(
+        monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n"
+    )
 
     assert exit_code == 1
     assert f"❌ doc-a.md: {word_count} words (need 20-30)" in out

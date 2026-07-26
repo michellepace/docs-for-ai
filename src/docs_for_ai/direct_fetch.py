@@ -1,4 +1,4 @@
-"""Resolve a doc URL to a fetch route (precedence order), fetch and extract its title."""
+"""Resolve a doc URL to a route (precedence order), fetch and extract its title."""
 
 import re
 import tomllib
@@ -96,7 +96,7 @@ def _has_no_file_suffix(url: str) -> bool:
 
 
 def _slugify(text: str) -> str:
-    """Lowercase `text` to a hyphen-joined `[a-z0-9]` slug (empty if no usable chars)."""
+    """Lowercase `text` to a hyphen-joined `[a-z0-9]` slug (empty if no usable char)."""
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
@@ -171,12 +171,14 @@ def _rst_filename(rel: str) -> str:
 def _readthedocs_route(url: str, prefix: str) -> FetchRoute | None:
     """Map a readthedocs `.html` page and its `_sources/*.rst.txt` twin, saved `.rst`.
 
-    Bidirectional: forward, a `.html` page fetches its twin and stays canonical; reverse,
-    a `_sources/{rel}.rst.txt` URL is fetched as-is but maps back to the page — so both
-    spellings converge on one file and one index entry. Declines anything else.
+    Bidirectional: forward, a `.html` page fetches its twin and stays canonical;
+    reverse, a `_sources/{rel}.rst.txt` URL is fetched as-is but maps back to the page —
+    so both spellings converge on one file and one index entry. Declines anything else.
     """
     rel = url.removeprefix(prefix)
-    if rel.startswith("_sources/") and rel.endswith(".rst.txt"):  # reverse — check first
+    if rel.startswith("_sources/") and rel.endswith(
+        ".rst.txt"
+    ):  # reverse — check first
         rel = rel.removeprefix("_sources/").removesuffix(".rst.txt")
         fetch_url, canonical = url, f"{prefix}{rel}.html"
     elif url.endswith(".html"):  # forward page

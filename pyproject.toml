@@ -51,7 +51,7 @@ reportDuplicateImport = false # Ruff F811
 # LINTING (RUFF)
 # =================================
 [tool.ruff]
-line-length = 90
+line-length = 88
 target-version = "py314"
 
 [tool.ruff.lint]

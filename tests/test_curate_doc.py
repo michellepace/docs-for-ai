@@ -16,7 +16,9 @@ from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 if TYPE_CHECKING:
     from pathlib import Path
 
-URL_FIRECRAWL = "https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions"
+URL_FIRECRAWL = (
+    "https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions"
+)
 
 URL_GH_BLOB = (
     "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
@@ -662,6 +664,7 @@ def test_cli_curates_via_firecrawl_scrape(tmp_path: Path) -> None:
     assert "<title>Practice with no store actions - Zustand</title>" in index
     assert f"<source_url>{URL_FIRECRAWL}</source_url>" in index
     assert (
-        "<local_file>learn-guides-practice-with-no-store-actions.md</local_file>" in index
+        "<local_file>learn-guides-practice-with-no-store-actions.md</local_file>"
+        in index
     )
     assert f"<description>{PLACEHOLDER_DESCRIPTION}</description>" in index

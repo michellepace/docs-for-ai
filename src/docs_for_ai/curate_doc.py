@@ -77,7 +77,9 @@ def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
         and not index_path.exists()
         and any(collection_dir.iterdir())
     ):
-        msg = f"Unsafe collection dir: non-empty and missing INDEX.xml — {collection_dir}"
+        msg = (
+            f"Unsafe collection dir: non-empty and missing INDEX.xml — {collection_dir}"
+        )
         raise CurationError(msg)
 
 
@@ -218,7 +220,9 @@ def fetch_document(route: direct_fetch.FetchRoute) -> FetchedDoc:
         content, title = firecrawl_scrape.scrape(route.canonical_url)
     else:
         content = direct_fetch.fetch_text(route.fetch_url)
-        title = direct_fetch.extract_title(content, route.doc_format, route.canonical_url)
+        title = direct_fetch.extract_title(
+            content, route.doc_format, route.canonical_url
+        )
     return FetchedDoc(content, title, route.filename, route.canonical_url)
 
 

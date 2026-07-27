@@ -1,7 +1,39 @@
 ---
 title: Notes for following "sociable" / "Kent Beck" style + refactoring following TDD
-updated: 2026-07-08
-status: draft / rough
+updated: 2026-07-27
+status: updated with extracted repeatable prompt
+---
+
+## Repeatable Refactor Prompt
+
+Already run on:
+- `tests/test_sync_index.py` (first exemplar)
+- `tests/test_curate_doc.py`
+
+```markdown
+Review `tests/test_<module>.py` against the classicist (Detroit-school) TDD
+standard — Fowler's "sociable" tests, Beck's tests-as-spec:
+
+- **Sociable:** drive the real public entry point with real files in tmp_path;
+  fake only the genuine external boundary (the network). No mocking of
+  internal collaborators.
+- **Behaviour-sensitive, structure-insensitive:** a test that would break under
+  a pure refactor is TDD scaffolding, not a keeper.
+- **Scaffolding deletion:** tests written to shape the design (one unit test per
+  helper, named after the code) get refactored away once the design settles —
+  transfer coverage to the sociable level first, then delete.
+- **Names as spec:** each test names the situation handled ("whitespace-only
+  change", "fetch failed"), never an internal function; one behaviour per
+  test; the names alone should reconstruct the behaviour table.
+- A focused unit test of a stable public seam (e.g. a pure formatter tested
+  against its own signature) is acceptable classicist practice — flag only
+  tests coupled to internals.
+
+Exemplar: `tests/test_sync_index.py` — sociable state tests through main()
+with the fetch stubbed at the boundary; the report formatter is treated as
+a second public seam and unit-tested directly.
+```
+
 ---
 
 ## Brief for Claude Code

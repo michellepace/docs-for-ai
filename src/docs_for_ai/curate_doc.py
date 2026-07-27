@@ -72,6 +72,9 @@ def _reject_uv_docs_url(url: str) -> None:
 
 
 def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
+    if collection_dir.is_file():
+        msg = f"Not a directory: {collection_dir}"
+        raise CurationError(msg)
     if (
         collection_dir.exists()
         and not index_path.exists()

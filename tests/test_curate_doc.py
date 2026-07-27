@@ -143,6 +143,23 @@ def test_curate_rejects_a_uv_hosted_docs_url(
     assert "collections/uv/INDEX.xml" in out
 
 
+def test_curate_rejects_a_file_path_as_collection_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    forbid_both_fetchers(monkeypatch)
+    file_path = tmp_path / "README.md"
+    file_path.write_text("not a collection\n")
+    monkeypatch.setattr("sys.argv", ["curate-doc", str(file_path), DOC_URL])
+
+    with pytest.raises(SystemExit) as exc:
+        curate_doc.main()
+
+    assert exc.value.code == 1
+    out = capsys.readouterr().out
+    assert "Not a directory" in out
+    assert str(file_path) in out
+
+
 def test_curate_refuses_a_nonempty_directory_without_index(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

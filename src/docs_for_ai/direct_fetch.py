@@ -1,4 +1,4 @@
-"""Resolve a doc URL to a route (precedence order), fetch and extract its title."""
+"""Resolve a URL to a fetch route (precedence order), fetch and extract its title."""
 
 import re
 import tomllib
@@ -176,9 +176,8 @@ def _readthedocs_route(url: str, prefix: str) -> FetchRoute | None:
     so both spellings converge on one file and one index entry. Declines anything else.
     """
     rel = url.removeprefix(prefix)
-    if rel.startswith("_sources/") and rel.endswith(
-        ".rst.txt"
-    ):  # reverse — check first
+    is_reverse_twin = rel.startswith("_sources/") and rel.endswith(".rst.txt")
+    if is_reverse_twin:  # reverse — check first
         rel = rel.removeprefix("_sources/").removesuffix(".rst.txt")
         fetch_url, canonical = url, f"{prefix}{rel}.html"
     elif url.endswith(".html"):  # forward page

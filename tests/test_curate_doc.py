@@ -196,8 +196,7 @@ def test_curate_exits_when_fetch_fails_without_scaffolding_collection(
 
     assert exc.value.code == 1
     assert "❌ Fetch failed: 404 not found" in capsys.readouterr().out
-    leftover = list(collection.iterdir()) if collection.exists() else []
-    assert leftover == []
+    assert not collection.exists()
 
 
 def test_curate_md_url_fetches_directly_and_writes_exact_index(

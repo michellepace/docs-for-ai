@@ -281,7 +281,6 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
     _reject_uv_docs_url(source_url)
     _validate_collection_dir(collection_dir, index_path)
 
-    collection_dir.mkdir(parents=True, exist_ok=True)
     index_exists = index_path.exists()
 
     fetch_route = direct_fetch.resolve_route(
@@ -302,6 +301,8 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
 
     doc = fetch_document(fetch_route)
 
+    # Only now touch the filesystem: a failed fetch must leave no trace behind.
+    collection_dir.mkdir(parents=True, exist_ok=True)
     if not index_exists:
         _initialise_collection(collection_dir, source_url)
 

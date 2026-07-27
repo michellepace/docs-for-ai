@@ -20,13 +20,30 @@ URL_FIRECRAWL = (
     "https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions"
 )
 
-URL_GH_BLOB = (
+URL_GH_BLOB_MD = (
     "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
 )
-URL_GH_RAW_TWIN = (
+URL_GH_RAW_TWIN_MD = (
     "https://raw.githubusercontent.com/astral-sh/uv/main/"
     "docs/getting-started/first-steps.md"
 )
+# Blob/raw twins for the non-.md extensions curate must preserve.
+URL_GH_BLOB_MDX = (
+    "https://github.com/biomejs/website/blob/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_RAW_TWIN_MDX = (
+    "https://raw.githubusercontent.com/biomejs/website/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_BLOB_QMD = (
+    "https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd"
+)
+URL_GH_RAW_TWIN_QMD = (
+    "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+    "get-started/deploy-cloud.qmd"
+)
+
 URL_GH_BLOB_404 = (
     "https://github.com/astral-sh/uv/blob/main/docs/zzz-does-not-exist-xyz.md"
 )
@@ -185,7 +202,7 @@ def test_curate_rejects_a_non_blob_github_url_before_fetching(
     monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _forbid_fetch)
     monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
     new_dir = tmp_path / "uv"
-    monkeypatch.setattr("sys.argv", ["curate-doc", str(new_dir), URL_GH_RAW_TWIN])
+    monkeypatch.setattr("sys.argv", ["curate-doc", str(new_dir), URL_GH_RAW_TWIN_MD])
 
     with pytest.raises(SystemExit) as exc:
         curate_doc.main()
@@ -229,41 +246,36 @@ def test_curate_md_url_fetches_directly_and_writes_exact_index(
     ("blob_url", "raw_url", "filename"),
     [
         pytest.param(
-            URL_GH_BLOB,
-            URL_GH_RAW_TWIN,
+            URL_GH_BLOB_MD,
+            URL_GH_RAW_TWIN_MD,
             "getting-started-first-steps.md",
             id="md",
         ),
         pytest.param(
-            "https://github.com/biomejs/website/blob/main/"
-            "src/content/docs/guides/getting-started.mdx",
-            "https://raw.githubusercontent.com/biomejs/website/main/"
-            "src/content/docs/guides/getting-started.mdx",
+            URL_GH_BLOB_MDX,
+            URL_GH_RAW_TWIN_MDX,
             "src-content-docs-guides-getting-started.mdx",
             id="mdx",
         ),
         pytest.param(
-            "https://github.com/posit-dev/py-shiny-site/blob/main/"
-            "get-started/deploy-cloud.qmd",
-            "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
-            "get-started/deploy-cloud.qmd",
+            URL_GH_BLOB_QMD,
+            URL_GH_RAW_TWIN_QMD,
             "get-started-deploy-cloud.qmd",
             id="qmd",
         ),
     ],
 )
-def test_curate_github_blob_fetches_raw_twin_preserving_extension(  # noqa: PLR0913
+def test_curate_github_blob_fetches_raw_twin_preserving_extension(
     blob_url: str,
     raw_url: str,
     filename: str,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
 ) -> None:
     fetched_urls = stub_direct_fetch(monkeypatch, "# stub\n\nbody\n")
     collection = tmp_path / "coll"
 
-    run_curate(collection, blob_url, monkeypatch, capsys)
+    curate_doc.curate(collection, blob_url)
 
     assert fetched_urls == [raw_url]
     assert (collection / filename).read_text() == "# stub\n\nbody\n"
@@ -622,7 +634,7 @@ def test_curate_rejects_filename_collision_without_clobbering(
 def test_cli_curates_github_blob_and_stores_blob_url(tmp_path: Path) -> None:
     """A blob URL is fetched (from raw) and stored verbatim as blob in INDEX + .md."""
     new_dir = tmp_path / "uv"
-    exit_code, output = run_script(str(new_dir), URL_GH_BLOB)
+    exit_code, output = run_script(str(new_dir), URL_GH_BLOB_MD)
 
     assert exit_code == 0
     assert "🏁 Success! curated doc" in output
@@ -632,7 +644,7 @@ def test_cli_curates_github_blob_and_stores_blob_url(tmp_path: Path) -> None:
     assert "<!DOCTYPE html>" not in content  # raw md fetched, not the blob HTML
 
     index = (new_dir / "INDEX.xml").read_text()
-    assert f"<source_url>{URL_GH_BLOB}</source_url>" in index
+    assert f"<source_url>{URL_GH_BLOB_MD}</source_url>" in index
     assert "<local_file>getting-started-first-steps.md</local_file>" in index
     assert "<title>First steps with uv</title>" in index
     assert "<description>PLACEHOLDER</description>" in index

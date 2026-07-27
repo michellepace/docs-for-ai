@@ -294,34 +294,48 @@ class TestFilenameFromCanonicalUrl:
         assert filename_from_canonical_url(url, ext=ext) == expected
 
 
+# GitHub Blob URLs and their raw twins, one per extension curate must preserve.
+URL_GH_BLOB_MD = (
+    "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
+)
+URL_GH_RAW_TWIN_MD = (
+    "https://raw.githubusercontent.com/astral-sh/uv/main/"
+    "docs/getting-started/first-steps.md"
+)
+URL_GH_BLOB_MDX = (
+    "https://github.com/biomejs/website/blob/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_RAW_TWIN_MDX = (
+    "https://raw.githubusercontent.com/biomejs/website/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_BLOB_QMD = (
+    "https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd"
+)
+URL_GH_RAW_TWIN_QMD = (
+    "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+    "get-started/deploy-cloud.qmd"
+)
+# Two subdirectories deep, where the others are one.
+URL_GH_BLOB_DEEPLY_NESTED = (
+    "https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/dependencies.md"
+)
+
+
 class TestGithubBlobToRawUrl:
     """Blob → raw GitHub URL validation and normalisation."""
 
     @pytest.mark.parametrize(
         ("blob_url", "raw_url"),
         [
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/getting-started/first-steps.md",
-                "https://raw.githubusercontent.com/astral-sh/uv/main/"
-                "docs/getting-started/first-steps.md",
-            ),
+            (URL_GH_BLOB_MD, URL_GH_RAW_TWIN_MD),
             (
                 "https://github.com/o/r/blob/master/docs/x.md",
                 "https://raw.githubusercontent.com/o/r/master/docs/x.md",
             ),
-            (
-                "https://github.com/biomejs/website/blob/main/"
-                "src/content/docs/guides/getting-started.mdx",
-                "https://raw.githubusercontent.com/biomejs/website/main/"
-                "src/content/docs/guides/getting-started.mdx",
-            ),
-            (
-                "https://github.com/posit-dev/py-shiny-site/blob/main/"
-                "get-started/deploy-cloud.qmd",
-                "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
-                "get-started/deploy-cloud.qmd",
-            ),
+            (URL_GH_BLOB_MDX, URL_GH_RAW_TWIN_MDX),
+            (URL_GH_BLOB_QMD, URL_GH_RAW_TWIN_QMD),
         ],
     )
     def test_blob_url_becomes_raw(self, blob_url: str, raw_url: str) -> None:
@@ -350,34 +364,12 @@ class TestGithubFilenameFromBlobUrl:
     @pytest.mark.parametrize(
         ("blob_url", "expected"),
         [
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/getting-started/features.md",
-                "getting-started-features.md",
-            ),
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/concepts/projects/dependencies.md",
-                "concepts-projects-dependencies.md",
-            ),
-            (
-                "https://github.com/o/r/blob/main/readme.md",
-                "readme.md",
-            ),
-            (
-                "https://github.com/o/r/blob/main/docs/index.md",
-                "index.md",
-            ),
-            (
-                "https://github.com/biomejs/website/blob/main/"
-                "src/content/docs/guides/getting-started.mdx",
-                "src-content-docs-guides-getting-started.mdx",
-            ),
-            (
-                "https://github.com/posit-dev/py-shiny-site/blob/main/"
-                "get-started/deploy-cloud.qmd",
-                "get-started-deploy-cloud.qmd",
-            ),
+            (URL_GH_BLOB_MD, "getting-started-first-steps.md"),
+            (URL_GH_BLOB_DEEPLY_NESTED, "concepts-projects-dependencies.md"),
+            ("https://github.com/o/r/blob/main/readme.md", "readme.md"),
+            ("https://github.com/o/r/blob/main/docs/index.md", "index.md"),
+            (URL_GH_BLOB_MDX, "src-content-docs-guides-getting-started.mdx"),
+            (URL_GH_BLOB_QMD, "get-started-deploy-cloud.qmd"),
         ],
     )
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:

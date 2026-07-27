@@ -115,7 +115,10 @@ class TestResolveRoute:
                 f"{MD}/v2.0/api",
                 ("markdown", f"{MD}/v2.0/api.md", f"{MD}/v2.0/api", "v2-0-api.md"),
             ),
-            (f"{MD}/page.html", (None, f"{MD}/page.html", f"{MD}/page.html", "page.md")),
+            (
+                f"{MD}/page.html",
+                (None, f"{MD}/page.html", f"{MD}/page.html", "page.md"),
+            ),
             (f"{MD}/page.mdx", (None, f"{MD}/page.mdx", f"{MD}/page.mdx", "page.md")),
             (
                 f"{RTD}/panel.html",
@@ -213,7 +216,7 @@ class TestResolveRoute:
     def test_routes_url(
         self, url: str, expected: tuple[str | None, str, str, str]
     ) -> None:
-        """Registry transform → raw `.md`/`.rst.txt` as-is → FireCrawl, in precedence."""
+        """Registry transform → raw `.md`/`.rst.txt` → FireCrawl, in precedence."""
         assert resolve_route(url, RULES) == expected
 
     def test_github_blob_resolves_to_raw_route(self) -> None:
@@ -228,7 +231,7 @@ class TestResolveRoute:
 
 
 class TestFilenameFromCanonicalUrl:
-    """Non-GitHub URL-path → filename derivation (slugified, doc/view suffix stripped)."""
+    """Non-GitHub URL path → filename (slugified, doc/view suffix stripped)."""
 
     @pytest.mark.parametrize(
         ("url", "ext", "expected"),
@@ -291,34 +294,48 @@ class TestFilenameFromCanonicalUrl:
         assert filename_from_canonical_url(url, ext=ext) == expected
 
 
+# GitHub Blob URLs and their raw twins, one per extension curate must preserve.
+URL_GH_BLOB_MD = (
+    "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
+)
+URL_GH_RAW_TWIN_MD = (
+    "https://raw.githubusercontent.com/astral-sh/uv/main/"
+    "docs/getting-started/first-steps.md"
+)
+URL_GH_BLOB_MDX = (
+    "https://github.com/biomejs/website/blob/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_RAW_TWIN_MDX = (
+    "https://raw.githubusercontent.com/biomejs/website/main/"
+    "src/content/docs/guides/getting-started.mdx"
+)
+URL_GH_BLOB_QMD = (
+    "https://github.com/posit-dev/py-shiny-site/blob/main/get-started/deploy-cloud.qmd"
+)
+URL_GH_RAW_TWIN_QMD = (
+    "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
+    "get-started/deploy-cloud.qmd"
+)
+# Two subdirectories deep, where the others are one.
+URL_GH_BLOB_DEEPLY_NESTED = (
+    "https://github.com/astral-sh/uv/blob/main/docs/concepts/projects/dependencies.md"
+)
+
+
 class TestGithubBlobToRawUrl:
     """Blob → raw GitHub URL validation and normalisation."""
 
     @pytest.mark.parametrize(
         ("blob_url", "raw_url"),
         [
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/getting-started/first-steps.md",
-                "https://raw.githubusercontent.com/astral-sh/uv/main/"
-                "docs/getting-started/first-steps.md",
-            ),
+            (URL_GH_BLOB_MD, URL_GH_RAW_TWIN_MD),
             (
                 "https://github.com/o/r/blob/master/docs/x.md",
                 "https://raw.githubusercontent.com/o/r/master/docs/x.md",
             ),
-            (
-                "https://github.com/biomejs/website/blob/main/"
-                "src/content/docs/guides/getting-started.mdx",
-                "https://raw.githubusercontent.com/biomejs/website/main/"
-                "src/content/docs/guides/getting-started.mdx",
-            ),
-            (
-                "https://github.com/posit-dev/py-shiny-site/blob/main/"
-                "get-started/deploy-cloud.qmd",
-                "https://raw.githubusercontent.com/posit-dev/py-shiny-site/main/"
-                "get-started/deploy-cloud.qmd",
-            ),
+            (URL_GH_BLOB_MDX, URL_GH_RAW_TWIN_MDX),
+            (URL_GH_BLOB_QMD, URL_GH_RAW_TWIN_QMD),
         ],
     )
     def test_blob_url_becomes_raw(self, blob_url: str, raw_url: str) -> None:
@@ -347,34 +364,12 @@ class TestGithubFilenameFromBlobUrl:
     @pytest.mark.parametrize(
         ("blob_url", "expected"),
         [
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/getting-started/features.md",
-                "getting-started-features.md",
-            ),
-            (
-                "https://github.com/astral-sh/uv/blob/main/"
-                "docs/concepts/projects/dependencies.md",
-                "concepts-projects-dependencies.md",
-            ),
-            (
-                "https://github.com/o/r/blob/main/readme.md",
-                "readme.md",
-            ),
-            (
-                "https://github.com/o/r/blob/main/docs/index.md",
-                "index.md",
-            ),
-            (
-                "https://github.com/biomejs/website/blob/main/"
-                "src/content/docs/guides/getting-started.mdx",
-                "src-content-docs-guides-getting-started.mdx",
-            ),
-            (
-                "https://github.com/posit-dev/py-shiny-site/blob/main/"
-                "get-started/deploy-cloud.qmd",
-                "get-started-deploy-cloud.qmd",
-            ),
+            (URL_GH_BLOB_MD, "getting-started-first-steps.md"),
+            (URL_GH_BLOB_DEEPLY_NESTED, "concepts-projects-dependencies.md"),
+            ("https://github.com/o/r/blob/main/readme.md", "readme.md"),
+            ("https://github.com/o/r/blob/main/docs/index.md", "index.md"),
+            (URL_GH_BLOB_MDX, "src-content-docs-guides-getting-started.mdx"),
+            (URL_GH_BLOB_QMD, "get-started-deploy-cloud.qmd"),
         ],
     )
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
@@ -386,7 +381,9 @@ class TestGithubFilenameFromBlobUrl:
         Distinct from the no-match branch; the label is the only signal of which fired.
         """
         with pytest.raises(CurationError, match="Bad derived filename") as exc:
-            github_filename_from_blob_url("https://github.com/o/r/blob/main/docs/a_b.md")
+            github_filename_from_blob_url(
+                "https://github.com/o/r/blob/main/docs/a_b.md"
+            )
         assert "a_b.md" in str(exc.value)
 
 
@@ -401,8 +398,16 @@ class TestExtractMarkdownTitle:
                 "x",
                 "Working on projects",
             ),
-            ('---\ntitle: "Managing dependencies"\n---\n', "x", "Managing dependencies"),
-            ("---\ntitle: 'Managing dependencies'\n---\n", "x", "Managing dependencies"),
+            (
+                '---\ntitle: "Managing dependencies"\n---\n',
+                "x",
+                "Managing dependencies",
+            ),
+            (
+                "---\ntitle: 'Managing dependencies'\n---\n",
+                "x",
+                "Managing dependencies",
+            ),
             ("---\ndescription: x\n---\n# Python versions\n", "x", "Python versions"),
             ("---\ntitle: ''\n---\n# Real Heading\n", "x", "Real Heading"),
             ("# First steps\n\nbody\n", "x", "First steps"),

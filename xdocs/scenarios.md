@@ -16,13 +16,13 @@ Principles:
 uv run curate-doc <collection_dir> <URL>
 ```
 
-## Precidence: getting the doc (falls through)
+## Precedence: getting the doc (falls through)
 
-![Routing precedence as of 2026-07-01 (may have drifed)](direct-vs-scrape.jpg)
+![Routing precedence as of 2026-07-01 (may have drifted)](direct-vs-scrape.jpg)
 
 01. GitHub URLS: if it's a file, direct fetch it (any extension)
 
-02. If URL matches a prefix in `direct-fetch-rules.toml`, direct fetch it's twin. `<source_url>` must be the non-twin.
+02. If URL matches a prefix in `direct-fetch-rules.toml`, direct fetch its twin. `<source_url>` must be the non-twin.
 
     ```markdown
     - https://rich.readthedocs.io/en/stable/panel.html; twin: https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
@@ -48,7 +48,7 @@ uv run curate-doc <collection_dir> <URL>
 
 06. Edge case: firecrawl content not the same as direct fetch. So what happens in the scenario when you put a "non-md" looking URL in, and then later you put the ".md" at the end URL. two source entries right? this seems okay to me. not sure.
 
-07. Edge case: `md-append` does not catch ULRs that end in .pdf, jpg etc. IT falls through to firecrawl. But these files should be directly fetch. but then how would you title them anyhow. this is such a remote use case. but how should I handle.
+07. Edge case: `md-append` does not catch URLs that end in .pdf, jpg etc. IT falls through to firecrawl. But these files should be directly fetch. but then how would you title them anyhow. this is such a remote use case. but how should I handle.
 
 08. Handle when I get 404s (even though not all sites give them). This came up when I was testing URLs with different casing.
 

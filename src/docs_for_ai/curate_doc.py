@@ -72,12 +72,17 @@ def _reject_uv_docs_url(url: str) -> None:
 
 
 def _validate_collection_dir(collection_dir: Path, index_path: Path) -> None:
+    if collection_dir.is_file():
+        msg = f"Not a directory: {collection_dir}"
+        raise CurationError(msg)
     if (
         collection_dir.exists()
         and not index_path.exists()
         and any(collection_dir.iterdir())
     ):
-        msg = f"Unsafe collection dir: non-empty and missing INDEX.xml — {collection_dir}"
+        msg = (
+            f"Unsafe collection dir: non-empty and missing INDEX.xml — {collection_dir}"
+        )
         raise CurationError(msg)
 
 
@@ -218,7 +223,9 @@ def fetch_document(route: direct_fetch.FetchRoute) -> FetchedDoc:
         content, title = firecrawl_scrape.scrape(route.canonical_url)
     else:
         content = direct_fetch.fetch_text(route.fetch_url)
-        title = direct_fetch.extract_title(content, route.doc_format, route.canonical_url)
+        title = direct_fetch.extract_title(
+            content, route.doc_format, route.canonical_url
+        )
     return FetchedDoc(content, title, route.filename, route.canonical_url)
 
 
@@ -277,7 +284,6 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
     _reject_uv_docs_url(source_url)
     _validate_collection_dir(collection_dir, index_path)
 
-    collection_dir.mkdir(parents=True, exist_ok=True)
     index_exists = index_path.exists()
 
     fetch_route = direct_fetch.resolve_route(
@@ -298,6 +304,8 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
 
     doc = fetch_document(fetch_route)
 
+    # Only now touch the filesystem: a failed fetch must leave no trace behind.
+    collection_dir.mkdir(parents=True, exist_ok=True)
     if not index_exists:
         _initialise_collection(collection_dir, source_url)
 

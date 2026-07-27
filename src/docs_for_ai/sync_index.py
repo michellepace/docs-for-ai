@@ -123,11 +123,12 @@ def _placeholder_reasons(results: list[curate_doc.CurationResult]) -> dict[str, 
 def format_sync_report(report: SyncReport) -> str:
     """Build the end-of-run report: counts, then actionable sections only."""
     curated = len(report.successes)
-    lines = [
-        f"SYNC {collection_label(report.collection_dir)}",
+    counts = (
         f"sources {report.total_sources} · curated {curated}"
-        f" · failed {len(report.failures)} · orphans deleted {report.orphans_deleted}",
-    ]
+        f" · failed {len(report.failures)}"
+        f" · orphans deleted {report.orphans_deleted}"
+    )
+    lines = [f"SYNC {collection_label(report.collection_dir)}", counts]
 
     if report.failures:
         lines += ["", f"FAILED ({len(report.failures)})"]
@@ -152,11 +153,11 @@ def format_sync_report(report: SyncReport) -> str:
 
     needed = len(report.placeholder_files)
     noun = "description" if needed == 1 else "descriptions"
-    lines += [
-        "",
+    footer = (
         f"🏁 Sync complete: {curated}/{report.total_sources} curated,"
-        f" {needed} {noun} needed",
-    ]
+        f" {needed} {noun} needed"
+    )
+    lines += ["", footer]
     return "\n".join(lines)
 
 

@@ -21,7 +21,7 @@ type DescriptionsByFile = dict[str, str]
 
 
 def parse_descriptions(text: str) -> DescriptionsByFile:
-    """Parse filename/description line pairs into a {local_file: description} mapping."""
+    """Parse filename/description line pairs into a {local_file: description} map."""
     non_blank_lines = [line.strip() for line in text.splitlines() if line.strip()]
 
     descriptions: DescriptionsByFile = {}
@@ -52,7 +52,7 @@ def _in_band_descriptions(descriptions: DescriptionsByFile) -> DescriptionsByFil
 
 
 def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> int:
-    """Apply matching descriptions to INDEX.xml, write if changed, return update count."""
+    """Apply matching descriptions to INDEX.xml, write if changed, return count."""
     root = ET.parse(index_path).getroot()
 
     updated_count = 0

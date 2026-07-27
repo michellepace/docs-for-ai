@@ -10,6 +10,12 @@ from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.sync_index import SyncFailure, SyncReport, format_sync_report, main
+from tests.helpers import (
+    forbid_both_fetchers,
+    forbid_scrape,
+    read_index_description,
+    set_index_description,
+)
 
 
 def make_source(local_file: str, source_url: str, description: str) -> dict[str, str]:
@@ -34,29 +40,12 @@ def create_index_xml(index_path: Path, sources: list[dict[str, str]]) -> None:
     write_index(root, index_path)
 
 
-def read_descriptions_by_file(index_path: Path) -> dict[str, str]:
-    root = ET.parse(index_path).getroot()
-    return {
-        source.findtext("local_file", ""): source.findtext("description", "")
-        for source in root.findall("source")
-    }
-
-
 def read_sources_by_file(index_path: Path) -> dict[str, str]:
     root = ET.parse(index_path).getroot()
     return {
         source.findtext("local_file", ""): source.findtext("source_url", "")
         for source in root.findall("source")
     }
-
-
-def set_index_description(index_path: Path, local_file: str, description: str) -> None:
-    root = ET.parse(index_path).getroot()
-    for source in root.findall("source"):
-        desc_elem = source.find("description")
-        if source.findtext("local_file") == local_file and desc_elem is not None:
-            desc_elem.text = description
-    write_index(root, index_path)
 
 
 def run_sync(
@@ -70,12 +59,6 @@ def run_sync(
     return capsys.readouterr().out
 
 
-def _forbid_scrape(_url: str, _max_attempts: int = 2) -> tuple[str, str]:
-    """Stand in for `firecrawl_scrape.scrape` to prove the network is never touched."""
-    msg = "FireCrawl must not be called during a sync test"
-    raise AssertionError(msg)
-
-
 def stub_fetches(
     monkeypatch: pytest.MonkeyPatch, docs: dict[str, str | Exception]
 ) -> None:
@@ -86,6 +69,8 @@ def stub_fetches(
     """
 
     def fetch(url: str) -> str:
+        if url not in docs:
+            pytest.fail(f"unexpected fetch URL in this test: {url}")
         content = docs[url]
         if isinstance(content, Exception):
             raise content
@@ -97,7 +82,7 @@ def stub_fetches(
         lambda: {"append-md": ["https://example.com/"]},
     )
     monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
 
 
 def create_collection(tmp_path: Path, doc_content: str, description: str) -> Path:
@@ -227,11 +212,14 @@ def test_sync_exits_when_index_missing(
     assert str(tmp_path / "INDEX.xml") in out
 
 
-def test_sync_exits_when_index_xml_malformed(
+def test_sync_exits_when_index_xml_malformed_without_deleting_orphans(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    """Invalid XML aborts the run before the destructive orphan sweep."""
+    forbid_both_fetchers(monkeypatch)
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text("This is not XML at all")
+    (tmp_path / "orphan.md").write_text("# Orphan\n")
     monkeypatch.setattr("sys.argv", ["sync-index", str(tmp_path)])
 
     with pytest.raises(SystemExit) as exc:
@@ -241,6 +229,7 @@ def test_sync_exits_when_index_xml_malformed(
     out = capsys.readouterr().out
     assert "Invalid XML" in out
     assert "INDEX.xml" in out
+    assert (tmp_path / "orphan.md").exists()
 
 
 def test_sync_keeps_description_when_refetched_content_is_unchanged(
@@ -257,8 +246,8 @@ def test_sync_keeps_description_when_refetched_content_is_unchanged(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
-    assert descriptions["doc.md"] == "Curated description"
+    index_path = collection_dir / "INDEX.xml"
+    assert read_index_description(index_path, "doc.md") == "Curated description"
     assert "[1/1] ok    doc.md" in out
     assert "sources 1 · curated 1 · failed 0 · orphans deleted 0" in out
     assert "NEEDS DESCRIPTION" not in out
@@ -272,15 +261,15 @@ def test_sync_keeps_description_when_refetch_adds_only_blank_lines(
     collection_dir = create_collection(
         tmp_path, "# Doc\n\nStable content.\n", "Curated description"
     )
-    # Inserted blank lines defeated `git diff -w`; whitespace-normalised compare must not.
+    # Blank-line inserts defeat `git diff -w`; whitespace-normalised compare must not.
     stub_fetches(
         monkeypatch, {"https://example.com/doc.md": "# Doc\n\n\n\nStable content.\n"}
     )
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
-    assert descriptions["doc.md"] == "Curated description"
+    index_path = collection_dir / "INDEX.xml"
+    assert read_index_description(index_path, "doc.md") == "Curated description"
     assert "🏁 Sync complete: 1/1 curated, 0 descriptions needed" in out
     assert "NEEDS DESCRIPTION" not in out
 
@@ -298,8 +287,8 @@ def test_sync_resets_description_when_refetched_content_changed(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    descriptions = read_descriptions_by_file(collection_dir / "INDEX.xml")
-    assert descriptions["doc.md"] == PLACEHOLDER_DESCRIPTION
+    index_path = collection_dir / "INDEX.xml"
+    assert read_index_description(index_path, "doc.md") == PLACEHOLDER_DESCRIPTION
     needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
     assert "doc.md" in needs_section
     assert "(content changed)" in needs_section
@@ -339,7 +328,7 @@ def test_sync_keeps_description_regenerated_after_reset(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    assert read_descriptions_by_file(index_path)["doc.md"] == "Generated after sync"
+    assert read_index_description(index_path, "doc.md") == "Generated after sync"
     assert "NEEDS DESCRIPTION" not in out
 
 
@@ -353,7 +342,11 @@ def test_sync_fetches_missing_file_instead_of_pruning_entry(
     index_path = collection_dir / "INDEX.xml"
     create_index_xml(
         index_path,
-        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+        [
+            make_source(
+                "missing-doc.md", "https://example.com/missing-doc", "Description"
+            )
+        ],
     )
     stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
 
@@ -377,14 +370,18 @@ def test_sync_flags_recreated_doc_as_needing_description(
     index_path = collection_dir / "INDEX.xml"
     create_index_xml(
         index_path,
-        [make_source("missing-doc.md", "https://example.com/missing-doc", "Description")],
+        [
+            make_source(
+                "missing-doc.md", "https://example.com/missing-doc", "Description"
+            )
+        ],
     )
     stub_fetches(monkeypatch, {"https://example.com/missing-doc.md": "# Fetched fresh"})
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    descriptions = read_descriptions_by_file(index_path)
-    assert descriptions["missing-doc.md"] == PLACEHOLDER_DESCRIPTION
+    description = read_index_description(index_path, "missing-doc.md")
+    assert description == PLACEHOLDER_DESCRIPTION
     needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
     assert "missing-doc.md" in needs_section
     assert "(file recreated)" in needs_section
@@ -446,7 +443,10 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
     )
     stub_fetches(
         monkeypatch,
-        {"https://example.com/doc-a.md": failure, "https://example.com/doc-b.md": "# B"},
+        {
+            "https://example.com/doc-a.md": failure,
+            "https://example.com/doc-b.md": "# B",
+        },
     )
 
     out = run_sync(collection_dir, monkeypatch, capsys)
@@ -464,7 +464,7 @@ def test_sync_keeps_index_entry_and_reports_url_when_fetch_fails(
         "doc-a.md": "https://example.com/doc-a",
         "doc-b.md": "https://example.com/doc-b",
     }
-    assert read_descriptions_by_file(index_path)["doc-a.md"] == "Description A"
+    assert read_index_description(index_path, "doc-a.md") == "Description A"
 
 
 @pytest.mark.direct_fetch
@@ -517,7 +517,7 @@ def test_cli_refetches_github_blob_and_replaces_stale_content(tmp_path: Path) ->
     assert final_sources == {local_file: blob_url}, (
         f"INDEX.xml entry lost or rewritten after sync.\nSources now: {final_sources}"
     )
-    assert read_descriptions_by_file(index_path)[local_file] == PLACEHOLDER_DESCRIPTION, (
+    assert read_index_description(index_path, local_file) == PLACEHOLDER_DESCRIPTION, (
         "The sentinel guarantees a real content change, so the stale description "
         "must reset to PLACEHOLDER"
     )

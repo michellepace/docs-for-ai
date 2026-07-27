@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**Ignore `docs-x/` unless I reference it** — personal notes, often stale.
+**Ignore `xdocs/` unless I reference it** — personal notes, often stale.
 
 ## Overview
 

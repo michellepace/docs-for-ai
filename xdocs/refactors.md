@@ -28,7 +28,7 @@ Principle: keep a class only where grouping genuinely clarifies intent, otherwis
 
 ## Refactor out TDD scaffolding (`tests/*.py`)
 
-Leftover scaffolding to clean (inspiration: `docs-x/test-beck.md`, Kent Beck / sociable tests):
+Leftover scaffolding to clean (inspiration: `xdocs/test-beck.md`, Kent Beck / sociable tests):
 
 - `_forbid_scrape`/`_forbid_fetch` interaction guards (test_curate_doc.py, test_sync_index.py) assert HOW not WHAT — partly redundant with the output assertions
 - boilerplate docstring in test_firecrawl_scrape.py ("Tests for parse_retry_seconds.")

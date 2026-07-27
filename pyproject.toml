@@ -1,6 +1,6 @@
 [build-system]
 # Packaged for the [project.scripts] CLIs only; never published.
-requires = ["uv_build>=0.11.29,<0.12"]
+requires = ["uv_build>=0.11.32,<0.12"]
 build-backend = "uv_build"
 
 [project]
@@ -19,11 +19,11 @@ update-descriptions = "docs_for_ai.update_descriptions:main"
 
 [dependency-groups]
 dev = [
-  "pre-commit>=4.6.0",
+  "pre-commit>=4.6.1",
   "pyright>=1.1.411",
   "pytest>=9.1.1",
   "rich>=15.0.0",
-  "ruff>=0.15.22",
+  "ruff>=0.16.0",
 ]
 
 
@@ -51,8 +51,10 @@ reportDuplicateImport = false # Ruff F811
 # LINTING (RUFF)
 # =================================
 [tool.ruff]
-line-length = 90
+line-length = 88
 target-version = "py314"
+# protect corpus (ruff formats code blocks in md)
+extend-exclude = ["collections"]
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -64,6 +66,7 @@ ignore = [ # ignore incompatible or overly pedantic rules
   "COM812", # Trailing comma missing (conflicts with formatter)
   "ISC001", # implicit string concatenation (conflicts with formatter)
   "T201",   # Print found (allow print statements)
+  "CPY001", # Missing copyright notice (never published)
 ]
 
 [tool.ruff.lint.per-file-ignores]

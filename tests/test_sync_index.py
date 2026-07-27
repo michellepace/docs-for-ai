@@ -227,11 +227,13 @@ def test_sync_exits_when_index_missing(
     assert str(tmp_path / "INDEX.xml") in out
 
 
-def test_sync_exits_when_index_xml_malformed(
+def test_sync_exits_when_index_xml_malformed_without_deleting_orphans(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    """Invalid XML aborts the run before the destructive orphan sweep."""
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text("This is not XML at all")
+    (tmp_path / "orphan.md").write_text("# Orphan\n")
     monkeypatch.setattr("sys.argv", ["sync-index", str(tmp_path)])
 
     with pytest.raises(SystemExit) as exc:
@@ -241,6 +243,7 @@ def test_sync_exits_when_index_xml_malformed(
     out = capsys.readouterr().out
     assert "Invalid XML" in out
     assert "INDEX.xml" in out
+    assert (tmp_path / "orphan.md").exists()
 
 
 def test_sync_keeps_description_when_refetched_content_is_unchanged(

@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from docs_for_ai import curate_doc
+from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 
 if TYPE_CHECKING:
@@ -153,6 +154,8 @@ def test_curate_exits_with_usage_error_when_arguments_missing(
 def test_curate_rejects_a_malformed_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _forbid_fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
     monkeypatch.setattr("sys.argv", ["curate-doc", str(tmp_path), "horse-donkey-cow"])
 
     with pytest.raises(SystemExit) as exc:
@@ -167,6 +170,8 @@ def test_curate_rejects_a_malformed_url(
 def test_curate_rejects_a_uv_hosted_docs_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", _forbid_fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
     url = "https://docs.astral.sh/uv/guides/install-python/"
     monkeypatch.setattr("sys.argv", ["curate-doc", str(tmp_path), url])
 
@@ -211,6 +216,29 @@ def test_curate_rejects_a_non_blob_github_url_before_fetching(
     assert "Not a GitHub blob URL" in capsys.readouterr().out
     assert not (new_dir / "INDEX.xml").exists()
     assert not (new_dir / "README.md").exists()
+
+
+def test_curate_exits_when_fetch_fails_without_scaffolding_collection(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The fetch precedes scaffolding, so a failure leaves no partial collection."""
+
+    def fail_fetch(url: str) -> str:
+        msg = f"Fetch failed: 404 not found — {url}"
+        raise CurationError(msg)
+
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", fail_fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", _forbid_scrape)
+    collection = tmp_path / "coll"
+    monkeypatch.setattr("sys.argv", ["curate-doc", str(collection), DOC_URL])
+
+    with pytest.raises(SystemExit) as exc:
+        curate_doc.main()
+
+    assert exc.value.code == 1
+    assert "❌ Fetch failed: 404 not found" in capsys.readouterr().out
+    leftover = list(collection.iterdir()) if collection.exists() else []
+    assert leftover == []
 
 
 def test_curate_md_url_fetches_directly_and_writes_exact_index(

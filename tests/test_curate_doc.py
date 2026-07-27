@@ -91,6 +91,12 @@ def stub_scrape(monkeypatch: pytest.MonkeyPatch, body: str, title: str) -> list[
     return scraped_urls
 
 
+def forbid_both_fetchers(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Forbid direct fetch and FireCrawl scrape alike for negative-path tests."""
+    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
+    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
+
+
 def curate_offline(
     collection_dir: Path, content: str, monkeypatch: pytest.MonkeyPatch
 ) -> curate_doc.CurationResult:
@@ -114,8 +120,7 @@ def test_curate_exits_with_usage_error_when_arguments_missing(
 def test_curate_rejects_a_malformed_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
+    forbid_both_fetchers(monkeypatch)
     monkeypatch.setattr("sys.argv", ["curate-doc", str(tmp_path), "horse-donkey-cow"])
 
     with pytest.raises(SystemExit) as exc:
@@ -130,8 +135,7 @@ def test_curate_rejects_a_malformed_url(
 def test_curate_rejects_a_uv_hosted_docs_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
+    forbid_both_fetchers(monkeypatch)
     url = "https://docs.astral.sh/uv/guides/install-python/"
     monkeypatch.setattr("sys.argv", ["curate-doc", str(tmp_path), url])
 
@@ -164,8 +168,7 @@ def test_curate_refuses_a_nonempty_directory_without_index(
 def test_curate_rejects_a_non_blob_github_url_before_fetching(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
+    forbid_both_fetchers(monkeypatch)
     new_dir = tmp_path / "uv"
     monkeypatch.setattr("sys.argv", ["curate-doc", str(new_dir), URL_GH_RAW_TWIN_MD])
 
@@ -528,9 +531,8 @@ def test_curate_rejects_filename_collision_without_clobbering(
 ) -> None:
     """Two DIFFERENT canonical URLs that slugify to one filename fail loud."""
     monkeypatch.setattr(curate_doc.direct_fetch, "load_direct_fetch_rules", dict)
-    # The collision is rejected before the (paid) fetch — neither fetcher may run.
-    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
+    # The collision is rejected before the (paid) fetch.
+    forbid_both_fetchers(monkeypatch)
 
     # Pre-seed: foo-bar.md already curated from a DIFFERENT canonical URL.
     collection = tmp_path / "coll"

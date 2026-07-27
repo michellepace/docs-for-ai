@@ -9,6 +9,7 @@ allowed-tools:
   - Grep
   - mcp__firecrawl__firecrawl_scrape
   - mcp__firecrawl__firecrawl_search
+  - mcp__firecrawl__firecrawl_search_feedback
   - Read
   - WebFetch
   - WebSearch

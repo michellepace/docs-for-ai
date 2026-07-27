@@ -10,7 +10,12 @@ from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from docs_for_ai.sync_index import SyncFailure, SyncReport, format_sync_report, main
-from tests.helpers import forbid_scrape, read_index_description, set_index_description
+from tests.helpers import (
+    forbid_both_fetchers,
+    forbid_scrape,
+    read_index_description,
+    set_index_description,
+)
 
 
 def make_source(local_file: str, source_url: str, description: str) -> dict[str, str]:
@@ -64,6 +69,8 @@ def stub_fetches(
     """
 
     def fetch(url: str) -> str:
+        if url not in docs:
+            pytest.fail(f"unexpected fetch URL in this test: {url}")
         content = docs[url]
         if isinstance(content, Exception):
             raise content
@@ -209,6 +216,7 @@ def test_sync_exits_when_index_xml_malformed_without_deleting_orphans(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Invalid XML aborts the run before the destructive orphan sweep."""
+    forbid_both_fetchers(monkeypatch)
     index_path = tmp_path / "INDEX.xml"
     index_path.write_text("This is not XML at all")
     (tmp_path / "orphan.md").write_text("# Orphan\n")

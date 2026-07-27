@@ -14,6 +14,7 @@ from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
 from tests.helpers import (
+    forbid_both_fetchers,
     forbid_fetch,
     forbid_scrape,
     read_index_description,
@@ -91,12 +92,6 @@ def stub_scrape(monkeypatch: pytest.MonkeyPatch, body: str, title: str) -> list[
     return scraped_urls
 
 
-def forbid_both_fetchers(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Forbid direct fetch and FireCrawl scrape alike for negative-path tests."""
-    monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", forbid_fetch)
-    monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
-
-
 def curate_offline(
     collection_dir: Path, content: str, monkeypatch: pytest.MonkeyPatch
 ) -> curate_doc.CurationResult:
@@ -151,6 +146,7 @@ def test_curate_rejects_a_uv_hosted_docs_url(
 def test_curate_refuses_a_nonempty_directory_without_index(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    forbid_both_fetchers(monkeypatch)
     invalid_dir = tmp_path / "not_a_collection"
     invalid_dir.mkdir()
     (invalid_dir / "some_file.txt").write_text("random content")

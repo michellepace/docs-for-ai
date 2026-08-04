@@ -12,7 +12,8 @@
       "Bash(npx markdownlint-cli2 *)",
       "Bash(pre-commit run *)",
       "Bash(pwd)",
-      "Bash(uv *)"
+      "Bash(uv *)",
+      "Bash(xmlstarlet sel *)"
     ],
     "deny": [
       "Read(**/.env)",

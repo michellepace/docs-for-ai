@@ -63,7 +63,7 @@ repos:
         name: ruff format
         entry: uv run ruff format
         language: system
-        types_or: [python, pyproject]
+        types_or: [python, pyproject, markdown]  # md: fences hold Python
         pass_filenames: false
 
       - id: pyright                 # ruff lints; pyright type-checks
@@ -92,5 +92,6 @@ repos:
 # 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
 # 2. `pass_filenames: false` runs hook against the whole project
 # 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 4. ruff format also fires on *.md; corpus safe via ruff extend-exclude
 
 # Install hooks (must): uv run pre-commit install

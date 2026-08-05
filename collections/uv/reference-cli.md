@@ -729,7 +729,7 @@ When used in a project, the project environment will be created and updated befo
 
 When used outside a project, if a virtual environment can be found in the current directory or a parent directory, the command will be run in that environment. Otherwise, the command will be run in the environment of the discovered interpreter.
 
-By default, the project or workspace is discovered from the current working directory. However, when using `--preview-features target-workspace-discovery`, the project or workspace is instead discovered from the target script's directory.
+When running a script, the project or workspace is discovered from the script's directory. Otherwise, the project or workspace is discovered from the current working directory.
 
 Arguments following the command (or script) are not interpreted as arguments to uv. All options to uv must be provided before the command, e.g., `uv run --verbose foo`. A `--` can be used to separate the command from uv options for clarity, e.g., `uv run --python 3.12 -- python`.
 
@@ -1053,7 +1053,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-run--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -1195,7 +1195,7 @@ If the workspace member does not exist, uv will exit with an error.
 [`--prerelease`](#uv-run--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -1203,9 +1203,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-run--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-run--project) *project* : Discover a project in the given directory.
@@ -1417,11 +1425,9 @@ May also be set with the `UV_INSECURE_HOST` environment variable.
 [`--app`](#uv-init--app), `--application` : Create a project for an application.
 
 ```
-This is the default behavior if `--lib` is not requested.
-
 This project kind is for web servers, scripts, and command-line interfaces.
 
-By default, an application is not intended to be built and distributed as a Python package. The `--package` option can be used to create an application that is distributable, e.g., if you want to distribute a command-line interface via PyPI.
+Applications are packaged by default. Use `--no-package` to create an unpackaged application.
 ```
 
 [`--author-from`](#uv-init--author-from) *author-from* : Fill in the `authors` field in the `pyproject.toml`.
@@ -1552,9 +1558,7 @@ Instead, uv will search for a suitable Python version on the system.
 [`--no-package`](#uv-init--no-package) : Do not set up the project to be built as a Python package.
 
 ```
-Does not include a `[build-system]` for the project.
-
-This is the default behavior when using `--app`.
+This option creates the project structure as a flat directory that is not importable as a module and has no `[build-system]` entry. It can be used for applications that are not expected to be distributed as a package.
 ```
 
 [`--no-pin-python`](#uv-init--no-pin-python) : Do not create a `.python-version` file for the project.
@@ -1590,9 +1594,7 @@ When disabled, uv will only use locally cached data and locally available files.
 ```
 Defines a `[build-system]` for the project.
 
-This is the default behavior when using `--lib` or `--build-backend`, or when the `packaged-init` preview feature is enabled. It will become the default unconditionally in the future.
-
-When using `--app`, this will include a `[project.scripts]` entrypoint and use a `src/` project structure.
+This is the default behavior.
 ```
 
 [`--project`](#uv-init--project) *project* : Discover a project in the given directory.
@@ -1981,7 +1983,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-add--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -2099,7 +2101,7 @@ To enable an optional extra for this requirement instead, see `--extra`.
 [`--prerelease`](#uv-add--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -2107,9 +2109,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-add--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-add--project) *project* : Discover a project in the given directory.
@@ -2490,7 +2500,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-remove--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -2564,7 +2574,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--prerelease`](#uv-remove--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -2572,9 +2582,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-remove--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-remove--project) *project* : Discover a project in the given directory.
@@ -2939,7 +2957,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-version--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -3022,7 +3040,7 @@ Possible values:
 [`--prerelease`](#uv-version--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -3030,9 +3048,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-version--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-version--project) *project* : Discover a project in the given directory.
@@ -3435,7 +3461,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-sync--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -3482,6 +3508,8 @@ May also be set with the `UV_NO_DEFAULT_GROUPS` environment variable.
 
 ```
 This option is an alias of `--no-group dev`. See `--no-default-groups` to disable all default groups instead.
+
+This option is only available when running in a project.
 ```
 
 [`--no-editable`](#uv-sync--no-editable) : Install any editable dependencies, including the project and any workspace members, as non-editable [env: UV_NO_EDITABLE=]
@@ -3602,7 +3630,7 @@ If any workspace member does not exist, uv will exit with an error.
 [`--prerelease`](#uv-sync--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -3610,9 +3638,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-sync--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-sync--project) *project* : Discover a project in the given directory.
@@ -4013,7 +4049,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-lock--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -4081,7 +4117,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--prerelease`](#uv-lock--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -4089,9 +4125,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-lock--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-lock--project) *project* : Discover a project in the given directory.
@@ -4468,7 +4512,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-export--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -4515,6 +4559,8 @@ May also be set with the `UV_NO_DEFAULT_GROUPS` environment variable.
 
 ```
 This option is an alias of `--no-group dev`. See `--no-default-groups` to disable all default groups instead.
+
+This option is only available when running in a project.
 ```
 
 [`--no-editable`](#uv-export--no-editable) : Export any editable dependencies, including the project and any workspace members, as non-editable [env: UV_NO_EDITABLE=]
@@ -4628,7 +4674,7 @@ If any workspace member does not exist, uv will exit with an error.
 [`--prerelease`](#uv-export--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -4636,9 +4682,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-export--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-export--project) *project* : Discover a project in the given directory.
@@ -4874,6 +4928,17 @@ Possible values:
 - `requires-python`: Optimize for selecting latest supported version of each package, for each supported Python version
 ```
 
+[`--format`](#uv-tree--format) *format* : The format in which to display the dependency graph
+
+```
+[default: text]
+
+Possible values:
+
+- `text`: Display the dependency graph as a human-readable tree
+- `json`: Display the dependency graph as JSON
+```
+
 [`--frozen`](#uv-tree--frozen) : Display the requirements without locking the project [env: UV_FROZEN=]
 
 ```
@@ -4985,7 +5050,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tree--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -5034,6 +5099,8 @@ May also be set with the `UV_NO_DEFAULT_GROUPS` environment variable.
 
 ```
 This option is an alias of `--no-group dev`. See `--no-default-groups` to disable all default groups instead.
+
+This option is only available when running in a project.
 ```
 
 [`--no-group`](#uv-tree--no-group) *no-group* : Disable the specified dependency group \[env: `UV_NO_GROUP`=\]
@@ -5097,7 +5164,7 @@ May be provided multiple times. Implies `--no-default-groups`.
 [`--prerelease`](#uv-tree--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -5105,9 +5172,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-tree--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-tree--project) *project* : Discover a project in the given directory.
@@ -5453,6 +5528,8 @@ Run checks on the project.
 
 Currently, this type checks Python code using ty. By default, all Python files in the project are checked.
 
+To apply safe fixes to type-checking errors, use `--fix`.
+
 ### Usage
 
 ```
@@ -5473,6 +5550,12 @@ Note that all optional dependencies are always included in the resolution; this 
 
 ```
 `--no-group` can be used to exclude specific groups.
+```
+
+[`--all-packages`](#uv-check--all-packages) : Check all packages in the workspace.
+
+```
+The workspace's environment is synchronized to include all workspace members, and files in every member are checked.
 ```
 
 [`--allow-insecure-host`](#uv-check--allow-insecure-host), `--trusted-host` *allow-insecure-host* : Allow insecure connections to a host.
@@ -5605,6 +5688,8 @@ If a URL, the page must contain a flat list of links to package files adhering t
 May also be set with the `UV_FIND_LINKS` environment variable.
 ```
 
+[`--fix`](#uv-check--fix) : Apply safe fixes to resolve type-checking errors
+
 [`--fork-strategy`](#uv-check--fork-strategy) *fork-strategy* : The strategy to use when selecting multiple versions of a given package across Python versions and platforms.
 
 ```
@@ -5735,7 +5820,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-check--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -5782,6 +5867,8 @@ May also be set with the `UV_NO_DEFAULT_GROUPS` environment variable.
 
 ```
 This option is an alias of `--no-group dev`. See `--no-default-groups` to disable all default groups instead.
+
+This option is only available when running in a project.
 ```
 
 [`--no-extra`](#uv-check--no-extra) *no-extra* : Exclude the specified optional dependencies, if `--all-extras` is supplied.
@@ -5854,10 +5941,16 @@ The project and its dependencies will be omitted.
 May be provided multiple times. Implies `--no-default-groups`.
 ```
 
+[`--package`](#uv-check--package) *package* : Check specific packages in the workspace.
+
+```
+The workspace's environment is synchronized to include the selected members and their dependencies. Only files owned by the selected members are checked.
+```
+
 [`--prerelease`](#uv-check--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -5865,9 +5958,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-check--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-check--project) *project* : Discover a project in the given directory.
@@ -6216,7 +6317,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-audit--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -6338,7 +6439,7 @@ Possible values:
 [`--prerelease`](#uv-audit--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -6346,9 +6447,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-audit--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-audit--project) *project* : Discover a project in the given directory.
@@ -6810,7 +6919,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-run--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -6890,7 +6999,7 @@ May also be set with the `UV_OVERRIDE` environment variable.
 [`--prerelease`](#uv-tool-run--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -6898,9 +7007,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-tool-run--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-tool-run--project) *project* : Discover a project in the given directory.
@@ -7041,6 +7158,7 @@ Possible values:
 
 - `auto`: Select the appropriate PyTorch index based on the operating system and CUDA driver version
 - `cpu`: Use the CPU-only PyTorch index
+- `cu132`: Use the PyTorch index for CUDA 13.2
 - `cu130`: Use the PyTorch index for CUDA 13.0
 - `cu129`: Use the PyTorch index for CUDA 12.9
 - `cu128`: Use the PyTorch index for CUDA 12.8
@@ -7396,7 +7514,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-install--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -7474,7 +7592,7 @@ May also be set with the `UV_OVERRIDE` environment variable.
 [`--prerelease`](#uv-tool-install--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -7482,9 +7600,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-tool-install--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-tool-install--project) *project* : Discover a project in the given directory.
@@ -7625,6 +7751,7 @@ Possible values:
 
 - `auto`: Select the appropriate PyTorch index based on the operating system and CUDA driver version
 - `cpu`: Use the CPU-only PyTorch index
+- `cu132`: Use the PyTorch index for CUDA 13.2
 - `cu130`: Use the PyTorch index for CUDA 13.0
 - `cu129`: Use the PyTorch index for CUDA 12.9
 - `cu128`: Use the PyTorch index for CUDA 12.8
@@ -7944,7 +8071,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-upgrade--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -8012,7 +8139,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--prerelease`](#uv-tool-upgrade--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -8020,9 +8147,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-tool-upgrade--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-tool-upgrade--project) *project* : Discover a project in the given directory.
@@ -8215,6 +8350,8 @@ May also be set with the `UV_WORKING_DIR` environment variable.
 [`--exclude-newer`](#uv-tool-list--exclude-newer) *exclude-newer* : Limit candidate packages to those that were uploaded prior to the given date.
 
 ```
+The date is compared against the upload time of each individual distribution artifact (i.e., when each file was uploaded to the package index), not the release date of the package version.
+
 Accepts RFC 3339 timestamps (e.g., `2006-12-02T02:07:43Z`), local dates in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or an ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
 
 Durations do not respect semantics of the local time zone and are always resolved to a fixed number of seconds assuming that a day is 24 hours (e.g., DST transitions are ignored). Calendar units such as months and years are not allowed.
@@ -8222,6 +8359,16 @@ Durations do not respect semantics of the local time zone and are always resolve
 Use `false` to disable `exclude-newer`.
 
 May also be set with the `UV_EXCLUDE_NEWER` environment variable.
+```
+
+[`--exclude-newer-package`](#uv-tool-list--exclude-newer-package) *exclude-newer-package* : Limit candidate packages for specific packages to those that were uploaded prior to the given date.
+
+```
+Accepts package-date pairs in the format `PACKAGE=DATE`, where `DATE` is an RFC 3339 timestamp (e.g., `2006-12-02T02:07:43Z`), a local date in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or an ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
+
+Durations do not respect semantics of the local time zone and are always resolved to a fixed number of seconds assuming that a day is 24 hours (e.g., DST transitions are ignored). Calendar units such as months and years are not allowed.
+
+Can be provided multiple times for different packages.
 ```
 
 [`--help`](#uv-tool-list--help), `-h` : Display the concise help for this command
@@ -9251,6 +9398,8 @@ Repeating this option, e.g., `-qq`, will enable a silent mode in which uv will w
 [`--reinstall`](#uv-python-install--reinstall), `-r` : Reinstall the requested Python version, if it's already installed.
 
 ```
+If a minor version is requested, all matching installed patch versions are reinstalled.
+
 By default, uv will exit successfully if the version is already installed.
 ```
 
@@ -9282,7 +9431,7 @@ You can configure fine-grained logging using the `RUST_LOG` environment variable
 
 Upgrade installed Python versions.
 
-Upgrades versions to the latest supported patch release. Requires the `python-upgrade` preview feature.
+Upgrades versions to the latest supported patch release.
 
 A target Python minor version to upgrade may be provided, e.g., `3.13`. Multiple versions may be provided to perform more than one upgrade.
 
@@ -9858,7 +10007,7 @@ By default, Python installations are stored in the uv data directory at `$XDG_DA
 
 The Python installation directory may be overridden with `$UV_PYTHON_INSTALL_DIR`.
 
-To view the directory where uv installs Python executables instead, use the `--bin` flag. The Python executable directory may be overridden with `$UV_PYTHON_BIN_DIR`. Note that Python executables are only installed when preview mode is enabled.
+To view the directory where uv installs Python executables instead, use the `--bin` flag. The Python executable directory may be overridden with `$UV_PYTHON_BIN_DIR`.
 
 ### Usage
 
@@ -9883,8 +10032,6 @@ May also be set with the `UV_INSECURE_HOST` environment variable.
 [`--bin`](#uv-python-dir--bin) : Show the directory into which `uv python` will install Python executables.
 
 ```
-Note that this directory is only used when installing Python with preview mode enabled.
-
 The Python executable directory is determined according to the XDG standard and is derived
 from the following environment variables, in order of preference:
 
@@ -10415,6 +10562,12 @@ To view the location of the cache directory, run `uv cache dir`.
 May also be set with the `UV_CACHE_DIR` environment variable.
 ```
 
+[`--cert`](#uv-pip-compile--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
+```
+
 [`--color`](#uv-pip-compile--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -10672,7 +10825,7 @@ Multiple packages may be provided. Disable binaries for all packages with `:all:
 [`--no-build`](#uv-pip-compile--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Alias for `--only-binary :all:`.
 ```
@@ -10748,7 +10901,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--only-binary`](#uv-pip-compile--only-binary) *only-binary* : Only use pre-built wheels; don't build source distributions.
 
 ```
-When enabled, resolving will not run code from the given packages. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
 ```
@@ -10772,7 +10925,7 @@ May also be set with the `UV_OVERRIDE` environment variable.
 [`--prerelease`](#uv-pip-compile--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -10780,9 +10933,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-pip-compile--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-pip-compile--project) *project* : Discover a project in the given directory.
@@ -10944,6 +11105,7 @@ Possible values:
 
 - `auto`: Select the appropriate PyTorch index based on the operating system and CUDA driver version
 - `cpu`: Use the CPU-only PyTorch index
+- `cu132`: Use the PyTorch index for CUDA 13.2
 - `cu130`: Use the PyTorch index for CUDA 13.0
 - `cu129`: Use the PyTorch index for CUDA 12.9
 - `cu128`: Use the PyTorch index for CUDA 12.8
@@ -11085,6 +11247,12 @@ Defaults to `$XDG_CACHE_HOME/uv` or `$HOME/.cache/uv` on macOS and Linux, and `%
 To view the location of the cache directory, run `uv cache dir`.
 
 May also be set with the `UV_CACHE_DIR` environment variable.
+```
+
+[`--cert`](#uv-pip-sync--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
 ```
 
 [`--color`](#uv-pip-sync--color) *color-choice* : Control the use of color in output.
@@ -11302,7 +11470,7 @@ Multiple packages may be provided. Disable binaries for all packages with `:all:
 [`--no-build`](#uv-pip-sync--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Alias for `--only-binary :all:`.
 ```
@@ -11362,7 +11530,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--only-binary`](#uv-pip-sync--only-binary) *only-binary* : Only use pre-built wheels; don't build source distributions.
 
 ```
-When enabled, resolving will not run code from the given packages. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
 ```
@@ -11541,6 +11709,7 @@ Possible values:
 
 - `auto`: Select the appropriate PyTorch index based on the operating system and CUDA driver version
 - `cpu`: Use the CPU-only PyTorch index
+- `cu132`: Use the PyTorch index for CUDA 13.2
 - `cu130`: Use the PyTorch index for CUDA 13.0
 - `cu129`: Use the PyTorch index for CUDA 12.9
 - `cu128`: Use the PyTorch index for CUDA 12.8
@@ -11658,6 +11827,12 @@ Defaults to `$XDG_CACHE_HOME/uv` or `$HOME/.cache/uv` on macOS and Linux, and `%
 To view the location of the cache directory, run `uv cache dir`.
 
 May also be set with the `UV_CACHE_DIR` environment variable.
+```
+
+[`--cert`](#uv-pip-install--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
 ```
 
 [`--color`](#uv-pip-install--color) *color-choice* : Control the use of color in output.
@@ -11904,7 +12079,7 @@ Multiple packages may be provided. Disable binaries for all packages with `:all:
 [`--no-build`](#uv-pip-install--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Alias for `--only-binary :all:`.
 ```
@@ -11984,7 +12159,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--only-binary`](#uv-pip-install--only-binary) *only-binary* : Only use pre-built wheels; don't build source distributions.
 
 ```
-When enabled, resolving will not run code from the given packages. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
 ```
@@ -12010,7 +12185,7 @@ Unlike other install operations, this command does not require discovery of an e
 [`--prerelease`](#uv-pip-install--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -12018,9 +12193,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-pip-install--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-pip-install--project) *project* : Discover a project in the given directory.
@@ -12213,6 +12396,7 @@ Possible values:
 
 - `auto`: Select the appropriate PyTorch index based on the operating system and CUDA driver version
 - `cpu`: Use the CPU-only PyTorch index
+- `cu132`: Use the PyTorch index for CUDA 13.2
 - `cu130`: Use the PyTorch index for CUDA 13.0
 - `cu129`: Use the PyTorch index for CUDA 12.9
 - `cu128`: Use the PyTorch index for CUDA 12.8
@@ -12320,6 +12504,12 @@ Defaults to `$XDG_CACHE_HOME/uv` or `$HOME/.cache/uv` on macOS and Linux, and `%
 To view the location of the cache directory, run `uv cache dir`.
 
 May also be set with the `UV_CACHE_DIR` environment variable.
+```
+
+[`--cert`](#uv-pip-uninstall--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
 ```
 
 [`--color`](#uv-pip-uninstall--color) *color-choice* : Control the use of color in output.
@@ -12513,6 +12703,12 @@ To view the location of the cache directory, run `uv cache dir`.
 May also be set with the `UV_CACHE_DIR` environment variable.
 ```
 
+[`--cert`](#uv-pip-freeze--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
+```
+
 [`--color`](#uv-pip-freeze--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -12686,6 +12882,12 @@ To view the location of the cache directory, run `uv cache dir`.
 May also be set with the `UV_CACHE_DIR` environment variable.
 ```
 
+[`--cert`](#uv-pip-list--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
+```
+
 [`--color`](#uv-pip-list--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -12744,6 +12946,16 @@ Durations do not respect semantics of the local time zone and are always resolve
 Use `false` to disable `exclude-newer`.
 
 May also be set with the `UV_EXCLUDE_NEWER` environment variable.
+```
+
+[`--exclude-newer-package`](#uv-pip-list--exclude-newer-package) *exclude-newer-package* : Limit candidate packages for specific packages to those that were uploaded prior to the given date.
+
+```
+Accepts package-date pairs in the format `PACKAGE=DATE`, where `DATE` is an RFC 3339 timestamp (e.g., `2006-12-02T02:07:43Z`), a local date in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or an ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
+
+Durations do not respect semantics of the local time zone and are always resolved to a fixed number of seconds assuming that a day is 24 hours (e.g., DST transitions are ignored). Calendar units such as months and years are not allowed.
+
+Can be provided multiple times for different packages.
 ```
 
 [`--extra-index-url`](#uv-pip-list--extra-index-url) *extra-index-url* : (Deprecated: use `--index` instead) Extra URLs of package indexes to use, in addition to `--index-url`.
@@ -12978,6 +13190,12 @@ To view the location of the cache directory, run `uv cache dir`.
 May also be set with the `UV_CACHE_DIR` environment variable.
 ```
 
+[`--cert`](#uv-pip-show--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
+```
+
 [`--color`](#uv-pip-show--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -13147,6 +13365,12 @@ To view the location of the cache directory, run `uv cache dir`.
 May also be set with the `UV_CACHE_DIR` environment variable.
 ```
 
+[`--cert`](#uv-pip-tree--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
+```
+
 [`--color`](#uv-pip-tree--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -13205,6 +13429,16 @@ Durations do not respect semantics of the local time zone and are always resolve
 Use `false` to disable `exclude-newer`.
 
 May also be set with the `UV_EXCLUDE_NEWER` environment variable.
+```
+
+[`--exclude-newer-package`](#uv-pip-tree--exclude-newer-package) *exclude-newer-package* : Limit candidate packages for specific packages to those that were uploaded prior to the given date.
+
+```
+Accepts package-date pairs in the format `PACKAGE=DATE`, where `DATE` is an RFC 3339 timestamp (e.g., `2006-12-02T02:07:43Z`), a local date in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or an ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
+
+Durations do not respect semantics of the local time zone and are always resolved to a fixed number of seconds assuming that a day is 24 hours (e.g., DST transitions are ignored). Calendar units such as months and years are not allowed.
+
+Can be provided multiple times for different packages.
 ```
 
 [`--extra-index-url`](#uv-pip-tree--extra-index-url) *extra-index-url* : (Deprecated: use `--index` instead) Extra URLs of package indexes to use, in addition to `--index-url`.
@@ -13425,6 +13659,12 @@ Defaults to `$XDG_CACHE_HOME/uv` or `$HOME/.cache/uv` on macOS and Linux, and `%
 To view the location of the cache directory, run `uv cache dir`.
 
 May also be set with the `UV_CACHE_DIR` environment variable.
+```
+
+[`--cert`](#uv-pip-check--cert) *file* : Path to a PEM-encoded CA certificate bundle.
+
+```
+If provided, this overrides the default certificate source.
 ```
 
 [`--color`](#uv-pip-check--color) *color-choice* : Control the use of color in output.
@@ -13743,10 +13983,10 @@ Use `false` to disable `exclude-newer`.
 May also be set with the `UV_EXCLUDE_NEWER` environment variable.
 ```
 
-[`--exclude-newer-package`](#uv-venv--exclude-newer-package) *exclude-newer-package* : Limit candidate packages for a specific package to those that were uploaded prior to the given date.
+[`--exclude-newer-package`](#uv-venv--exclude-newer-package) *exclude-newer-package* : Limit candidate packages for specific packages to those that were uploaded prior to the given date.
 
 ```
-Accepts package-date pairs in the format `PACKAGE=DATE`, where `DATE` is an RFC 3339 timestamp (e.g., `2006-12-02T02:07:43Z`), a local date in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or a ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
+Accepts package-date pairs in the format `PACKAGE=DATE`, where `DATE` is an RFC 3339 timestamp (e.g., `2006-12-02T02:07:43Z`), a local date in the same format (e.g., `2006-12-02`) resolved based on your system's configured time zone, a "friendly" duration (e.g., `24 hours`, `1 week`, `30 days`), or an ISO 8601 duration (e.g., `PT24H`, `P7D`, `P30D`).
 
 Durations do not respect semantics of the local time zone and are always resolved to a fixed number of seconds assuming that a day is 24 hours (e.g., DST transitions are ignored). Calendar units such as months and years are not allowed.
 
@@ -14251,7 +14491,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-build--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -14349,7 +14589,7 @@ If the workspace member does not exist, uv will exit with an error.
 [`--prerelease`](#uv-build--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -14357,9 +14597,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-build--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-build--project) *project* : Discover a project in the given directory.
@@ -14741,6 +14989,12 @@ uv workspace metadata [OPTIONS]
 
 ### Options
 
+[`--active`](#uv-workspace-metadata--active) : Sync dependencies to the active virtual environment.
+
+```
+Instead of creating or updating the virtual environment for the project or script, the active virtual environment will be preferred, if the `VIRTUAL_ENV` environment variable is set.
+```
+
 [`--allow-insecure-host`](#uv-workspace-metadata--allow-insecure-host), `--trusted-host` *allow-insecure-host* : Allow insecure connections to a host.
 
 ```
@@ -14971,7 +15225,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-workspace-metadata--no-build) : Don't build source distributions.
 
 ```
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -15039,7 +15293,7 @@ When disabled, uv will only use locally cached data and locally available files.
 [`--prerelease`](#uv-workspace-metadata--prerelease) *prerelease* : The strategy to use when considering pre-release versions.
 
 ```
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
 May also be set with the `UV_PRERELEASE` environment variable.
 
@@ -15047,9 +15301,17 @@ Possible values:
 
 - `disallow`: Disallow all pre-release versions
 - `allow`: Allow all pre-release versions
-- `if-necessary`: Allow pre-release versions if all versions of a package are pre-release
-- `explicit`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `if-necessary-or-explicit`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `if-necessary`: Prefer stable versions, falling back to pre-release versions when necessary
+- `explicit`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `if-necessary-or-explicit`: Deprecated alias for `if-necessary`
+```
+
+[`--prerelease-package`](#uv-workspace-metadata--prerelease-package) *prerelease-package* : The strategy to use when considering pre-release versions for a specific package.
+
+```
+Accepts package-mode pairs in the format `PACKAGE=MODE`, where `MODE` is any value accepted by `--prerelease`.
+
+May be provided multiple times for different packages.
 ```
 
 [`--project`](#uv-workspace-metadata--project) *project* : Discover a project in the given directory.

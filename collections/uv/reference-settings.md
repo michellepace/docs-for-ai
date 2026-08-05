@@ -1433,7 +1433,7 @@ ______________________________________________________________________
 
 Don't build source distributions.
 
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 **Default value**: `false`
 
@@ -1646,17 +1646,17 @@ ______________________________________________________________________
 
 The strategy to use when considering pre-release versions.
 
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
-**Default value**: `"if-necessary-or-explicit"`
+**Default value**: `"if-necessary"`
 
 **Possible values**:
 
 - `"disallow"`: Disallow all pre-release versions
 - `"allow"`: Allow all pre-release versions
-- `"if-necessary"`: Allow pre-release versions if all versions of a package are pre-release
-- `"explicit"`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `"if-necessary-or-explicit"`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `"if-necessary"`: Prefer stable versions, falling back to pre-release versions when necessary
+- `"explicit"`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `"if-necessary-or-explicit"`: Deprecated alias for `if-necessary`
 
 **Example usage**:
 
@@ -1667,6 +1667,29 @@ prerelease = "allow"
 
 ```
 prerelease = "allow"
+```
+
+______________________________________________________________________
+
+### \[[`prerelease-package`](#prerelease-package)\](#prerelease-package)
+
+The strategy to use when considering pre-release versions for specific packages.
+
+Package-specific modes take precedence over the global [`prerelease`](#prerelease) mode. Accepts a dictionary mapping package names to any supported pre-release mode.
+
+**Default value**: `{}`
+
+**Type**: `dict`
+
+**Example usage**:
+
+```
+[tool.uv]
+prerelease-package = { numpy = "allow", scipy = "disallow" }
+```
+
+```
+prerelease-package = { numpy = "allow", scipy = "disallow" }
 ```
 
 ______________________________________________________________________
@@ -1687,13 +1710,13 @@ Unknown feature names are ignored with a warning.
 [tool.uv]
 preview-features = true
 # or
-preview-features = ["python-upgrade"]
+preview-features = ["json-output"]
 ```
 
 ```
 preview-features = true
 # or
-preview-features = ["python-upgrade"]
+preview-features = ["json-output"]
 ```
 
 ______________________________________________________________________
@@ -2092,6 +2115,50 @@ ignore-until-fixed = ["PYSEC-2022-43017"]
 ```
 [audit]
 ignore-until-fixed = ["PYSEC-2022-43017"]
+```
+
+______________________________________________________________________
+
+#### \[[`malware-check`](#audit_malware-check)\](#audit_malware-check)
+
+Whether to run the automatic malware check during sync operations.
+
+**Default value**: `false`
+
+**Type**: `bool`
+
+**Example usage**:
+
+```
+[tool.uv.audit]
+malware-check = true
+```
+
+```
+[audit]
+malware-check = true
+```
+
+______________________________________________________________________
+
+#### \[[`malware-check-url`](#audit_malware-check-url)\](#audit_malware-check-url)
+
+The vulnerability service URL to use for automatic malware checks.
+
+**Default value**: `"https://api.osv.dev/"`
+
+**Type**: `str`
+
+**Example usage**:
+
+```
+[tool.uv.audit]
+malware-check-url = "https://example.com"
+```
+
+```
+[audit]
+malware-check-url = "https://example.com"
 ```
 
 ______________________________________________________________________
@@ -2855,7 +2922,7 @@ ______________________________________________________________________
 
 Don't build source distributions.
 
-When enabled, resolving will not run arbitrary Python code. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Alias for `--only-binary :all:`.
 
@@ -3133,7 +3200,7 @@ ______________________________________________________________________
 
 Only use pre-built wheels; don't build source distributions.
 
-When enabled, resolving will not run code from the given packages. The cached wheels of already-built source distributions will be reused, but operations that require building distributions will exit with an error.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
 
@@ -3207,17 +3274,17 @@ ______________________________________________________________________
 
 The strategy to use when considering pre-release versions.
 
-By default, uv will accept pre-releases for packages that *only* publish pre-releases, along with first-party requirements that contain an explicit pre-release marker in the declared specifiers (`if-necessary-or-explicit`).
+By default, uv will prefer stable candidates, falling back to pre-releases only after every stable candidate that satisfies the active constraints is rejected (`if-necessary`).
 
-**Default value**: `"if-necessary-or-explicit"`
+**Default value**: `"if-necessary"`
 
 **Possible values**:
 
 - `"disallow"`: Disallow all pre-release versions
 - `"allow"`: Allow all pre-release versions
-- `"if-necessary"`: Allow pre-release versions if all versions of a package are pre-release
-- `"explicit"`: Allow pre-release versions for first-party packages with explicit pre-release markers in their version requirements
-- `"if-necessary-or-explicit"`: Allow pre-release versions if all versions of a package are pre-release, or if the package has an explicit pre-release marker in its version requirements
+- `"if-necessary"`: Prefer stable versions, falling back to pre-release versions when necessary
+- `"explicit"`: Prefer stable versions for first-party packages with explicit pre-release specifiers, falling back to pre-release versions when necessary. Disallow pre-release versions for all other packages
+- `"if-necessary-or-explicit"`: Deprecated alias for `if-necessary`
 
 **Example usage**:
 

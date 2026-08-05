@@ -14,7 +14,7 @@ collections/
     └── *.{md,rst,mdx,qmd}  # Curated doc files
 ```
 
-`INDEX.xml` is written programmatically; only `<description>` is LLM-generated via user workflow. One `<source>` per curated doc file:
+`INDEX.xml` is written programmatically; only `<description>` is LLM-generated. Every collection follows this exact schema:
 
 ```xml
 <docs_index>

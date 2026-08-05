@@ -29,18 +29,6 @@ collections/
 </docs_index>
 ```
 
-Be efficient — query `INDEX.xml` with `xmlstarlet` rather than reading it whole:
-
-```shell
-# Metadata — any XPath predicate works, e.g. [curated_at!="2026-01-01"]
-xmlstarlet sel -t -m '//source' -v 'concat(curated_at, "  ", local_file)' -n collections/uv/INDEX.xml
-
-# XPath 1.0 contains() is case-sensitive, hence translate()
-xmlstarlet sel -t -m '//source[contains(translate(concat(title," ",description),
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz"),"github")]' \
-  -f -o '  ' -v local_file -n collections/*/INDEX.xml
-```
-
 User workflow (commands in `.claude/commands/`):
 
 - `/curate-doc <collection> <url>`: curate doc into collection

@@ -3,8 +3,8 @@ title: How to set up Vitest with Next.js
 description: Learn how to set up Vitest with Next.js for Unit Testing.
 url: "https://nextjs.org/docs/app/guides/testing/vitest"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-02-11
 prerequisites:
   - "Guides: /docs/app/guides"
   - "Testing: /docs/app/guides/testing"

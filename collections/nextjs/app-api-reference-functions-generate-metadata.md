@@ -3,8 +3,8 @@ title: generateMetadata
 description: Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.
 url: "https://nextjs.org/docs/app/api-reference/functions/generate-metadata"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-06-09
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Functions: /docs/app/api-reference/functions"
@@ -1318,6 +1318,8 @@ export default function Page() {
 ```
 
 The `DynamicMarker` component renders nothing but tells Next.js the page has intentional dynamic content. By wrapping it in Suspense, the static content still prerenders normally.
+
+See [Next.js encountered runtime data in `generateMetadata()`](/docs/messages/blocking-prerender-metadata-runtime) and [Next.js encountered uncached data in `generateMetadata()`](/docs/messages/blocking-prerender-metadata-dynamic) for full fix options and trade-offs.
 
 ### Ordering
 

@@ -3,8 +3,8 @@ title: use server
 description: Learn how to use the use server directive to execute code on the server.
 url: "https://nextjs.org/docs/app/api-reference/directives/use-server"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-06-17
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Directives: /docs/app/api-reference/directives"
@@ -13,6 +13,8 @@ prerequisites:
 
 > For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
 The `use server` directive designates a function or file to be executed on the **server side**. It can be used at the top of a file to indicate that all functions in the file are server-side, or inline at the top of a function to mark the function as a [Server Function](https://19.react.dev/reference/rsc/server-functions). This is a React feature.
+
+For Next.js-specific Server Action behaviors (response model, security, configuration, deployment), see [Server Actions and Mutations](/docs/app/guides/server-actions).
 
 ## Using `use server` at the top of a file
 

@@ -3,8 +3,8 @@ title: Font Optimization
 description: Learn how to optimize fonts in Next.js
 url: "https://nextjs.org/docs/app/getting-started/fonts"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-05-27
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
@@ -55,7 +55,7 @@ Fonts are scoped to the component they're used in. To apply a font to your entir
 
 ## Google fonts
 
-You can automatically self-host any Google Font. Fonts are included stored as static assets and served from the same domain as your deployment, meaning no requests are sent to Google by the browser when the user visits your site.
+You can automatically self-host any Google Font. Fonts are included as static assets and served from the same domain as your deployment, meaning no requests are sent to Google by the browser when the user visits your site.
 
 To start using a Google Font, import your chosen font from `next/font/google`:
 

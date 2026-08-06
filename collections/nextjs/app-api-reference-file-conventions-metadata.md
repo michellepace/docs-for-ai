@@ -3,8 +3,8 @@ title: Metadata Files API Reference
 description: API documentation for the metadata file conventions.
 url: "https://nextjs.org/docs/app/api-reference/file-conventions/metadata"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2025-10-17
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "File-system conventions: /docs/app/api-reference/file-conventions"

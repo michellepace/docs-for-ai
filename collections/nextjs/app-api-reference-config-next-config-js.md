@@ -3,8 +3,8 @@ title: next.config.js
 description: Learn how to configure your application with next.config.js.
 url: "https://nextjs.org/docs/app/api-reference/config/next-config-js"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2025-11-04
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Configuration: /docs/app/api-reference/config"
@@ -204,6 +204,8 @@ expect(getRedirectUrl(response)).toEqual('https://nextjs.org/test2')
   - Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.
 - [inlineCss](/docs/app/api-reference/config/next-config-js/inlineCss)
   - Enable inline CSS support.
+- [instrumentationClientInject](/docs/app/api-reference/config/next-config-js/instrumentationClientInject)
+  - Inject additional client-side instrumentation modules before the user's `instrumentation-client.{js,ts}` file.
 - [logging](/docs/app/api-reference/config/next-config-js/logging)
   - Configure logging behavior in the terminal when running Next.js in development mode, including fetch logging, incoming requests, and forwarding browser console logs to the terminal.
 - [mdxRs](/docs/app/api-reference/config/next-config-js/mdxRs)
@@ -214,10 +216,16 @@ expect(getRedirectUrl(response)).toEqual('https://nextjs.org/test2')
   - API Reference for optimizePackageImports Next.js Config Option
 - [output](/docs/app/api-reference/config/next-config-js/output)
   - Next.js automatically traces which files are needed by each page to allow for easy deployment of your application. Learn how it works here.
+- [outputHashSalt](/docs/app/api-reference/config/next-config-js/outputHashSalt)
+  - Learn how to incorporate a custom salt string into content-addressed output filenames.
 - [pageExtensions](/docs/app/api-reference/config/next-config-js/pageExtensions)
   - Extend the default page extensions used by Next.js when resolving pages in the Pages Router.
+- [partialPrefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching)
+  - Configure the default link prefetch behavior to fetch only the static parts of each route.
 - [poweredByHeader](/docs/app/api-reference/config/next-config-js/poweredByHeader)
   - Next.js will add the `x-powered-by` header by default. Learn to opt-out of it here.
+- [prefetchInlining](/docs/app/api-reference/config/next-config-js/prefetchInlining)
+  - Override how the App Router bundles small prefetch responses together.
 - [productionBrowserSourceMaps](/docs/app/api-reference/config/next-config-js/productionBrowserSourceMaps)
   - Enables browser source map generation during the production build.
 - [proxyClientMaxBodySize](/docs/app/api-reference/config/next-config-js/proxyClientMaxBodySize)
@@ -244,18 +252,28 @@ expect(getRedirectUrl(response)).toEqual('https://nextjs.org/test2')
   - Learn how to override the invalidation time of the client cache.
 - [staticGeneration*](/docs/app/api-reference/config/next-config-js/staticGeneration)
   - Learn how to configure static generation in your Next.js application.
+- [supportsImmutableAssets](/docs/app/api-reference/config/next-config-js/supportsImmutableAssets)
+  - Configure support for immutable static assets
 - [taint](/docs/app/api-reference/config/next-config-js/taint)
   - Enable tainting Objects and Values.
 - [trailingSlash](/docs/app/api-reference/config/next-config-js/trailingSlash)
   - Configure Next.js pages to resolve with or without a trailing slash.
 - [transpilePackages](/docs/app/api-reference/config/next-config-js/transpilePackages)
-  - Automatically transpile and bundle dependencies from local packages (like monorepos) or from external dependencies (`node_modules`).
+  - Transpile and bundle dependencies from monorepo workspace packages or `node_modules` libraries that ship TypeScript, JSX, or modern syntax.
 - [turbopack](/docs/app/api-reference/config/next-config-js/turbopack)
   - Configure Next.js with Turbopack-specific options
+- [turbopackChunking](/docs/app/api-reference/config/next-config-js/turbopackChunking)
+  - Configure how Turbopack splits your client-side JavaScript into chunks in production.
 - [turbopackFileSystemCache](/docs/app/api-reference/config/next-config-js/turbopackFileSystemCache)
-  - Learn how to enable FileSystem Caching for Turbopack builds
+  - Learn how to enable and configure FileSystem Caching for Turbopack builds
 - [turbopack.ignoreIssue](/docs/app/api-reference/config/next-config-js/turbopackIgnoreIssue)
   - Suppress specific Turbopack errors and warnings from the CLI output and error overlay.
+- [turbopackLocalPostcssConfig](/docs/app/api-reference/config/next-config-js/turbopackLocalPostcssConfig)
+  - Enable per-directory PostCSS config resolution in Turbopack so that the config closest to each CSS file takes precedence over the project root config.
+- [turbopackMemoryEviction](/docs/app/api-reference/config/next-config-js/turbopackMemoryEviction)
+  - Learn how to control Turbopack's memory eviction strategy for the persistent cache.
+- [turbopackRustReactCompiler](/docs/app/api-reference/config/next-config-js/turbopackRustReactCompiler)
+  - Use the native Rust port of the React Compiler with Turbopack instead of the Babel transform.
 - [typedRoutes](/docs/app/api-reference/config/next-config-js/typedRoutes)
   - Enable support for statically typed links.
 - [typescript](/docs/app/api-reference/config/next-config-js/typescript)
@@ -264,8 +282,10 @@ expect(getRedirectUrl(response)).toEqual('https://nextjs.org/test2')
   - Configure Next.js to allow importing modules from external URLs.
 - [useLightningcss](/docs/app/api-reference/config/next-config-js/useLightningcss)
   - Enable experimental support for Lightning CSS.
-- [viewTransition](/docs/app/api-reference/config/next-config-js/viewTransition)
-  - Enable ViewTransition API from React in App Router
+- [useOffline](/docs/app/api-reference/config/next-config-js/useOffline)
+  - Learn how to enable the experimental `useOffline` configuration option to detect connectivity and retry failed requests automatically.
+- [useTypeScriptCli](/docs/app/api-reference/config/next-config-js/useTypeScriptCli)
+  - Run the project-local TypeScript CLI for type checking during production builds.
 - [webpack](/docs/app/api-reference/config/next-config-js/webpack)
   - Learn how to customize the webpack config used by Next.js
 - [webVitalsAttribution](/docs/app/api-reference/config/next-config-js/webVitalsAttribution)

@@ -3,8 +3,8 @@ title: Linking and Navigating
 description: Learn how the built-in navigation optimizations work, including prefetching, prerendering, and client-side navigation, and how to optimize navigation for dynamic routes and slow networks.
 url: "https://nextjs.org/docs/app/getting-started/linking-and-navigating"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-07-28
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
@@ -15,8 +15,6 @@ related:
 
 
 > For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
-<!-- AI agent hint: To ensure client-side navigations are instant, export `unstable_instant` from the route in addition to using Suspense. See /docs/app/guides/instant-navigation.md -->
-
 In Next.js, routes are rendered on the server by default. This often means the client has to wait for a server response before a new route can be shown. Next.js comes with built-in [prefetching](#prefetching), [streaming](#streaming), and [client-side transitions](#client-side-transitions) ensuring navigation stays fast and responsive.
 
 This guide explains how navigation works in Next.js and how you can optimize it for [dynamic routes](#dynamic-routes-without-loadingtsx) and [slow networks](#slow-networks).
@@ -72,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 ```jsx filename="app/layout.js" switcher
 import Link from 'next/link'
 
-export default function Layout() {
+export default function Layout({ children }) {
   return (
     <html>
       <body>
@@ -97,6 +95,8 @@ How much of the route is prefetched depends on whether it's static or dynamic:
 By skipping or partially prefetching dynamic routes, Next.js avoids unnecessary work on the server for routes the users may never visit. However, waiting for a server response before navigation can give the users the impression that the app is not responding.
 
 ![Server Rendering without Streaming](https://h8DxKfmAPhn8O0p3.public.blob.vercel-storage.com/docs/light/server-rendering-without-streaming.png)
+
+> **Good to know:** See the [Prefetching guide](/docs/app/guides/prefetching) for the full behavior, including how to control prefetching per link and how it changes when you adopt [Partial Prefetching](/docs/app/guides/adopting-partial-prefetching).
 
 To improve the navigation experience to dynamic routes, you can use [streaming](#streaming).
 
@@ -248,6 +248,8 @@ export default function LoadingIndicator() {
 ```
 
 You can "debounce" the hint by adding an initial animation delay (e.g. 100ms) and starting as invisible (e.g. `opacity: 0`). This means the loading indicator will only be shown if the navigation takes longer than the specified delay. See the [`useLinkStatus` reference](/docs/app/api-reference/functions/use-link-status#gracefully-handling-fast-navigation) for a CSS example.
+
+> **Good to know**: An **experimental** [`useOffline`](/docs/app/api-reference/config/next-config-js/useOffline) hook can keep prefetched routes navigable during connectivity drops. See the [offline support guide](/docs/app/guides/offline-support).
 
 > **Good to know**: You can use other visual feedback patterns like a progress bar. View an example [here](https://github.com/vercel/react-transition-progress).
 

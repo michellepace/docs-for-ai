@@ -3,8 +3,8 @@ title: How to use fonts
 description: Learn how to use fonts in Next.js
 url: "https://nextjs.org/docs/pages/getting-started/fonts"
 docs_index: /docs/pages/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2025-05-08
 router: Pages Router
 prerequisites:
   - "Getting Started: /docs/pages/getting-started"
@@ -55,7 +55,7 @@ export default function MyApp({ Component, pageProps }) {
 
 ## Google fonts
 
-You can automatically self-host any Google Font. Fonts are included stored as static assets and served from the same domain as your deployment, meaning no requests are sent to Google by the browser when the user visits your site.
+You can automatically self-host any Google Font. Fonts are included as static assets and served from the same domain as your deployment, meaning no requests are sent to Google by the browser when the user visits your site.
 
 To start using a Google Font, import your chosen font from `next/font/google`:
 

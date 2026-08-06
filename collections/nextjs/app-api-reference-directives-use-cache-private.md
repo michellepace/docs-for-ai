@@ -3,8 +3,8 @@ title: "use cache: private"
 description: "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs."
 url: "https://nextjs.org/docs/app/api-reference/directives/use-cache-private"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-07-31
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Directives: /docs/app/api-reference/directives"
@@ -17,9 +17,6 @@ related:
 
 
 > For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
-
-> This feature is currently experimental and subject to change, it's not recommended for production. Try it out and share your feedback on [GitHub](https://github.com/vercel/next.js/issues).
-
 The `'use cache: private'` directive allows functions to access runtime request APIs like `cookies()`, `headers()`, and `searchParams` within a cached scope. However, results are **never stored on the server**, they're cached only in the browser's memory and do not persist across page reloads.
 
 Reach for `'use cache: private'` when:
@@ -27,13 +24,11 @@ Reach for `'use cache: private'` when:
 * You want to cache a function that already accesses runtime data, and refactoring to [move the runtime access outside and pass values as arguments](/docs/app/getting-started/caching#working-with-runtime-apis) is not practical.
 * Compliance requirements prevent storing certain data on the server, even temporarily
 
-Because this directive accesses runtime data, the function executes on every server render and is excluded from running during [static shell](/docs/app/getting-started/caching#how-rendering-works) generation.
+Because this directive accesses runtime data, the function executes on every server render and is excluded from running during [static shell](/docs/app/getting-started/caching#prerendering) generation.
 
 It is **not** possible to configure custom cache handlers for `'use cache: private'`.
 
 For a comparison of the different cache directives, see [How `use cache: remote` differs from `use cache` and `use cache: private`](/docs/app/api-reference/directives/use-cache-remote#how-use-cache-remote-differs-from-use-cache-and-use-cache-private).
-
-> **Good to know**: This directive is marked as `experimental` because it depends on runtime prefetching, which is not yet stable. Runtime prefetching is an upcoming feature that will let the router prefetch past the [static shell](/docs/app/getting-started/caching#how-rendering-works) into **any** cached scope, not just private caches.
 
 ## Usage
 
@@ -162,7 +157,7 @@ async function getRecommendations(productId) {
 }
 ```
 
-> **Good to know**: The `stale` time must be at least 30 seconds for runtime prefetching to work. See [`cacheLife` client cache behavior](/docs/app/api-reference/functions/cacheLife#client-cache-behavior) for details.
+> **Good to know**: The `stale` time must be at least 30 seconds for runtime prefetching to work, and at least 5 minutes for the content to be included in the route's [App Shell](/docs/app/glossary#app-shell). See [`cacheLife` prerendering behavior](/docs/app/api-reference/functions/cacheLife#prerendering-behavior) for details.
 
 ## Request APIs allowed in private caches
 

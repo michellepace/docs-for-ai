@@ -3,8 +3,8 @@ title: Project structure and organization
 description: Learn the folder and file conventions in Next.js, and how to organize your project.
 url: "https://nextjs.org/docs/app/getting-started/project-structure"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-07-21
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 ---
@@ -121,7 +121,7 @@ Use `@slot` for named slots rendered by a parent layout. Use intercept patterns 
 | [`favicon`](/docs/app/api-reference/file-conventions/metadata/app-icons#favicon)                                | `.ico`                              | Favicon file             |
 | [`icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#icon)                                      | `.ico` `.jpg` `.jpeg` `.png` `.svg` | App Icon file            |
 | [`icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx)       | `.js` `.ts` `.tsx`                  | Generated App Icon       |
-| [`apple-icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#apple-icon)                          | `.jpg` `.jpeg`, `.png`              | Apple App Icon file      |
+| [`apple-icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#apple-icon)                          | `.jpg` `.jpeg` `.png`               | Apple App Icon file      |
 | [`apple-icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx) | `.js` `.ts` `.tsx`                  | Generated Apple App Icon |
 
 #### Open Graph and Twitter images
@@ -253,7 +253,7 @@ To organize routes without affecting the URL, create a group to keep related rou
 
 ![Organizing Routes with Route Groups](https://h8DxKfmAPhn8O0p3.public.blob.vercel-storage.com/docs/light/route-group-organisation.png)
 
-Even though routes inside `(marketing)` and `(shop)` share the same URL hierarchy, you can create a different layout for each group by adding a `layout.js` file inside their folders.
+Even though routes inside `(marketing)` and `(shop)` share the same URL hierarchy, you can create a different layout for each group by adding a `layout.js` file inside their folders. These layouts nest within the existing app layout.
 
 ![Route Groups with Multiple Layouts](https://h8DxKfmAPhn8O0p3.public.blob.vercel-storage.com/docs/light/route-group-multiple-layouts.png)
 

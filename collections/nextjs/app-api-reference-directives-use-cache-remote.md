@@ -3,8 +3,8 @@ title: "use cache: remote"
 description: "Learn how to use the \"use cache: remote\" directive for persistent, shared caching using remote cache handlers."
 url: "https://nextjs.org/docs/app/api-reference/directives/use-cache-remote"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-06-08
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Directives: /docs/app/api-reference/directives"
@@ -93,6 +93,15 @@ Next.js provides three caching directives, each designed for different use cases
 | **Server cache utilization**            | May be low outside static shell | High (shared across instances)    | N/A                    |
 | **Additional costs**                    | None                            | Infrastructure (storage, network) | None                   |
 | **Latency impact**                      | None                            | Cache handler lookup              | None                   |
+| **Persists across deploys**             | No                              | No                                | N/A                    |
+
+### Persistence across deploys
+
+Remote cache entries do not persist across deploys. The cache key includes the `deploymentId` (when configured) or the `buildId`, so a new build produces new keys and the previous build's entries are no longer reachable. See [Cache keys](/docs/app/api-reference/directives/use-cache#cache-keys) for the full key composition.
+
+This is intentional. Between builds, the function's identity hash or the shape of its return value can change. Upgrading a CMS client, refactoring a cached function, or changing a dependency could produce a value that doesn't match what older callers expect, so reusing entries across deploys risks serving stale or malformed data.
+
+If you need entries that persist across deploys, use [`unstable_cache`](/docs/app/api-reference/functions/unstable_cache) for non-`fetch` functions, or rely on the [`fetch`](/docs/app/api-reference/functions/fetch) cache.
 
 ### Caching with runtime data
 

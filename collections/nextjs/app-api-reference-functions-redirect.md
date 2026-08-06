@@ -3,20 +3,21 @@ title: redirect
 description: API Reference for the redirect function.
 url: "https://nextjs.org/docs/app/api-reference/functions/redirect"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-07-28
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Functions: /docs/app/api-reference/functions"
 related:
   - app/api-reference/functions/permanentRedirect
+  - app/guides/server-actions
 ---
 
 
 > For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
 The `redirect` function allows you to redirect the user to another URL. `redirect` can be used while rendering in [Server and Client Components](/docs/app/getting-started/server-and-client-components), [Route Handlers](/docs/app/api-reference/file-conventions/route), and [Server Functions](/docs/app/getting-started/mutating-data).
 
-When used in a [streaming context](/docs/app/getting-started/linking-and-navigating#streaming), this will insert a meta tag to emit the redirect on the client side. When used in a server action, it will serve a 303 HTTP redirect response to the caller. Otherwise, it will serve a 307 HTTP redirect response to the caller.
+When used in a [streaming context](/docs/app/getting-started/linking-and-navigating#streaming), this will insert a meta tag to emit the redirect on the client side. In a Server Action, `redirect` performs a client-side navigation when JavaScript is available. For progressive enhancement form submissions, it serves a 303 HTTP redirect response. Otherwise, it serves a 307 HTTP redirect response.
 
 If a resource doesn't exist, you can use the [`notFound` function](/docs/app/api-reference/functions/not-found) instead.
 
@@ -219,7 +220,7 @@ The introduction of the `307` status code means that the request method is prese
 * `302` - Temporary redirect, will change the request method from `POST` to `GET`
 * `307` - Temporary redirect, will preserve the request method as `POST`
 
-The `redirect()` method uses a `307` by default, instead of a `302` temporary redirect, meaning your requests will *always* be preserved as `POST` requests.
+The `redirect()` method uses a `307` by default, instead of a `302` temporary redirect, meaning the request method is preserved. Server Action form submissions are an exception: they use a `303` response so the browser follows the redirect with a `GET` request. When JavaScript is available, Server Actions perform a client-side navigation instead of an HTTP redirect.
 
 [Learn more](https://developer.mozilla.org/docs/Web/HTTP/Redirections) about HTTP Redirects.
 
@@ -230,6 +231,8 @@ The `redirect()` method uses a `307` by default, instead of a `302` temporary re
 | `v13.0.0` | `redirect` introduced. |
 - [permanentRedirect](/docs/app/api-reference/functions/permanentRedirect)
   - API Reference for the permanentRedirect function.
+- [Server Actions](/docs/app/guides/server-actions)
+  - How Server Actions work in Next.js, including the single-roundtrip response model, sequential dispatch, security, and caching integration.
 
 ---
 

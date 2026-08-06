@@ -3,8 +3,8 @@ title: Layouts and Pages
 description: Learn how to create your first pages and layouts, and link between them with the Link component.
 url: "https://nextjs.org/docs/app/getting-started/layouts-and-pages"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-05-28
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
@@ -262,10 +262,11 @@ You can use the [`<Link>` component](/docs/app/api-reference/components/link) to
 
 For example, to generate a list of blog posts, import `<Link>` from `next/link` and pass a `href` prop to the component:
 
-```tsx filename="app/ui/post.tsx" highlight={1,10} switcher
+```tsx filename="app/ui/post.tsx" highlight={1,2,11} switcher
 import Link from 'next/link'
+import { getPosts } from '@/lib/posts'
 
-export default async function Post({ post }) {
+export default async function Posts() {
   const posts = await getPosts()
 
   return (
@@ -280,10 +281,11 @@ export default async function Post({ post }) {
 }
 ```
 
-```jsx filename="app/ui/post.js" highlight={1,10}  switcher
+```jsx filename="app/ui/post.js" highlight={1,2,11} switcher
 import Link from 'next/link'
+import { getPosts } from '@/lib/posts'
 
-export default async function Post({ post }) {
+export default async function Posts() {
   const posts = await getPosts()
 
   return (
@@ -346,7 +348,7 @@ Learn more about the features mentioned in this page by reading the API Referenc
 - [Link Component](/docs/app/api-reference/components/link)
   - Enable fast client-side navigation with the built-in `next/link` component.
 - [Dynamic Segments](/docs/app/api-reference/file-conventions/dynamic-routes)
-  - Dynamic Route Segments can be used to programmatically generate route segments from dynamic data.
+  - Use Dynamic Segments to read URL path params and generate routes from dynamic data.
 
 ---
 

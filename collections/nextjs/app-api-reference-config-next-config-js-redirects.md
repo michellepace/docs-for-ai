@@ -3,8 +3,8 @@ title: redirects
 description: Add redirects to your Next.js app.
 url: "https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-06-30
 prerequisites:
   - "Configuration: /docs/app/api-reference/config"
   - "next.config.js: /docs/app/api-reference/config/next-config-js"
@@ -18,7 +18,7 @@ To use redirects you can use the `redirects` key in `next.config.js`:
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/about',
@@ -30,7 +30,7 @@ module.exports = {
 }
 ```
 
-`redirects` is an async function that expects an array to be returned holding objects with `source`, `destination`, and `permanent` properties:
+`redirects` can be defined as a synchronous or async function. It should return, or resolve to, an array of objects with `source`, `destination`, and `permanent` properties:
 
 * `source` is the incoming request path pattern.
 * `destination` is the path you want to route to.
@@ -67,7 +67,7 @@ Path matches are allowed, for example `/old-blog/:slug` will match `/old-blog/fi
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/old-blog/:slug',
@@ -91,7 +91,7 @@ To match a wildcard path you can use `*` after a parameter, for example `/blog/:
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/blog/:slug*',
@@ -109,7 +109,7 @@ To match a regex path you can wrap the regex in parentheses after a parameter, f
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/post/:slug(\\d{1,})',
@@ -125,7 +125,7 @@ The following characters `(`, `)`, `{`, `}`, `:`, `*`, `+`, `?` are used for reg
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         // this will match `/english(default)/something` being requested
@@ -150,7 +150,7 @@ To only match a redirect when header, cookie, or query values also match the `ha
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       // if the header `x-redirect-me` is present,
       // this redirect will be applied
@@ -240,7 +240,7 @@ When leveraging [`basePath` support](/docs/app/api-reference/config/next-config-
 module.exports = {
   basePath: '/docs',
 
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/with-basePath', // automatically becomes /docs/with-basePath
@@ -267,7 +267,7 @@ For dynamic or per-request locale handling, use [dynamic route segments and prox
 
 ```js filename="next.config.js"
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         // Manually handle locale prefixes for App Router

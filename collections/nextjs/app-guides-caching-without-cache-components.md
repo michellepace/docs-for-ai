@@ -3,8 +3,8 @@ title: Caching and Revalidating (Previous Model)
 description: Learn how to cache and revalidate data using fetch options, unstable_cache, and route segment configs for projects not using Cache Components.
 url: "https://nextjs.org/docs/app/guides/caching-without-cache-components"
 docs_index: /docs/llms.txt
-version: 16.2.6
-lastUpdated: 2026-05-19
+version: 16.3.0
+lastUpdated: 2026-06-23
 prerequisites:
   - "Guides: /docs/app/guides"
 ---
@@ -190,7 +190,7 @@ export const revalidate = false
 > **Good to know**:
 >
 > * The revalidate value needs to be statically analyzable. For example `revalidate = 600` is valid, but `revalidate = 60 * 10` is not.
-> * The revalidate value is not available when using `runtime = 'edge'`.
+> * The revalidate value is not available when using the deprecated `runtime = 'edge'`.
 > * In Development, Pages are *always* rendered on-demand and are never cached. This allows you to see changes immediately without waiting for a revalidation period to pass.
 
 #### Revalidation frequency
@@ -233,7 +233,7 @@ import { revalidateTag } from 'next/cache'
 
 export async function updateUser(id: string) {
   // Mutate data
-  revalidateTag('user')
+  revalidateTag('user', 'max')
 }
 ```
 
@@ -242,7 +242,7 @@ import { revalidateTag } from 'next/cache'
 
 export async function updateUser(id) {
   // Mutate data
-  revalidateTag('user')
+  revalidateTag('user', 'max')
 }
 ```
 
@@ -369,6 +369,10 @@ async function Item({ id }) {
   // ...
 }
 ```
+
+## Statically generating dynamic routes
+
+To prerender dynamic routes with [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params) and revalidate them over time, see the [Incremental Static Regeneration](/docs/app/guides/incremental-static-regeneration) guide.
 ---
 
 For a semantic overview of all documentation, see [/docs/sitemap.md](/docs/sitemap.md)

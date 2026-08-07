@@ -3,6 +3,7 @@ description: Get a grounded answer against a doc collection.
 disable-model-invocation: true
 argument-hint: "[collection] \"your question\""
 allowed-tools:
+  - Bash(grep *)
   - Bash(find *)
   - Bash(printf *)
   - Glob

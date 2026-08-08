@@ -4,56 +4,70 @@
     <description>Definitions disambiguating near-synonyms — subagents versus agent teams, connectors versus MCP servers, sandboxing versus permission rules — plus renamed terms like headless mode, each linking its owning doc.</description>
     <source_url>https://code.claude.com/docs/en/glossary</source_url>
     <local_file>en-glossary.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Best practices for Claude Code</title>
-    <description>Verification loops Claude can close itself, plan mode before implementing, lean `CLAUDE.md` versus on-demand skills, `/clear` and subagents to reclaim context, parallel and headless runs, and common failure patterns.</description>
+    <description>Verification loops Claude can close itself, plan mode before implementing, lean `CLAUDE.md` versus on-demand skills, `/clear` and subagents to reclaim context, parallel sessions, non-interactive headless (`claude -p`) fan-out, failure patterns.</description>
     <source_url>https://code.claude.com/docs/en/best-practices</source_url>
     <local_file>en-best-practices.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Tools reference</title>
-    <description>Catalogue of built-in tools with exact names used in permission rules, subagent `tools` lists, and hook matchers; the `ToolName(specifier)` format; per-tool behaviour for `Bash`, `Read`, `Edit`, `Grep`, `WebFetch`, `EndConversation`.</description>
+    <description>Every built-in tool name for permission rules, subagent tool lists, and hook matchers; whether each prompts by default; the `ToolName(specifier)` formats; and per-tool behaviour such as Bash output limits.</description>
     <source_url>https://code.claude.com/docs/en/tools-reference</source_url>
     <local_file>en-tools-reference.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Configure permissions</title>
-    <description>Deny-first precedence over `ask`, `allow`, rule specificity and `PreToolUse` hooks; `Tool(specifier)` syntax; gitignore-anchored `Read`/`Edit` as the only file-path rules; `acceptEdits`/`plan`/`bypassPermissions` modes; managed settings; workspace trust gating project allow rules.</description>
+    <description>Allow, ask and deny rules deciding which tool calls need your approval, how patterns match Bash commands and file paths, modes like `acceptEdits` and `bypassPermissions`, and organisation-wide managed settings.</description>
     <source_url>https://code.claude.com/docs/en/permissions</source_url>
     <local_file>en-permissions.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
-    <description>`SKILL.md` frontmatter gating invocation (`disable-model-invocation`, `user-invocable`), directory location deciding the `/name` typed, `$ARGUMENTS` and `!command` injection, backgrounded `context: fork` runs, `skill-creator` evals, and why Cowork or routines miss `~/.claude/skills/`.</description>
+    <description>Authoring guide for `SKILL.md` files: where skills live, the frontmatter reference, controlling who invokes a skill, passing arguments, running one in a subagent, and sharing them beyond Claude Code.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Create plugins</title>
-    <description>`.claude-plugin/plugin.json` as the only file inside `.claude-plugin/`, with `skills/`, `agents/`, `hooks/`, `.mcp.json` at the plugin root; `claude plugin init` for skills-directory plugins, `--plugin-dir` testing, converting `.claude/` config, marketplace submission.</description>
+    <description>Authoring walkthrough: `plugin.json` inside `.claude-plugin/` but `skills/`, `agents/`, `hooks/`, `.mcp.json` at the plugin root; testing with local `--plugin-dir` or hosted-zip `--plugin-url`; migrating `.claude/`; marketplace submission.</description>
     <source_url>https://code.claude.com/docs/en/plugins</source_url>
     <local_file>en-plugins.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Plugins reference</title>
-    <description>Every `plugin.json` field — `workflows`, `lspServers`, `userConfig`, `experimental.monitors` — plus the hook-event table, the full `claude plugin` subcommand surface, `${CLAUDE_PLUGIN_ROOT}` versus update-surviving `${CLAUDE_PLUGIN_DATA}`, install scopes, cache eviction.</description>
+    <description>What a plugin can ship — skills, agents, hooks, MCP and LSP servers, monitors, themes. `claude plugin` subcommands, `${CLAUDE_PLUGIN_ROOT}` versus update-surviving `${CLAUDE_PLUGIN_DATA}` and install scopes.</description>
     <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
     <local_file>en-plugins-reference.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
+  </source>
+  <source>
+    <title>Run Claude Code programmatically</title>
+    <description>Headless `claude -p` for repeatable scripts — `--bare` for a fixed context, JSON and streaming output shaped by `--json-schema`, tool pre-approval, resuming sessions. CLI only.</description>
+    <source_url>https://code.claude.com/docs/en/headless</source_url>
+    <local_file>en-headless.md</local_file>
+    <curated_at>2026-08-08</curated_at>
+  </source>
+  <source>
+    <title>Run agents in parallel</title>
+    <description>Chooser comparing subagents, agent view, agent teams and dynamic workflows by who coordinates and whether workers share files; plus worktrees, cross-session messaging, `/batch`, and `/tasks` status checks.</description>
+    <source_url>https://code.claude.com/docs/en/agents</source_url>
+    <local_file>en-agents.md</local_file>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Create custom subagents</title>
-    <description>`.claude/agents/` definition files with `tools`, `model`, `permissionMode`, `skills`, `memory`, `hooks` frontmatter, scope precedence, built-in Explore/Plan; `@`-mention, `--agent`, `/subtask` forks inheriting conversation; background runs narrow tools; env-var nesting and spawn caps.</description>
+    <description>Reference for `.claude/agents/` files: where they live and which wins, every frontmatter field, the built-in Explore and Plan agents, `@` and `--agent` invocation, background runs, and `/subtask` forks.</description>
     <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
     <local_file>en-sub-agents.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Manage multiple agents with agent view</title>
@@ -63,10 +77,31 @@
     <curated_at>2026-08-08</curated_at>
   </source>
   <source>
-    <title>Run Claude Code programmatically</title>
-    <description>`--bare` skips hook/plugin/MCP discovery for reproducible CI; `--output-format json`/`stream-json` carries `--json-schema` results, `system/init` load errors and subagent messages; `--allowedTools` and permission modes auto-approve; stdin piping and `--continue`/`--resume` multi-turn sessions.</description>
-    <source_url>https://code.claude.com/docs/en/headless</source_url>
-    <local_file>en-headless.md</local_file>
-    <curated_at>2026-08-02</curated_at>
+    <title>Orchestrate teams of Claude Code sessions</title>
+    <description>Experimental, gated by `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` — a lead spawning teammates sharing a task list and mailbox, contrasted with subagents; `teammateMode` split panes, plan approval, quality-gate hooks, limitations.</description>
+    <source_url>https://code.claude.com/docs/en/agent-teams</source_url>
+    <local_file>en-agent-teams.md</local_file>
+    <curated_at>2026-08-08</curated_at>
+  </source>
+  <source>
+    <title>Message your other Claude Code sessions</title>
+    <description>Plain-text handoffs between independent sessions using `SendMessage` and `ListAgents`, discovered via `/list-agents`; `crossSessionInbound` accept, hold or refuse gating, `isolatePeerMachines`, the inbox socket, reply-only cross-machine delivery.</description>
+    <source_url>https://code.claude.com/docs/en/cross-session-messaging</source_url>
+    <local_file>en-cross-session-messaging.md</local_file>
+    <curated_at>2026-08-08</curated_at>
+  </source>
+  <source>
+    <title>Orchestrate subagents at scale with dynamic workflows</title>
+    <description>When to choose one over subagents, skills and teams; `ultracode` triggering, bundled `/deep-research`, the `/workflows` view, saving scripts as commands taking `args`, resume rules, `workflowSizeGuideline`.</description>
+    <source_url>https://code.claude.com/docs/en/workflows</source_url>
+    <local_file>en-workflows.md</local_file>
+    <curated_at>2026-08-08</curated_at>
+  </source>
+  <source>
+    <title>Run parallel sessions with worktrees</title>
+    <description>`--worktree` creating `.claude/worktrees/` checkouts, `EnterWorktree` mid-session, edits blocked against the main checkout, `isolation: worktree` subagents, `.worktreeinclude` for gitignored files, `worktree.baseRef`, cleanup, and non-git `WorktreeCreate` hooks.</description>
+    <source_url>https://code.claude.com/docs/en/worktrees</source_url>
+    <local_file>en-worktrees.md</local_file>
+    <curated_at>2026-08-08</curated_at>
   </source>
 </docs_index>

@@ -35,13 +35,6 @@
     <curated_at>2026-08-02</curated_at>
   </source>
   <source>
-    <title>Create custom subagents</title>
-    <description>`.claude/agents/` definition files with `tools`, `model`, `permissionMode`, `skills`, `memory`, `hooks` frontmatter, scope precedence, built-in Explore/Plan; `@`-mention, `--agent`, `/subtask` forks inheriting conversation; background runs narrow tools; env-var nesting and spawn caps.</description>
-    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
-    <local_file>en-sub-agents.md</local_file>
-    <curated_at>2026-08-02</curated_at>
-  </source>
-  <source>
     <title>Create plugins</title>
     <description>`.claude-plugin/plugin.json` as the only file inside `.claude-plugin/`, with `skills/`, `agents/`, `hooks/`, `.mcp.json` at the plugin root; `claude plugin init` for skills-directory plugins, `--plugin-dir` testing, converting `.claude/` config, marketplace submission.</description>
     <source_url>https://code.claude.com/docs/en/plugins</source_url>
@@ -54,6 +47,20 @@
     <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
     <local_file>en-plugins-reference.md</local_file>
     <curated_at>2026-08-02</curated_at>
+  </source>
+  <source>
+    <title>Create custom subagents</title>
+    <description>`.claude/agents/` definition files with `tools`, `model`, `permissionMode`, `skills`, `memory`, `hooks` frontmatter, scope precedence, built-in Explore/Plan; `@`-mention, `--agent`, `/subtask` forks inheriting conversation; background runs narrow tools; env-var nesting and spawn caps.</description>
+    <source_url>https://code.claude.com/docs/en/sub-agents</source_url>
+    <local_file>en-sub-agents.md</local_file>
+    <curated_at>2026-08-02</curated_at>
+  </source>
+  <source>
+    <title>Manage multiple agents with agent view</title>
+    <description>Terminal dashboard from `claude agents` for background sessions: dispatch with `--bg` or `/bg`, peek and attach to rows, `.claude/worktrees/` edit isolation, and the supervisor process that hosts them.</description>
+    <source_url>https://code.claude.com/docs/en/agent-view</source_url>
+    <local_file>en-agent-view.md</local_file>
+    <curated_at>2026-08-08</curated_at>
   </source>
   <source>
     <title>Run Claude Code programmatically</title>

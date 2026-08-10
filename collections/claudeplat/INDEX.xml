@@ -1,79 +1,93 @@
 <docs_index>
   <source>
-    <title>Skill authoring best practices</title>
+    <title>Prompt engineering overview</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices</source_url>
-    <local_file>en-agents-and-tools-agent-skills-best-practices.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Agent Skills</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview</source_url>
-    <local_file>en-agents-and-tools-agent-skills-overview.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Get started with Agent Skills in the API</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart</source_url>
-    <local_file>en-agents-and-tools-agent-skills-quickstart.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview</source_url>
+    <local_file>en-build-with-claude-prompt-engineering-overview.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
     <title>Prompting best practices</title>
     <description>PLACEHOLDER</description>
     <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices</source_url>
     <local_file>en-build-with-claude-prompt-engineering-claude-prompting-best-practices.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
-    <title>Console prompting tools</title>
+    <title>Prompting Claude Fable 5</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-tools</source_url>
-    <local_file>en-build-with-claude-prompt-engineering-prompting-tools.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5</source_url>
+    <local_file>en-build-with-claude-prompt-engineering-prompting-claude-fable-5.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
-    <title>Define success criteria and build evaluations</title>
+    <title>Prompting Claude Opus 5</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/develop-tests</source_url>
-    <local_file>en-test-and-evaluate-develop-tests.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5</source_url>
+    <local_file>en-build-with-claude-prompt-engineering-prompting-claude-opus-5.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
-    <title>Using the Evaluation Tool</title>
+    <title>Prompting Claude Sonnet 5</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/eval-tool</source_url>
-    <local_file>en-test-and-evaluate-eval-tool.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5</source_url>
+    <local_file>en-build-with-claude-prompt-engineering-prompting-claude-sonnet-5.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
-    <title>Reducing latency</title>
+    <title>Agent Skills</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-latency</source_url>
-    <local_file>en-test-and-evaluate-strengthen-guardrails-reduce-latency.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview</source_url>
+    <local_file>en-agents-and-tools-agent-skills-overview.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
-    <title>Building agents with the Claude Agent SDK | Claude</title>
+    <title>Get started with Agent Skills in the API</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://claude.com/blog/building-agents-with-the-claude-agent-sdk</source_url>
-    <local_file>blog-building-agents-with-the-claude-agent-sdk.md</local_file>
-    <curated_at>2026-05-26</curated_at>
-  </source>
-  <source>
-    <title>Equipping agents for the real world with Agent Skills</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills</source_url>
-    <local_file>engineering-equipping-agents-for-the-real-world-with-agent-skills.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart</source_url>
+    <local_file>en-agents-and-tools-agent-skills-quickstart.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
   <source>
     <title>Using Agent Skills with the API</title>
     <description>PLACEHOLDER</description>
     <source_url>https://platform.claude.com/docs/en/build-with-claude/skills-guide</source_url>
     <local_file>en-build-with-claude-skills-guide.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <curated_at>2026-08-10</curated_at>
+  </source>
+  <source>
+    <title>Skill authoring best practices</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices</source_url>
+    <local_file>en-agents-and-tools-agent-skills-best-practices.md</local_file>
+    <curated_at>2026-08-10</curated_at>
+  </source>
+  <source>
+    <title>Define success criteria and build evaluations</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/develop-tests</source_url>
+    <local_file>en-test-and-evaluate-develop-tests.md</local_file>
+    <curated_at>2026-08-10</curated_at>
+  </source>
+  <source>
+    <title>Reducing latency</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-latency</source_url>
+    <local_file>en-test-and-evaluate-strengthen-guardrails-reduce-latency.md</local_file>
+    <curated_at>2026-08-10</curated_at>
+  </source>
+  <source>
+    <title>Reduce hallucinations</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations</source_url>
+    <local_file>en-test-and-evaluate-strengthen-guardrails-reduce-hallucinations.md</local_file>
+    <curated_at>2026-08-10</curated_at>
+  </source>
+  <source>
+    <title>Increase output consistency</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/increase-consistency</source_url>
+    <local_file>en-test-and-evaluate-strengthen-guardrails-increase-consistency.md</local_file>
+    <curated_at>2026-08-10</curated_at>
   </source>
 </docs_index>

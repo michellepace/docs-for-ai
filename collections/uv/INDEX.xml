@@ -1,14 +1,14 @@
 <docs_index>
   <source>
     <title>Settings</title>
-    <description>Full reference - every command, subcommand, argument and option with defaults and `UV_*` equivalents. Grep by command, never read whole (≈102k words)</description>
+    <description>Full reference - every setting under `[tool.uv]` and its `[tool.uv.*]` sub-tables, in `pyproject.toml` or `uv.toml`, with default, accepted values and TOML example. Grep by setting name (≈11k words)</description>
     <source_url>https://docs.astral.sh/uv/reference/settings/index.md</source_url>
     <local_file>reference-settings.md</local_file>
     <curated_at>2026-08-04</curated_at>
   </source>
   <source>
     <title>CLI Reference</title>
-    <description>Full reference - every setting under `[tool.uv]` and its `[tool.uv.*]` sub-tables, in `pyproject.toml` or `uv.toml`, with default, accepted values and TOML example. Grep by setting name (≈11k words)</description>
+    <description>Full reference - every command, subcommand, argument and option with defaults and `UV_*` equivalents. Grep by command, never read whole (≈102k words)</description>
     <source_url>https://docs.astral.sh/uv/reference/cli/index.md</source_url>
     <local_file>reference-cli.md</local_file>
     <curated_at>2026-08-04</curated_at>

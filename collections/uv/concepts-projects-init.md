@@ -64,7 +64,7 @@ dependencies = []
 example-app = "example_app:main"
 
 [build-system]
-requires = ["uv_build>=0.12.1,<0.13"]
+requires = ["uv_build>=0.12.3,<0.13"]
 build-backend = "uv_build"
 ```
 
@@ -87,7 +87,7 @@ dependencies = []
 example-app = "example_app:main"
 
 [build-system]
-requires = ["uv_build>=0.12.1,<0.13"]
+requires = ["uv_build>=0.12.3,<0.13"]
 build-backend = "uv_build"
 ```
 
@@ -147,7 +147,7 @@ requires-python = ">=3.11"
 dependencies = []
 
 [build-system]
-requires = ["uv_build>=0.12.1,<0.13"]
+requires = ["uv_build>=0.12.3,<0.13"]
 build-backend = "uv_build"
 ```
 
@@ -344,5 +344,5 @@ cases uv will still configure a build system but will not create the expected fi
 When `--bare` is used, additional features can still be used opt-in:
 
 ```console
-$ uv init example-bare --bare --description "Hello world" --author-from git --vcs git --python-pin
+$ uv init example-bare --bare --description "Hello world" --author-from git --vcs git --pin-python
 ```

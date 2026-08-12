@@ -118,7 +118,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager | 2026-08-04 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager | 2026-08-12 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-07-14 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |

@@ -4,7 +4,7 @@ description: Learn how to use the use client directive to render a component on 
 url: "https://nextjs.org/docs/app/api-reference/directives/use-client"
 docs_index: /docs/llms.txt
 version: 16.3.0
-lastUpdated: 2025-06-16
+lastUpdated: 2026-08-11
 prerequisites:
   - "API Reference: /docs/app/api-reference"
   - "Directives: /docs/app/api-reference/directives"
@@ -16,7 +16,7 @@ The `'use client'` directive declares an entry point for the components to be re
 
 > **Good to know:**
 >
-> You do not need to add the `'use client'` directive to every file that contains Client Components. You only need to add it to the files whose components you want to render directly within Server Components. The `'use client'` directive defines the client-server [boundary](https://nextjs.org/docs/app/building-your-application/rendering#network-boundary), and the components exported from such a file serve as entry points to the client.
+> You do not need to add the `'use client'` directive to every file that contains Client Components. You only need to add it to the files whose components you want to render directly within Server Components. The `'use client'` directive defines the [server and client boundary](/docs/app/guides/server-and-client-boundary), and the components exported from such a file serve as entry points to the client.
 
 ## Usage
 

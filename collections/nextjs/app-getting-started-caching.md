@@ -4,7 +4,7 @@ description: Learn how to cache data and UI in Next.js
 url: "https://nextjs.org/docs/app/getting-started/caching"
 docs_index: /docs/llms.txt
 version: 16.3.0
-lastUpdated: 2026-07-28
+lastUpdated: 2026-08-10
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
@@ -52,7 +52,7 @@ The [`use cache`](/docs/app/api-reference/directives/use-cache) directive caches
 * **Data-level**: Cache a function that fetches or computes data (e.g., `getProducts()`, `getUser(id)`)
 * **UI-level**: Cache an entire component or page (e.g., `async function BlogPosts()`)
 
-A cache directive gives a result a lifetime, information Next.js uses to apply rendering optimizations. See [Prerendering](#prerendering) for how cached results become part of the static shell and may be included in a [prefetch](#runtime-prefetching).
+A cache directive gives a result a lifetime, information Next.js uses to apply rendering optimizations. See [Prerendering](#prerendering) for how cached results become part of the static shell and may be included in a [prefetch](#prefetching).
 
 > **Good to know:** We recommend pairing every cache directive with a [`cacheLife`](/docs/app/api-reference/functions/cacheLife). Without one, the implicit `default` profile applies.
 
@@ -175,7 +175,7 @@ export default function Page() {
 
 A runtime API access without `<Suspense>` surfaces the same **blocking-route** insight in the dev overlay, with the same fix:
 
-Runtime-dependent data can still be given a cache lifetime with [`"use cache: private"`](/docs/app/api-reference/directives/use-cache-private), another variant that ships with Cache Components. It gives a lifetime to a function that reads cookies, headers, or `searchParams` directly, so it can be included in a [prefetch](#runtime-prefetching).
+Runtime-dependent data can still be given a cache lifetime with [`"use cache: private"`](/docs/app/api-reference/directives/use-cache-private), another variant that ships with Cache Components. It gives a lifetime to a function that reads cookies, headers, or `searchParams` directly, so it can be included in a [prefetch](#prefetching).
 
 The following section shows an alternative to `use cache: private`: extracting a runtime value and passing it to a shared cached function.
 
@@ -214,7 +214,7 @@ At request time, `<CachedContent />` executes if no matching cache entry is foun
 
 > **Good to know:** Because `<CachedContent />` is gated behind request data, it isn't added to the prerendered static shell. At runtime it's cached [in-memory](/docs/app/api-reference/directives/use-cache#runtime-caching-considerations) by default, which doesn't persist across serverless requests, so it may re-evaluate on each request. Reach for [`'use cache: remote'`](/docs/app/api-reference/directives/use-cache-remote) for durable, shared caching.
 
-With this pattern, [runtime prefetching](#runtime-prefetching) can prerender `<CachedContent />` with the user's actual session during a client transition and have the result ready before the click. This works even when server-side entries rarely survive between requests, because the lifetime you assign is what lets the result join the prefetch, where the client treats it as fresh for its [`cacheLife`](/docs/app/api-reference/functions/cacheLife) `stale` window.
+With this pattern, [prefetching](#prefetching) can prerender `<CachedContent />` with the user's actual session during a client transition and have the result ready before the click. This works even when server-side entries rarely survive between requests, because the lifetime you assign is what lets the result join the prefetch, where the client treats it as fresh for its [`cacheLife`](/docs/app/api-reference/functions/cacheLife) `stale` window.
 
 ## Static, cached, and streaming
 
@@ -412,7 +412,7 @@ Next.js requires you to explicitly handle components that can't complete during 
 
 ### Maximizing the static shell
 
-The deeper your async work sits in the tree, the more of the page can be prerendered. This is the structural pattern Cache Components rewards: a general practice worth applying everywhere, and the foundation for the instant navigation and runtime prefetching that follow. It applies to all [runtime APIs](#working-with-runtime-apis) and async operations like data fetches.
+The deeper your async work sits in the tree, the more of the page can be prerendered. This is the structural pattern Cache Components rewards: a general practice worth applying everywhere, and the foundation for the instant navigation and prefetching that follow. It applies to all [runtime APIs](#working-with-runtime-apis) and async operations like data fetches.
 
 Consider a layout that destructures `params` at the top level:
 
@@ -474,17 +474,17 @@ Cache Components shipped in 16.0.0 with verification that direct visits to a rou
 
 Read the [Instant navigation guide](/docs/app/guides/instant-navigation) for examples and inspection tools.
 
-### Runtime prefetching
+### Prefetching
 
-With [Partial Prefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching) enabled, the router prefetches each route's [App Shell](/docs/app/glossary#app-shell) by default, which already includes static content and the session data derived from `cookies()` and `headers()`. Runtime prefetching extends the prefetch with **URL data**: the `searchParams` and dynamic `params` that vary per destination link.
+With [Partial Prefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching) enabled, the router prefetches each route's [App Shell](/docs/app/glossary#app-shell) by default. The App Shell includes static content and session data derived from `cookies()` and `headers()`. To also prefetch cached content that depends on a link's **URL data**, such as `searchParams` or dynamic `params`, set `prefetch={true}` on that link.
 
 With [`<Link prefetch={true}>`](/docs/app/api-reference/components/link#prefetch) pointing at a [Partial Prefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching) route, Next.js renders that route's component tree again at prefetch time, this time with the destination URL resolved. The same rules apply, but more of the tree resolves now that its `searchParams` and `params` are in scope:
 
-* [`use cache`](#usage) called with values extracted from runtime APIs (passed as arguments) joins the runtime prerender
-* [`use cache: private`](/docs/app/api-reference/directives/use-cache-private) executes on the server, reads runtime data directly, and caches the result in the browser, joining the runtime prerender
-* [`<Suspense>`](#streaming-uncached-data) fallbacks stay in the runtime prerender while uncached content streams at request time
+* [`use cache`](#usage) called with values extracted from runtime APIs (passed as arguments) joins the per-link prefetch
+* [`use cache: private`](/docs/app/api-reference/directives/use-cache-private) executes on the server, reads runtime data directly, and caches the result in the browser as part of the per-link prefetch
+* [`<Suspense>`](#streaming-uncached-data) fallbacks stay in the prefetched UI while uncached content streams at request time
 
-This generates a **runtime prerender** that extends past the static shell with content the destination URL unlocks. Because it happens during the prefetch, the navigation has nothing to wait on. The cost is a server invocation per prefetchable link.
+This per-link prefetch includes cached content that resolves after the destination URL is known. It costs a server invocation per prefetchable link.
 
 For example, take a search page that reads `searchParams` from the URL:
 
@@ -525,7 +525,7 @@ When a [`<Link>`](/docs/app/api-reference/components/link) to `/search?q=shoes` 
 
 See [Adopting Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) to understand how `<Link>` prefetching behaves and how to adopt it.
 
-See the [Runtime prefetching guide](/docs/app/guides/runtime-prefetching) for full patterns and the [`prefetch` reference](/docs/app/api-reference/file-conventions/route-segment-config/prefetch) for all modes.
+See the [Optimizing prefetching guide](/docs/app/guides/optimizing-prefetching) for full patterns and the [`prefetch` reference](/docs/app/api-reference/file-conventions/route-segment-config/prefetch) for all modes.
 
 ## Where cached content is stored
 
@@ -533,7 +533,7 @@ A cached function's output is serialized into an **RSC payload**, at build time 
 
 * **Prerendered HTML.** The payload is rendered to HTML and stored on disk when self-hosting, or in your platform's durable storage behind a CDN. That HTML is the [static shell](#prerendering) at build time and the concrete page after an [ISR](#incremental-static-regeneration) upgrade, with [`revalidate`](/docs/app/api-reference/functions/cacheLife#revalidate) and [`expire`](/docs/app/api-reference/functions/cacheLife#expire) controlling when it's rebuilt.
 * **Shared store.** By default the result stays in a per-instance, in-memory store that is ephemeral on serverless. [`use cache: remote`](/docs/app/api-reference/directives/use-cache-remote) moves it to a durable [cache handler](/docs/app/api-reference/config/next-config-js/cacheHandlers) shared across instances, a network roundtrip that pays off only at a **high hit rate**.
-* **Browser.** The payload is included in the RSC sent for a client navigation or [prefetch](#runtime-prefetching), where the browser keeps it fresh for its [`stale`](/docs/app/api-reference/functions/cacheLife#stale) window. [`use cache: private`](/docs/app/api-reference/directives/use-cache-private) results live only here.
+* **Browser.** The payload is included in the RSC sent for a client navigation or [prefetch](#prefetching), where the browser keeps it fresh for its [`stale`](/docs/app/api-reference/functions/cacheLife#stale) window. [`use cache: private`](/docs/app/api-reference/directives/use-cache-private) results live only here.
 
 > **Good to know:** An [App Shell](/docs/app/glossary#app-shell) that reads `cookies()` or `headers()` is session-specific, cached per session on the client rather than in the shared server cache.
 

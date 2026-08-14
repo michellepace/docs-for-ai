@@ -27,7 +27,7 @@
     "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": false,
     "superpowers@claude-plugins-official": false,
-    "mattpocock-skills@mattpocock": false,
+    "mattpocock-skills@claude-plugins-official": false,
     "ponytail@ponytail": false
   },
   "extraKnownMarketplaces": {
@@ -41,12 +41,6 @@
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
       }
     },
     "ponytail": {

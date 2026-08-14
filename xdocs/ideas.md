@@ -46,6 +46,8 @@ Get https://code.claude.com/docs/llms.txt and match on INDEX.xml's `<source_url>
 
 **Data point: nextjs frontmatter (2026-08-14):** Filled nextjs INDEX.xml from each doc's frontmatter `description:` Only 3 sat in [20,30] — median ~13 words — so I dropped `DESCRIP_MIN_WORDS` to 5. Just don't want to generate tokens when I know my descrip rules aren't right.
 
+**Data point: mcp hand-written (2026-08-14):** Wrote all 14 mcp descriptions from full doc reads. Bypassed `/curate-doc` skill — brief to Fable was one sentence ("so I know when to pick it, like llms.txt"), no description-rules.md. Fable's routing-keyword style: name the primitives, flag deprecations, say what a doc *isn't* deep on.
+
 ## Idea: Curation commands should diff
 
 So it becomes "whats changed" and shall I tweak/improve the description. Rather than "lets write the whole thing again." But sometimes I do want the descriptions all to be reset, so maybe we need a `--reset-descriptions` flag (remove the PLACEHOLDER, was a past LLM problem. Shooo, so much to do.

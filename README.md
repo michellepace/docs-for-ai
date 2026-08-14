@@ -110,6 +110,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
 | 📦 [`firecrawl/`](collections/firecrawl/) | 📄 [`INDEX.xml`](collections/firecrawl/INDEX.xml) | Web scraping for AI | 2026-07-18 | [Official](https://docs.firecrawl.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
+| 📦 [`mcp/`](collections/mcp/) | 📄 [`INDEX.xml`](collections/mcp/INDEX.xml) | AI integration standard | 2026-08-14 | [Official](https://modelcontextprotocol.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-07-11 | [Official](https://mdformat.readthedocs.io) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-07-14 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |

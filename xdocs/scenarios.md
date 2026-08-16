@@ -18,7 +18,7 @@ uv run curate-doc <collection_dir> <URL>
 
 ## Precedence: getting the doc (falls through)
 
-![Routing precedence as of 2026-07-01 (may have drifted)](direct-vs-scrape.jpg)
+![Routing precedence as of 2026-07-01 (may have drifted)](../images/curate-doc-routing-2026-07-01.jpg)
 
 01. GitHub URLS: if it's a file, direct fetch it (any extension)
 

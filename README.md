@@ -2,10 +2,14 @@
 
 Curate documentation from any URL into your own collections. Then ask questions against a collection to get good, grounded answers.
 
-<div align="center">
-  <img src="images/example_usage.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
-  <p><em>(1) curate the doc → (2) stored and indexed → (3) ask Qs against the collection</em></p>
-</div>
+<p align="left">
+  <a href="images/curate-doc-usage-2025-11-25.jpg">
+    <img src="images/curate-doc-usage-2025-11-25.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
+  </a>
+  <br>
+  <em>(1) curate the doc → (2) stored and indexed → (3) ask Qs against the collection</em>
+</p>
+<br>
 
 **Why good answers?** The data is cleaner: curated docs beat a raw web fetch or web search. The index forces focus: each collection has an `INDEX.xml` the LLM reader uses to find the docs relevant to your question.
 
@@ -134,6 +138,15 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
 **Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
+
+<p align="left">
+  <a href="images/curate-doc-routing-2026-07-01.jpg">
+    <img src="images/curate-doc-routing-2026-07-01.jpg" alt="Flowchart of how curate-doc resolves a URL. Query strings, fragments and trailing slashes are stripped first, then four gates in order: (1) GitHub host — fetch the raw twin, or error out; (2) direct-fetch-rules.toml prefix — fetch the .md or .rst.txt twin; (3) URL already ends in .md or .rst.txt — fetch as-is; (4) FireCrawl scrape, last resort." width="300">
+  </a>
+  <br>
+  <em>Routing simplified, or <a href="images/curate-doc-routing-2026-08-05.jpg">the detailed version</a></em>
+</p>
+<br>
 
 **INDEX.xml Schema:**
 

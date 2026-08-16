@@ -1,14 +1,14 @@
 <docs_index>
   <source>
     <title>Prompt engineering overview</title>
-    <description>Learn when prompt engineering is the right solution, how to iterate on prompts, and where to find Claude prompting techniques and interactive tutorials.</description>
+    <description>Learn when prompt engineering is the right solution, and find Claude prompting techniques and interactive tutorials.</description>
     <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview</source_url>
     <local_file>en-build-with-claude-prompt-engineering-overview.md</local_file>
     <curated_at>2026-08-16</curated_at>
   </source>
   <source>
     <title>Prompting best practices</title>
-    <description>Comprehensive guide to prompt engineering techniques for Claude's latest models, covering clarity, examples, XML structuring, output formatting, tool use, thinking, and agentic systems.</description>
+    <description>Comprehensive guide to prompt engineering techniques for Claude's latest models, covering clarity, examples, XML structuring, thinking, and agentic systems.</description>
     <source_url>https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices</source_url>
     <local_file>en-build-with-claude-prompt-engineering-claude-prompting-best-practices.md</local_file>
     <curated_at>2026-08-16</curated_at>
@@ -43,21 +43,21 @@
   </source>
   <source>
     <title>Get started with Agent Skills in the API</title>
-    <description>Learn how to use Agent Skills to create documents with the Claude API in under 10 minutes, listing Skills, generating presentations, and downloading files.</description>
+    <description>Learn how to use Agent Skills to create documents with the Claude API in under 10 minutes.</description>
     <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart</source_url>
     <local_file>en-agents-and-tools-agent-skills-quickstart.md</local_file>
     <curated_at>2026-08-16</curated_at>
   </source>
   <source>
     <title>Using Agent Skills with the API</title>
-    <description>Learn how to use Agent Skills to extend Claude's capabilities through the API, covering the container parameter, custom Skill management, versioning, limits, and best practices.</description>
+    <description>Learn how to use Agent Skills to extend Claude's capabilities through the API.</description>
     <source_url>https://platform.claude.com/docs/en/build-with-claude/skills-guide</source_url>
     <local_file>en-build-with-claude-skills-guide.md</local_file>
     <curated_at>2026-08-16</curated_at>
   </source>
   <source>
     <title>Skill authoring best practices</title>
-    <description>Learn how to write effective Skills that Claude can discover and use successfully, covering conciseness, degrees of freedom, naming conventions, descriptions, and progressive disclosure patterns.</description>
+    <description>Learn how to write effective Skills that Claude can discover and use successfully.</description>
     <source_url>https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices</source_url>
     <local_file>en-agents-and-tools-agent-skills-best-practices.md</local_file>
     <curated_at>2026-08-16</curated_at>
@@ -78,149 +78,16 @@
   </source>
   <source>
     <title>Reduce hallucinations</title>
-    <description>Minimize hallucinations in Claude's outputs using basic and advanced strategies: allowing uncertainty, grounding responses in direct quotes, and verifying claims with citations.</description>
+    <description>Minimize hallucinations in Claude's outputs by allowing uncertainty, grounding responses in direct quotes, and verifying claims with citations.</description>
     <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations</source_url>
     <local_file>en-test-and-evaluate-strengthen-guardrails-reduce-hallucinations.md</local_file>
     <curated_at>2026-08-16</curated_at>
   </source>
   <source>
     <title>Increase output consistency</title>
-    <description>Make Claude's outputs more consistent by specifying exact formats, prefilling responses, constraining with examples, grounding answers in retrieval, chaining prompts, and keeping Claude in character.</description>
+    <description>Make Claude's outputs more consistent by specifying exact formats, prefilling responses, constraining with examples, and grounding answers in retrieval.</description>
     <source_url>https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/increase-consistency</source_url>
     <local_file>en-test-and-evaluate-strengthen-guardrails-increase-consistency.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Building custom connectors</title>
-    <description>Build your own MCP servers to connect Claude to your tools and data</description>
-    <source_url>https://claude.com/docs/connectors/building</source_url>
-    <local_file>connectors-building.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>What should I build: MCP, plugin, or both?</title>
-    <description>Decide between an MCP server, a plugin, or both for your Claude integration</description>
-    <source_url>https://claude.com/docs/connectors/building/what-to-build</source_url>
-    <local_file>connectors-building-what-to-build.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Authentication for connectors</title>
-    <description>OAuth and authentication options for MCP servers in Claude</description>
-    <source_url>https://claude.com/docs/connectors/building/authentication</source_url>
-    <local_file>connectors-building-authentication.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Model Context Protocol (MCP)</title>
-    <description>Understanding the open standard powering Claude's connectors</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp</source_url>
-    <local_file>connectors-building-mcp.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Lazy authentication for MCP servers</title>
-    <description>Let users call public tools immediately and defer OAuth until a protected tool is actually invoked.</description>
-    <source_url>https://claude.com/docs/connectors/building/lazy-authentication</source_url>
-    <local_file>connectors-building-lazy-authentication.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Enterprise Managed Auth for connectors</title>
-    <description>Accept identity assertions from enterprise SSO so users connect to your MCP server without a separate OAuth consent step.</description>
-    <source_url>https://claude.com/docs/connectors/building/enterprise-managed-auth</source_url>
-    <local_file>connectors-building-enterprise-managed-auth.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Directory connectors vs custom connectors</title>
-    <description>Understand the difference between directory-listed and custom connectors</description>
-    <source_url>https://claude.com/docs/connectors/building/directory-vs-custom</source_url>
-    <local_file>connectors-building-directory-vs-custom.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Testing your connector</title>
-    <description>Test your MCP server against Claude before submitting to the directory</description>
-    <source_url>https://claude.com/docs/connectors/building/testing</source_url>
-    <local_file>connectors-building-testing.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Troubleshooting connectors</title>
-    <description>Diagnose and resolve common connection failures for custom and directory MCP connectors</description>
-    <source_url>https://claude.com/docs/connectors/building/troubleshooting</source_url>
-    <local_file>connectors-building-troubleshooting.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Pre-submission checklist</title>
-    <description>What Anthropic reviewers test, so you can pass on the first try</description>
-    <source_url>https://claude.com/docs/connectors/building/review-criteria</source_url>
-    <local_file>connectors-building-review-criteria.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Manage your listing after publishing</title>
-    <description>Update your MCP server, plugin, and directory listing after publication</description>
-    <source_url>https://claude.com/docs/connectors/building/after-publishing</source_url>
-    <local_file>connectors-building-after-publishing.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Managing your directory listing</title>
-    <description>Track submissions, monitor server health and usage metrics, and edit your Connectors Directory listing</description>
-    <source_url>https://claude.com/docs/connectors/building/managing-your-listing</source_url>
-    <local_file>connectors-building-managing-your-listing.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Get started with MCP Apps</title>
-    <description>Learn how to test MCP Apps in Claude</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/getting-started</source_url>
-    <local_file>connectors-building-mcp-apps-getting-started.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Design guidelines</title>
-    <description>Visual and interaction design guidelines for MCP Apps in Claude</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/design-guidelines</source_url>
-    <local_file>connectors-building-mcp-apps-design-guidelines.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Blend your MCP App with Claude's theme</title>
-    <description>Make your widget background transparent and style it with Claude's style variables</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/transparent-theming</source_url>
-    <local_file>connectors-building-mcp-apps-transparent-theming.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Supersede older widget instances</title>
-    <description>Keep only the newest copy of a widget active when its tool is called more than once in a conversation</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/instance-supersession</source_url>
-    <local_file>connectors-building-mcp-apps-instance-supersession.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Building cross-platform MCP Apps</title>
-    <description>Build MCP Apps that work with both Claude and ChatGPT using a single codebase</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/cross-compatibility</source_url>
-    <local_file>connectors-building-mcp-apps-cross-compatibility.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Opening external links from MCP Apps</title>
-    <description>How Claude handles ui/open-link requests, and how directory connectors can allowlist destinations to skip the confirmation modal</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/external-links</source_url>
-    <local_file>connectors-building-mcp-apps-external-links.md</local_file>
-    <curated_at>2026-08-16</curated_at>
-  </source>
-  <source>
-    <title>Troubleshooting MCP Apps</title>
-    <description>Debug and resolve common issues with MCP Apps</description>
-    <source_url>https://claude.com/docs/connectors/building/mcp-apps/troubleshooting</source_url>
-    <local_file>connectors-building-mcp-apps-troubleshooting.md</local_file>
     <curated_at>2026-08-16</curated_at>
   </source>
 </docs_index>

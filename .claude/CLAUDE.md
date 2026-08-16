@@ -20,12 +20,12 @@ collections/
 <docs_index>
   <source>
     <title>[curated source document title]</title>
-    <description>[short description for LLM routing]</description>
+    <description>[routing signal an LLM uses to pick this file]</description>
     <source_url>[document source url]</source_url>
     <local_file>[curated doc filename]</local_file>
     <curated_at>YYYY-MM-DD</curated_at>
   </source>
-  <!-- ...repeated per curated doc... -->
+  <!-- One <source> entry per curated doc file -->
 </docs_index>
 ```
 

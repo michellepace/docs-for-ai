@@ -141,7 +141,7 @@ The `/curate-doc` command always regenerates the description, whereas `/recurate
 <docs_index>
   <source>
     <title>[curated source document title]</title>
-    <description>[20-30 word routing signal an LLM reader uses to pick this file]</description>
+    <description>[routing signal an LLM uses to pick this file]</description>
     <source_url>[document source url]</source_url>
     <local_file>[curated doc filename]</local_file>
     <curated_at>YYYY-MM-DD</curated_at>

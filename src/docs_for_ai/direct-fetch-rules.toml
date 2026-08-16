@@ -6,6 +6,7 @@
 # Eg Clerk has https://clerk.com/docs/guides/ai/skills
 #    with twin https://clerk.com/docs/guides/ai/skills.md
 append-md = [
+  "https://claude.com/docs/",
   "https://clerk.com/docs/",
   "https://code.claude.com/docs/",
   "https://docs.coderabbit.ai/",

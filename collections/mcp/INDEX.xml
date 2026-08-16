@@ -1,0 +1,100 @@
+<docs_index>
+  <source>
+    <title>What is the Model Context Protocol (MCP)?</title>
+    <description>Non-technical introduction to what MCP is: the USB-C analogy, example use cases, benefits for developers and users, and ecosystem adoption.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro</source_url>
+    <local_file>2026-07-28-getting-started-intro.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Architecture overview</title>
+    <description>MCP's host–client–server architecture, data and transport layers, JSON-RPC primitives (tools, resources, prompts, elicitation), stateless discovery, and notifications, with a message-exchange example.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture</source_url>
+    <local_file>2026-07-28-learn-architecture.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Understanding MCP servers</title>
+    <description>Detailed reference on the three server primitives — tools, resources, and prompts: protocol operations, who controls each, user-interaction patterns, and combining multiple servers.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts</source_url>
+    <local_file>2026-07-28-learn-server-concepts.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Understanding MCP clients</title>
+    <description>The host–client distinction and client features servers can use: elicitation (form and URL modes, MRTR flow), deprecated roots and sampling, and security and consent guidance.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/learn/client-concepts</source_url>
+    <local_file>2026-07-28-learn-client-concepts.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Versioning</title>
+    <description>MCP's date-based protocol versioning: revision states, feature deprecation lifecycle, per-request version negotiation via `_meta` and `UnsupportedProtocolVersionError`, and compatibility with older handshake-based revisions.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/learn/versioning</source_url>
+    <local_file>2026-07-28-learn-versioning.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Connect to local MCP servers</title>
+    <description>Claude Desktop tutorial: configure a local filesystem server via `claude_desktop_config.json` and `npx`, approve tool actions, and troubleshoot connection failures using logs.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers</source_url>
+    <local_file>2026-07-28-develop-connect-local-servers.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Connect to remote MCP Servers</title>
+    <description>Tutorial: connect Claude (Desktop or browser) to internet-hosted MCP servers via Custom Connectors, authenticating with OAuth and configuring tool permissions.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-remote-servers</source_url>
+    <local_file>2026-07-28-develop-connect-remote-servers.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Build with Agent Skills</title>
+    <description>Scaffolding MCP servers with AI coding agents via the `mcp-server-dev` plugin's Agent Skills, including deployment-path selection (remote HTTP, MCP apps, MCPB bundles, local stdio).</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/build-with-agent-skills</source_url>
+    <local_file>2026-07-28-develop-build-with-agent-skills.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Build an MCP server</title>
+    <description>Tutorial: build a stdio weather server exposing `get_alerts`/`get_forecast` tools in Python, TypeScript, Java, Kotlin, C#, Ruby, Rust, or Go, avoiding stdout logging, then test in Claude Desktop.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server</source_url>
+    <local_file>2026-07-28-develop-build-server.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Build an MCP client</title>
+    <description>Tutorial: build a Claude-powered chatbot client that launches stdio servers, lists tools, and routes Anthropic API `tool_use` calls, in Python, TypeScript, Java, Kotlin, C#, Ruby, or Rust.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/build-client</source_url>
+    <local_file>2026-07-28-develop-build-client.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Client Best Practices</title>
+    <description>Scaling hosts to hundreds of tools: progressive tool discovery (search meta-tools, dynamic server connection, caching) and programmatic tool calling in sandboxes (code mode), with security guidance.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/clients/client-best-practices</source_url>
+    <local_file>2026-07-28-develop-clients-client-best-practices.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>SDKs</title>
+    <description>Table of official MCP SDKs by language (TypeScript, Python, C#, Go, Java, Rust, Ruby, Swift, PHP, Kotlin) with GitHub repository URLs, docs-site links, and support-tier classifications.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/sdk</source_url>
+    <local_file>2026-07-28-sdk.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Debugging</title>
+    <description>Debugging MCP integrations: Inspector, stderr/OpenTelemetry logging, common stdio failures (working directory, environment variables), protocol error codes, and Claude Desktop logs and Chrome DevTools.</description>
+    <source_url>https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging</source_url>
+    <local_file>2026-07-28-tools-debugging.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>Example Servers</title>
+    <description>Catalogue of reference servers (Filesystem, Git, Fetch, Memory, Time, others) with links to official and community integrations, plus npx/uvx run commands and Claude configuration snippets.</description>
+    <source_url>https://modelcontextprotocol.io/examples</source_url>
+    <local_file>examples.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+</docs_index>

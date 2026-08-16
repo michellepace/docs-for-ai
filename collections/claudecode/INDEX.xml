@@ -104,4 +104,18 @@
     <local_file>en-worktrees.md</local_file>
     <curated_at>2026-08-08</curated_at>
   </source>
+  <source>
+    <title>How Claude remembers your project</title>
+    <description>CLAUDE.md scopes and load order, `@path` imports, path-scoped `.claude/rules/`, `AGENTS.md` bridging and `claudeMdExcludes`; plus Claude-written auto memory (`MEMORY.md` index, `/memory`) and adherence troubleshooting.</description>
+    <source_url>https://code.claude.com/docs/en/memory</source_url>
+    <local_file>en-memory.md</local_file>
+    <curated_at>2026-08-12</curated_at>
+  </source>
+  <source>
+    <title>Connect Claude Code to tools via MCP</title>
+    <description>For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts — plus the two paths users install through.</description>
+    <source_url>https://code.claude.com/docs/en/mcp</source_url>
+    <local_file>en-mcp.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
 </docs_index>

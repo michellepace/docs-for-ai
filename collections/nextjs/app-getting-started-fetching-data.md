@@ -4,7 +4,7 @@ description: Learn how to fetch data and stream content that depends on data.
 url: "https://nextjs.org/docs/app/getting-started/fetching-data"
 docs_index: /docs/llms.txt
 version: 16.3.0
-lastUpdated: 2026-07-24
+lastUpdated: 2026-08-11
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
@@ -351,6 +351,8 @@ export default function BlogPage() {
   )
 }
 ```
+
+See [Client-side data fetching](/docs/app/guides/client-side-data-fetching) for direct browser fetching, providing initial data from a Server Component, and coordinating a library cache with the Next.js server and client caches.
 
 ## Examples
 

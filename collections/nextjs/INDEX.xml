@@ -1,254 +1,268 @@
 <docs_index>
   <source>
     <title>How to set up your Next.js project for AI coding agents</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.</description>
     <source_url>https://nextjs.org/docs/app/guides/ai-agents</source_url>
     <local_file>app-guides-ai-agents.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Project structure and organization</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn the folder and file conventions in Next.js, and how to organize your project.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/project-structure</source_url>
     <local_file>app-getting-started-project-structure.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Layouts and Pages</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to create your first pages and layouts, and link between them with the Link component.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/layouts-and-pages</source_url>
     <local_file>app-getting-started-layouts-and-pages.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Linking and Navigating</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how the built-in navigation optimizations work, including prefetching, prerendering, and client-side navigation, and how to optimize navigation for dynamic routes and slow networks.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/linking-and-navigating</source_url>
     <local_file>app-getting-started-linking-and-navigating.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Server and Client Components</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how you can use React Server and Client Components to render parts of your application on the server or the client.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/server-and-client-components</source_url>
     <local_file>app-getting-started-server-and-client-components.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Fetching Data</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to fetch data and stream content that depends on data.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/fetching-data</source_url>
     <local_file>app-getting-started-fetching-data.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Caching</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to cache data and UI in Next.js</description>
     <source_url>https://nextjs.org/docs/app/getting-started/caching</source_url>
     <local_file>app-getting-started-caching.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Font Optimization</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to optimize fonts in Next.js</description>
     <source_url>https://nextjs.org/docs/app/getting-started/fonts</source_url>
     <local_file>app-getting-started-fonts.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Image Optimization</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to optimize images in Next.js</description>
     <source_url>https://nextjs.org/docs/app/getting-started/images</source_url>
     <local_file>app-getting-started-images.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Proxy</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use Proxy</description>
     <source_url>https://nextjs.org/docs/app/getting-started/proxy</source_url>
     <local_file>app-getting-started-proxy.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Caching and Revalidating (Previous Model)</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to cache and revalidate data using fetch options, unstable_cache, and route segment configs for projects not using Cache Components.</description>
     <source_url>https://nextjs.org/docs/app/guides/caching-without-cache-components</source_url>
     <local_file>app-guides-caching-without-cache-components.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>How to optimize your Next.js application for production</title>
-    <description>PLACEHOLDER</description>
+    <description>Recommendations to ensure the best performance and user experience before taking your Next.js application to production.</description>
     <source_url>https://nextjs.org/docs/app/guides/production-checklist</source_url>
     <local_file>app-guides-production-checklist.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Testing</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to set up Next.js with four commonly used testing tools — Cypress, Playwright, Vitest, and Jest.</description>
     <source_url>https://nextjs.org/docs/app/guides/testing</source_url>
     <local_file>app-guides-testing.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>How to set up Jest with Next.js</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to set up Jest with Next.js for Unit Testing and Snapshot Testing.</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/jest</source_url>
     <local_file>app-guides-testing-jest.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>How to set up Playwright with Next.js</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to set up Playwright with Next.js for End-to-End (E2E) Testing.</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/playwright</source_url>
     <local_file>app-guides-testing-playwright.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>How to set up Vitest with Next.js</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to set up Vitest with Next.js for Unit Testing.</description>
     <source_url>https://nextjs.org/docs/app/guides/testing/vitest</source_url>
     <local_file>app-guides-testing-vitest.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>use cache</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use the "use cache" directive to cache data in your Next.js application.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache</source_url>
     <local_file>app-api-reference-directives-use-cache.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>use cache: private</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use the "use cache: private" directive to cache functions that access runtime request APIs.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-private</source_url>
     <local_file>app-api-reference-directives-use-cache-private.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>use cache: remote</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use the "use cache: remote" directive for persistent, shared caching using remote cache handlers.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-cache-remote</source_url>
     <local_file>app-api-reference-directives-use-cache-remote.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>use client</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use the use client directive to render a component on the client.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-client</source_url>
     <local_file>app-api-reference-directives-use-client.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>use server</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use the use server directive to execute code on the server.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/directives/use-server</source_url>
     <local_file>app-api-reference-directives-use-server.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>generateMetadata</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/generate-metadata</source_url>
     <local_file>app-api-reference-functions-generate-metadata.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>redirect</title>
-    <description>PLACEHOLDER</description>
+    <description>API Reference for the redirect function.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/redirect</source_url>
     <local_file>app-api-reference-functions-redirect.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>permanentRedirect</title>
-    <description>PLACEHOLDER</description>
+    <description>API Reference for the permanentRedirect function.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/permanentRedirect</source_url>
     <local_file>app-api-reference-functions-permanentredirect.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>loading.js</title>
-    <description>PLACEHOLDER</description>
+    <description>API reference for the loading.js file.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/loading</source_url>
     <local_file>app-api-reference-file-conventions-loading.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Metadata Files API Reference</title>
-    <description>PLACEHOLDER</description>
+    <description>API documentation for the metadata file conventions.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/metadata</source_url>
     <local_file>app-api-reference-file-conventions-metadata.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Font Module</title>
-    <description>PLACEHOLDER</description>
+    <description>Optimizing loading web fonts with the built-in `next/font` loaders.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/components/font</source_url>
     <local_file>app-api-reference-components-font.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>TypeScript</title>
-    <description>PLACEHOLDER</description>
+    <description>Next.js provides a TypeScript-first development experience for building your React application.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/typescript</source_url>
     <local_file>app-api-reference-config-typescript.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>next.config.js</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to configure your application with next.config.js.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js</source_url>
     <local_file>app-api-reference-config-next-config-js.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>devIndicators</title>
-    <description>PLACEHOLDER</description>
+    <description>Configuration options for the on-screen indicator that gives context about the current route you're viewing during development.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/devIndicators</source_url>
     <local_file>app-api-reference-config-next-config-js-devindicators.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>redirects</title>
-    <description>PLACEHOLDER</description>
+    <description>Add redirects to your Next.js app.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects</source_url>
     <local_file>app-api-reference-config-next-config-js-redirects.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>serverComponentsHmrCache</title>
-    <description>PLACEHOLDER</description>
+    <description>Configure whether fetch responses in Server Components are cached across HMR refresh requests.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/serverComponentsHmrCache</source_url>
     <local_file>app-api-reference-config-next-config-js-servercomponentshmrcache.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Turbopack</title>
-    <description>PLACEHOLDER</description>
+    <description>Turbopack is an incremental bundler optimized for JavaScript and TypeScript, written in Rust, and built into Next.js.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/turbopack</source_url>
     <local_file>app-api-reference-turbopack.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Uncached data was accessed outside of `&lt;Suspense&gt;`</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/messages/blocking-route</source_url>
     <local_file>messages-blocking-route.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Missing Suspense boundary with useSearchParams</title>
     <description>PLACEHOLDER</description>
     <source_url>https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout</source_url>
     <local_file>messages-missing-suspense-with-csr-bailout.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>How to use fonts</title>
-    <description>PLACEHOLDER</description>
+    <description>Learn how to use fonts in Next.js</description>
     <source_url>https://nextjs.org/docs/pages/getting-started/fonts</source_url>
     <local_file>pages-getting-started-fonts.md</local_file>
-    <curated_at>2026-08-06</curated_at>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>ESLint Plugin</title>
+    <description>Learn how to use and configure the ESLint plugin to catch common issues and problems in a Next.js application.</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/config/eslint</source_url>
+    <local_file>app-api-reference-config-eslint.md</local_file>
+    <curated_at>2026-08-14</curated_at>
+  </source>
+  <source>
+    <title>create-next-app</title>
+    <description>Create Next.js apps using one command with the create-next-app CLI.</description>
+    <source_url>https://nextjs.org/docs/app/api-reference/cli/create-next-app</source_url>
+    <local_file>app-api-reference-cli-create-next-app.md</local_file>
+    <curated_at>2026-08-14</curated_at>
   </source>
 </docs_index>

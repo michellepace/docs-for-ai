@@ -44,9 +44,19 @@ Get https://code.claude.com/docs/llms.txt and match on INDEX.xml's `<source_url>
 
 </example-start>
 
+### Data points: all written without `description-rules.md`
+
+No point burning tokens on rules I know are wrong. Wordcount band per run, default `[20,30]`:
+
+- **nextjs frontmatter (2026-08-14) `[5,30]`** — filled from each doc's frontmatter `description:`; only 3 sat in [20,30], median ~13 words.
+- **mcp hand-written (2026-08-14) `[20,30]`** — 14 from full doc reads, Fable briefed in one sentence ("so I know when to pick it, like llms.txt"); landed [20,27] unprompted (`40417cf`). Its routing-keyword style: name the primitives, flag deprecations, say what a doc *isn't* deep on.
+- **claudecode en-mcp.md (2026-08-14) `[20,30]`** — hand-wrote with Opus. Keyword-stuffed until I asked how it'd say it at lunchtime. Rare content routes: 7% of the doc, its only home.
+- **claudeai (2026-08-16) `[5,40]`** — 19 verbatim from `claude.com` LLMs.txt, matched by URL; all 7–20 words, so [20,30] would have rejected most.
+- **claudeplat (2026-08-16) `[10,30]`** — all 13 verbatim from each doc's frontmatter `description:`; landed [13,26] words, so [20,30] would have rejected 6.
+
 ## Idea: Curation commands should diff
 
-So it becomes "whats changed" and shall I tweak/improve the description. Rather than "lets write the whole thing again." But sometimes I do want the descriptions all to be reset, so maybe we need a `--reset-descriptions` flag (remove the PLACEHOLDER, was a past LLM problem. Shooo, so much to do.
+So it becomes "whats changed" and shall I tweak/improve the description. Rather than "lets write the whole thing again." But sometimes I do want the descriptions all to be reset, so maybe we need a `--reset-descriptions` flag (remove the PLACEHOLDER, was a past LLM problem). Shooo, so much to do.
 
 ## Idea: Sync-index
 

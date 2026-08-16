@@ -4,11 +4,12 @@ description: Learn how you can use React Server and Client Components to render 
 url: "https://nextjs.org/docs/app/getting-started/server-and-client-components"
 docs_index: /docs/llms.txt
 version: 16.3.0
-lastUpdated: 2026-07-29
+lastUpdated: 2026-08-11
 prerequisites:
   - "Getting Started: /docs/app/getting-started"
 related:
   - app/api-reference/directives/use-client
+  - app/guides/server-and-client-boundary
 ---
 
 
@@ -16,6 +17,8 @@ related:
 By default, layouts and pages are [Server Components](https://react.dev/reference/rsc/server-components), which lets you fetch data and render parts of your UI on the server, optionally cache the result, and stream it to the client. When you need interactivity or browser APIs, you can use [Client Components](https://react.dev/reference/rsc/use-client) to layer in functionality.
 
 This page explains how Server and Client Components work in Next.js and when to use them, with examples of how to compose them together in your application.
+
+> **Good to know:** For an explanation of where each component type runs and how the boundary works, see [The Server and Client Boundary](/docs/app/guides/server-and-client-boundary).
 
 ## When to use Server and Client Components?
 
@@ -111,7 +114,7 @@ On the server, Next.js uses React's APIs to orchestrate rendering. The rendering
 
 > **What is the React Server Component Payload (RSC)?**
 >
-> The RSC Payload is a compact binary representation of the rendered React Server Components tree. It's used by React on the client to update the browser's DOM. The RSC Payload contains:
+> The RSC Payload is a compact, serialized representation of the rendered React Server Components tree. It's used by React on the client to update the browser's DOM. The RSC Payload contains:
 >
 > * The rendered result of Server Components
 > * Placeholders for where Client Components should be rendered and references to their JavaScript files
@@ -188,7 +191,7 @@ See [Interleaving Server and Client Components](/docs/app/getting-started/server
 
 To reduce the size of your client JavaScript bundles, add `'use client'` to specific interactive components instead of marking large parts of your UI as Client Components.
 
-For example, the `<Layout>` component contains mostly static elements like a logo and navigation links, but includes an interactive search bar. `<Search />` is interactive and needs to be a Client Component, however, the rest of the layout can remain a Server Component.
+For example, the `<Layout>` component contains mostly static elements like a logo and navigation links, but includes an interactive search bar. `<Search />` needs to be a Client Component, while the rest of the layout can stay a Server Component.
 
 ```tsx filename="app/layout.tsx" highlight={12} switcher
 // Client Component
@@ -608,6 +611,8 @@ Learn more about the APIs mentioned in this page.
 
 - [use client](/docs/app/api-reference/directives/use-client)
   - Learn how to use the use client directive to render a component on the client.
+- [Server and Client Boundary](/docs/app/guides/server-and-client-boundary)
+  - Learn where Server and Client Components run in the App Router and how the boundary between them works.
 
 ---
 

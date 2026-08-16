@@ -113,7 +113,7 @@
   </source>
   <source>
     <title>Connect Claude Code to tools via MCP</title>
-    <description>Focus is on using MCP servers. For authors, general guidance is linked out; the Claude Code specifics are here including recommended `mcp-server-dev` plugin.</description>
+    <description>For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts — plus the two paths users install through.</description>
     <source_url>https://code.claude.com/docs/en/mcp</source_url>
     <local_file>en-mcp.md</local_file>
     <curated_at>2026-08-14</curated_at>

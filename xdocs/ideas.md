@@ -44,11 +44,14 @@ Get https://code.claude.com/docs/llms.txt and match on INDEX.xml's `<source_url>
 
 </example-start>
 
-**Data point: nextjs frontmatter (2026-08-14):** Filled nextjs INDEX.xml from each doc's frontmatter `description:` Only 3 sat in [20,30] — median ~13 words — so I dropped `DESCRIP_MIN_WORDS` to 5. Just don't want to generate tokens when I know my descrip rules aren't right.
+### Data points: all written without `description-rules.md`
 
-**Data point: mcp hand-written (2026-08-14):** Wrote all 14 mcp descriptions from full doc reads. Bypassed `/curate-doc` skill — brief to Fable was one sentence ("so I know when to pick it, like llms.txt"), no description-rules.md. Fable's routing-keyword style: name the primitives, flag deprecations, say what a doc *isn't* deep on.
+No point burning tokens on rules I know are wrong. Wordcount band per run, default `[20,30]`:
 
-**Data point: claudecode en-mcp (2026-08-14):** Hand-wrote with Opus, no description-rules.md. Keyword-stuffed until I asked how it'd say it at lunchtime. Rare content routes: 7% of the doc, its only home.
+- **nextjs frontmatter (2026-08-14) `[5,30]`** — filled from each doc's frontmatter `description:`; only 3 sat in [20,30], median ~13 words.
+- **mcp hand-written (2026-08-14) `[20,30]`** — 14 from full doc reads, Fable briefed in one sentence ("so I know when to pick it, like llms.txt"); landed [20,27] unprompted (`40417cf`). Its routing-keyword style: name the primitives, flag deprecations, say what a doc *isn't* deep on.
+- **claudecode en-mcp (2026-08-14) `[20,30]`** — hand-wrote with Opus. Keyword-stuffed until I asked how it'd say it at lunchtime. Rare content routes: 7% of the doc, its only home.
+- **claudeplat connectors (2026-08-16) `[5,40]`** — 19 verbatim from `claude.com` LLMs.txt, matched by URL; all 7–20 words, so [20,30] would have rejected most.
 
 ## Idea: Curation commands should diff
 

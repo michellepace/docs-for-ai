@@ -53,6 +53,7 @@ No point burning tokens on rules I know are wrong. Wordcount band per run, defau
 - **claudecode en-mcp.md (2026-08-14) `[20,30]`** — hand-wrote with Opus. Keyword-stuffed until I asked how it'd say it at lunchtime. Rare content routes: 7% of the doc, its only home.
 - **claudeai (2026-08-16) `[5,40]`** — 19 verbatim from `claude.com` LLMs.txt, matched by URL; all 7–20 words, so [20,30] would have rejected most.
 - **claudeplat (2026-08-16) `[10,30]`** — all 13 verbatim from each doc's frontmatter `description:`; landed [13,26] words, so [20,30] would have rejected 6.
+- **playwrightcli (2026-08-19)** — handcurated, small files. Landed on [11,16]. Two Claude passes.
 
 ## Idea: Curation commands should diff
 

@@ -1,9 +1,163 @@
 <docs_index>
   <source>
     <title>Coding agents</title>
-    <description>`playwright-cli` gives coding agents token-efficient browser control, chosen over Playwright MCP; covers `install --skills`, snapshot element refs, click/type/network/storage commands, named persistent sessions, and the `show` dashboard.</description>
+    <description>Whole CLI on one page: MCP comparison, install, every command group, sessions, dashboard, config.</description>
     <source_url>https://github.com/microsoft/playwright/blob/main/docs/src/getting-started-cli.md</source_url>
     <local_file>src-getting-started-cli.md</local_file>
     <curated_at>2026-07-14</curated_at>
+  </source>
+  <source>
+    <title>Introduction</title>
+    <description>What the CLI is, its key features, how it trades off against MCP, plus every command.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/introduction.mdx</source_url>
+    <local_file>agent-cli-introduction.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Installation</title>
+    <description>Getting the CLI, its browsers and its skills installed before you run anything.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/installation.mdx</source_url>
+    <local_file>agent-cli-installation.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Quick Start</title>
+    <description>Your first few commands, and how to read the page state each one returns.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/quick-start.mdx</source_url>
+    <local_file>agent-cli-quick-start.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Skills</title>
+    <description>How installed skills teach your agent the CLI, and how to work without them.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/skills.mdx</source_url>
+    <local_file>agent-cli-skills.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Snapshots</title>
+    <description>Accessibility trees and element refs — reading them, scoping or trimming output, using selectors instead.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/snapshots.mdx</source_url>
+    <local_file>agent-cli-snapshots.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Navigation</title>
+    <description>Opening a browser, going to pages, moving back and forward, reloading, and closing up.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/navigation.mdx</source_url>
+    <local_file>agent-cli-commands-navigation.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Interaction</title>
+    <description>Clicking, typing, filling forms and dragging, and the three ways to target an element.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/interaction.mdx</source_url>
+    <local_file>agent-cli-commands-interaction.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Tabs</title>
+    <description>Listing, opening, switching and closing tabs when a task spans several pages.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/tabs.mdx</source_url>
+    <local_file>agent-cli-commands-tabs.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Dialogs</title>
+    <description>Getting past alert, confirm and prompt boxes that block everything else on the page.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/dialogs.mdx</source_url>
+    <local_file>agent-cli-commands-dialogs.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Storage &amp; Authentication</title>
+    <description>Saving a logged-in session to reuse later, and editing cookies and browser storage.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/storage.mdx</source_url>
+    <local_file>agent-cli-commands-storage.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Console &amp; Eval</title>
+    <description>Reading the page console, and running your own JavaScript or Playwright code against it.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/console-eval.mdx</source_url>
+    <local_file>agent-cli-commands-console-eval.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Screenshots &amp; PDF</title>
+    <description>Capturing the page as an image or PDF, and when a picture beats a snapshot.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/screenshots-pdf.mdx</source_url>
+    <local_file>agent-cli-commands-screenshots-pdf.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Tracing</title>
+    <description>Recording a full timeline of a run to replay later in Trace Viewer.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/tracing.mdx</source_url>
+    <local_file>agent-cli-commands-tracing.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Test Debugging</title>
+    <description>Pausing a failing Playwright test and poking at the live page to see why.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/test-debugging.mdx</source_url>
+    <local_file>agent-cli-commands-test-debugging.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Sessions &amp; Dashboard</title>
+    <description>Running several isolated browsers at once, keeping their profiles, and watching them live.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/sessions.mdx</source_url>
+    <local_file>agent-cli-sessions.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Attach</title>
+    <description>Connecting to an already-open, remote or cloud browser over CDP, a Playwright server, or the extension.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/attach.mdx</source_url>
+    <local_file>agent-cli-commands-attach.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Video Recording</title>
+    <description>Filming a browser run as a chaptered video, for bug reports or demos.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/video-recording.mdx</source_url>
+    <local_file>agent-cli-commands-video-recording.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Capabilities</title>
+    <description>Every command by capability group, mirroring MCP; only place listing the assertion and locator-generation commands.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/capabilities.mdx</source_url>
+    <local_file>agent-cli-capabilities.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Vision Mode</title>
+    <description>Clicking by pixel coordinates when a canvas or custom widget has no accessible element.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/vision-mode.mdx</source_url>
+    <local_file>agent-cli-vision-mode.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Configuration</title>
+    <description>Choosing browser, headed mode and profile, plus the full config schema and env vars.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/configuration.mdx</source_url>
+    <local_file>agent-cli-configuration.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Keyboard &amp; Mouse</title>
+    <description>Key names, combos and Tab navigation, plus raw mouse-coordinate moves, clicks and scrolling.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/keyboard-mouse.mdx</source_url>
+    <local_file>agent-cli-commands-keyboard-mouse.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
+  </source>
+  <source>
+    <title>Network &amp; Mocking</title>
+    <description>Inspecting requests, faking API responses and errors, and testing offline behaviour.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/network-routing.mdx</source_url>
+    <local_file>agent-cli-commands-network-routing.mdx</local_file>
+    <curated_at>2026-08-19</curated_at>
   </source>
 </docs_index>

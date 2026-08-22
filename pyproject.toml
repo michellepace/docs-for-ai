@@ -7,6 +7,7 @@ build-backend = "uv_build"
 name = "docs-for-ai"
 version = "0.1.0"
 description = "Curate and index clean docs for targeted AI context"
+readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
   "firecrawl-py>=4.37.0", # scrape docs to markdown
@@ -30,6 +31,8 @@ dev = [
 # TESTING (PYTEST)
 # =================================
 [tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra" # end-of-run summary for every non-passing test
 markers = [
   "firecrawl: hits FireCrawl API (paid, network)",
   "direct_fetch: fetches a real source directly, no FireCrawl (free, network)",
@@ -39,11 +42,11 @@ markers = [
 # TYPE CHECKING (PYRIGHT)
 # =================================
 [tool.pyright]
-typeCheckingMode = "standard" # Keep (not strict!)
+typeCheckingMode = "standard" # pyright's default; strict fights untyped libs
 pythonVersion = "3.14"
 venvPath = "."                # Claude Code Official: LSP plugin
 venv = ".venv"                # Claude Code Official: LSP plugin
-reportUnusedImport = false    # Ruff F401
+reportUnusedImport = false    # Ruff F401 covers it
 reportUnusedVariable = false  # Ruff F841
 reportDuplicateImport = false # Ruff F811
 
@@ -53,7 +56,7 @@ reportDuplicateImport = false # Ruff F811
 [tool.ruff]
 line-length = 88
 target-version = "py314"
-# protect corpus (ruff formats code blocks in md)
+# Protect corpus (ruff formats code blocks in md)
 extend-exclude = ["collections"]
 
 [tool.ruff.lint]
@@ -71,15 +74,15 @@ ignore = [ # ignore incompatible or overly pedantic rules
 
 [tool.ruff.lint.per-file-ignores]
 "src/docs_for_ai/*" = [
-  "S314",   # XML parsing (safe - trusted local files only)
+  "S314",   # XML parsing (safe — trusted local files only)
   "S603",   # subprocess call: check for execution of untrusted input
   "DTZ011", # date.today() appropriate for local date tracking
 ]
 "tests/**" = [
-  "D1",      # Missing docstrings (not required in tests)
-  "PLR2004", # Magic value used in comparison
-  "S101",    # Use of assert detected
-  "S314",    # XML parsing (safe - trusted test data only)
+  "S101",    # assert statements are idiomatic in tests
+  "PLR2004", # literal expected values are fine
+  "D1",      # docstrings not required in tests (D100-D107)
+  "S314",    # XML parsing (safe — trusted test data only)
   "S603",    # subprocess call: check for execution of untrusted input
   "S607",    # Partial executable paths (controlled test env)
   "DTZ011",  # date.today() appropriate for matching script behavior
@@ -88,11 +91,12 @@ ignore = [ # ignore incompatible or overly pedantic rules
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+# Both sections restate Ruff's defaults — kept visible
 [tool.ruff.lint.pylint]
-max-args = 5
-max-branches = 12
-max-returns = 6
-max-statements = 50
+max-args = 5        # PLR0913
+max-branches = 12   # PLR0912
+max-returns = 6     # PLR0911
+max-statements = 50 # PLR0915
 
 [tool.ruff.lint.mccabe]
-max-complexity = 10
+max-complexity = 10 # C901

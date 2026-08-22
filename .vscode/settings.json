@@ -1,9 +1,9 @@
 {
     // General editor settings
-    "window.commandCenter": true,   // search box at top of window
-    "editor.colorDecorators": true, // show colour pickers in code
+    "window.commandCenter": true,   // command + file search in the title bar
+    "editor.colorDecorators": true, // colour swatches next to hex/rgb values
 
-    // Hide generated cache/venv dirs from the Explorer
+    // Hide generated dirs from Explorer, search & quick-open
     "files.exclude": {
         "**/__pycache__": true,
         "**/.pytest_cache": true,
@@ -15,29 +15,29 @@
     // `uv sync` creates .venv/ → IDE auto-detects the interpreter below.
     // uv convention: don't activate the venv — run commands via `uv run <cmd>`
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-    "python.terminal.activateEnvironment": false, // don't auto-activate; use `uv run`
+    "python.terminal.activateEnvironment": false,
 
-    // 🐍 Ruff: Python lint & format (see pyproject.toml)
-    "ruff.nativeServer": "on",  // faster Rust-based language server
+    // 🐍 Ruff: Python lint & format (rules in pyproject.toml)
+    "ruff.nativeServer": "on", // for speed
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll.ruff": "explicit", // autofix on save
-            "source.organizeImports.ruff": "explicit" // organise on save
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
         }
     },
 
-    // 🧩 Even Better TOML (tamasfe.even-better-toml)
+    // 🧩 Even Better TOML: format .toml on save
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml",
         "editor.formatOnSave": true
     },
 
-    // 📝 Markdownlint (davidanson.vscode-markdownlint)
+    // 📝 Markdownlint: autofix on save (rules in .markdownlint-cli2.yaml)
     "[markdown]": {
         "editor.codeActionsOnSave": {
             "source.fixAll.markdownlint": "explicit"
         }
-    },
+    }
 }

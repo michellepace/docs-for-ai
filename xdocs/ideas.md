@@ -56,6 +56,25 @@ No point burning tokens on rules I know are wrong. Wordcount band per run, defau
 - **claudeai (2026-08-16) `[5,40]`** — 19 verbatim from `claude.com` LLMs.txt, matched by URL; all 7–20 words, so [20,30] would have rejected most.
 - **claudeplat (2026-08-16) `[10,30]`** — all 13 verbatim from each doc's frontmatter `description:`; landed [13,26] words, so [20,30] would have rejected 6.
 - **playwrightcli (2026-08-19)** — handcurated, small files. Landed on [11,16]. Two Claude passes.
+- **claudecode entire collection (2026-08-22) `[5,30]`** — standardise collection to use each doc's own `>` line under the H1 verbatim. Why: headless was depreicated to "interactive mode". It was easier just to use these than update all my own descriptions. Captured on the way to trying:
+
+    ```markdown
+    # TASK: Pick the best description for this claudecode doc file
+
+    Scope: only the referenced file: collections/claudecode/en-glossary.md
+
+    Write a description of this doc as you would inform an as to what it holds as he tries to find relevant docs amongst others. And apply these rules:
+
+    Rules
+    - Don't restate the title; say what's inside that the title can't.
+    - Cite specifics as examples, never as a complete inventory of the file's contents. e.g. *"Defines agentic loop, compaction, `CLAUDE.md`, hooks, subagents, MCP, and other core concepts; ends with a table of renamed terms."*
+    - Name the doc's shape when it has one — but only if the doc supports the claim. e.g. *"Complete technical reference for the plugin system: manifest schemas, `claude plugin` CLI commands, and component specifications."*
+    - Pragmatically resilient — still true after ordinary small edits
+    - Target words: [15, 30]. More words is not always better, every word earns its keep
+    - Format: <description>single line here</description>; use `backticks` when appropriate
+
+    Review your description against the rules pragmatically and adjust if needed, then output.
+    ```
 
 ## Idea: Curation commands should diff
 

@@ -1,6 +1,6 @@
 # MCP for Claude Code — authoring reference (hand scoped)
 
-> For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts — plus the two paths users install through.
+> For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts, plus the two paths users install through.
 
 ## ⚠️ NOTE: Trimmed from original doc!
 

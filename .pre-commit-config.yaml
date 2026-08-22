@@ -5,7 +5,7 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: check-merge-conflict    # block on merge markers
+      - id: check-merge-conflict
         fail_fast: true
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]

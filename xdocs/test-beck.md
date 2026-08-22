@@ -7,6 +7,7 @@ status: updated with extracted repeatable prompt
 ## Repeatable Refactor Prompt
 
 Already run on:
+
 - `tests/test_sync_index.py` (first exemplar)
 - `tests/test_curate_doc.py`
 

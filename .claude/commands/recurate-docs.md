@@ -25,19 +25,22 @@ Print your verdict before any tool call: on a problem, fail with a suggested fix
 <validation_failure>
 Be friendly and brief, and include the corrected `/recurate-docs …` — in the spirit of this example:
 
-```
+```markdown
 ## 🤔 Missing argument!
 - Usage: `/recurate-docs <collection>`
 - Existing: `shiny`, `uv`, `tailwind`
 
 [Friendly suggestion in 1 short sentence]
 ```
+
 </validation_failure>
 
 <validation_success>
-```
+
+```markdown
 ## 🙂 Super! Re-curating the `$collection` collection...
 ```
+
 </validation_success>
 
 ## Step 2. Run the script
@@ -77,7 +80,8 @@ Word count is enforced; on ❌, rewrite the flagged description(s) and rerun wit
 Report completion in this format, filling each slot from the scripts' output:
 
 <report_format>
-```
+
+```markdown
 ## ✅ Re-curate Complete!
 
 📊 Statistics
@@ -90,4 +94,5 @@ Report completion in this format, filling each slot from the scripts' output:
 💡 What changed in `$collection`:
 - [one line per `NEEDS DESCRIPTION` doc, from its reason tag]
 ```
+
 </report_format>

@@ -29,7 +29,7 @@ Be friendly and brief, and include the corrected `/curate-doc …` to run — th
 
 Example (semantic mismatch):
 
-```
+```markdown
 ## 🤔 Mmm.. are you sure you meant `shiny`?
 - Collection: `shiny`
 - URL: `https://tailwindcss.com/docs/installation`
@@ -38,12 +38,15 @@ Example (semantic mismatch):
 
 [Friendly recommendation in 1–2 short sentences, ask for confirmation]
 ```
+
 </validation_failure>
 
 <validation_success>
-```
+
+```markdown
 ## 🙂 Super! Curating Shiny doc to collections/shiny/ collection...
 ```
+
 </validation_success>
 
 Print your verdict BEFORE proceeding to Step 2: on a problem, fail with a suggested fix and await confirmation; on success, print the success message, then start Step 2.
@@ -83,7 +86,8 @@ Word count is enforced; on ❌, rewrite the description and rerun until it passe
 Report completion in this format, filling each slot from the scripts' output:
 
 <report_format>
-```
+
+```markdown
 ## ✨ Curation Success!
 
 🎯 What happened
@@ -95,4 +99,5 @@ Report completion in this format, filling each slot from the scripts' output:
 
 "*<description, if written>*"
 ```
+
 </report_format>

@@ -5,6 +5,7 @@
 Easier to manage and understand, more flexible.
 
 Examples:
+
 - commmon ones (`append-md`): add ".md"
 - https://docs.astral.sh/uv/concepts/tools/ → https://docs.astral.sh/uv/concepts/tools/index.md (add "index.md")
 - https://rich.readthedocs.io/en/stable/ → https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
@@ -22,6 +23,7 @@ The impact is that I can have "more than one rule" in an index.
 ## Idea: Re-write "description rules"
 
 Problems of `.claude/references/description-rules.md`
+
 1. At the very least: pulls in two directions, needs to be simplified too.
 2. Another way of writting?: Anthropic, Vercel, etc. LLMs.txt (designed for routing) is very different. I'm unsure which approach to use.
 

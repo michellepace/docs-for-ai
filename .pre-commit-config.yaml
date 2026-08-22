@@ -90,9 +90,9 @@ repos:
         stages: [pre-push]
 
 # Notes (non-obvious)
-# 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
-# 2. `pass_filenames: false` runs hook against the whole project
-# 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 1. `pass_filenames: false` runs hook against the whole project
+# 2. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 3. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
 # 4. ruff format also fires on *.md; corpus safe via ruff extend-exclude
 
 # Install hooks (must): uv run pre-commit install

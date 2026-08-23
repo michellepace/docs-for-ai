@@ -5,9 +5,10 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: check-merge-conflict    # block on merge markers
+      - id: check-merge-conflict
         fail_fast: true
       - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
         exclude: ^collections/      # curated corpus
       - id: end-of-file-fixer
         exclude: ^collections/      # curated corpus
@@ -19,8 +20,8 @@ repos:
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.23.2
     hooks:
-      - id: markdownlint-cli2       # final format (.markdownlint-cli2.yaml)
-        args: [--fix]               # autofix
+      - id: markdownlint-cli2       # rules .markdownlint-cli2.yaml
+        args: [--fix]
 
   - repo: https://github.com/ComPWA/taplo-pre-commit
     rev: v0.9.3
@@ -40,7 +41,7 @@ repos:
       - id: shellcheck              # lint shell (read-only, after shfmt)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.1
+    rev: 0.12.5
     hooks:
       - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 
@@ -89,9 +90,9 @@ repos:
         stages: [pre-push]
 
 # Notes (non-obvious)
-# 1. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
-# 2. `pass_filenames: false` runs hook against the whole project
-# 3. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 1. `pass_filenames: false` runs hook against the whole project
+# 2. types_or [python, pyproject] fires on *.py + pyproject.toml only
+# 3. pre-push alone runs firecrawl tests (to skip: git push --no-verify)
 # 4. ruff format also fires on *.md; corpus safe via ruff extend-exclude
 
 # Install hooks (must): uv run pre-commit install

@@ -1,14 +1,15 @@
 # MCP for Claude Code — authoring reference (hand scoped)
 
-> Trimmed from https://code.claude.com/docs/en/mcp.
->
-> - Scoped to **writing a public, unauthenticated remote server over streamable HTTP** that serves read-only content, plus the installation and verification facts to hand to a user.
-> - Removed: local stdio, SSE and WebSocket transports, OAuth and header auth, plugin packaging, elicitation, channels, secrets in config, and consumer-only troubleshooting.
->
-> **This file covers one thing: what the Claude Code client does to your server, and how its users install
-> it.** It is not the protocol and not the connector story. Protocol fundamentals live in the `mcp`
-> collection; connector auth, testing, Directory review, and MCP apps live in the `claudeai` collection.
-> Don't answer those from this file.
+> For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts, plus the two paths users install through.
+
+## ⚠️ NOTE: Trimmed from original doc!
+
+Trimmed from https://code.claude.com/docs/en/mcp:
+
+- Scoped to **writing a public, unauthenticated remote server over streamable HTTP** that serves read-only content, plus the installation and verification facts to hand to a user.
+- Removed: local stdio, SSE and WebSocket transports, OAuth and header auth, plugin packaging, elicitation, channels, secrets in config, and consumer-only troubleshooting.
+
+**This file covers one thing: what the Claude Code client does to your server, and how its users install it.** It is not the protocol and not the connector story. Protocol fundamentals live in the `mcp` collection; connector auth, testing, Directory review, and MCP apps live in the `claudeai` collection. Don't answer those from this file.
 
 ---
 

@@ -36,6 +36,7 @@ If the question clearly belongs to another collection from `<available_collectio
 Fallback to the web only when the curated collection is insufficient and the user has agreed.
 
 Always prefer Firecrawl:
+
 - Known URL: `firecrawl_scrape` with just the `url` — always markdown, never `json` extraction (grounding needs the page text).
 - Discovery: `firecrawl_search` with `includeDomains` as bare hostname(s) from `<source_url>` (drop the filter if nothing useful returns). Never add `scrapeOptions` — it embeds every result's full text. Pick the 1–3 best hits, then scrape them.
 
@@ -47,7 +48,8 @@ ONLY if Firecrawl is unavailable, fall back to your lossy/noisy `WebSearch`/`Web
 Grounded answer — coherent, scannable, and well-structured for a TUI like Claude Code. Include key quotation(s) when directly relevant; use emojis strategically for scannability.
 
 <response_format>
-```
+
+```markdown
 # Question tersely framed
 
 [grounded answer]
@@ -56,4 +58,5 @@ Grounded answer — coherent, scannable, and well-structured for a TUI like Clau
 - Index and each local file read (full paths)
 - Web URLs (fallback only)
 ```
+
 </response_format>

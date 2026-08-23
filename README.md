@@ -107,9 +107,9 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | Collection | Collection Index | Description | Curated | Source |
 | :--------- | :--------------- | :---------- | :------ | :----- |
 | 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
-| 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-08-16 | [Official](https://claude.com) |
-| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-08-08 | [Official](https://code.claude.com) |
-| 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-08-16 | [Official](https://platform.claude.com) |
+| 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-08-16 | [Official](https://claude.com/docs/) |
+| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-08-22 | [Official](https://code.claude.com/docs/) |
+| 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-08-16 | [Official](https://platform.claude.com/docs/) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
 | 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-07-27 | [Official](https://docs.coderabbit.ai) |
 | 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
@@ -168,14 +168,17 @@ The `/curate-doc` command always regenerates the description, whereas `/recurate
 ## 📝 TODO
 
 Regenerate "Descriptions":
+
 - Get status `uv run scripts/collection_status.py`
 - Framing shifted from "semantic search" to **LLM routing**, re-curate all.
 
 `scripts/curate-collection.sh`
+
 - Bulk-curates a collection from a URL file, one `claude -p` session per URL.
 - One day to replace `/recurate-docs` and `sync-index`... maybe (look deeply).
 
 direct-fetch-rules.toml
+
 - need a new one for `collections/uv/README.md` case
 - has to read the page, 404 doesn't always work
 - test on https://www.mintlify.com/docs/quickstart

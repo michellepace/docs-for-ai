@@ -118,4 +118,18 @@
     <local_file>en-mcp.md</local_file>
     <curated_at>2026-08-22</curated_at>
   </source>
+  <source>
+    <title>Agent SDK overview</title>
+    <description>Build production AI agents with Claude Code as a library. Compares SDK to CLI, Client SDK, Managed Agents; capabilities table (hooks, subagents, MCP, sessions); links to quickstart, API references, examples.</description>
+    <source_url>https://code.claude.com/docs/en/agent-sdk</source_url>
+    <local_file>en-agent-sdk.md</local_file>
+    <curated_at>2026-08-23</curated_at>
+  </source>
+  <source>
+    <title>Agent SDK reference - Python</title>
+    <description>Exhaustive API reference, from `query()` vs `ClaudeSDKClient` and `ClaudeAgentOptions` through hook, message and error types to built-in tool input/output schemas and sandbox config; runnable examples throughout.</description>
+    <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
+    <local_file>en-agent-sdk-python.md</local_file>
+    <curated_at>2026-08-23</curated_at>
+  </source>
 </docs_index>

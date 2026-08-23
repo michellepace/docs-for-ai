@@ -90,11 +90,4 @@
     <local_file>en-test-and-evaluate-strengthen-guardrails-increase-consistency.md</local_file>
     <curated_at>2026-08-19</curated_at>
   </source>
-  <source>
-    <title>Agent SDK reference - Python</title>
-    <description>Complete API reference for the Python Agent SDK, including all functions, types, and classes.</description>
-    <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
-    <local_file>en-agent-sdk-python.md</local_file>
-    <curated_at>2026-08-19</curated_at>
-  </source>
 </docs_index>

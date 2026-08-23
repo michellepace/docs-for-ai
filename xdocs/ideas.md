@@ -59,21 +59,32 @@ No point burning tokens on rules I know are wrong. Wordcount band per run, defau
 - **claudecode entire collection (2026-08-22) `[5,30]`** — standardise collection to use each doc's own `>` line under the H1 verbatim. Why: headless was depreicated to "interactive mode". It was easier just to use these than update all my own descriptions. Captured on the way to trying:
 
     ```markdown
-    # TASK: Pick the best description for this claudecode doc file
+    # TASK: Write the INDEX.xml description for one doc
 
-    Scope: only the referenced file: collections/claudecode/en-glossary.md
+    Scope: only `collections/<collection>/<file>`. Don't read sibling docs or INDEX.xml for house style.
 
-    Write a description of this doc as you would inform an as to what it holds as he tries to find relevant docs amongst others. And apply these rules:
+    Reader: another Claude that sees only titles + descriptions and must pick which file to open for a question. Write what helps it choose.
 
-    Rules
-    - Don't restate the title; say what's inside that the title can't.
-    - Cite specifics as examples, never as a complete inventory of the file's contents. e.g. *"Defines agentic loop, compaction, `CLAUDE.md`, hooks, subagents, MCP, and other core concepts; ends with a table of renamed terms."*
-    - Name the doc's shape when it has one — but only if the doc supports the claim. e.g. *"Complete technical reference for the plugin system: manifest schemas, `claude plugin` CLI commands, and component specifications."*
-    - Pragmatically resilient — still true after ordinary small edits
-    - Target words: [15, 30]. More words is not always better, every word earns its keep
-    - Format: <description>single line here</description>; use `backticks` when appropriate
+    ## How to read the doc
+    1. `wc --bytes --words --lines` — note the size in a line.
+    2. Read lines 1–22 (H1 and its `>` tagline), then every heading: `grep -nE '^#{1,6} '`.
+    3. Dip into a section only where its heading leaves you unsure what it actually holds.
 
-    Review your description against the rules pragmatically and adjust if needed, then output.
+    ## Rules
+    - Don't restate the title; say what's inside that the title can't. The doc's own `>` tagline may lead if it carries routing words the title lacks.
+    - Specifics are examples, never a closed inventory. A bare comma list reads as "that's everything" — frame it as a sample or a span: *"from `query()` vs `ClaudeSDKClient` through hook and message types to sandbox config"*, *"defines agentic loop, compaction, hooks, MCP, and other core concepts"*.
+    - Favour content that lives only here (branding rules, a renamed-terms table) over what every doc of its kind has (next-steps links, install steps).
+    - Name the doc's shape only if the doc supports the claim: *"Complete technical reference for the plugin system: manifest schemas, `claude plugin` CLI commands, component specifications."*
+    - Still true after ordinary small edits.
+    - [15, 30] words; every word earns its keep.
+
+    ## Output
+    Read it back as a stranger: does any list sound closed? Does any clause fit every doc of this kind? Fix, then print `<description>one line, `backticks` for code</description>` and apply it:
+
+        uv run update-descriptions collections/<collection> <<'EOF'
+        <file>
+        <description text>
+        EOF
     ```
 
 ## Idea: Curation commands should diff

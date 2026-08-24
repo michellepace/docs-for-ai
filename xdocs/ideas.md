@@ -58,7 +58,7 @@ No point burning tokens on rules I know are wrong. Wordcount band per run, defau
 - **playwrightcli (2026-08-19)** — handcurated, small files. Landed on [11,16]. Two Claude passes.
 - **claudecode entire collection (2026-08-22) `[5,30]`** — standardise collection to use each doc's own `>` line under the H1 verbatim. Why: headless was depreicated to "interactive mode". It was easier just to use these than update all my own descriptions. Captured on the way to trying `<try-prompt>`:
 
-<try-prompt>
+<prompt>
 
 ````markdown
 # TASK: Write the INDEX.xml description for one doc
@@ -69,7 +69,7 @@ Reader: another Claude that sees only titles + descriptions and must pick which 
 
 ## How to read the doc
 1. `wc --bytes --words --lines` — note the size in a line.
-2. Read lines 1–22 (H1 and its `>` tagline), then every heading: `grep -nE '^#{1,6} '`.
+2. Read lines 1–100 (H1 and its `>` tagline), then every heading: `grep -nE '^#{1,6} '`.
 3. Dip into a section only where its heading leaves you unsure what it actually holds.
 
 ## Rules
@@ -91,7 +91,7 @@ EOF
 ```
 ````
 
-</try-prompt>
+</prompt>
 
 ## Idea: Curation commands should diff
 

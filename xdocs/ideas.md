@@ -56,36 +56,42 @@ No point burning tokens on rules I know are wrong. Wordcount band per run, defau
 - **claudeai (2026-08-16) `[5,40]`** — 19 verbatim from `claude.com` LLMs.txt, matched by URL; all 7–20 words, so [20,30] would have rejected most.
 - **claudeplat (2026-08-16) `[10,30]`** — all 13 verbatim from each doc's frontmatter `description:`; landed [13,26] words, so [20,30] would have rejected 6.
 - **playwrightcli (2026-08-19)** — handcurated, small files. Landed on [11,16]. Two Claude passes.
-- **claudecode entire collection (2026-08-22) `[5,30]`** — standardise collection to use each doc's own `>` line under the H1 verbatim. Why: headless was depreicated to "interactive mode". It was easier just to use these than update all my own descriptions. Captured on the way to trying:
+- **claudecode entire collection (2026-08-22) `[5,30]`** — standardise collection to use each doc's own `>` line under the H1 verbatim. Why: headless was depreicated to "interactive mode". It was easier just to use these than update all my own descriptions. Captured on the way to trying `<try-prompt>`:
 
-    ```markdown
-    # TASK: Write the INDEX.xml description for one doc
+<try-prompt>
 
-    Scope: only `collections/<collection>/<file>`. Don't read sibling docs or INDEX.xml for house style.
+````markdown
+# TASK: Write the INDEX.xml description for one doc
 
-    Reader: another Claude that sees only titles + descriptions and must pick which file to open for a question. Write what helps it choose.
+Scope: only `collections/<collection>/<file>`. Don't read sibling docs or INDEX.xml for house style.
 
-    ## How to read the doc
-    1. `wc --bytes --words --lines` — note the size in a line.
-    2. Read lines 1–22 (H1 and its `>` tagline), then every heading: `grep -nE '^#{1,6} '`.
-    3. Dip into a section only where its heading leaves you unsure what it actually holds.
+Reader: another Claude that sees only titles + descriptions and must pick which file to open for a question. Write what helps it choose.
 
-    ## Rules
-    - Don't restate the title; say what's inside that the title can't. The doc's own `>` tagline may lead if it carries routing words the title lacks.
-    - Specifics are examples, never a closed inventory. A bare comma list reads as "that's everything" — frame it as a sample or a span: *"from `query()` vs `ClaudeSDKClient` through hook and message types to sandbox config"*, *"defines agentic loop, compaction, hooks, MCP, and other core concepts"*.
-    - Favour content that lives only here (branding rules, a renamed-terms table) over what every doc of its kind has (next-steps links, install steps).
-    - Name the doc's shape only if the doc supports the claim: *"Complete technical reference for the plugin system: manifest schemas, `claude plugin` CLI commands, component specifications."*
-    - Still true after ordinary small edits.
-    - [15, 30] words; every word earns its keep.
+## How to read the doc
+1. `wc --bytes --words --lines` — note the size in a line.
+2. Read lines 1–22 (H1 and its `>` tagline), then every heading: `grep -nE '^#{1,6} '`.
+3. Dip into a section only where its heading leaves you unsure what it actually holds.
 
-    ## Output
-    Read it back as a stranger: does any list sound closed? Does any clause fit every doc of this kind? Fix, then print `<description>one line, `backticks` for code</description>` and apply it:
+## Rules
+- Don't restate the title; say what's inside that the title can't. The doc's own `>` tagline may lead if it carries routing words the title lacks.
+- Specifics are examples, never a closed inventory. A bare comma list reads as "that's everything" — frame it as a sample or a span: *"from `query()` vs `ClaudeSDKClient` through hook and message types to sandbox config"*, *"defines agentic loop, compaction, hooks, MCP, and other core concepts"*.
+- Favour content that lives only here (branding rules, a renamed-terms table) over what every doc of its kind has (next-steps links, install steps).
+- Name the doc's shape only if the doc supports the claim: *"Complete technical reference for the plugin system: manifest schemas, `claude plugin` CLI commands, component specifications."*
+- Still true after ordinary small edits.
+- [15, 30] words; every word earns its keep.
 
-        uv run update-descriptions collections/<collection> <<'EOF'
-        <file>
-        <description text>
-        EOF
-    ```
+## Output
+Read it back as a stranger: does any list sound closed? Does any clause fit every doc of this kind? Fix, then print `<description>one line, backticks for code</description>` and apply it:
+
+```bash
+uv run update-descriptions collections/<collection> <<'EOF'
+<file>
+<description text>
+EOF
+```
+````
+
+</try-prompt>
 
 ## Idea: Curation commands should diff
 

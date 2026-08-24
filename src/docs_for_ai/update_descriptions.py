@@ -13,7 +13,7 @@ from docs_for_ai.paths import normalise_collection_dir
 if TYPE_CHECKING:
     from pathlib import Path
 
-DESCRIP_MIN_WORDS = 20
+DESCRIP_MIN_WORDS = 15
 DESCRIP_MAX_WORDS = 30
 LINES_PER_ENTRY = 2  # filename line + description line
 

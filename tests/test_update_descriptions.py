@@ -62,7 +62,7 @@ def run_cli(
     return exit_code, capsys.readouterr().out
 
 
-@pytest.mark.parametrize("word_count", [20, 30], ids=["at-min", "at-max"])
+@pytest.mark.parametrize("word_count", [15, 30], ids=["at-min", "at-max"])
 def test_in_band_description_is_applied_with_success_verdict(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -84,7 +84,7 @@ def test_in_band_description_is_applied_with_success_verdict(
 
 
 @pytest.mark.parametrize(
-    "word_count", [19, 31], ids=["just-below-band", "just-above-band"]
+    "word_count", [14, 31], ids=["just-below-band", "just-above-band"]
 )
 def test_out_of_band_description_is_flagged_and_withheld(
     tmp_path: Path,
@@ -100,7 +100,7 @@ def test_out_of_band_description_is_flagged_and_withheld(
     )
 
     assert exit_code == 1
-    assert f"❌ doc-a.md: {word_count} words (need 20-30)" in out
+    assert f"❌ doc-a.md: {word_count} words (need 15-30)" in out
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
@@ -118,7 +118,7 @@ def test_out_of_band_entry_does_not_block_in_band_sibling(
     # The per-file verdicts, exit 1, and closing steer drive the repair loop
     assert exit_code == 1
     assert "✅ doc-a.md: 25 words" in out
-    assert "❌ doc-b.md: 2 words (need 20-30)" in out
+    assert "❌ doc-b.md: 2 words (need 15-30)" in out
     assert "rerun with only those" in out
 
     # In-band doc-a is applied immediately; flagged doc-b keeps its old description
@@ -229,7 +229,7 @@ def test_cli_entry_point_propagates_exit_1_while_applying_in_band_sibling(
 
     assert result.returncode == 1
     assert "✅ doc-a.md: 25 words" in result.stdout
-    assert "❌ doc-b.md: 2 words (need 20-30)" in result.stdout
+    assert "❌ doc-b.md: 2 words (need 15-30)" in result.stdout
     content = index_path.read_text(encoding="utf-8")
     assert f"<description>{IN_BAND}</description>" in content
     assert "old B" in content

@@ -615,7 +615,7 @@ def test_cli_curates_via_firecrawl_scrape(tmp_path: Path) -> None:
     assert "🏁 Success! curated doc" in output
 
     index = (new_dir / "INDEX.xml").read_text()
-    assert "<title>Practice with no store actions - Zustand</title>" in index
+    assert "<title>Practice with no store actions - Zustand Docs</title>" in index
     assert f"<source_url>{URL_FIRECRAWL}</source_url>" in index
     assert (
         "<local_file>learn-guides-practice-with-no-store-actions.md</local_file>"

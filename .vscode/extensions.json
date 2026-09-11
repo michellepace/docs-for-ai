@@ -2,7 +2,6 @@
     "recommendations": [
         "ms-python.python",           // Python core: interpreter picker, pytest Test Explorer
         "ms-python.vscode-pylance",   // language server: IntelliSense, hover, go-to-definition
-        "ms-python.debugpy",          // debugger: breakpoints, stepping
         "charliermarsh.ruff",         // lint + format (by Astral, same makers as uv)
         "tamasfe.even-better-toml",   // TOML: highlight, validate, format
         "davidanson.vscode-markdownlint",  // Markdown lint + fix on save

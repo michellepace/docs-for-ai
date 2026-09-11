@@ -132,4 +132,11 @@
     <local_file>en-agent-sdk-python.md</local_file>
     <curated_at>2026-08-31</curated_at>
   </source>
+  <source>
+    <title>Model configuration</title>
+    <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
+    <source_url>https://code.claude.com/docs/en/model-config</source_url>
+    <local_file>en-model-config.md</local_file>
+    <curated_at>2026-09-11</curated_at>
+  </source>
 </docs_index>

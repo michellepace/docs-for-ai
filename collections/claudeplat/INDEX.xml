@@ -90,4 +90,11 @@
     <local_file>en-test-and-evaluate-strengthen-guardrails-increase-consistency.md</local_file>
     <curated_at>2026-08-19</curated_at>
   </source>
+  <source>
+    <title>Stop reasons and fallback</title>
+    <description>Learn what each stop_reason value means and how to handle truncation, tool use, paused turns, and refusals in your application.</description>
+    <source_url>https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons</source_url>
+    <local_file>en-build-with-claude-handling-stop-reasons.md</local_file>
+    <curated_at>2026-09-12</curated_at>
+  </source>
 </docs_index>

@@ -30,18 +30,18 @@ repos:
         types: [toml]
 
   - repo: https://github.com/maxwinterstein/shfmt-py
-    rev: v4.0.0
+    rev: v4.2.0
     hooks:
       - id: shfmt                   # format shell
         args: [-w, -i, '2', -ci, -bn]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: v0.11.0.1-1
     hooks:
       - id: shellcheck              # lint shell (read-only, after shfmt)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.5
+    rev: 0.12.13
     hooks:
       - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 

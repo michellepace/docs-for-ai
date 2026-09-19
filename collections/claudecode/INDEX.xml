@@ -28,6 +28,13 @@
     <curated_at>2026-08-31</curated_at>
   </source>
   <source>
+    <title>Choose a permission mode</title>
+    <description>Control whether Claude asks before acting. Explains each permission mode, which one a session starts in, what auto mode's classifier blocks, and `claude -p` behaviour.</description>
+    <source_url>https://code.claude.com/docs/en/permission-modes</source_url>
+    <local_file>en-permission-modes.md</local_file>
+    <curated_at>2026-09-18</curated_at>
+  </source>
+  <source>
     <title>Extend Claude with skills</title>
     <description>Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom commands and bundled skills.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>

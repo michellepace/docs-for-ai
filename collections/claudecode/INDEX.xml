@@ -25,21 +25,21 @@
     <description>Control what Claude Code can access and do with fine-grained permission rules, modes, and managed policies.</description>
     <source_url>https://code.claude.com/docs/en/permissions</source_url>
     <local_file>en-permissions.md</local_file>
-    <curated_at>2026-08-31</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Choose a permission mode</title>
-    <description>Control whether Claude asks before acting. Explains each permission mode, which one a session starts in, what auto mode's classifier blocks, and `claude -p` behaviour.</description>
+    <description>Control whether Claude asks before acting. Explains each permission mode, which one a session starts in, what auto mode's classifier blocks, protected paths, and how `claude -p` handles prompts.</description>
     <source_url>https://code.claude.com/docs/en/permission-modes</source_url>
     <local_file>en-permission-modes.md</local_file>
-    <curated_at>2026-09-18</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
     <description>Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom commands and bundled skills.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <curated_at>2026-08-31</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Create plugins</title>
@@ -60,7 +60,7 @@
     <description>Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.</description>
     <source_url>https://code.claude.com/docs/en/headless</source_url>
     <local_file>en-headless.md</local_file>
-    <curated_at>2026-08-31</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Run agents in parallel</title>
@@ -113,17 +113,17 @@
   </source>
   <source>
     <title>How Claude remembers your project</title>
-    <description>Give Claude persistent instructions with CLAUDE.md files, and let Claude accumulate learnings automatically with auto memory.</description>
+    <description>Give Claude persistent instructions with CLAUDE.md or AGENTS.md files, and let Claude accumulate learnings automatically with auto memory.</description>
     <source_url>https://code.claude.com/docs/en/memory</source_url>
     <local_file>en-memory.md</local_file>
-    <curated_at>2026-08-31</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>MCP for Claude Code — authoring reference (hand scoped)</title>
-    <description>For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — tool search, schema/output/timeout limits, `_meta` annotations, resources and prompts, plus the two paths users install through.</description>
+    <description>Writing a public, unauthenticated streamable-HTTP MCP server for Claude Code: tool search, schema/output/timeout limits, `_meta`, connection lifecycle, resources, prompts, install paths.</description>
     <source_url>https://code.claude.com/docs/en/mcp</source_url>
     <local_file>en-mcp.md</local_file>
-    <curated_at>2026-08-22</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Agent SDK overview</title>
@@ -134,16 +134,16 @@
   </source>
   <source>
     <title>Agent SDK reference - Python</title>
-    <description>Exhaustive API reference, from `query()` vs `ClaudeSDKClient` and `ClaudeAgentOptions` through hook, message and error types to built-in tool input/output schemas and sandbox config; runnable examples throughout.</description>
+    <description>Complete API reference for the Python Agent SDK, including all functions, types, and classes. Use for exact signatures, fields, and defaults.</description>
     <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
     <local_file>en-agent-sdk-python.md</local_file>
-    <curated_at>2026-08-31</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
   <source>
     <title>Model configuration</title>
     <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
     <source_url>https://code.claude.com/docs/en/model-config</source_url>
     <local_file>en-model-config.md</local_file>
-    <curated_at>2026-09-11</curated_at>
+    <curated_at>2026-09-19</curated_at>
   </source>
 </docs_index>

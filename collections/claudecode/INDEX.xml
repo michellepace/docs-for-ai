@@ -14,6 +14,20 @@
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
+    <title>How Claude remembers your project</title>
+    <description>Give Claude persistent instructions with CLAUDE.md or AGENTS.md files, and let Claude accumulate learnings automatically with auto memory.</description>
+    <source_url>https://code.claude.com/docs/en/memory</source_url>
+    <local_file>en-memory.md</local_file>
+    <curated_at>2026-09-19</curated_at>
+  </source>
+  <source>
+    <title>Model configuration</title>
+    <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
+    <source_url>https://code.claude.com/docs/en/model-config</source_url>
+    <local_file>en-model-config.md</local_file>
+    <curated_at>2026-09-19</curated_at>
+  </source>
+  <source>
     <title>Tools reference</title>
     <description>Complete reference for the tools Claude Code can use, including permission requirements and per-tool behavior.</description>
     <source_url>https://code.claude.com/docs/en/tools-reference</source_url>
@@ -42,6 +56,20 @@
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
+    <title>Hooks reference</title>
+    <description>Reference for Claude Code hook events, configuration schema, JSON input/output, exit codes, and async, HTTP and MCP hooks — live effort level, permission mode, tool_use_id</description>
+    <source_url>https://code.claude.com/docs/en/hooks</source_url>
+    <local_file>en-hooks.md</local_file>
+    <curated_at>2026-09-20</curated_at>
+  </source>
+  <source>
+    <title>MCP for Claude Code — authoring reference (hand scoped)</title>
+    <description>Writing a public, unauthenticated streamable-HTTP MCP server for Claude Code: tool search, schema/output/timeout limits, `_meta`, connection lifecycle, resources, prompts, install paths.</description>
+    <source_url>https://code.claude.com/docs/en/mcp</source_url>
+    <local_file>en-mcp.md</local_file>
+    <curated_at>2026-09-19</curated_at>
+  </source>
+  <source>
     <title>Create plugins</title>
     <description>Create custom plugins to extend Claude Code with skills, agents, hooks, and MCP servers.</description>
     <source_url>https://code.claude.com/docs/en/plugins</source_url>
@@ -53,13 +81,6 @@
     <description>Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.</description>
     <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
     <local_file>en-plugins-reference.md</local_file>
-    <curated_at>2026-09-19</curated_at>
-  </source>
-  <source>
-    <title>Run Claude Code programmatically</title>
-    <description>Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.</description>
-    <source_url>https://code.claude.com/docs/en/headless</source_url>
-    <local_file>en-headless.md</local_file>
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
@@ -91,17 +112,17 @@
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
-    <title>Message your other Claude Code sessions</title>
-    <description>Let Claude list and message your other Claude Code sessions on this machine, and reach your sessions on other machines or in the cloud.</description>
-    <source_url>https://code.claude.com/docs/en/cross-session-messaging</source_url>
-    <local_file>en-cross-session-messaging.md</local_file>
-    <curated_at>2026-09-19</curated_at>
-  </source>
-  <source>
     <title>Orchestrate subagents at scale with dynamic workflows</title>
     <description>Dynamic workflows orchestrate many subagents from a script Claude writes and you can rerun. Use them for codebase audits, large migrations, and cross-checked research.</description>
     <source_url>https://code.claude.com/docs/en/workflows</source_url>
     <local_file>en-workflows.md</local_file>
+    <curated_at>2026-09-19</curated_at>
+  </source>
+  <source>
+    <title>Message your other Claude Code sessions</title>
+    <description>Let Claude list and message your other Claude Code sessions on this machine, and reach your sessions on other machines or in the cloud.</description>
+    <source_url>https://code.claude.com/docs/en/cross-session-messaging</source_url>
+    <local_file>en-cross-session-messaging.md</local_file>
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
@@ -112,17 +133,10 @@
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
-    <title>How Claude remembers your project</title>
-    <description>Give Claude persistent instructions with CLAUDE.md or AGENTS.md files, and let Claude accumulate learnings automatically with auto memory.</description>
-    <source_url>https://code.claude.com/docs/en/memory</source_url>
-    <local_file>en-memory.md</local_file>
-    <curated_at>2026-09-19</curated_at>
-  </source>
-  <source>
-    <title>MCP for Claude Code — authoring reference (hand scoped)</title>
-    <description>Writing a public, unauthenticated streamable-HTTP MCP server for Claude Code: tool search, schema/output/timeout limits, `_meta`, connection lifecycle, resources, prompts, install paths.</description>
-    <source_url>https://code.claude.com/docs/en/mcp</source_url>
-    <local_file>en-mcp.md</local_file>
+    <title>Run Claude Code programmatically</title>
+    <description>Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.</description>
+    <source_url>https://code.claude.com/docs/en/headless</source_url>
+    <local_file>en-headless.md</local_file>
     <curated_at>2026-09-19</curated_at>
   </source>
   <source>
@@ -138,19 +152,5 @@
     <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
     <local_file>en-agent-sdk-python.md</local_file>
     <curated_at>2026-09-19</curated_at>
-  </source>
-  <source>
-    <title>Model configuration</title>
-    <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
-    <source_url>https://code.claude.com/docs/en/model-config</source_url>
-    <local_file>en-model-config.md</local_file>
-    <curated_at>2026-09-19</curated_at>
-  </source>
-  <source>
-    <title>Hooks reference</title>
-    <description>Reference for Claude Code hook events, configuration schema, JSON input/output, exit codes, and async, HTTP and MCP hooks — live effort level, permission mode, tool_use_id</description>
-    <source_url>https://code.claude.com/docs/en/hooks</source_url>
-    <local_file>en-hooks.md</local_file>
-    <curated_at>2026-09-20</curated_at>
   </source>
 </docs_index>

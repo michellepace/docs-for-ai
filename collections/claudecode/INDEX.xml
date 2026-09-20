@@ -146,4 +146,11 @@
     <local_file>en-model-config.md</local_file>
     <curated_at>2026-09-19</curated_at>
   </source>
+  <source>
+    <title>Hooks reference</title>
+    <description>Reference for Claude Code hook events, configuration schema, JSON input/output, exit codes, and async, HTTP and MCP hooks — live effort level, permission mode, tool_use_id</description>
+    <source_url>https://code.claude.com/docs/en/hooks</source_url>
+    <local_file>en-hooks.md</local_file>
+    <curated_at>2026-09-20</curated_at>
+  </source>
 </docs_index>

@@ -25,7 +25,7 @@
     <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
     <source_url>https://code.claude.com/docs/en/model-config</source_url>
     <local_file>en-model-config.md</local_file>
-    <curated_at>2026-09-19</curated_at>
+    <curated_at>2026-09-23</curated_at>
   </source>
   <source>
     <title>Tools reference</title>
@@ -39,28 +39,28 @@
     <description>Control what Claude Code can access and do with fine-grained permission rules, modes, and managed policies.</description>
     <source_url>https://code.claude.com/docs/en/permissions</source_url>
     <local_file>en-permissions.md</local_file>
-    <curated_at>2026-09-19</curated_at>
+    <curated_at>2026-09-23</curated_at>
   </source>
   <source>
     <title>Choose a permission mode</title>
     <description>Control whether Claude asks before acting. Explains each permission mode, which one a session starts in, what auto mode's classifier blocks, protected paths, and how `claude -p` handles prompts.</description>
     <source_url>https://code.claude.com/docs/en/permission-modes</source_url>
     <local_file>en-permission-modes.md</local_file>
-    <curated_at>2026-09-19</curated_at>
+    <curated_at>2026-09-23</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
     <description>Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom commands and bundled skills.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <curated_at>2026-09-19</curated_at>
+    <curated_at>2026-09-23</curated_at>
   </source>
   <source>
     <title>Hooks reference</title>
     <description>Reference for Claude Code hook events, configuration schema, JSON input/output, exit codes, and async, HTTP and MCP hooks — live effort level, permission mode, tool_use_id</description>
     <source_url>https://code.claude.com/docs/en/hooks</source_url>
     <local_file>en-hooks.md</local_file>
-    <curated_at>2026-09-20</curated_at>
+    <curated_at>2026-09-23</curated_at>
   </source>
   <source>
     <title>MCP for Claude Code — authoring reference (hand scoped)</title>

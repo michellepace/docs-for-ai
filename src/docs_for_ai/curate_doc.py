@@ -250,7 +250,8 @@ def _parse_args() -> argparse.Namespace:
         ),
         epilog="""\
 notes:
-  - Fetch precedence: GitHub raw → .md/.rst.txt twin → FireCrawl (last resort).
+  - Fetch precedence: GitHub raw → .md twin → raw .md/.rst.txt → FireCrawl
+    (last resort).
   - Re-curating a URL overwrites its doc and replaces its INDEX entry.
   - A new, content-changed, or recreated doc gets a PLACEHOLDER description to
     fill in later; if the re-fetched content is unchanged (ignoring whitespace),

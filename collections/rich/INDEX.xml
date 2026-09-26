@@ -1,16 +1,16 @@
 <docs_index>
   <source>
     <title>Layout</title>
-    <description>`Layout` class splitting the terminal into nested `name`-addressable regions via `split_column`/`split_row`, each set with `update`; size by fixed `size` or flexible `ratio`/`minimum_size`, toggle `visible`, pair with `Live` for fullscreen apps.</description>
-    <source_url>https://rich.readthedocs.io/en/stable/layout.html</source_url>
-    <local_file>layout.rst</local_file>
-    <curated_at>2026-07-05</curated_at>
+    <description>Rich's `Layout` carves the terminal into named, nested regions, each with its own content and a fixed or proportional size; the foundation for fullscreen apps with `Live`.</description>
+    <source_url>https://rich.readthedocs.io/en/stable/_sources/layout.rst.txt</source_url>
+    <local_file>en-stable-sources-layout.rst</local_file>
+    <curated_at>2026-09-26</curated_at>
   </source>
   <source>
     <title>Panel</title>
-    <description>`rich.panel.Panel` draws a border around any renderable; the `box` argument picks the style, `expand=False` or `Panel.fit()` shrinks it to content, and `title`/`subtitle` label the top and bottom edges.</description>
-    <source_url>https://rich.readthedocs.io/en/stable/panel.html</source_url>
-    <local_file>panel.rst</local_file>
-    <curated_at>2026-07-05</curated_at>
+    <description>Short intro to Rich's `Panel` for framing text or any renderable in a border, with options to restyle the box, shrink it to fit, and add titles.</description>
+    <source_url>https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt</source_url>
+    <local_file>en-stable-sources-panel.rst</local_file>
+    <curated_at>2026-09-26</curated_at>
   </source>
 </docs_index>

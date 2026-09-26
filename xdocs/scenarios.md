@@ -1,6 +1,6 @@
 ---
 title: Scenarios — Aspirational "TO Be" - simply
-updated: 2026-07-01
+updated: 2026-09-26
 status: draft / rough
 ---
 
@@ -18,14 +18,13 @@ uv run curate-doc <collection_dir> <URL>
 
 ## Precedence: getting the doc (falls through)
 
-![Routing precedence as of 2026-07-01 (may have drifted)](../images/curate-doc-routing-2026-07-01.jpg)
+![Routing precedence as of 2026-09-26 (may have drifted)](../images/curate-doc-routing-2026-09-26.jpg)
 
 01. GitHub URLS: if it's a file, direct fetch it (any extension)
 
 02. If URL matches a prefix in `direct-fetch-rules.toml`, direct fetch its twin. `<source_url>` must be the non-twin.
 
     ```markdown
-    - https://rich.readthedocs.io/en/stable/panel.html; twin: https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
     - https://nextjs.org/docs/app/getting-started/css; twin: https://nextjs.org/docs/app/getting-started/css.md
     - https://docs.convex.dev/ ("docs" first, what happens?)
     ```
@@ -44,7 +43,7 @@ uv run curate-doc <collection_dir> <URL>
 
 05. Edge case: GitHub should direct fetch any file, but should I go to the trouble of direct fetching non-github urls that are too just files like .jpg, .svg, .pdf. Is this over engineering. What happens now if I do it.
 
-    > For a URL that matches an append-md prefix but is not a doc page or its .md twin (e.g. it ends in .png, .html, .pdf) — should the rule step aside and let FireCrawl handle it (this is what readthedocs does, and it keeps today's behaviour), or should it force-append .md to it anyway (which would 404 on those non-page URLs)?
+    > For a URL that matches an append-md prefix but is not a doc page or its .md twin (e.g. it ends in .png, .html, .pdf) — should the rule step aside and let FireCrawl handle it (this keeps today's behaviour), or should it force-append .md to it anyway (which would 404 on those non-page URLs)?
 
 06. Edge case: firecrawl content not the same as direct fetch. So what happens in the scenario when you put a "non-md" looking URL in, and then later you put the ".md" at the end URL. two source entries right? this seems okay to me. not sure.
 
@@ -68,5 +67,5 @@ Note: Shiny/other may hardcode rules → find and remove
 `<title>` from doc parsing
 
 - Treat markdown family the same [md|mdx|qmd] (e.g `title:` → H1, fallback filename?)
-- readthedocs (uses RST heading format)
+- `.rst.txt` (uses RST heading format)
 - what is the fallback, is it sane?

@@ -50,14 +50,12 @@ class TestLoadDirectFetchRules:
         rules_file = tmp_path / "direct-fetch-rules.toml"
         rules_file.write_text(
             'append-md = ["https://vercel.com/docs/", "https://code.claude.com/docs"]\n'
-            'readthedocs = ["https://rich.readthedocs.io/en/stable"]\n'
         )
         assert load_direct_fetch_rules(rules_file) == {
             "append-md": [
                 "https://vercel.com/docs/",
                 "https://code.claude.com/docs/",
             ],
-            "readthedocs": ["https://rich.readthedocs.io/en/stable/"],
         }
 
     def test_unknown_transform_key_fails_loud(self, tmp_path: Path) -> None:
@@ -72,8 +70,7 @@ class TestLoadDirectFetchRules:
 # NamedTuple, so it compares equal to a plain (doc_format, fetch_url,
 # canonical_url, filename) tuple — expectations are written as those tuples.
 MD = "https://vercel.com/docs"
-RTD = "https://rich.readthedocs.io/en/stable"
-RULES = {"append-md": [f"{MD}/"], "readthedocs": [f"{RTD}/"]}
+RULES = {"append-md": [f"{MD}/"]}
 
 
 class TestResolveRoute:
@@ -121,46 +118,6 @@ class TestResolveRoute:
             ),
             (f"{MD}/page.mdx", (None, f"{MD}/page.mdx", f"{MD}/page.mdx", "page.md")),
             (
-                f"{RTD}/panel.html",
-                (
-                    "rst",
-                    f"{RTD}/_sources/panel.rst.txt",
-                    f"{RTD}/panel.html",
-                    "panel.rst",
-                ),
-            ),
-            (
-                f"{RTD}/reference/console.html",
-                (
-                    "rst",
-                    f"{RTD}/_sources/reference/console.rst.txt",
-                    f"{RTD}/reference/console.html",
-                    "reference-console.rst",
-                ),
-            ),
-            (
-                f"{RTD}/_sources/panel.rst.txt",
-                (
-                    "rst",
-                    f"{RTD}/_sources/panel.rst.txt",
-                    f"{RTD}/panel.html",
-                    "panel.rst",
-                ),
-            ),
-            (
-                f"{RTD}/_sources/reference/console.rst.txt",
-                (
-                    "rst",
-                    f"{RTD}/_sources/reference/console.rst.txt",
-                    f"{RTD}/reference/console.html",
-                    "reference-console.rst",
-                ),
-            ),
-            (
-                f"{RTD}/genindex",
-                (None, f"{RTD}/genindex", f"{RTD}/genindex", "en-stable-genindex.md"),
-            ),
-            (
                 "https://example.com/docs/notes.md",
                 (
                     "markdown",
@@ -202,11 +159,6 @@ class TestResolveRoute:
             "registry-dot-in-nonfinal-segment",
             "registry-html-suffix-declines-firecrawls",
             "registry-mdx-suffix-declines-firecrawls",
-            "readthedocs-html-fetches-rst-twin",
-            "readthedocs-nested-html-clean-filename",
-            "readthedocs-raw-source-reverse-maps",
-            "readthedocs-raw-nested-source-reverse-maps",
-            "readthedocs-non-html-declines-firecrawls",
             "off-registry-md-fetched-as-is",
             "off-registry-rst-txt-fetched-as-is",
             "unmatched-path-firecrawls",
@@ -253,11 +205,6 @@ class TestFilenameFromCanonicalUrl:
             ("https://site.com/docs/guide?v=2#frag", "md", "guide.md"),
             ("https://example.com", "md", "index.md"),
             (
-                "https://rich.readthedocs.io/en/stable/tree.html",
-                "rst",
-                "en-stable-tree.rst",
-            ),
-            (
                 "https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt",
                 "rst",
                 "en-stable-sources-panel.rst",
@@ -279,7 +226,6 @@ class TestFilenameFromCanonicalUrl:
             "dot-in-nonfinal-segment-slugged",
             "query-and-fragment-stripped",
             "empty-path-falls-back-to-index",
-            "html-suffix-stripped-ext-rst",
             "sources-rst-txt-stripped-ext-rst",
             "html-suffix-stripped-ext-md",
             "md-suffix-stripped-name-kept",
@@ -461,15 +407,19 @@ class TestExtractRstTitle:
                     Second Title
                     ============
                     """),
-                "https://x.io/ignored.html",
+                "https://x.io/_sources/ignored.rst.txt",
                 "First Title",
             ),
             (
                 "A Longer Heading\n===\n\nbody with a stray short rule.\n",
-                "https://x.io/fallback.html",
+                "https://x.io/_sources/fallback.rst.txt",
                 "Fallback",
             ),
-            ("just prose, no heading at all\n", "https://x.io/panel.html", "Panel"),
+            (
+                "just prose, no heading at all\n",
+                "https://x.io/_sources/panel.rst.txt",
+                "Panel",
+            ),
         ],
         ids=[
             "first-underlined-title-wins",
@@ -513,28 +463,16 @@ class TestFetchText:
 @pytest.mark.parametrize(
     ("page", "expected_title"),
     [
-        ("panel.html", "Panel"),
-        ("syntax.html", "Syntax"),
-        ("markup.html", "Console Markup"),
+        ("panel", "Panel"),
+        ("syntax", "Syntax"),
+        ("markup", "Console Markup"),
     ],
 )
-def test_real_rich_page_resolves_fetches_and_titles(
+def test_real_rich_rst_source_fetches_as_is_and_titles(
     page: str, expected_title: str
 ) -> None:
-    url = f"https://rich.readthedocs.io/en/stable/{page}"
+    url = f"https://rich.readthedocs.io/en/stable/_sources/{page}.rst.txt"
     route = resolve_route(url, load_direct_fetch_rules())
-    assert route.doc_format == "rst"
-    assert route.filename == f"{page.removesuffix('.html')}.rst"
+    assert route == ("rst", url, url, f"en-stable-sources-{page}.rst")
     content = fetch_text(route.fetch_url)
     assert extract_rst_title(content, route.canonical_url) == expected_title
-
-
-@pytest.mark.direct_fetch
-def test_real_rich_raw_rst_source_reverse_maps_to_page() -> None:
-    url = "https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt"
-    route = resolve_route(url, load_direct_fetch_rules())
-    assert route.doc_format == "rst"
-    assert route.canonical_url == "https://rich.readthedocs.io/en/stable/panel.html"
-    assert route.filename == "panel.rst"
-    content = fetch_text(route.fetch_url)
-    assert extract_rst_title(content, route.canonical_url) == "Panel"

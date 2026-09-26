@@ -373,35 +373,25 @@ def test_curate_page_and_md_twin_collapse_to_one_source(
     assert f"<source_url>{page}.md</source_url>" not in index
 
 
-def test_curate_readthedocs_page_and_rst_twin_collapse_to_one_source(
+def test_curate_rst_source_is_fetched_and_recorded_as_is(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    monkeypatch.setattr(
-        curate_doc.direct_fetch,
-        "load_direct_fetch_rules",
-        lambda: {"readthedocs": ["https://allowed.test/"]},
-    )
     fetched_urls = stub_direct_fetch(
         monkeypatch, "Panel Widgets\n=============\n\nbody\n"
     )
     collection = tmp_path / "coll"
-    page = "https://allowed.test/panel.html"
-    rst_twin = "https://allowed.test/_sources/panel.rst.txt"
+    rst_source = "https://example.com/_sources/panel.rst.txt"
 
-    for url in (page, rst_twin):
-        run_curate(collection, url, monkeypatch, capsys)
+    run_curate(collection, rst_source, monkeypatch, capsys)
 
-    # Both spellings fetch the free RST source twin; the page URL stays canonical.
-    assert fetched_urls == [rst_twin, rst_twin]
+    assert fetched_urls == [rst_source]
     index = (collection / "INDEX.xml").read_text()
-    assert index.count("<source>") == 1
-    assert "<local_file>panel.rst</local_file>" in index
-    assert f"<source_url>{page}</source_url>" in index
+    assert f"<source_url>{rst_source}</source_url>" in index
+    assert "<local_file>sources-panel.rst</local_file>" in index
     # The title comes from the RST heading, not the URL stem.
     assert "<title>Panel Widgets</title>" in index
-    assert [p.name for p in collection.glob("*.rst")] == ["panel.rst"]
 
 
 def test_curate_keeps_description_when_content_unchanged(

@@ -118,10 +118,9 @@ def filename_from_canonical_url(url: str, ext: str = "md") -> str:
     return f"{slug or 'index'}.{ext}"
 
 
-def _matching_prefix(url: str, prefixes: list[str]) -> str | None:
-    """The longest registry prefix `url` falls under, or None (boundary-safe)."""
-    matches = [p for p in prefixes if f"{url}/".startswith(p)]
-    return max(matches, key=len) if matches else None
+def _matches_prefix(url: str, prefixes: list[str]) -> bool:
+    """True when `url` falls under any registry prefix (boundary-safe)."""
+    return any(f"{url}/".startswith(p) for p in prefixes)
 
 
 def _raw_format_route(url: str) -> FetchRoute | None:
@@ -145,11 +144,10 @@ def _github_route(url: str) -> FetchRoute:
     return FetchRoute("markdown", raw_url, url, github_filename_from_blob_url(url))
 
 
-def _append_md_route(url: str, _prefix: str) -> FetchRoute | None:
+def _append_md_route(url: str) -> FetchRoute | None:
     """Map a suffix-less page and its `.md` twin, both saved as one `.md` file.
 
     Any other suffix (`.mdx`, `.html`, …) is declined.
-    Accepts `_prefix` only to share the transform dispatch signature.
     """
     if url.endswith(".md"):  # reverse — check first
         canonical = url.removesuffix(".md")
@@ -162,37 +160,12 @@ def _append_md_route(url: str, _prefix: str) -> FetchRoute | None:
     )
 
 
-def _rst_filename(rel: str) -> str:
-    """Slugify a page-relative path (e.g. `reference/console`) into `{slug}.rst`."""
-    return f"{_slugify(rel) or 'index'}.rst"
-
-
-def _readthedocs_route(url: str, prefix: str) -> FetchRoute | None:
-    """Map a readthedocs `.html` page and its `_sources/*.rst.txt` twin, saved `.rst`.
-
-    Bidirectional: forward, a `.html` page fetches its twin and stays canonical;
-    reverse, a `_sources/{rel}.rst.txt` URL is fetched as-is but maps back to the page —
-    so both spellings converge on one file and one index entry. Declines anything else.
-    """
-    rel = url.removeprefix(prefix)
-    is_reverse_twin = rel.startswith("_sources/") and rel.endswith(".rst.txt")
-    if is_reverse_twin:  # reverse — check first
-        rel = rel.removeprefix("_sources/").removesuffix(".rst.txt")
-        fetch_url, canonical = url, f"{prefix}{rel}.html"
-    elif url.endswith(".html"):  # forward page
-        rel = rel.removesuffix(".html")
-        fetch_url, canonical = f"{prefix}_sources/{rel}.rst.txt", url
-    else:
-        return None
-    return FetchRoute("rst", fetch_url, canonical, _rst_filename(rel))
-
-
 def _firecrawl_route(url: str) -> FetchRoute:
     """No direct twin: scrape the URL via FireCrawl (doc_format None)."""
     return FetchRoute(None, url, url, filename_from_canonical_url(url))
 
 
-TRANSFORMS = {"append-md": _append_md_route, "readthedocs": _readthedocs_route}
+TRANSFORMS = {"append-md": _append_md_route}
 
 
 def resolve_route(url: str, rules: dict[str, list[str]]) -> FetchRoute:
@@ -201,8 +174,7 @@ def resolve_route(url: str, rules: dict[str, list[str]]) -> FetchRoute:
     if is_github_url(url):
         return _github_route(url)
     for name, prefixes in rules.items():
-        prefix = _matching_prefix(url, prefixes)
-        if prefix and (route := TRANSFORMS[name](url, prefix)):
+        if _matches_prefix(url, prefixes) and (route := TRANSFORMS[name](url)):
             return route
     return _raw_format_route(url) or _firecrawl_route(url)
 

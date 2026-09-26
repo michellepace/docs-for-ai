@@ -119,7 +119,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-09-26 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-08-19 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
-| 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-07-05 | [Official](https://rich.readthedocs.io) |
+| 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-26 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
@@ -140,11 +140,11 @@ The `/curate-doc` command always regenerates the description, whereas `/recurate
 **Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 
 <p align="left">
-  <a href="images/curate-doc-routing-2026-07-01.jpg">
-    <img src="images/curate-doc-routing-2026-07-01.jpg" alt="Flowchart of how curate-doc resolves a URL. Query strings, fragments and trailing slashes are stripped first, then four gates in order: (1) GitHub host — fetch the raw twin, or error out; (2) direct-fetch-rules.toml prefix — fetch the .md or .rst.txt twin; (3) URL already ends in .md or .rst.txt — fetch as-is; (4) FireCrawl scrape, last resort." width="300">
+  <a href="images/curate-doc-routing-2026-09-26.jpg">
+    <img src="images/curate-doc-routing-2026-09-26.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .rst.txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
   </a>
   <br>
-  <em>Routing simplified, or <a href="images/curate-doc-routing-2026-08-05.jpg">the detailed version</a></em>
+  <em>Routing illustrated</em>
 </p>
 <br>
 

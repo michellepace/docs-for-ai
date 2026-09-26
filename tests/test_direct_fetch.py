@@ -370,21 +370,30 @@ class TestGithubFilenameFromBlobUrl:
             ("https://github.com/o/r/blob/main/docs/index.md", "index.md"),
             (URL_GH_BLOB_MDX, "src-content-docs-guides-getting-started.mdx"),
             (URL_GH_BLOB_QMD, "get-started-deploy-cloud.qmd"),
+            (
+                "https://github.com/o/r/blob/main/docs/users/installation_and_usage.md",
+                "users-installation-and-usage.md",
+            ),
+            (
+                "https://github.com/o/r/blob/main/docs/Getting.Started.md",
+                "getting-started.md",
+            ),
+            ("https://github.com/o/r/blob/main/docs/_.md", "index.md"),
+        ],
+        ids=[
+            "docs-prefix-dropped",
+            "deeply-nested",
+            "root-file",
+            "docs-index",
+            "mdx-extension-kept",
+            "qmd-extension-kept",
+            "underscores-slugged",
+            "dots-and-uppercase-slugged",
+            "empty-slug-falls-back-to-index",
         ],
     )
     def test_derives_expected_name(self, blob_url: str, expected: str) -> None:
         assert github_filename_from_blob_url(blob_url) == expected
-
-    def test_pattern_violating_name_fails(self) -> None:
-        """A derived name breaking the filename pattern fails as a bad filename.
-
-        Distinct from the no-match branch; the label is the only signal of which fired.
-        """
-        with pytest.raises(CurationError, match="Bad derived filename") as exc:
-            github_filename_from_blob_url(
-                "https://github.com/o/r/blob/main/docs/a_b.md"
-            )
-        assert "a_b.md" in str(exc.value)
 
 
 class TestExtractMarkdownTitle:

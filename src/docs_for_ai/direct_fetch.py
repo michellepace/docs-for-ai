@@ -18,7 +18,6 @@ HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
 DIRECT_FETCH_RULES_PATH = Path(__file__).parent / "direct-fetch-rules.toml"
-FILENAME_RE = re.compile(r"^[a-z0-9-]+\.(?:md|mdx|qmd)$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
 # Accepted shapes: a blob file on main/master ending in .md/.mdx/.qmd.
@@ -245,7 +244,7 @@ def github_blob_to_raw_url(url: str) -> str:
 def github_filename_from_blob_url(url: str) -> str:
     """Derive a filename from a GitHub blob URL's path, keeping its extension.
 
-    Strips a leading `docs/`, lowercases, hyphen-joins.
+    Strips a leading `docs/`, then slugifies the rest.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -254,14 +253,8 @@ def github_filename_from_blob_url(url: str) -> str:
     # Avoid a redundant "docs-" filename prefix.
     if segments and segments[0] == "docs":
         segments = segments[1:]
-    filename = "-".join(segments).lower() + "." + match.group(5).lower()
-    if not FILENAME_RE.match(filename):
-        _fail(
-            "Bad derived filename",
-            f"'{filename}' fails ^[a-z0-9-]+\\.(?:md|mdx|qmd)$",
-            url,
-        )
-    return filename
+    slug = _slugify("-".join(segments))
+    return f"{slug or 'index'}.{match.group(5).lower()}"
 
 
 def _title_from_frontmatter(content: str) -> str | None:

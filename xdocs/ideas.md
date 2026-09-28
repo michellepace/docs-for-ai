@@ -1,36 +1,58 @@
+---
+updated: 2026-09-28
+description: unprioritised proposals; DONE ideas get deleted
+---
+
 # Rough ideas to improve docs-for-ai
 
-## Idea: Make configurable by URL
+## Idea: Move `uv` to website URLs
 
-Easier to manage and understand, more flexible.
+Swap uv's 25 GitHub blob URLs for `docs.astral.sh/uv/…/index.md` ones, like its first three.
 
-Examples:
+Benefits:
 
-- commmon ones (`append-md`): add ".md"
-- https://docs.astral.sh/uv/concepts/tools/ → https://docs.astral.sh/uv/concepts/tools/index.md (add "index.md")
+- One source for all 28 docs; the 3 reference pages are mkdocs-generated and absent from GitHub (`c838397`).
+- Drops the uv-only `_reject_uv_docs_url` check, fixing its 3 sync failures.
 
-Would also stip the 3 errors on `uv run sync-index collections/uv`.
+Costs:
 
-## Idea: Source URL should be truthful
+- Website `.md` loses `!!!` admonitions, code-block languages, and clean headings, the reasons uv moved to GitHub in `c838397`.
+- Can't paste the browser URL; must add `index.md` by hand, until [Idea: Per-site URL suffixes](#idea-per-site-url-suffixes).
 
-Currently if I curate and it has `md-append` then the source URL in the index isn't the `.md` one.
+Alternative: keep GitHub blobs; let the check allow the 3 reference pages.
 
-If were were truthful, then re-curate doesn't have to apply any rules, it can just use the source URL in the index.
+## Idea: Store the URL actually fetched as `<source_url>`
 
-The impact is that I can have "more than one rule" in an index.
+Today `append-md` fetches `…/page.md` but stores `…/page` in INDEX.xml, so re-curate and sync must re-apply rules to know what to fetch. Standardise every collection to store the fetched URL.
 
-Canonical now (2026-09-26):
+Benefits:
 
-- rich
-- mdformat (`34ce9bb`)
+- Re-curate and sync fetch `<source_url>` as-is, with no rules.
+- A collection can mix URLs from different rules, and editing `direct-fetch-rules.toml` can't break an existing index.
 
-## Idea: Re-write "description rules" — ✅ DONE
+Done: `rich`, `mdformat` (`34ce9bb`).
 
-Done 2026-09-28: `.claude/references/description-rules.md` cut from ~1,000 words to ~130. `/curate-doc` pins `model: claude-opus-5-5` at `effort: xhigh`, and `update-descriptions` enforces [8, 25] words.
+## Idea: Per-site URL suffixes
 
-- A blind routing eval (Claude picking docs from `INDEX.xml` alone) found the short rules route at least as well as the long ones and as `llms.txt` descriptions, so no need to source descriptions from `llms.txt`.
-- Keep the rules short: Opus follows each one literally (the long file's examples became a template) and ignores soft length guidance; only the script's cap bounds length.
-- To revisit, re-run that eval: questions with known answer docs, written without seeing any description, routed blind from the index.
+Restructure `direct-fetch-rules.toml` so each site prefix maps to the suffix appended when curating a matching URL:
+
+```toml
+[append]
+"https://docs.astral.sh/uv/"        = "/index.md"
+"https://code.claude.com/docs/"     = ".md"
+"https://claude.com/docs/"          = ".md"
+"https://platform.claude.com/docs/" = ".md"
+```
+
+- `https://docs.astral.sh/uv/getting-started/first-steps/` => `…/first-steps/index.md`
+- `https://code.claude.com/docs/en/best-practices` => `….md`
+
+- Builds on the idea above.
+- A URL already ending in its suffix passes through unchanged.
+- Longest matching prefix wins; TOML's unique keys give one rule per prefix.
+- New suffix = new TOML line, no code (today `append-md` is a name defined in code).
+- Only covers suffixes; a mid-URL rewrite would need its own section.
+- Benefit: I can always curate from the "page url as I see it on the website"
 
 ## Idea: Curation commands should diff
 

@@ -106,7 +106,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 | Collection | Collection Index | Description | Curated | Source |
 | :--------- | :--------------- | :---------- | :------ | :----- |
-| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
+| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-09-28 | [Official](https://biomejs.dev) |
 | 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-08-16 | [Official](https://claude.com/docs/) |
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-09-19 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-08-16 | [Official](https://platform.claude.com/docs/) |

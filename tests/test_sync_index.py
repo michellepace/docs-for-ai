@@ -411,6 +411,26 @@ def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
     assert "orphans deleted 2" in out
 
 
+def test_sync_deletes_old_file_when_source_url_now_curates_to_new_filename(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    (collection_dir / "old.md").write_text("# Old")
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [make_source("old.md", "https://example.com/new", "Description")],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/new.md": "# New"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert {p.name for p in collection_dir.iterdir()} == {"INDEX.xml", "new.md"}
+    assert "orphans deleted 1" in out
+
+
 @pytest.mark.parametrize(
     ("failure", "expected_error"),
     [

@@ -194,6 +194,10 @@ def _run_sync(collection_dir: Path) -> None:
             print(f"[{position}/{total}] {'ok':<6}{attempt.local_file}")
         sys.stdout.flush()
 
+    # A changed source_url re-curates to a new filename, orphaning the old file.
+    reindexed_files = {source.local_file for source in read_index_sources(index_path)}
+    deleted_orphans += delete_orphan_files(collection_dir, reindexed_files)
+
     if index_sources:
         print()
     report = SyncReport(

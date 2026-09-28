@@ -11,7 +11,7 @@ collections/
 └── <collection>/           # eg. nextjs/, clerk/, uv/
     ├── INDEX.xml           # Targeted doc retrieval
     ├── README.md
-    └── *.{md,rst,mdx,qmd}  # Curated doc files
+    └── *.{md,mdx,qmd,txt}  # Curated doc files
 ```
 
 `INDEX.xml` is written programmatically; only `<description>` is LLM-generated. Every collection follows this exact schema, with each leaf element always on one line:

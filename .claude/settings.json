@@ -22,6 +22,9 @@
       "Bash(uv auth token*)"
     ]
   },
+  "worktree": {
+    "baseRef": "head"
+  },
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,
     "pyright-lsp@claude-plugins-official": true,

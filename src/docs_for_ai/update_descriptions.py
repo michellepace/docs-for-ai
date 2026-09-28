@@ -121,25 +121,25 @@ def _read_piped_stdin() -> str:
 def main() -> None:
     """Parse arguments and apply stdin descriptions to a collection's INDEX.xml."""
     parser = argparse.ArgumentParser(
-        description=(
-            "Apply descriptions from stdin to a collection's INDEX.xml, "
-            "matched by <local_file> filename."
-        ),
-        epilog=(
-            "stdin format — one line pair per INDEX source, "
-            "piped via a quoted heredoc:\n"
-            "  update-descriptions collections/<name> <<'EOF'\n"
-            "  <local_file>    (bare filename, not a path)\n"
-            f"  <description>   ({DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words)\n"
-            "  ...             (repeat the line pair per source)\n"
-            "  EOF\n\n"
-            "Out-of-band descriptions are flagged (exit 1); in-band siblings "
-            "still apply. Unmatched filenames are skipped without error."
-        ),
+        description="Set INDEX.xml descriptions from stdin, matched by <local_file>.",
+        epilog=f"""\
+stdin:
+  Line pairs for any subset of sources, piped via a quoted heredoc so
+  quotes, $ and backticks stay literal:
+    uv run update-descriptions collections/<name> <<'EOF'
+    <local_file>     bare filename as in INDEX.xml, not a path
+    <description>    one line, {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words
+    ...              more pairs; blank lines are ignored
+    EOF
+
+exit:
+  0 even if a filename matched no source (skipped, with only its
+  word-count ✅ printed); 1 with `❌ <reason>`.
+""",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+        "collection_dir", help="Collection directory; must contain INDEX.xml"
     )
     args = parser.parse_args()
 

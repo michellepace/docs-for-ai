@@ -11,14 +11,14 @@ from urllib.parse import urlparse, urlunparse
 
 from docs_for_ai.errors import CurationError
 
-# A directly-fetched doc's format; None on a route means "scrape via FireCrawl".
+# Selects a directly-fetched doc's title extractor; None on a route means
+# "scrape via FireCrawl".
 DocFormat = Literal["markdown", "rst"]
 
 HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
 DIRECT_FETCH_RULES_PATH = Path(__file__).parent / "direct-fetch-rules.toml"
-FILENAME_RE = re.compile(r"^[a-z0-9-]+\.(?:md|mdx|qmd)$")
 FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
 # Accepted shapes: a blob file on main/master ending in .md/.mdx/.qmd.
@@ -27,15 +27,18 @@ GITHUB_BLOB_RE = re.compile(
     r"^https://github\.com/([^/]+)/([^/]+)/blob/(main|master)/(.+)\.(md|mdx|qmd)$",
     re.IGNORECASE,
 )
-STRIPPED_SUFFIXES = (".rst.txt", ".html", ".mdx", ".qmd", ".md", ".rst")
+STRIPPED_SUFFIXES = (".rst.txt", ".html", ".mdx", ".qmd", ".md", ".rst", ".txt")
 _STRIPPED_SUFFIX_RE = re.compile(
     r"(?:" + "|".join(re.escape(suffix) for suffix in STRIPPED_SUFFIXES) + r")$",
     re.IGNORECASE,
 )
-# Raw URLs fetched as-is, mapped to their (format, output extension).
-RAW_SUFFIXES: dict[str, tuple[DocFormat, str]] = {
-    ".md": ("markdown", "md"),
-    ".rst.txt": ("rst", "rst"),
+# Raw URLs fetched and recorded as-is, mapped to their format. Checked in order,
+# so `.rst.txt` must precede `.txt`; any other `.txt` (e.g. llms.txt) reads as
+# markdown.
+RAW_SUFFIXES: dict[str, DocFormat] = {
+    ".md": "markdown",
+    ".rst.txt": "rst",
+    ".txt": "markdown",
 }
 
 
@@ -56,27 +59,22 @@ def is_github_url(url: str) -> bool:
     return urlparse(url).netloc.lower() in {"github.com", "raw.githubusercontent.com"}
 
 
-def _raw_format(url: str) -> tuple[DocFormat, str] | None:
-    """The (format, extension) of a directly fetchable raw URL, else None.
-
-    `.md` → markdown; `.rst.txt` → reStructuredText.
-    """
+def _raw_suffix(url: str) -> str | None:
+    """The first `RAW_SUFFIXES` key the URL's path ends with, else None."""
     path = urlparse(url).path
-    for suffix, format_ext in RAW_SUFFIXES.items():
-        if path.endswith(suffix):
-            return format_ext
-    return None
+    return next((suffix for suffix in RAW_SUFFIXES if path.endswith(suffix)), None)
 
 
 class FetchRoute(NamedTuple):
     """How to source a URL: its format, the URL to fetch, and the outputs.
 
     `doc_format` is None for FireCrawl, else `"markdown"` or `"rst"` — it selects
-    the title extractor and the output extension.
+    the title extractor.
     `fetch_url` is fetched directly for a `doc_format`; for FireCrawl it is the
     URL scraped.
-    `canonical_url` (recorded as `<source_url>`) is query/fragment-free.
-    `filename` is the resolved output filename; its extension reflects the format.
+    `canonical_url` (recorded as `<source_url>`) is query/fragment-free, and
+    resolves back to this same route when sync-index re-curates it.
+    `filename` is the resolved output filename.
     """
 
     doc_format: DocFormat | None
@@ -119,25 +117,25 @@ def filename_from_canonical_url(url: str, ext: str = "md") -> str:
     return f"{slug or 'index'}.{ext}"
 
 
-def _matching_prefix(url: str, prefixes: list[str]) -> str | None:
-    """The longest registry prefix `url` falls under, or None (boundary-safe)."""
-    matches = [p for p in prefixes if f"{url}/".startswith(p)]
-    return max(matches, key=len) if matches else None
+def _matches_prefix(url: str, prefixes: list[str]) -> bool:
+    """True when `url`, or the page of a `.md` twin, falls under a registry prefix.
 
-
-def _raw_format_route(url: str) -> FetchRoute | None:
-    """A raw `.md`/`.rst.txt` URL fetched as-is, else None.
-
-    Markdown drops its `.md` for the canonical URL (so the two spellings collapse);
-    reStructuredText keeps its raw URL.
+    Boundary-safe: the prefix root page itself (and so its twin) matches.
     """
-    fmt = _raw_format(url)
-    if fmt is None:
+    return any(f"{url.removesuffix('.md')}/".startswith(p) for p in prefixes)
+
+
+def _raw_route(url: str) -> FetchRoute | None:
+    """A raw `.md`/`.txt` URL, fetched and recorded as-is, else None.
+
+    With no rule vouching for a page twin, the raw URL is the only one known to
+    fetch directly, so it stays canonical; its filename keeps the URL's suffix.
+    """
+    suffix = _raw_suffix(url)
+    if suffix is None:
         return None
-    format_name, ext = fmt
-    canonical = url.removesuffix(".md") if format_name == "markdown" else url
-    filename = filename_from_canonical_url(canonical, ext=ext)
-    return FetchRoute(format_name, url, canonical, filename)
+    filename = filename_from_canonical_url(url, ext=suffix.removeprefix("."))
+    return FetchRoute(RAW_SUFFIXES[suffix], url, url, filename)
 
 
 def _github_route(url: str) -> FetchRoute:
@@ -146,14 +144,16 @@ def _github_route(url: str) -> FetchRoute:
     return FetchRoute("markdown", raw_url, url, github_filename_from_blob_url(url))
 
 
-def _append_md_route(url: str, _prefix: str) -> FetchRoute | None:
+def _append_md_route(url: str) -> FetchRoute | None:
     """Map a suffix-less page and its `.md` twin, both saved as one `.md` file.
 
-    Any other suffix (`.mdx`, `.html`, …) is declined.
-    Accepts `_prefix` only to share the transform dispatch signature.
+    Any other suffix (`.mdx`, `.html`, …) is declined, as is a `.md` whose page
+    would carry a suffix (`v1.2.md`): that page wouldn't route back here.
     """
     if url.endswith(".md"):  # reverse — check first
         canonical = url.removesuffix(".md")
+        if not _has_no_file_suffix(canonical):
+            return None
     elif _has_no_file_suffix(url):  # forward page
         canonical = url
     else:
@@ -163,37 +163,12 @@ def _append_md_route(url: str, _prefix: str) -> FetchRoute | None:
     )
 
 
-def _rst_filename(rel: str) -> str:
-    """Slugify a page-relative path (e.g. `reference/console`) into `{slug}.rst`."""
-    return f"{_slugify(rel) or 'index'}.rst"
-
-
-def _readthedocs_route(url: str, prefix: str) -> FetchRoute | None:
-    """Map a readthedocs `.html` page and its `_sources/*.rst.txt` twin, saved `.rst`.
-
-    Bidirectional: forward, a `.html` page fetches its twin and stays canonical;
-    reverse, a `_sources/{rel}.rst.txt` URL is fetched as-is but maps back to the page —
-    so both spellings converge on one file and one index entry. Declines anything else.
-    """
-    rel = url.removeprefix(prefix)
-    is_reverse_twin = rel.startswith("_sources/") and rel.endswith(".rst.txt")
-    if is_reverse_twin:  # reverse — check first
-        rel = rel.removeprefix("_sources/").removesuffix(".rst.txt")
-        fetch_url, canonical = url, f"{prefix}{rel}.html"
-    elif url.endswith(".html"):  # forward page
-        rel = rel.removesuffix(".html")
-        fetch_url, canonical = f"{prefix}_sources/{rel}.rst.txt", url
-    else:
-        return None
-    return FetchRoute("rst", fetch_url, canonical, _rst_filename(rel))
-
-
 def _firecrawl_route(url: str) -> FetchRoute:
     """No direct twin: scrape the URL via FireCrawl (doc_format None)."""
     return FetchRoute(None, url, url, filename_from_canonical_url(url))
 
 
-TRANSFORMS = {"append-md": _append_md_route, "readthedocs": _readthedocs_route}
+TRANSFORMS = {"append-md": _append_md_route}
 
 
 def resolve_route(url: str, rules: dict[str, list[str]]) -> FetchRoute:
@@ -202,10 +177,9 @@ def resolve_route(url: str, rules: dict[str, list[str]]) -> FetchRoute:
     if is_github_url(url):
         return _github_route(url)
     for name, prefixes in rules.items():
-        prefix = _matching_prefix(url, prefixes)
-        if prefix and (route := TRANSFORMS[name](url, prefix)):
+        if _matches_prefix(url, prefixes) and (route := TRANSFORMS[name](url)):
             return route
-    return _raw_format_route(url) or _firecrawl_route(url)
+    return _raw_route(url) or _firecrawl_route(url)
 
 
 def _normalise_prefixes(rules: dict[str, list[str]]) -> dict[str, list[str]]:
@@ -245,7 +219,7 @@ def github_blob_to_raw_url(url: str) -> str:
 def github_filename_from_blob_url(url: str) -> str:
     """Derive a filename from a GitHub blob URL's path, keeping its extension.
 
-    Strips a leading `docs/`, lowercases, hyphen-joins.
+    Strips a leading `docs/`, then slugifies the rest.
     """
     match = GITHUB_BLOB_RE.match(url)
     if match is None:
@@ -254,14 +228,8 @@ def github_filename_from_blob_url(url: str) -> str:
     # Avoid a redundant "docs-" filename prefix.
     if segments and segments[0] == "docs":
         segments = segments[1:]
-    filename = "-".join(segments).lower() + "." + match.group(5).lower()
-    if not FILENAME_RE.match(filename):
-        _fail(
-            "Bad derived filename",
-            f"'{filename}' fails ^[a-z0-9-]+\\.(?:md|mdx|qmd)$",
-            url,
-        )
-    return filename
+    slug = _slugify("-".join(segments))
+    return f"{slug or 'index'}.{match.group(5).lower()}"
 
 
 def _title_from_frontmatter(content: str) -> str | None:

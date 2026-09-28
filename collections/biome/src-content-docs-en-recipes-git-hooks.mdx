@@ -23,8 +23,8 @@ Some examples of _Lefthook_ configurations:
   pre-commit:
     commands:
       check:
-        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-        run: npx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,css}"
+        run: npx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
   ```
 
 - Format, lint, and apply safe code fixes before committing
@@ -33,8 +33,8 @@ Some examples of _Lefthook_ configurations:
   pre-commit:
     commands:
       check:
-        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-        run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,css}"
+        run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
         stage_fixed: true
   ```
 
@@ -46,8 +46,8 @@ Some examples of _Lefthook_ configurations:
   pre-push:
     commands:
       check:
-        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-        run: npx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {push_files}
+        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,css}"
+        run: npx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true {push_files}
   ```
 
 Note that you don't need to use both `glob` and `--files-ignore-unknown=true`.
@@ -57,6 +57,10 @@ If you wish more control over which files are handled, you should use `glob`.
 `--no-errors-on-unmatched` silents possible errors in case *no files are processed*.
 
 Once configured, run `lefthook install` to set up the hooks.
+
+:::note
+If you are using Lefthook older than `v2.1.6` and see raw ANSI escape sequences in your terminal, you should either upgrade Lefthook or configure Lefthook colors / set `NO_COLOR`. Alternatively, you can pass `--colors=off` to Biome.
+:::
 
 
 ## Husky
@@ -92,8 +96,8 @@ Here's some example of commands that you could find useful when running the Git 
 ```jsonc title="package.json"
 {
   "lint-staged": {
-    // Run Biome on staged files that have the following extensions: js, ts, jsx, tsx, json and jsonc
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+    // Run Biome on staged files that have the following extensions: js, ts, jsx, tsx, json, jsonc and css
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,css}": [
       "biome check --files-ignore-unknown=true", // Check formatting and lint
       "biome check --write --no-errors-on-unmatched", // Format, sort imports, lint, and apply safe fixes
       "biome check --write --organize-imports-enabled=false --no-errors-on-unmatched", // format and apply safe fixes
@@ -178,7 +182,7 @@ repos:
         entry: npx @biomejs/biome check --write --files-ignore-unknown=true --no-errors-on-unmatched
         language: system
         types: [text]
-        files: "\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?)$"
+        files: "\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css)$"
 ```
 
 The pre-commit option `files` is optional,

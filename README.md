@@ -3,8 +3,8 @@
 Curate documentation from any URL into your own collections. Then ask questions against a collection to get good, grounded answers.
 
 <p align="left">
-  <a href="images/curate-doc-usage-2025-11-25.jpg">
-    <img src="images/curate-doc-usage-2025-11-25.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
+  <a href="images/curate-doc-usage.jpg">
+    <img src="images/curate-doc-usage.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
   </a>
   <br>
   <em>(1) curate the doc → (2) stored and indexed → (3) ask Qs against the collection</em>
@@ -22,7 +22,7 @@ collections/
 └── <collection>/           # eg. biome/, clerk/, uv/
     ├── INDEX.xml           # Routing index for targeted retrieval
     ├── README.md
-    └── *.{md,rst,mdx,qmd}  # Curated doc files
+    └── *.{md,mdx,qmd,txt}  # Curated doc files
 ```
 
 ---
@@ -96,7 +96,7 @@ printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
 }
 ```
 
-**Tip:** GitHub URLs are always fetched, never scraped — faster, cleaner and free. If the website you are curating from has a `.md` twin, make it direct-fetch too: add the prefix to [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml). As a last resort, FireCrawl scrapes.
+**Tip:** GitHub, `.md` and `.txt` URLs are fetched for free. If a site's pages have `.md` twins, add its prefix to [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) so its pages are free too. Anything else is scraped by FireCrawl (paid).
 
 ---
 
@@ -106,7 +106,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 | Collection | Collection Index | Description | Curated | Source |
 | :--------- | :--------------- | :---------- | :------ | :----- |
-| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2025-11-04 | [Official](https://biomejs.dev) |
+| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-09-28 | [Official](https://biomejs.dev) |
 | 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-08-16 | [Official](https://claude.com/docs/) |
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-09-19 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-08-16 | [Official](https://platform.claude.com/docs/) |
@@ -116,10 +116,10 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`firecrawl/`](collections/firecrawl/) | 📄 [`INDEX.xml`](collections/firecrawl/INDEX.xml) | Web scraping for AI | 2026-07-18 | [Official](https://docs.firecrawl.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
 | 📦 [`mcp/`](collections/mcp/) | 📄 [`INDEX.xml`](collections/mcp/INDEX.xml) | AI integration standard | 2026-08-14 | [Official](https://modelcontextprotocol.io) |
-| 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-07-11 | [Official](https://mdformat.readthedocs.io) |
+| 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-09-26 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-08-19 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
-| 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-07-05 | [Official](https://rich.readthedocs.io) |
+| 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
@@ -137,14 +137,14 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
-**Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
+**Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 
 <p align="left">
-  <a href="images/curate-doc-routing-2026-07-01.jpg">
-    <img src="images/curate-doc-routing-2026-07-01.jpg" alt="Flowchart of how curate-doc resolves a URL. Query strings, fragments and trailing slashes are stripped first, then four gates in order: (1) GitHub host — fetch the raw twin, or error out; (2) direct-fetch-rules.toml prefix — fetch the .md or .rst.txt twin; (3) URL already ends in .md or .rst.txt — fetch as-is; (4) FireCrawl scrape, last resort." width="300">
+  <a href="images/curate-doc-routing.jpg">
+    <img src="images/curate-doc-routing.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
   </a>
   <br>
-  <em>Routing simplified, or <a href="images/curate-doc-routing-2026-08-05.jpg">the detailed version</a></em>
+  <em>Routing illustrated</em>
 </p>
 <br>
 

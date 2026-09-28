@@ -1,85 +1,78 @@
-ContentsMenuExpandLight modeDark modeAuto light/dark, in light modeAuto light/dark, in dark mode[Skip to content](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html#furo-main-content)
+# Installation and usage
 
-[Back to top](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html#)
 
-[View this page](https://mdformat.readthedocs.io/en/stable/_sources/users/installation_and_usage.md.txt "View this page")
-
-Toggle Light / Dark / Auto color theme
-
-Toggle table of contents sidebar
-
-# Installation and usage [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#installation-and-usage "Link to this heading")
-
-## Installing [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#installing "Link to this heading")
+## Installing
 
 Install with [CommonMark](https://spec.commonmark.org/current/) support:
 
-```
+```bash
 pipx install mdformat
 ```
 
 Install with [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/) support:
 
-```
+```bash
 pipx install mdformat
 pipx inject mdformat mdformat-gfm
 ```
 
-Note that GitHub’s Markdown renderer supports syntax extensions not included in the GFM specification.
+Note that GitHub's Markdown renderer supports syntax extensions not included in the GFM specification.
 For full GitHub support do:
 
-```
+```bash
 pipx install mdformat
 pipx inject mdformat mdformat-gfm mdformat-frontmatter mdformat-footnote mdformat-gfm-alerts
 ```
 
 Install with [Markedly Structured Text (MyST)](https://myst-parser.readthedocs.io/en/latest/using/syntax.html) support:
 
-```
+```bash
 pipx install mdformat
 pipx inject mdformat mdformat-myst
 ```
 
-Warning
-
+```{warning}
 The formatting style produced by mdformat may change in each version.
 It is recommended to pin mdformat dependency version.
+```
 
-## Command line usage [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#command-line-usage "Link to this heading")
+<!-- MANUAL: inlined README.md@1.0.0 'cli-usage' in place of {include}; a refresh reverts this -->
 
-### Format files [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#format-files "Link to this heading")
+## Command line usage
+
+### Format files
 
 Format files `README.md` and `CHANGELOG.md` in place
 
-```
+```bash
 mdformat README.md CHANGELOG.md
 ```
 
 Format `.md` files in current working directory recursively
 
-```
+```bash
 mdformat .
 ```
 
 Read Markdown from standard input until `EOF`.
 Write formatted Markdown to standard output.
 
-```
+```bash
 mdformat -
 ```
 
-### Check formatting [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#check-formatting "Link to this heading")
+### Check formatting
 
-```
+```bash
 mdformat --check README.md CHANGELOG.md
 ```
 
 This will not apply any changes to the files.
 If a file is not properly formatted, the exit code will be non-zero.
 
-### Options [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#options "Link to this heading")
+### Options
 
-```
+```console
 foo@bar:~$ mdformat --help
 usage: mdformat [-h] [--check] [--no-validate] [--version] [--number]
                 [--wrap {keep,no,INTEGER}] [--end-of-line {lf,crlf,keep}]
@@ -116,11 +109,11 @@ options:
 
 The `--exclude` option is only available on Python 3.13+.
 
-## Python API usage [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#python-api-usage "Link to this heading")
+## Python API usage
 
-### Format text [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#format-text "Link to this heading")
+### Format text
 
-```
+```python
 import mdformat
 
 unformatted = "\n\n# A header\n\n"
@@ -128,11 +121,11 @@ formatted = mdformat.text(unformatted)
 assert formatted == "# A header\n"
 ```
 
-### Format a file [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#format-a-file "Link to this heading")
+### Format a file
 
 Format file `README.md` in place:
 
-```
+```python
 import mdformat
 
 # Input filepath as a string...
@@ -145,12 +138,12 @@ filepath = pathlib.Path("README.md")
 mdformat.file(filepath)
 ```
 
-### Options [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#id1 "Link to this heading")
+### Options
 
 All formatting style modifying options available in the CLI are also available in the Python API,
 with equivalent option names:
 
-```
+```python
 import mdformat
 
 mdformat.file(
@@ -162,12 +155,12 @@ mdformat.file(
 )
 ```
 
-## Usage as a pre-commit hook [¶](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html\#usage-as-a-pre-commit-hook "Link to this heading")
+## Usage as a pre-commit hook
 
 `mdformat` can be used as a [pre-commit](https://github.com/pre-commit/pre-commit) hook.
-Add the following to your project’s `.pre-commit-config.yaml` to enable this:
+Add the following to your project's `.pre-commit-config.yaml` to enable this:
 
-```
+```yaml
 - repo: https://github.com/hukkin/mdformat
   rev: 1.0.0  # Use the ref you want to point at
   hooks:
@@ -177,10 +170,3 @@ Add the following to your project’s `.pre-commit-config.yaml` to enable this:
     - mdformat-gfm
     - mdformat-black
 ```
-
-Versions[latest](https://mdformat.readthedocs.io/en/latest/users/installation_and_usage.html)**[stable](https://mdformat.readthedocs.io/en/stable/users/installation_and_usage.html)**On Read the Docs[Project Home](https://app.readthedocs.org/projects/mdformat/?utm_source=mdformat&utm_content=flyout)[Builds](https://app.readthedocs.org/projects/mdformat/builds/?utm_source=mdformat&utm_content=flyout)Search
-
-* * *
-
-[Addons documentation](https://docs.readthedocs.io/page/addons.html?utm_source=mdformat&utm_content=flyout) ― Hosted by
-[Read the Docs](https://about.readthedocs.com/?utm_source=mdformat&utm_content=flyout)

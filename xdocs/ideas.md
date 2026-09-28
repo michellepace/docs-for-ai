@@ -8,7 +8,6 @@ Examples:
 
 - commmon ones (`append-md`): add ".md"
 - https://docs.astral.sh/uv/concepts/tools/ → https://docs.astral.sh/uv/concepts/tools/index.md (add "index.md")
-- https://rich.readthedocs.io/en/stable/ → https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
 
 Would also stip the 3 errors on `uv run sync-index collections/uv`.
 
@@ -19,6 +18,11 @@ Currently if I curate and it has `md-append` then the source URL in the index is
 If were were truthful, then re-curate doesn't have to apply any rules, it can just use the source URL in the index.
 
 The impact is that I can have "more than one rule" in an index.
+
+Canonical now (2026-09-26):
+
+- rich
+- mdformat (`34ce9bb`)
 
 ## Idea: Re-write "description rules"
 

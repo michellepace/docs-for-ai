@@ -1,10 +1,10 @@
-# Site prefixes whose pages have a directly-fetchable twin (a raw .md or .rst).
+# Site prefixes whose pages have a directly-fetchable twin (a raw .md).
 # Add a prefix here so its pages are direct-fetched, not scraped via FireCrawl.
 # Each key is a rule; its list holds the site prefixes that rule covers.
 
-# MARKDOWN
-# Eg Clerk has https://clerk.com/docs/guides/ai/skills
-#    with twin https://clerk.com/docs/guides/ai/skills.md
+# Example:
+# Clerk has https://clerk.com/docs/guides/ai/skills
+#  with twin https://clerk.com/docs/guides/ai/skills.md
 append-md = [
   "https://claude.com/docs/",
   "https://clerk.com/docs/",
@@ -25,9 +25,3 @@ append-md = [
   "https://vitest.dev/config/",
   "https://vitest.dev/guide/",
 ]
-
-# READTHEDOCS — a rendered HTML page and its `_sources/*.rst.txt`
-#   reStructuredText twin (curate either spelling).
-# Eg rich has https://rich.readthedocs.io/en/stable/panel.html
-#   with twin https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt
-readthedocs = ["https://rich.readthedocs.io/en/stable/"]

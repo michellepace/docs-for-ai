@@ -62,10 +62,10 @@ def run_sync(
 def stub_fetches(
     monkeypatch: pytest.MonkeyPatch, docs: dict[str, str | Exception]
 ) -> None:
-    """Serve canned content for https://example.com/* fetch URLs, offline.
+    """Serve canned content per fetch URL, offline; FireCrawl is forbidden.
 
-    Keys are FETCH urls — the `append-md` rule fetches `<canonical>.md`.
-    An Exception value is raised instead of returned.
+    Keys are FETCH urls — https://example.com/ is under the `append-md` rule,
+    so it fetches `<canonical>.md`. An Exception value is raised, not returned.
     """
 
     def fetch(url: str) -> str:
@@ -332,6 +332,35 @@ def test_sync_keeps_description_regenerated_after_reset(
     assert "NEEDS DESCRIPTION" not in out
 
 
+@pytest.mark.parametrize(
+    ("raw_url", "local_file"),
+    [
+        ("https://bun.test/docs/installation.md", "installation.md"),
+        ("https://bun.test/llms.txt", "llms.txt"),
+    ],
+    ids=["md", "txt"],
+)
+def test_sync_refetches_a_curated_raw_url_directly(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    raw_url: str,
+    local_file: str,
+) -> None:
+    """A raw URL from a site with no rule round-trips: never a paid scrape."""
+    stub_fetches(monkeypatch, {raw_url: "# Installation\n\nbody\n"})
+    collection_dir = tmp_path / "bun"
+    curate_doc.curate(collection_dir, raw_url)
+    index_path = collection_dir / "INDEX.xml"
+    set_index_description(index_path, local_file, "Curated description")
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert f"[1/1] ok    {local_file}" in out
+    assert read_sources_by_file(index_path) == {local_file: raw_url}
+    assert read_index_description(index_path, local_file) == "Curated description"
+
+
 def test_sync_fetches_missing_file_instead_of_pruning_entry(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -409,6 +438,26 @@ def test_sync_deletes_files_not_in_index_and_keeps_protected_files(
 
     assert {p.name for p in collection_dir.iterdir()} == survivors
     assert "orphans deleted 2" in out
+
+
+def test_sync_deletes_old_file_when_source_url_now_curates_to_new_filename(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = tmp_path / "collection"
+    collection_dir.mkdir()
+    (collection_dir / "old.md").write_text("# Old")
+    create_index_xml(
+        collection_dir / "INDEX.xml",
+        [make_source("old.md", "https://example.com/new", "Description")],
+    )
+    stub_fetches(monkeypatch, {"https://example.com/new.md": "# New"})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert {p.name for p in collection_dir.iterdir()} == {"INDEX.xml", "new.md"}
+    assert "orphans deleted 1" in out
 
 
 @pytest.mark.parametrize(

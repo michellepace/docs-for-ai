@@ -251,16 +251,16 @@ def _parse_args() -> argparse.Namespace:
 fetch route (picked from the URL; first match wins):
   1. GitHub blob on main/master ending .md/.mdx/.qmd → its raw file; any
      other github.com or raw.githubusercontent.com URL is rejected
-  2. extensionless URL under a prefix in
-     src/docs_for_ai/direct-fetch-rules.toml → <url>.md
-  3. URL ending .md or .rst.txt → fetched as-is
+  2. extensionless page, or its .md twin, under a prefix in
+     src/docs_for_ai/direct-fetch-rules.toml → <page>.md, recorded as <page>
+  3. any other URL ending .md or .txt → fetched and recorded as-is
   4. anything else → FireCrawl scrape
 
 changes:
-  Curating a URL already in INDEX.xml (a page and its .md twin count as
-  one) overwrites its doc and updates its entry in place. <description> is
-  kept if the content is unchanged (ignoring whitespace); otherwise it
-  becomes PLACEHOLDER.
+  Curating a URL already in INDEX.xml (under a rule prefix, a page and its
+  .md twin count as one) overwrites its doc and updates its entry in
+  place. <description> is kept if the content is unchanged (ignoring
+  whitespace); otherwise it becomes PLACEHOLDER.
 
 exit:
   0 on success; 1 with `❌ <reason>`, having changed nothing.
@@ -324,7 +324,7 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
 
     description = _decide_description(outcome, existing)
 
-    # doc.source_url is canonical: query/fragment-free, no trailing `.md`
+    # doc.source_url is canonical: query/fragment-free, re-resolves to this route
     index_action = _add_or_update_source_in_index(
         collection_dir, doc.title, doc.source_url, doc.filename, description
     )

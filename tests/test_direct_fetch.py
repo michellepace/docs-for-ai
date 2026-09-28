@@ -117,13 +117,31 @@ class TestResolveRoute:
                 (None, f"{MD}/page.html", f"{MD}/page.html", "page.md"),
             ),
             (f"{MD}/page.mdx", (None, f"{MD}/page.mdx", f"{MD}/page.mdx", "page.md")),
+            (f"{MD}.md", ("markdown", f"{MD}.md", MD, "index.md")),
+            (
+                f"{MD}/v1.2.md",
+                ("markdown", f"{MD}/v1.2.md", f"{MD}/v1.2.md", "v1-2.md"),
+            ),
+            (
+                f"{MD}/llms.txt",
+                ("markdown", f"{MD}/llms.txt", f"{MD}/llms.txt", "llms.txt"),
+            ),
             (
                 "https://example.com/docs/notes.md",
                 (
                     "markdown",
                     "https://example.com/docs/notes.md",
-                    "https://example.com/docs/notes",
+                    "https://example.com/docs/notes.md",
                     "notes.md",
+                ),
+            ),
+            (
+                "https://example.com/llms.txt",
+                (
+                    "markdown",
+                    "https://example.com/llms.txt",
+                    "https://example.com/llms.txt",
+                    "llms.txt",
                 ),
             ),
             (
@@ -132,7 +150,7 @@ class TestResolveRoute:
                     "rst",
                     "https://example.com/hello.rst.txt",
                     "https://example.com/hello.rst.txt",
-                    "hello.rst",
+                    "hello.rst.txt",
                 ),
             ),
             (
@@ -150,7 +168,7 @@ class TestResolveRoute:
             ),
         ],
         ids=[
-            "registry-md-fetched-as-is",
+            "registry-md-twin-collapses-to-page",
             "registry-md-query-stripped",
             "registry-md-nested-reverse-maps",
             "registry-no-suffix-appends-md",
@@ -159,8 +177,12 @@ class TestResolveRoute:
             "registry-dot-in-nonfinal-segment",
             "registry-html-suffix-declines-firecrawls",
             "registry-mdx-suffix-declines-firecrawls",
-            "off-registry-md-fetched-as-is",
-            "off-registry-rst-txt-fetched-as-is",
+            "registry-root-md-twin-collapses-to-page",
+            "registry-dotted-md-falls-through-to-raw",
+            "registry-txt-falls-through-to-raw",
+            "off-registry-md-fetched-and-recorded-as-is",
+            "off-registry-txt-read-as-markdown",
+            "off-registry-rst-txt-read-as-rst",
             "unmatched-path-firecrawls",
             "bare-domain-firecrawls",
         ],
@@ -168,8 +190,38 @@ class TestResolveRoute:
     def test_routes_url(
         self, url: str, expected: tuple[str | None, str, str, str]
     ) -> None:
-        """Registry transform → raw `.md`/`.rst.txt` → FireCrawl, in precedence."""
+        """Registry transform → raw `.md`/`.txt` → FireCrawl, in precedence."""
         assert resolve_route(url, RULES) == expected
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            f"{MD}/storage",
+            f"{MD}/storage.md",
+            f"{MD}.md",
+            f"{MD}/v1.2.md",
+            "https://example.com/docs/notes.md",
+            "https://example.com/llms.txt",
+            "https://example.com/_sources/panel.rst.txt",
+            "https://github.com/o/r/blob/main/docs/guide.md",
+            "https://example.com/docs/page",
+        ],
+        ids=[
+            "registry-page",
+            "registry-md-twin",
+            "registry-root-md-twin",
+            "registry-dotted-md",
+            "off-registry-md",
+            "off-registry-txt",
+            "off-registry-rst-txt",
+            "github-blob",
+            "firecrawl",
+        ],
+    )
+    def test_recorded_url_resolves_to_the_same_route(self, url: str) -> None:
+        """sync-index re-resolves the recorded <source_url>; it must not re-route."""
+        route = resolve_route(url, RULES)
+        assert resolve_route(route.canonical_url, RULES) == route
 
     def test_github_blob_resolves_to_raw_route(self) -> None:
         """A GitHub blob URL resolves to its raw twin, ahead of the registry."""
@@ -206,15 +258,16 @@ class TestFilenameFromCanonicalUrl:
             ("https://example.com", "md", "index.md"),
             (
                 "https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt",
-                "rst",
-                "en-stable-sources-panel.rst",
+                "rst.txt",
+                "en-stable-sources-panel.rst.txt",
             ),
+            ("https://ui.shadcn.com/llms.txt", "txt", "llms.txt"),
             ("https://site.com/guide.html", "md", "guide.md"),
             ("https://site.com/notes.md", "md", "notes.md"),
             ("https://site.com/page.HTML", "md", "page.md"),
             ("https://site.com/notes.MD", "md", "notes.md"),
             ("https://example.com/docs/", "md", "index.md"),
-            ("panel", "rst", "panel.rst"),
+            ("panel", "txt", "panel.txt"),
             ("panel", "md", "panel.md"),
         ],
         ids=[
@@ -226,13 +279,14 @@ class TestFilenameFromCanonicalUrl:
             "dot-in-nonfinal-segment-slugged",
             "query-and-fragment-stripped",
             "empty-path-falls-back-to-index",
-            "sources-rst-txt-stripped-ext-rst",
+            "rst-txt-suffix-stripped-whole",
+            "txt-suffix-stripped",
             "html-suffix-stripped-ext-md",
             "md-suffix-stripped-name-kept",
             "html-suffix-case-insensitive",
             "md-suffix-case-insensitive",
             "bare-docs-root-falls-back-to-index",
-            "ext-overrides-to-rst",
+            "ext-overrides-the-default",
             "ext-md-is-the-default",
         ],
     )
@@ -473,6 +527,6 @@ def test_real_rich_rst_source_fetches_as_is_and_titles(
 ) -> None:
     url = f"https://rich.readthedocs.io/en/stable/_sources/{page}.rst.txt"
     route = resolve_route(url, load_direct_fetch_rules())
-    assert route == ("rst", url, url, f"en-stable-sources-{page}.rst")
+    assert route == ("rst", url, url, f"en-stable-sources-{page}.rst.txt")
     content = fetch_text(route.fetch_url)
     assert extract_rst_title(content, route.canonical_url) == expected_title

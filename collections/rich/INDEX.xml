@@ -3,42 +3,42 @@
     <title>Layout</title>
     <description>`Layout` splits the terminal into rows and columns of independent content, usable with `Live` for full-screen apps; for example fixed or proportional sizes, hiding parts.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/layout.rst.txt</source_url>
-    <local_file>en-stable-sources-layout.rst</local_file>
+    <local_file>en-stable-sources-layout.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Panel</title>
     <description>Draw a border around text or any renderable, with a box style, a title or subtitle, and width fitted to the content.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/panel.rst.txt</source_url>
-    <local_file>en-stable-sources-panel.rst</local_file>
+    <local_file>en-stable-sources-panel.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Styles</title>
     <description>Controls how text looks, such as colors, bold, underline and links, via style strings or `Style` objects; `Theme` names styles and overrides Rich's defaults.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/style.rst.txt</source_url>
-    <local_file>en-stable-sources-style.rst</local_file>
+    <local_file>en-stable-sources-style.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Console API</title>
     <description>The `Console` object controls how and where all output is written; for example logging, spinners, test capture, HTML/SVG export, paging, and color in CI.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/console.rst.txt</source_url>
-    <local_file>en-stable-sources-console.rst</local_file>
+    <local_file>en-stable-sources-console.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Padding</title>
     <description>Add blank space around text or any renderable, set per side like CSS padding, with an optional background color.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/padding.rst.txt</source_url>
-    <local_file>en-stable-sources-padding.rst</local_file>
+    <local_file>en-stable-sources-padding.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Tables</title>
     <description>Everything about `Table`, from borders, headers and column widths to alignment and row striping; `Table.grid` also places content side by side without borders.</description>
     <source_url>https://rich.readthedocs.io/en/stable/_sources/tables.rst.txt</source_url>
-    <local_file>en-stable-sources-tables.rst</local_file>
+    <local_file>en-stable-sources-tables.rst.txt</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
 </docs_index>

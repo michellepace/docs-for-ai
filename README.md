@@ -22,7 +22,7 @@ collections/
 └── <collection>/           # eg. biome/, clerk/, uv/
     ├── INDEX.xml           # Routing index for targeted retrieval
     ├── README.md
-    └── *.{md,rst,mdx,qmd}  # Curated doc files
+    └── *.{md,mdx,qmd,txt}  # Curated doc files
 ```
 
 ---
@@ -96,7 +96,7 @@ printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
 }
 ```
 
-**Tip:** GitHub URLs are always fetched, never scraped — faster, cleaner and free. If the website you are curating from has a `.md` twin, make it direct-fetch too: add the prefix to [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml). As a last resort, FireCrawl scrapes.
+**Tip:** GitHub, `.md` and `.txt` URLs are fetched for free. If a site's pages have `.md` twins, add its prefix to [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) so its pages are free too. Anything else is scraped by FireCrawl (paid).
 
 ---
 
@@ -137,11 +137,11 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
-**Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
+**Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 
 <p align="left">
   <a href="images/curate-doc-routing.jpg">
-    <img src="images/curate-doc-routing.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .rst.txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
+    <img src="images/curate-doc-routing.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
   </a>
   <br>
   <em>Routing illustrated</em>

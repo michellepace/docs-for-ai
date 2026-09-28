@@ -1,4 +1,4 @@
-"""curate-doc tests: fetch the cheapest route; URL twins collapse to one source.
+"""curate-doc tests: fetch the cheapest route; rule-site twins collapse to one source.
 
 Descriptions survive unless content really changed.
 """
@@ -39,7 +39,7 @@ URL_GH_BLOB_404 = (
     "https://github.com/astral-sh/uv/blob/main/docs/zzz-does-not-exist-xyz.md"
 )
 
-DOC_URL = "https://example.com/docs/hello.md"  # canonical …/hello → hello.md
+DOC_URL = "https://example.com/docs/hello.md"  # no rule: recorded as-is → hello.md
 DOC_CONTENT = "# Hello\n\nFirst paragraph.\n\nSecond paragraph.\n"
 
 
@@ -229,13 +229,12 @@ def test_curate_md_url_fetches_directly_and_writes_exact_index(
     )
 
     assert (collection / "hello-there-hi.md").read_text() == "# Hello\n\nbody\n"
-    # Canonical source_url drops the trailing `.md` (the two spellings collapse).
     expected_index = (
         "<docs_index>\n"
         "  <source>\n"
         "    <title>Hello</title>\n"
         f"    <description>{PLACEHOLDER_DESCRIPTION}</description>\n"
-        "    <source_url>https://example.com/docs/hello/there/hi</source_url>\n"
+        "    <source_url>https://example.com/docs/hello/there/hi.md</source_url>\n"
         "    <local_file>hello-there-hi.md</local_file>\n"
         f"    <curated_at>{date.today().isoformat()}</curated_at>\n"
         "  </source>\n"
@@ -373,25 +372,46 @@ def test_curate_page_and_md_twin_collapse_to_one_source(
     assert f"<source_url>{page}.md</source_url>" not in index
 
 
-def test_curate_rst_source_is_fetched_and_recorded_as_is(
+@pytest.mark.parametrize(
+    ("raw_url", "content", "expected_file_and_title"),
+    [
+        (
+            "https://example.com/llms.txt",
+            "# shadcn/ui\n\nbody\n",
+            ("llms.txt", "shadcn/ui"),
+        ),
+        (
+            "https://example.com/_sources/panel.rst.txt",
+            "Panel Widgets\n=============\n\nbody\n",
+            ("sources-panel.rst.txt", "Panel Widgets"),
+        ),
+    ],
+    ids=["txt-titled-as-markdown", "rst-txt-titled-as-rst"],
+)
+def test_curate_txt_url_is_fetched_and_recorded_as_is(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
+    raw_url: str,
+    content: str,
+    expected_file_and_title: tuple[str, str],
 ) -> None:
-    fetched_urls = stub_direct_fetch(
-        monkeypatch, "Panel Widgets\n=============\n\nbody\n"
-    )
+    """The file keeps the URL's suffix; the title comes from its heading."""
+    fetched_urls = stub_direct_fetch(monkeypatch, content)
     collection = tmp_path / "coll"
-    rst_source = "https://example.com/_sources/panel.rst.txt"
 
-    run_curate(collection, rst_source, monkeypatch, capsys)
+    curate_doc.curate(collection, raw_url)
 
-    assert fetched_urls == [rst_source]
-    index = (collection / "INDEX.xml").read_text()
-    assert f"<source_url>{rst_source}</source_url>" in index
-    assert "<local_file>sources-panel.rst</local_file>" in index
-    # The title comes from the RST heading, not the URL stem.
-    assert "<title>Panel Widgets</title>" in index
+    assert fetched_urls == [raw_url]
+    source = ET.parse(collection / "INDEX.xml").getroot().find("source")
+    assert source is not None
+    recorded = (
+        source.findtext("source_url"),
+        source.findtext("local_file"),
+        source.findtext("title"),
+    )
+    assert recorded == (raw_url, *expected_file_and_title)
+    local_file = expected_file_and_title[0]
+    assert (collection / local_file).read_text() == content
 
 
 def test_curate_keeps_description_when_content_unchanged(
@@ -497,7 +517,7 @@ def test_cli_report_shows_created_doc_and_constant_success_gate(
     assert "collection: initialised" in out
     assert "hello.md (created)" in out
     assert "INDEX.xml (indexed)" in out
-    assert "url:    https://example.com/docs/hello\n" in out
+    assert "url:    https://example.com/docs/hello.md\n" in out
     assert "fetch:  1,250 chars, direct" in out
     assert "title:  Hello\n" in out
     assert "description: PLACEHOLDER (pending)" in out

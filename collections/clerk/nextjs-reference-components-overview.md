@@ -7,6 +7,7 @@ Clerk offers a comprehensive suite of components designed to seamlessly integrat
 - [<SignIn />](https://clerk.com/docs/nextjs/reference/components/authentication/sign-in.md)
 - [<SignUp />](https://clerk.com/docs/nextjs/reference/components/authentication/sign-up.md)
 - [<GoogleOneTap />](https://clerk.com/docs/nextjs/reference/components/authentication/google-one-tap.md)
+- [<OAuthConsent />](https://clerk.com/docs/nextjs/reference/components/authentication/oauth-consent.md)
 - [<TaskChooseOrganization />](https://clerk.com/docs/nextjs/reference/components/authentication/task-choose-organization.md)
 - [<TaskResetPassword />](https://clerk.com/docs/nextjs/reference/components/authentication/task-reset-password.md)
 - [<TaskSetupMFA />](https://clerk.com/docs/nextjs/reference/components/authentication/task-setup-mfa.md)
@@ -24,6 +25,7 @@ Clerk offers a comprehensive suite of components designed to seamlessly integrat
 - [<OrganizationProfile />](https://clerk.com/docs/nextjs/reference/components/organization/organization-profile.md)
 - [<OrganizationSwitcher />](https://clerk.com/docs/nextjs/reference/components/organization/organization-switcher.md)
 - [<OrganizationList />](https://clerk.com/docs/nextjs/reference/components/organization/organization-list.md)
+- [<InviteMembersButton />](https://clerk.com/docs/nextjs/reference/components/organization/invite-members-button.md)
 
 ## Billing components
 
@@ -34,7 +36,7 @@ Clerk offers a comprehensive suite of components designed to seamlessly integrat
 
 ## Control components
 
-Control components manage authentication-related behaviors in your application. They handle tasks such as controlling content visibility based on user authentication status, managing loading states during authentication processes, and redirecting users to appropriate pages. Control components render at `<Loading />` and `<Loaded />` states for assertions on the [Clerk object](https://clerk.com/docs/nextjs/reference/objects/clerk.md). A common example is the [<Show />](https://clerk.com/docs/nextjs/reference/components/control/show.md) component, which allows you to conditionally render content based on authentication and authorization state.
+Control components manage authentication-related behaviors in your application. They handle tasks such as controlling content visibility based on user authentication status, managing loading states during authentication processes, and redirecting users to appropriate pages. A common example is the [<Show />](https://clerk.com/docs/nextjs/reference/components/control/show.md) component, which allows you to conditionally render content based on authentication and authorization state.
 
 - [<AuthenticateWithRedirectCallback />](https://clerk.com/docs/nextjs/reference/components/control/authenticate-with-redirect-callback.md)
 - [<ClerkDegraded />](https://clerk.com/docs/nextjs/reference/components/control/clerk-degraded.md)
@@ -63,21 +65,21 @@ Control components manage authentication-related behaviors in your application. 
 ## Customization guides
 
 - [Customize components with the appearance prop](https://clerk.com/docs/nextjs/guides/customizing-clerk/appearance-prop/overview.md)
-- [Localize components with the `localization` prop (experimental)](https://clerk.com/docs/guides/customizing-clerk/localization.md?sdk=nextjs)
+- [Localize components with the `localization` prop](https://clerk.com/docs/guides/customizing-clerk/localization.md?sdk=nextjs)
 - [Add pages to the <UserProfile /> component](https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/user-profile.md)
 - [Add pages to the <OrganizationProfile /> component](https://clerk.com/docs/nextjs/guides/customizing-clerk/adding-items/organization-profile.md)
 
 ### Secured by Clerk branding
 
-> This feature requires a [paid plan](https://clerk.com/pricing){{ target: '_blank' }} for production use, but all features are free to use in development mode so that you can try out what works for you. See the [pricing](https://clerk.com/pricing){{ target: '_blank' }} page for more information.
+> This feature requires a [paid plan](https://clerk.com/pricing) for production use, but all features are free to use in development mode so that you can try out what works for you. See the [pricing](https://clerk.com/pricing) page for more information.
 
-By default, Clerk displays a **Secured by Clerk** badge on Clerk components. You can remove this branding by following these steps:
+By default, Clerk displays a **Secured by Clerk** badge on its prebuilt UI. You can remove this branding by following these steps:
 
 1. In the Clerk Dashboard, navigate to your application's [**Settings**](https://dashboard.clerk.com/~/settings).
 2. Under **Branding**, toggle on the **Remove "Secured by Clerk" branding** option.
 
-- [Join our Discord](https://clerk.com/discord): Join our official Discord server to chat with us directly and become a part of the Clerk community.
-- [Need help?](https://clerk.com/support): Contact us through Discord, Twitter, or email to receive answers to your questions and learn more about Clerk.
+- [Join the Discord community](https://clerk.com/discord): Join the official Discord community to connect with other developers.
+- [Need help?](https://clerk.com/contact/support): Contact the support team to get answers to your questions.
 
 ---
 

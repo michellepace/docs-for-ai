@@ -141,10 +141,10 @@
   </source>
   <source>
     <title>persist</title>
-    <description>PLACEHOLDER</description>
+    <description>Reference and tutorials: saving state to localStorage or custom storage, persisting some fields, version migrations, merging nested state, manual rehydration for SSR.</description>
     <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/persist.md</source_url>
     <local_file>reference-middlewares-persist.md</local_file>
-    <curated_at>2026-05-23</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>devtools</title>

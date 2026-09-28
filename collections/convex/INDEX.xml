@@ -8,10 +8,10 @@
   </source>
   <source>
     <title>The Zen of Convex</title>
-    <description>PLACEHOLDER</description>
+    <description>Best-practices guide: choosing queries, mutations or actions, keeping functions fast, avoiding custom client caching, and scheduling actions from mutations as workflows.</description>
     <source_url>https://docs.convex.dev/understanding/zen</source_url>
     <local_file>understanding-zen.md</local_file>
-    <curated_at>2026-07-14</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Dev workflow</title>

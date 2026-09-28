@@ -57,10 +57,10 @@
   </source>
   <source>
     <title>Build an MCP server</title>
-    <description>Tutorial: build a stdio weather server exposing `get_alerts`/`get_forecast` tools in Python, TypeScript, Java, Kotlin, C#, Ruby, Rust, or Go, avoiding stdout logging, then test in Claude Desktop.</description>
+    <description>Tutorial: stdio weather tools in Python, TypeScript, Java, Kotlin, C#, Ruby, Rust or Go; claude_desktop_config.json setup, why stdout logging breaks servers, missing-server troubleshooting</description>
     <source_url>https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server</source_url>
     <local_file>2026-07-28-develop-build-server.md</local_file>
-    <curated_at>2026-08-14</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Build an MCP client</title>

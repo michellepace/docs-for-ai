@@ -22,10 +22,10 @@
   </source>
   <source>
     <title>Choosing a syntax</title>
-    <description>PLACEHOLDER</description>
+    <description>Guide to picking Express or Core: large-app maintainability, output options like plot brushing that Express lacks, R-user familiarity; full Core dashboard example.</description>
     <source_url>https://github.com/posit-dev/py-shiny-site/blob/main/docs/express-or-core.qmd</source_url>
     <local_file>express-or-core.qmd</local_file>
-    <curated_at>2026-05-27</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Transition to Core</title>

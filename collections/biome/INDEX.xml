@@ -71,7 +71,7 @@
   </source>
   <source>
     <title>Configuration</title>
-    <description>PLACEHOLDER</description>
+    <description>Reference for every biome.json option: ignoring files and folders with globs, per-language formatting like quotes and indentation, rule severities, and per-path overrides.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/configuration.mdx</source_url>
     <local_file>src-content-docs-en-reference-configuration.mdx</local_file>
     <curated_at>2026-09-28</curated_at>

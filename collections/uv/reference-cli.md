@@ -580,12 +580,8 @@ Credentials are only stored in this directory when the plaintext backend is used
 ### Usage
 
 ```
-uv auth dir [OPTIONS] [SERVICE]
+uv auth dir [OPTIONS]
 ```
-
-### Arguments
-
-[`SERVICE`](#uv-auth-dir--service) : The domain or URL of the service to lookup
 
 ### Options
 
@@ -823,12 +819,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-run--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-run--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-run--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -944,14 +942,16 @@ Using `--gui-script` will attempt to parse the path as a PEP 723 script and run 
 
 [`--help`](#uv-run--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-run--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-run--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -1053,7 +1053,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-run--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -1073,6 +1073,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-run--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-run--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -1777,12 +1781,14 @@ This is equivalent to pip's `--constraint` option.
 May also be set with the `UV_CONSTRAINT` environment variable.
 ```
 
-[`--default-index`](#uv-add--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-add--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -1886,14 +1892,16 @@ These requirements will not be included in the published metadata for the projec
 
 [`--help`](#uv-add--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-add--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-add--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -1983,7 +1991,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-add--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -2003,6 +2011,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-add--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-add--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -2312,12 +2324,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-remove--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-remove--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-remove--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -2407,14 +2421,16 @@ The project environment will not be synced.
 
 [`--help`](#uv-remove--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-remove--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-remove--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -2500,7 +2516,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-remove--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -2520,6 +2536,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-remove--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-remove--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -2771,12 +2791,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-version--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-version--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-version--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -2864,14 +2886,16 @@ The project environment will not be synced.
 
 [`--help`](#uv-version--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-version--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-version--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -2957,7 +2981,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-version--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -2977,6 +3001,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-version--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-version--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -3251,12 +3279,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-sync--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-sync--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-sync--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -3362,14 +3392,16 @@ May be provided multiple times.
 
 [`--help`](#uv-sync--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-sync--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-sync--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -3461,7 +3493,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-sync--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -3481,6 +3513,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-sync--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-sync--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -3608,9 +3644,11 @@ The project and its dependencies will be omitted.
 May be provided multiple times. Implies `--no-default-groups`.
 ```
 
-[`--output-format`](#uv-sync--output-format) *output-format* : Select the output format
+[`--output-format`](#uv-sync--output-format) *output-format* : Select the output format.
 
 ```
+JSON output is written to stdout; diagnostic messages are written to stderr. The JSON schema is experimental and may change without warning.
+
 [default: text]
 
 Possible values:
@@ -3843,7 +3881,7 @@ Asserts that the `uv.lock` would remain unchanged after a resolution. If the loc
 Equivalent to `--locked`.
 ```
 
-[`--check-exists`](#uv-lock--check-exists), `--frozen` : Assert that a `uv.lock` exists without checking if it is up-to-date [env: UV_FROZEN=]
+[`--check-exists`](#uv-lock--check-exists) : Assert that a `uv.lock` exists without checking if it is up-to-date [env: UV_FROZEN=]
 
 ```
 Equivalent to `--frozen`.
@@ -3873,12 +3911,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-lock--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-lock--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-lock--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -3960,14 +4000,16 @@ Possible values:
 
 [`--help`](#uv-lock--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-lock--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-lock--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -4049,7 +4091,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-lock--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -4069,6 +4111,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-lock--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-lock--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -4298,12 +4344,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-export--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-export--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-export--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -4415,14 +4463,16 @@ May be provided multiple times.
 
 [`--help`](#uv-export--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-export--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-export--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -4512,7 +4562,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-export--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -4532,6 +4582,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-export--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-export--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -4843,12 +4897,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-tree--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-tree--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-tree--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -4953,14 +5009,16 @@ May be provided multiple times.
 
 [`--help`](#uv-tree--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-tree--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-tree--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -5050,7 +5108,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tree--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -5070,6 +5128,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-tree--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-tree--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -5614,12 +5676,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-check--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-check--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-check--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -5721,14 +5785,16 @@ May be provided multiple times.
 
 [`--help`](#uv-check--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-check--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-check--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -5820,7 +5886,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-check--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -5840,6 +5906,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-check--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-check--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -5886,6 +5956,12 @@ May be provided multiple times.
 ```
 
 [`--no-index`](#uv-check--no-index) : Ignore the registry index (e.g., PyPI), instead relying on direct URL dependencies and those provided via `--find-links`
+
+[`--no-install-project`](#uv-check--no-install-project) : Do not install the current project [env: UV_NO_INSTALL_PROJECT=]
+
+```
+By default, the current project is installed into the environment with all of its dependencies. The `--no-install-project` option excludes the project itself while still installing its dependencies, which is useful when the project can be type-checked from its source tree without building native extensions.
+```
 
 [`--no-managed-python`](#uv-check--no-managed-python) : Disable use of uv-managed Python versions [env: UV_NO_MANAGED_PYTHON=]
 
@@ -6119,12 +6195,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-audit--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-audit--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-audit--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -6222,14 +6300,16 @@ Vulnerabilities matching any of the provided IDs (including aliases) will be exc
 May be provided multiple times.
 ```
 
-[`--index`](#uv-audit--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-audit--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -6317,7 +6397,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-audit--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -6337,6 +6417,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-audit--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-audit--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -6735,12 +6819,14 @@ This is equivalent to pip's `--constraint` option.
 May also be set with the `UV_CONSTRAINT` environment variable.
 ```
 
-[`--default-index`](#uv-tool-run--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-tool-run--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -6830,14 +6916,16 @@ By default, the package name is assumed to match the command name.
 
 [`--help`](#uv-tool-run--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-tool-run--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-tool-run--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -6921,7 +7009,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-run--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -6941,6 +7029,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-tool-run--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-tool-run--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -7330,12 +7422,14 @@ This is equivalent to pip's `--constraint` option.
 May also be set with the `UV_CONSTRAINT` environment variable.
 ```
 
-[`--default-index`](#uv-tool-install--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-tool-install--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -7427,14 +7521,16 @@ Possible values:
 
 [`--help`](#uv-tool-install--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-tool-install--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-tool-install--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -7516,7 +7612,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-install--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -7536,6 +7632,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-tool-install--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-tool-install--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -7905,12 +8005,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-setting-package`](#uv-tool-upgrade--config-setting-package), `--config-settings-package` *config-setting-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-tool-upgrade--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-tool-upgrade--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -7986,14 +8088,16 @@ Possible values:
 
 [`--help`](#uv-tool-upgrade--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-tool-upgrade--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-tool-upgrade--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -8073,7 +8177,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-tool-upgrade--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -8093,6 +8197,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-tool-upgrade--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-tool-upgrade--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -10808,12 +10916,14 @@ Used to reflect custom build scripts and commands that wrap `uv pip compile`.
 May also be set with the `UV_CUSTOM_COMPILE_COMMAND` environment variable.
 ```
 
-[`--default-index`](#uv-pip-compile--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-pip-compile--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -10934,14 +11044,16 @@ May be provided multiple times.
 
 [`--help`](#uv-pip-compile--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-pip-compile--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-pip-compile--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -11453,6 +11565,12 @@ May also be set with the `UV_CACHE_DIR` environment variable.
 If provided, this overrides the default certificate source.
 ```
 
+[`--check`](#uv-pip-sync--check) : Check whether the environment matches the requirements without modifying it.
+
+```
+Resolve and report any necessary changes, exiting with code 1 if changes are needed.
+```
+
 [`--color`](#uv-pip-sync--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -11497,12 +11615,14 @@ This is equivalent to pip's `--constraint` option.
 May also be set with the `UV_CONSTRAINT` environment variable.
 ```
 
-[`--default-index`](#uv-pip-sync--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-pip-sync--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -11579,14 +11699,16 @@ May be provided multiple times.
 
 [`--help`](#uv-pip-sync--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-pip-sync--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-pip-sync--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -11731,6 +11853,19 @@ When disabled, uv will only use locally cached data and locally available files.
 When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
+```
+
+[`--output-format`](#uv-pip-sync--output-format) *output-format* : Select the output format.
+
+```
+JSON output is written to stdout; diagnostic messages are written to stderr. The JSON schema is experimental and may change without warning.
+
+[default: text]
+
+Possible values:
+
+- `text`: Display the result in a human-readable format
+- `json`: Display the result in JSON format
 ```
 
 [`--prefix`](#uv-pip-sync--prefix) *prefix* : Install packages into `lib`, `bin`, and other top-level folders under the specified directory, as if a virtual environment were present at that location.
@@ -12033,6 +12168,12 @@ May also be set with the `UV_CACHE_DIR` environment variable.
 If provided, this overrides the default certificate source.
 ```
 
+[`--check`](#uv-pip-install--check) : Check whether the environment satisfies the requirements without modifying it.
+
+```
+Resolve and report any necessary changes, exiting with code 1 if changes are needed.
+```
+
 [`--color`](#uv-pip-install--color) *color-choice* : Control the use of color in output.
 
 ```
@@ -12077,12 +12218,14 @@ This is equivalent to pip's `--constraint` option.
 May also be set with the `UV_CONSTRAINT` environment variable.
 ```
 
-[`--default-index`](#uv-pip-install--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-pip-install--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -12190,14 +12333,16 @@ May be provided multiple times.
 
 [`--help`](#uv-pip-install--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-pip-install--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-pip-install--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -12360,6 +12505,19 @@ When disabled, uv will only use locally cached data and locally available files.
 When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution for the given packages will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
 
 Multiple packages may be provided. Disable binaries for all packages with `:all:`. Clear previously specified packages with `:none:`.
+```
+
+[`--output-format`](#uv-pip-install--output-format) *output-format* : Select the output format.
+
+```
+JSON output is written to stdout; diagnostic messages are written to stderr. The JSON schema is experimental and may change without warning.
+
+[default: text]
+
+Possible values:
+
+- `text`: Display the result in a human-readable format
+- `json`: Display the result in JSON format
 ```
 
 [`--overrides`](#uv-pip-install--overrides), `--override` *overrides* : Override versions using the given requirements files.
@@ -13106,12 +13264,14 @@ While uv configuration can be included in a `pyproject.toml` file, it is not all
 May also be set with the `UV_CONFIG_FILE` environment variable.
 ```
 
-[`--default-index`](#uv-pip-list--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-pip-list--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -13190,14 +13350,16 @@ Possible values:
 
 [`--help`](#uv-pip-list--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-pip-list--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-pip-list--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -13589,12 +13751,14 @@ While uv configuration can be included in a `pyproject.toml` file, it is not all
 May also be set with the `UV_CONFIG_FILE` environment variable.
 ```
 
-[`--default-index`](#uv-pip-tree--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-pip-tree--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -13661,14 +13825,16 @@ May also be set with the `UV_FIND_LINKS` environment variable.
 
 [`--help`](#uv-pip-tree--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-pip-tree--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-pip-tree--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -14147,12 +14313,14 @@ While uv configuration can be included in a `pyproject.toml` file, it is not all
 May also be set with the `UV_CONFIG_FILE` environment variable.
 ```
 
-[`--default-index`](#uv-venv--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-venv--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -14219,14 +14387,16 @@ This will remove all files and directories at the target path.
 
 [`--help`](#uv-venv--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-venv--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-venv--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -14513,12 +14683,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-build--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-build--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-build--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -14600,14 +14772,16 @@ Possible values:
 
 [`--help`](#uv-build--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-build--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-build--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -14689,7 +14863,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-build--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -14711,6 +14885,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 [`--no-build-logs`](#uv-build--no-build-logs) : Hide logs from the build backend
 
 [`--no-build-package`](#uv-build--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-build--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -14945,7 +15123,7 @@ This option allows retrying publishing that failed after only some, but not all 
 
 Before uploading, the index is checked. If the exact same file already exists in the index, the file will not be uploaded. If an error occurred during the upload, the index is checked again, to handle cases where the identical file was uploaded twice in parallel.
 
-The exact behavior will vary based on the index. When uploading to PyPI, uploading the same file succeeds even without `--check-url`, while most other indexes error. When uploading to pyx, the index URL can be inferred automatically from the publish URL.
+The exact behavior will vary based on the index. When uploading to PyPI, uploading the same file succeeds even without `--check-url`, while most other indexes error.
 
 The index must provide one of the supported hashes (SHA-256, SHA-384, or SHA-512).
 
@@ -14985,7 +15163,7 @@ May also be set with the `UV_WORKING_DIR` environment variable.
 [`--dry-run`](#uv-publish--dry-run) : Perform a dry run without uploading files.
 
 ```
-When enabled, the command will check for existing files if `--check-url` is provided, and will perform validation against the index if supported, but will not upload any files.
+The command checks the distribution metadata locally, and checks for existing files if `--check-url` or `--index` is provided, but will not upload any files.
 ```
 
 [`--help`](#uv-publish--help), `-h` : Display the concise help for this command
@@ -15239,12 +15417,14 @@ May also be set with the `UV_CONFIG_FILE` environment variable.
 
 [`--config-settings-package`](#uv-workspace-metadata--config-settings-package), `--config-settings-package` *config-settings-package* : Settings to pass to the PEP 517 build backend for a specific package, specified as `PACKAGE:KEY=VALUE` pairs
 
-[`--default-index`](#uv-workspace-metadata--default-index) *default-index* : The URL of the default package index (by default: <https://pypi.org/simple>).
+[`--default-index`](#uv-workspace-metadata--default-index) *default-index* : The default package index (by default: <https://pypi.org/simple>).
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 The index given by this flag is given lower priority than all other indexes specified via the `--index` flag.
+
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
 
 May also be set with the `UV_DEFAULT_INDEX` environment variable.
 ```
@@ -15259,10 +15439,10 @@ See `--project` to only change the project root directory.
 May also be set with the `UV_WORKING_DIR` environment variable.
 ```
 
-[`--dry-run`](#uv-workspace-metadata--dry-run) : Perform a dry run, without writing the lockfile.
+[`--exact`](#uv-workspace-metadata--exact) : Perform an exact sync, removing extraneous packages.
 
 ```
-In dry-run mode, uv will resolve the project's dependencies and report on the resulting changes, but will not write the lockfile to disk.
+By default, synchronization preserves packages that are not part of the selected resolution. When enabled, uv removes those packages from the environment.
 ```
 
 [`--exclude-newer`](#uv-workspace-metadata--exclude-newer) *exclude-newer* : Limit candidate packages to those that were uploaded prior to the given date.
@@ -15328,14 +15508,16 @@ Possible values:
 
 [`--help`](#uv-workspace-metadata--help), `-h` : Display the concise help for this command
 
-[`--index`](#uv-workspace-metadata--index) *index* : The URLs to use when resolving dependencies, in addition to the default index.
+[`--index`](#uv-workspace-metadata--index) *index* : The indexes to use when resolving dependencies, in addition to the default index.
 
 ```
 Accepts either a repository compliant with PEP 503 (the simple repository API), or a local directory laid out in the same format.
 
 All indexes provided via this flag take priority over the index specified by `--default-index` (which defaults to PyPI). When multiple `--index` flags are provided, earlier values take priority.
 
-Index names are not supported as values. Relative paths must be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
+Indexes configured in `uv.toml` or `pyproject.toml` may be selected by name. Enable the `index-by-name` preview feature to prefer index names over relative paths.
+
+Relative paths can be disambiguated from index names with `./` or `../` on Unix or `.\\`, `..\\`, `./` or `../` on Windows.
 
 May also be set with the `UV_INDEX` environment variable.
 ```
@@ -15423,7 +15605,7 @@ May also be set with the `UV_NO_BINARY` environment variable.
 [`--no-build`](#uv-workspace-metadata--no-build) : Don't build source distributions.
 
 ```
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 May also be set with the `UV_NO_BUILD` environment variable.
 ```
@@ -15443,6 +15625,10 @@ Assumes that the packages' build dependencies specified by PEP 518 are already i
 ```
 
 [`--no-build-package`](#uv-workspace-metadata--no-build-package) *no-build-package* : Don't build source distributions for a specific package \[env: `UV_NO_BUILD_PACKAGE`=\]
+
+```
+First-party packages, such as projects in the workspace, will still be built.
+```
 
 [`--no-cache`](#uv-workspace-metadata--no-cache), `--no-cache-dir`, `-n` : Avoid reading from or writing to the cache, instead using a temporary directory for the duration of the operation
 
@@ -15573,7 +15759,9 @@ If provided, uv will resolve the dependencies based on the script's inline metad
 [`--sync`](#uv-workspace-metadata--sync) : Sync the environment to include module ownership metadata in the output.
 
 ```
-This adds a mapping from importable module names to references to the package nodes that provide them. To do this, the venv will be synced in inexact mode.
+This adds a mapping from importable module names to references to the package nodes that provide them. By default, the environment is synced in inexact mode.
+
+This also allows creating or updating the lockfile, unless `--locked` or `--frozen` is provided. For scripts, the lockfile is only updated if it already exists.
 ```
 
 [`--system-certs`](#uv-workspace-metadata--system-certs) : Whether to load TLS certificates from the platform's native certificate store [env: UV_SYSTEM_CERTS=]

@@ -3,8 +3,8 @@
 Curate documentation from any URL into your own collections. Then ask questions against a collection to get good, grounded answers.
 
 <p align="left">
-  <a href="images/curate-doc-usage-2025-11-25.jpg">
-    <img src="images/curate-doc-usage-2025-11-25.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
+  <a href="images/curate-doc-usage.jpg">
+    <img src="images/curate-doc-usage.jpg" alt="Terminal showing a three-step workflow: (1) run /curate-doc on a biome URL, (2) success output with the curated doc and new INDEX.xml entry, (3) /ask-docs queries the docs. Annotations mark each step." width="940">
   </a>
   <br>
   <em>(1) curate the doc → (2) stored and indexed → (3) ask Qs against the collection</em>
@@ -140,8 +140,8 @@ The `/curate-doc` command always regenerates the description, whereas `/recurate
 **Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.rst.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 
 <p align="left">
-  <a href="images/curate-doc-routing-2026-09-26.jpg">
-    <img src="images/curate-doc-routing-2026-09-26.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .rst.txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
+  <a href="images/curate-doc-routing.jpg">
+    <img src="images/curate-doc-routing.jpg" alt="Flowchart: curate-doc tries four routes in order — GitHub raw twin, rule-matched .md twin, raw .md or .rst.txt as-is (all free), then a paid FireCrawl scrape as last resort." width="350">
   </a>
   <br>
   <em>Routing illustrated</em>

@@ -3,6 +3,8 @@ description: Curate a source URL into a collection
 disable-model-invocation: true
 argument-hint: "<collection> <url>"
 arguments: [collection, source_url]
+model: claude-opus-5-5
+effort: xhigh
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -70,7 +72,7 @@ Two reads feed the write:
 
 The report's `title:` line is the `<title>` your description must complement.
 
-Then pipe a [15, 25]-word description (strict) straight in — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe the description straight in (the script rejects fewer than 8 or more than 25 words) — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'

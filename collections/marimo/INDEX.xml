@@ -15,10 +15,10 @@
   </source>
   <source>
     <title>FAQ</title>
-    <description>PLACEHOLDER</description>
+    <description>FAQ: Jupyter comparison, stopping expensive cells auto-running, UI element on_change gotchas, matplotlib plots, SQL braces, dotenv, remote servers, deploying apps.</description>
     <source_url>https://docs.marimo.io/faq</source_url>
     <local_file>faq.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Installation</title>

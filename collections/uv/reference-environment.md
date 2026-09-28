@@ -106,7 +106,7 @@ Used to override uv in the output header of the `requirements.txt` files generat
 
 added in `0.4.23`
 
-Equivalent to the `--default-index` command-line argument. If set, uv will use this URL as the default index when searching for packages.
+Equivalent to the `--default-index` command-line argument. If set, uv will use this index as the default index when searching for packages.
 
 ### [`UV_DEV`](#uv_dev)
 
@@ -210,7 +210,7 @@ Timeout (in seconds) for HTTP reads. (default: 30 s)
 
 added in `0.4.23`
 
-Equivalent to the `--index` command-line argument. If set, uv will use this space-separated list of URLs as additional indexes when searching for packages.
+Equivalent to the `--index` command-line argument. If set, uv will use this space-separated list of additional indexes when searching for packages.
 
 ### [`UV_INDEX_STRATEGY`](#uv_index_strategy)
 
@@ -380,7 +380,7 @@ Equivalent to the `--no-binary-package` command line argument. If set, uv will n
 
 added in `0.1.40`
 
-Equivalent to the `--no-build` command-line argument. If set, uv will not build source distributions.
+Equivalent to the `--no-build` command-line argument. If set, uv will not build source distributions. First-party packages, such as projects in the workspace, will still be built.
 
 ### [`UV_NO_BUILD_ISOLATION`](#uv_no_build_isolation)
 
@@ -392,7 +392,7 @@ Equivalent to the `--no-build-isolation` command-line argument. If set, uv will 
 
 added in `0.6.5`
 
-Equivalent to the `--no-build-package` command line argument. If set, uv will not build source distributions for the given space-delimited list of packages.
+Equivalent to the `--no-build-package` command line argument. If set, uv will not build source distributions for the given space-delimited list of packages. First-party packages, such as projects in the workspace, will still be built.
 
 ### [`UV_NO_CACHE`](#uv_no_cache)
 
@@ -804,12 +804,6 @@ Equivalent to the `--system` command-line argument. If set to `true`, uv will us
 
 WARNING: `UV_SYSTEM_PYTHON=true` is intended for use in continuous integration (CI) or containerized environments and should be used with caution, as modifying the system Python can lead to unexpected behavior.
 
-### [`UV_TEST_NO_HTTP_RETRY_DELAY`](#uv_test_no_http_retry_delay)
-
-added in `0.7.21`
-
-Used to disable delay for HTTP retries in tests.
-
 ### [`UV_TOOL_BIN_DIR`](#uv_tool_bin_dir)
 
 added in `0.3.0`
@@ -1146,29 +1140,11 @@ added in `0.8.15`
 
 The pyx API key (e.g., `sk-pyx-...`).
 
-### [`PYX_API_URL`](#pyx_api_url)
-
-added in `0.8.15`
-
-The URL of the pyx Simple API server.
-
 ### [`PYX_AUTH_TOKEN`](#pyx_auth_token)
 
 added in `0.8.15`
 
 The pyx authentication token (e.g., `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...`), as output by `uv auth token`.
-
-### [`PYX_CDN_DOMAIN`](#pyx_cdn_domain)
-
-added in `0.8.15`
-
-The domain of the pyx CDN.
-
-### [`PYX_CREDENTIALS_DIR`](#pyx_credentials_dir)
-
-added in `0.8.15`
-
-Specifies the directory where uv stores pyx credentials.
 
 ### [`RUFF`](#ruff)
 

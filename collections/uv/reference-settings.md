@@ -12,9 +12,11 @@ Note
 
 In `uv lock`, `uv sync`, and `uv run`, uv will only read `build-constraint-dependencies` from the `pyproject.toml` at the workspace root, and will ignore any declarations in other workspace members or `uv.toml` files.
 
+Hashes can be included to verify downloaded build dependency archives. To provide hashes, use a table with `requirement` and `hashes`. uv records these hashes in `uv.lock`.
+
 **Default value**: `[]`
 
-**Type**: `list[str]`
+**Type**: `list[str | dict]`
 
 **Example usage**:
 
@@ -275,6 +277,38 @@ pyproject.toml
 ```
 [tool.uv]
 managed = false
+```
+
+______________________________________________________________________
+
+### \[[`minimum-libc-version`](#minimum-libc-version)\](#minimum-libc-version)
+
+The minimum libc versions to support when resolving for Linux.
+
+During universal resolution, wheels must support the configured libc versions to satisfy `required-environments`. For example, `{ glibc = "2.31" }` accepts `manylinux_2_17` wheels as coverage, but not `manylinux_2_34` wheels. Both are retained in the lockfile so installation can select the best wheel for the current machine. An omitted libc is not required.
+
+Use `required-environments` to specify the Linux architectures to support. Each configured libc version needs compatible wheels for those environments. Generic Linux wheels do not constrain libc and can satisfy either implementation. Packages with a usable source distribution can still be selected.
+
+This setting is respected by `uv lock` and `uv pip compile --universal`.
+
+This option is in preview and may change in any future release. Use `--preview-features minimum-libc-version` or configure `preview-features = ["minimum-libc-version"]` to disable the warning.
+
+**Default value**: `None`
+
+**Type**: `dict[str, str]`
+
+**Example usage**:
+
+pyproject.toml
+
+```
+[tool.uv]
+preview-features = ["minimum-libc-version"]
+required-environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+minimum-libc-version = { glibc = "2.31" }
 ```
 
 ______________________________________________________________________
@@ -1433,7 +1467,7 @@ ______________________________________________________________________
 
 Don't build source distributions.
 
-When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. uv may still build editable requirements, and their build backends may run arbitrary Python code.
+When enabled, uv will reuse cached wheels from previously built source distributions, but operations that require building a source distribution will exit with an error. First-party packages, such as projects in the workspace, will still be built. uv will also still build editable requirements, and their build backends may run arbitrary Python code.
 
 **Default value**: `false`
 
@@ -1501,6 +1535,8 @@ ______________________________________________________________________
 ### \[[`no-build-package`](#no-build-package)\](#no-build-package)
 
 Don't build source distributions for a specific package.
+
+First-party packages, such as projects in the workspace, will still be built.
 
 **Default value**: `[]`
 

@@ -64,10 +64,10 @@
   </source>
   <source>
     <title>Dialogs</title>
-    <description>Getting past alert, confirm and prompt boxes that block everything else on the page.</description>
+    <description>Reference for accepting or dismissing alert, confirm and prompt popups, entering prompt text, and clearing a blocking Modal state, including file choosers.</description>
     <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/dialogs.mdx</source_url>
     <local_file>agent-cli-commands-dialogs.mdx</local_file>
-    <curated_at>2026-08-24</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Storage &amp; Authentication</title>

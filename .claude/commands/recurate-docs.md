@@ -3,6 +3,8 @@ description: Re-curate a collection's docs and descriptions
 disable-model-invocation: true
 argument-hint: "<collection>"
 arguments: [collection]
+model: claude-opus-5-5
+effort: xhigh
 allowed-tools:
   - Bash(find *)
   - Bash(git diff *)
@@ -60,7 +62,7 @@ Two reads feed every write:
 
 Each entry's indented `title:` line is the `<title>` that description must complement.
 
-Then pipe one [15, 30]-word description (strict) per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe one description per entry (the script rejects fewer than 8 or more than 25 words) — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'

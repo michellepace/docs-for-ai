@@ -43,9 +43,9 @@ consistent, eliminating hidden state and making your notebook reproducible.
 marimo achieves this by intelligently analyzing your code and understanding the
 relationships between cells, and automatically re-running cells as needed.
 
-In addition, marimo notebooks can serialize package requirements inline;
-marimo runs these "sandboxed" notebooks in temporary virtual environments,
-making them [reproducible down to the packages](https://docs.marimo.io/guides/editor_features/package_management/).
+In addition, marimo notebooks can [carry their package requirements](https://docs.marimo.io/guides/package_management/sandboxes/)
+inside the notebook file. marimo runs these notebooks in separate environments,
+and script lockfiles can record resolved dependency versions for sharing.
 
 **Maintainability.**
 marimo notebooks are stored as pure Python programs (`.py` files). This lets you
@@ -434,9 +434,16 @@ marimo. Instead, use `dotenv.load_dotenv(dotenv.find_dotenv(usecwd=True))`.
 
 You can use any Python package. marimo cells run arbitrary Python code.
 
-### How do I use marimo on a remote server?
+### How do I use marimo with Claude Code or other AI agents?
 
-> We recorded a video tutorial on how to use marimo on a remote server. Check it out [here](https://youtu.be/pam9Hw8rbaA).
+Use [marimo pair](https://marimo.io/pair), an agent skill that
+gives agent CLIs like Claude Code, Codex, and OpenCode full access to a running
+notebook: your agent can read variables, test logic in a scratchpad, run
+cells, and add or remove them. The marimo editor also has [built-in AI
+features](https://docs.marimo.io/guides/editor_features/ai_completion/), including a chat panel and
+code completion.
+
+### How do I use marimo on a remote server?
 
 Use SSH port-forwarding to run marimo on a remote server
 and connect to it from a browser on your local machine. Make sure
@@ -487,6 +494,18 @@ notebook to an `ipynb` file, or export to `HTML`:
 
 1. export to ipynb: `marimo export ipynb my_notebook.py -o my_notebook.ipynb --include-outputs`
 2. export to HTML: `marimo export html my_notebook.py -o my_notebook.html`
+
+### How do I preview notebooks on GitHub?
+
+Here are a few ways to preview notebooks on GitHub:
+
+1. Export notebooks to ipynb.
+2. Install the marimo glance browser extension for
+   [Chrome](https://chromewebstore.google.com/detail/marimo-glance/emnkplkdlpojjembfbkdagibhmippjfg) or
+   [Firefox](https://addons.mozilla.org/en-US/firefox/addon/marimo-glance/), which
+   lets you replace a notebook's raw Python source on GitHub or GitLab with an
+   interactive notebook in one click. The marimo glance extension only works for notebooks compatible with [WebAssembly](https://docs.marimo.io/guides/wasm/).
+3. Use [molab's built-in GitHub previewer](https://docs.marimo.io/guides/molab/#mirror-notebooks-from-github).
 
 ### How do I deploy apps?
 

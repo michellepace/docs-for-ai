@@ -218,10 +218,10 @@
   </source>
   <source>
     <title>Component Reference</title>
-    <description>PLACEHOLDER</description>
+    <description>Link-only hub of prebuilt sign-in, user, organization, billing, control and unstyled button components; also removing the "Secured by Clerk" badge.</description>
     <source_url>https://clerk.com/docs/nextjs/reference/components/overview</source_url>
     <local_file>nextjs-reference-components-overview.md</local_file>
-    <curated_at>2026-05-26</curated_at>
+    <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>&lt;UserButton /&gt; component</title>

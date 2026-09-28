@@ -245,28 +245,36 @@ def _parse_args() -> argparse.Namespace:
     """Parse CLI arguments: target collection directory and source URL."""
     parser = argparse.ArgumentParser(
         description=(
-            "Fetch a doc from a URL, save it into a collection, "
-            "and register it in INDEX.xml."
+            "Fetch a doc from a URL into a collection and record it in INDEX.xml."
         ),
         epilog="""\
-notes:
-  - Fetch precedence: GitHub raw → .md twin → raw .md/.rst.txt → FireCrawl
-    (last resort).
-  - Re-curating a URL overwrites its doc and replaces its INDEX entry.
-  - A new, content-changed, or recreated doc gets a PLACEHOLDER description to
-    fill in later; if the re-fetched content is unchanged (ignoring whitespace),
-    the existing description is kept.
-  - The collection is initialised if the directory doesn't exist.
+fetch route (picked from the URL; first match wins):
+  1. GitHub blob on main/master ending .md/.mdx/.qmd → its raw file; any
+     other github.com or raw.githubusercontent.com URL is rejected
+  2. extensionless URL under a prefix in
+     src/docs_for_ai/direct-fetch-rules.toml → <url>.md
+  3. URL ending .md or .rst.txt → fetched as-is
+  4. anything else → FireCrawl scrape
+
+changes:
+  Curating a URL already in INDEX.xml (a page and its .md twin count as
+  one) overwrites its doc and updates its entry in place. <description> is
+  kept if the content is unchanged (ignoring whitespace); otherwise it
+  becomes PLACEHOLDER.
+
+exit:
+  0 on success; 1 with `❌ <reason>`, having changed nothing.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "collection_dir",
-        help="Target collection directory (created if it doesn't exist)",
+        help="Collection directory; initialised (README.md, INDEX.xml) if "
+        "missing or empty, else must contain INDEX.xml",
     )
     parser.add_argument(
         "source_url",
-        help="Web URL of the document to curate",
+        help="Doc URL; ?query, #fragment and trailing / are dropped",
     )
     return parser.parse_args()
 

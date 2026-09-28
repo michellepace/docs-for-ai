@@ -214,33 +214,23 @@ def _run_sync(collection_dir: Path) -> None:
 def main() -> None:
     """Sync INDEX.xml, curate all docs, print ticks then one report."""
     parser = argparse.ArgumentParser(
-        description=(
-            "Re-sync a docs collection to its INDEX.xml, "
-            "refreshing every doc from source."
-        ),
+        description="Re-curate every doc in a collection's INDEX.xml from source.",
         epilog="""\
-INDEX.xml is the source of truth. This reconciles the files on disk to it,
-then re-fetches each listed doc from its source_url so content is current.
+changes:
+  - Re-fetches each doc from its <source_url>, overwriting the file and
+    updating its entry. <description> is kept if the content is unchanged
+    (ignoring whitespace); otherwise it becomes PLACEHOLDER.
+  - Deletes files not listed as a <local_file>. INDEX.xml, README.md,
+    dotfiles and subdirectories are kept.
+  - Never removes an INDEX.xml source; a failed one is left as it was.
 
-what it changes (destructive — commit or stash first):
-  - Deletes orphan files not listed in INDEX.xml (README.md and dotfiles
-    are kept).
-  - Re-curates every listed source: overwrites its doc file with fresh content
-    (recreating missing files), and refreshes that source's <title> and
-    <curated_at> date in INDEX.xml.
-  - Keeps existing descriptions for docs whose content is unchanged (ignoring
-    whitespace); resets a changed or recreated doc's description to PLACEHOLDER,
-    and flags every source whose description is still PLACEHOLDER.
-
-what it never does: remove an INDEX source.
-
-output: one tick line per doc while curating, then a report — counts,
-        failed sources, and docs still needing descriptions.
+exit:
+  0 even if sources failed; 1 with `❌ <reason>`, having changed nothing.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "collection_dir", help="Target collection directory (must contain INDEX.xml)"
+        "collection_dir", help="Collection directory; must contain INDEX.xml"
     )
     args = parser.parse_args()
 

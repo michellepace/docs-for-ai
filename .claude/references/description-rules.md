@@ -8,7 +8,7 @@ The description is a **routing signal** — a future Claude session reads all en
 
 - Route by meaning, not term overlap: an LLM *reads* this to pick a file (there is no keyword index), so state relationships rather than a bag of nouns. Orient first — what the doc is / when to reach for it — then embed the top few discriminating terms. Avoid a table-of-contents of disconnected fragments; the `<good>` examples bind terms with relationships (`.venv` managed by `run`/`sync`; `uv.lock` versus `pylock.toml`), they don't just enumerate.
 - No colon intros like 'Here's the X:' — give me X directly (see `<good>`)
-- Length 20-30 words; every word earns its place — terse and direct. Don't glue terms like `sync`/`uv.lock` to fake one word
+- Length 15-25 words; every word earns its place — terse and direct. Don't glue terms like `sync`/`uv.lock` to fake one word
 - Apply DRY:
   - complement the title; surface high-value terms it lacks (e.g. "anti-patterns", "best-practices")
   - assume every sibling shares the collection's topic — don't spend words on it

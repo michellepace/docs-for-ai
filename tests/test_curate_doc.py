@@ -127,11 +127,20 @@ def test_curate_rejects_a_malformed_url(
     assert "horse-donkey-cow" in out
 
 
-def test_curate_rejects_a_uv_hosted_docs_url(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://docs.astral.sh/uv/guides/install-python/",
+        "https://docs.astral.sh/uv/guides/install-python/index.md",
+    ],
+)
+def test_curate_rejects_a_uv_website_url_for_a_page_on_github(
+    url: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     forbid_both_fetchers(monkeypatch)
-    url = "https://docs.astral.sh/uv/guides/install-python/"
     monkeypatch.setattr("sys.argv", ["curate-doc", str(tmp_path), url])
 
     with pytest.raises(SystemExit) as exc:
@@ -141,6 +150,18 @@ def test_curate_rejects_a_uv_hosted_docs_url(
     out = capsys.readouterr().out
     assert "Unsupported uv URL" in out
     assert "collections/uv/INDEX.xml" in out
+
+
+def test_curate_accepts_a_uv_website_url_for_a_page_absent_from_github(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    url = "https://docs.astral.sh/uv/reference/cli/index.md"
+    fetched_urls = stub_direct_fetch(monkeypatch, DOC_CONTENT)
+
+    result = curate_doc.curate(tmp_path / "uv", url)
+
+    assert fetched_urls == [url]
+    assert result.canonical_url == url
 
 
 def test_curate_rejects_a_file_path_as_collection_dir(

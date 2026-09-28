@@ -1,36 +1,20 @@
 ---
-updated: 2026-09-28
+updated: 2026-09-29
 description: unprioritised proposals; DONE ideas get deleted
 ---
 
 # Rough ideas to improve docs-for-ai
 
-## Idea: Move `uv` to website URLs
-
-Swap uv's 25 GitHub blob URLs for `docs.astral.sh/uv/…/index.md` ones, like its first three.
-
-Benefits:
-
-- One source for all 28 docs; the 3 reference pages are mkdocs-generated and absent from GitHub (`c838397`).
-- Drops the uv-only `_reject_uv_docs_url` check, fixing its 3 sync failures.
-
-Costs:
-
-- Website `.md` loses `!!!` admonitions, code-block languages, and clean headings, the reasons uv moved to GitHub in `c838397`.
-- Can't paste the browser URL; must add `index.md` by hand, until [Idea: Per-site URL suffixes](#idea-per-site-url-suffixes).
-
-Alternative: keep GitHub blobs; let the check allow the 3 reference pages.
-
 ## Idea: Store the URL actually fetched as `<source_url>`
 
-Today `append-md` fetches `…/page.md` but stores `…/page` in INDEX.xml, so re-curate and sync must re-apply rules to know what to fetch. Standardise every collection to store the fetched URL.
+Today `append-md` fetches `…/page.md` but stores `…/page` in `INDEX.xml`, so re-curate and sync must re-apply rules to know what to fetch. Standardise every collection to store the fetched URL.
 
 Benefits:
 
 - Re-curate and sync fetch `<source_url>` as-is, with no rules.
 - A collection can mix URLs from different rules, and editing `direct-fetch-rules.toml` can't break an existing index.
 
-Done: `rich`, `mdformat` (`34ce9bb`).
+Done collections: `rich`, `mdformat`, `uv`.
 
 ## Idea: Per-site URL suffixes
 

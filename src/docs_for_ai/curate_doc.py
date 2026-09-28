@@ -61,9 +61,20 @@ def _validate_url(url: str) -> None:
         raise CurationError(msg)
 
 
-def _reject_uv_docs_url(url: str) -> None:
-    """Reject hosted-docs uv URLs; the uv collection is sourced from GitHub."""
-    if url.startswith("https://docs.astral.sh/uv/"):
+# mkdocs generates these at build time, so GitHub has no source for them.
+UV_PAGES_ABSENT_FROM_GITHUB = frozenset(
+    {
+        "https://docs.astral.sh/uv/reference/cli/index.md",
+        "https://docs.astral.sh/uv/reference/environment/index.md",
+        "https://docs.astral.sh/uv/reference/settings/index.md",
+    }
+)
+
+
+def _reject_uv_website_url(url: str) -> None:
+    """Reject a uv website URL whose page GitHub has; uv is sourced from GitHub."""
+    is_uv_website = url.startswith("https://docs.astral.sh/uv/")
+    if is_uv_website and url not in UV_PAGES_ABSENT_FROM_GITHUB:
         msg = (
             "Unsupported uv URL: use the GitHub blob "
             f"(see collections/uv/INDEX.xml) — {url}"
@@ -290,7 +301,7 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
     index_path = collection_dir / "INDEX.xml"
 
     _validate_url(source_url)
-    _reject_uv_docs_url(source_url)
+    _reject_uv_website_url(source_url)
     _validate_collection_dir(collection_dir, index_path)
 
     index_exists = index_path.exists()

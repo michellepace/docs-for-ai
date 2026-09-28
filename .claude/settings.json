@@ -27,6 +27,7 @@
   },
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,
+    "alwayson-misc@my-claude-marketplace": true,
     "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": false,
     "superpowers@claude-plugins-official": false,

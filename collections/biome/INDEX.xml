@@ -1,70 +1,70 @@
 <docs_index>
   <source>
     <title>Configure Biome</title>
-    <description>PLACEHOLDER</description>
+    <description>Guide to biome.json layout and per-language overrides, config file lookup order, including or ignoring files with globs, and which JSON files allow comments.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/guides/configure-biome.mdx</source_url>
     <local_file>src-content-docs-en-guides-configure-biome.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>First-party extensions</title>
-    <description>PLACEHOLDER</description>
+    <description>Short install guide for official VS Code, IntelliJ/JetBrains and Zed plugins, including setting Biome as VS Code's default formatter.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/editors/first-party-extensions.mdx</source_url>
     <local_file>src-content-docs-en-editors-first-party-extensions.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Format all files</title>
-    <description>PLACEHOLDER</description>
+    <description>Getting-started guide: install as a pinned dev dependency, generate biome.json with init, run format, lint and check, plus editor extensions and biome ci.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/guides/getting-started.mdx</source_url>
     <local_file>src-content-docs-en-guides-getting-started.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Integrate Biome with your VCS</title>
-    <description>PLACEHOLDER</description>
+    <description>Git-only setup guide: respect .gitignore, and lint or format only files changed against a branch or staged for commit.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/guides/integrate-in-vcs.mdx</source_url>
     <local_file>src-content-docs-en-guides-integrate-in-vcs.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Language support</title>
-    <description>PLACEHOLDER</description>
+    <description>Support matrix of languages formatted and linted (SCSS, YAML, Markdown pending); enabling experimental Vue/Svelte/Astro and CSS-in-JS; JSONC trailing commas; Vue/Svelte lint false positives.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/internals/language-support.mdx</source_url>
     <local_file>src-content-docs-en-internals-language-support.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Philosophy</title>
-    <description>PLACEHOLDER</description>
+    <description>Brief contributor ethos: public decision-making, specific error messages with fix hints, minimal options, jargon-free naming, inclusive language, terminal output readable without color.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/internals/philosophy.mdx</source_url>
     <local_file>src-content-docs-en-internals-philosophy.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Linter</title>
-    <description>PLACEHOLDER</description>
+    <description>Guide to enabling or disabling rules, groups and domains, severity and CI exit codes, safe vs unsafe fixes, ESLint migration, slow memory-hungry linting.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/index.mdx</source_url>
     <local_file>src-content-docs-en-linter-index.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>useSortedClasses (JavaScript)</title>
-    <description>PLACEHOLDER</description>
+    <description>Experimental lint rule sorting Tailwind utility classes as a prettier-plugin-tailwindcss alternative; covers clsx/cva/tw calls, why fix-on-save skips it, unsupported plugins and screen variants.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/rules/use-sorted-classes/javascript.mdx</source_url>
     <local_file>src-content-docs-en-linter-rules-use-sorted-classes-javascript.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Continuous Integration</title>
-    <description>PLACEHOLDER</description>
+    <description>Recipe contrasting `biome ci` with `biome check`, plus GitHub Actions, reviewdog PR comments and GitLab code-quality pipeline examples, including extended-config dependencies.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/continuous-integration.mdx</source_url>
     <local_file>src-content-docs-en-recipes-continuous-integration.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Git Hooks</title>
-    <description>PLACEHOLDER</description>
+    <description>Recipes for formatting and linting staged files with Lefthook, Husky plus lint-staged, git-format-staged, pre-commit framework, or shell scripts, including re-staging fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/git-hooks.mdx</source_url>
     <local_file>src-content-docs-en-recipes-git-hooks.mdx</local_file>
     <curated_at>2026-09-28</curated_at>
@@ -78,7 +78,7 @@
   </source>
   <source>
     <title>VS Code extension</title>
-    <description>PLACEHOLDER</description>
+    <description>Setup and settings reference: format, fix and sort imports on save, multi-root workspaces, custom binary path, Cursor install, LSP trace troubleshooting, 2.x upgrade.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/vscode.mdx</source_url>
     <local_file>src-content-docs-en-reference-vscode.mdx</local_file>
     <curated_at>2026-09-28</curated_at>

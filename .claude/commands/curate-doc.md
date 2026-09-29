@@ -1,6 +1,6 @@
 ---
 description: Curate a source URL into a collection
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "<collection> <url>"
 arguments: [collection, source_url]
 model: claude-opus-5-5

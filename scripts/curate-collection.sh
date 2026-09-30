@@ -1,33 +1,30 @@
 #!/usr/bin/env bash
 # Curate every URL in a file into a collection — one `claude -p` session per URL.
 #
-# Two non-obvious constraints, both learned the hard way:
-#   1. `claude` gets </dev/null and the URL list is read on FD 3. Share stdin
-#      with the loop and `claude -p` swallows the remaining URLs as piped input.
-#   2. Never pass --bare. It skips discovery of .claude/commands, so the
-#      /curate-doc slash command would not exist. Same reason we cd to the
-#      repo root before invoking claude. NB: the headless docs say --bare
-#      will become the default for -p in a future release.
+# Constraints:
+#   1. `claude -p` reads stdin as prompt input, so it gets </dev/null and the
+#      loop reads URLs on FD 3 — two guards against it eating the URL list.
+#   2. `claude -p` omits `--bare`: bare skips .claude/commands and bills the API.
 set -uo pipefail
 
 usage() {
   cat <<'EOF'
-Curate a list of doc URLs into a collection, sequentially and in order.
+Run `/curate-doc <collection> <url>` per URL in a file, one at a time.
 
 Usage:
   scripts/curate-collection.sh <collection> <url-file>
   scripts/curate-collection.sh --help
 
 Arguments:
-  <collection>   Collection name, e.g. `uv`
-  <url-file>     One source URL per line; blank lines skipped.
+  <collection>  Existing or new, e.g. uv.
+  <url-file>    One URL per line; blank lines skipped.
 
-Runs `/curate-doc` once per URL in a fresh `claude -p` session, in file order.
-A failed URL is reported and the run continues; exit status is non-zero if any
-failed.
+Each URL runs in a fresh `claude -p` session, in file order; output streams to
+stdout. A failed URL is reported and the run continues; exit status is non-zero
+if any failed.
 
 Example:
-  scripts/curate-collection.sh uv uv.txt 2>&1 | tee curate-run.log
+  scripts/curate-collection.sh uv urls.txt 2>&1 | tee curate-run.log
 EOF
 }
 
@@ -57,7 +54,7 @@ command -v claude >/dev/null || {
   exit 2
 }
 
-cd "$(dirname "$0")/.." || exit 1
+cd "$(dirname "$0")/.." || exit 1 # start claude here so this repo's .claude/ loads
 
 n=0
 failed=0

@@ -1,124 +1,42 @@
 ---
-title: "Claude Code: `/run`, `/verify` & Headless Mode — for docs-for-ai 🧭"
-updated: 2026-07-01
-status: draft / rough
+title: "Claude Code `/run`, `/verify` & `claude -p` — how they fit docs-for-ai"
+updated: 2026-09-30
 ---
 
-A guide to two built-in Claude Code skills and headless mode (`claude -p`), and how they fit a **CLI project** like this one — where the runtime surface is `uv run curate-doc`, `uv run sync-index`, and `uv run update-descriptions`, and the real end-to-end workflows live in `.claude/commands/` (`/curate-doc`, `/ask-docs`, `/recurate-docs`).
+Why three Claude Code built-ins fit this repo, and what to watch for when using them here. How each tool works is covered in the curated docs, which are kept current:
 
----
+- `/run`, `/verify`, `/run-skill-generator` → `collections/claudecode/en-skills.md` ("Run and verify your app")
+- `claude -p`, `--bare` → `collections/claudecode/en-headless.md`
+- All built-ins, with version notes → `collections/claudecode/en-commands.md`
 
-## 1. The `/run` command 🚀
+## `/run` and `/verify` — judge real output
 
-### What it does
+**Why they fit:** this code produces text an LLM reads: sync reports, `INDEX.xml` and curated files. Tests can prove that output is correct, but only reading it shows whether it reads well. `/run` shows a change working. `/verify` gives a PASS/FAIL verdict and tries inputs you didn't. Both work here without setup, because the entry points are plain `uv run <entry-point>` commands that print to stdout. That means `/run-skill-generator` isn't needed.
 
-`/run` launches and **drives your project's app so you can see a change actually working** — not just passing tests or typechecks. It infers how to launch the project from its type (CLI, server, TUI, Electron, browser-driven, library) and from files like `pyproject.toml`, `package.json`, or a README. It then executes the app with representative input, observes the real output, and reports what it saw.
+What `/verify` runs depends on what the diff touches:
 
-If your project needs a non-standard launch (databases, env files, multi-step builds), inference can fail — running `/run-skill-generator` once records a repeatable launch recipe under `.claude/skills/run-<name>/SKILL.md`, which `/run`, `/verify`, and other agents then follow instead of rediscovering it every time.
+| Diff touches | `/verify` does |
+| ------------ | -------------- |
+| `src/` | Runs the CLI in a terminal |
+| `.claude/skills/` | Runs the skill and watches the agent |
+| Only `collections/`, tests or docs | Reports a one-line SKIP |
 
-### When to reach for it
+Using it here:
 
-- You've just made a change and want to **see it working in the real app**, not infer it from green tests.
-- You want a **screenshot or live output** of the current state of the app.
-- You're debugging behaviour that only shows up at runtime (config, environment, integration).
+- **It never runs pytest or pyright.** That's by design, so run both yourself as well.
+- **Keep skill runs free.** `/curate-doc` can fall back to FireCrawl, which is paid. When you verify a skill edit, point it at a direct-fetch URL and a scratch collection.
+- **Review `.claude/skills/verify/SKILL.md` before you commit it.** If `/verify` has to work out the launch itself, it may write this file. At the repo root, that file replaces the bundled `/verify`.
+- **Name the range once the branch is pushed**, for example `/verify main..HEAD`. When the branch has an upstream, `/verify` diffs against it (observed in v2.1.285), so an up-to-date branch looks like it has no changes.
 
-### Use case examples
+## `claude -p` — run skills unattended
 
-1. **Next.js + Playwright** 🌐 — after restyling a dashboard page, `/run` boots the dev server, drives a browser to the page, and screenshots it so you can see the layout for real.
-2. **FastAPI service** — after adding a `/health` endpoint, `/run` starts uvicorn, curls the endpoint, and shows the actual JSON response and status code.
-3. **TUI app (Textual/Ink)** — after changing a keybinding, `/run` launches the TUI, sends the keystrokes, and observes that the screen updates as intended.
-4. **📌 This project** — on your current branch (`sync-index/tidy-report`), after tweaking the collection-status report wording, `/run` would execute something like `uv run sync-index nextjs` and show you the **actual rendered report**, so you can judge whether it really reads well for an LLM consumer — something a unit test can't tell you.
+**Why it fits:** the skills are this project's real end-to-end workflows, and `claude -p "/<skill> …"` runs one without you at the keyboard. `scripts/curate-collection.sh` runs one URL at a time, and `scripts/run-parallel.sh` runs several prompts at once. The mechanics of calling `claude -p` safely are recorded in each script's header comments, so they aren't repeated here.
 
----
+The scripts pass no `--allowedTools` or `--permission-mode` because each skill's `allowed-tools` pre-approves what it needs. A `-p` run is one turn, so the grant covers the whole session. If you add a tool call to a skill, add the tool to its `allowed-tools`. Otherwise the headless run is denied that tool.
 
-## 2. The `/verify` command ✅
+**Watch for:** `--bare` is planned to become the default for `-p` (`en-headless.md`). Bare mode skips `.claude/skills/`, so when that change ships both scripts will quietly stop loading skills. When it lands, find the opt-out flag in the release notes and add it to both scripts.
 
-### What it does
+## Untried
 
-`/verify` checks that a code change **actually does what it's supposed to** by exercising it end-to-end and observing behaviour — deliberately *not* falling back to "tests pass" or "pyright is happy". It builds/launches the project (using the same recorded `run-<name>` skill as `/run`, and bootstrapping a project verify skill on first use if none exists), drives the affected flow, and reports success or failure against the intended behaviour.
-
-**`/run` vs `/verify` in one line:** `/run` is "show me it working" (exploratory, during development); `/verify` is "prove this diff is correct" (a gate, before committing).
-
-### When to reach for it
-
-- **Before committing a nontrivial change** to product code — the skill's own guidance.
-- When tests pass but you're not confident the *observable* behaviour is right (CLI output formatting, file side-effects, exit codes).
-- **Not** for diffs that only touch tests or docs — there's no runtime surface to drive. In this repo, that means: skip it for pure `collections/` curation changes; use it for changes to the Python CLI code.
-
-### Use case examples
-
-1. **E-commerce checkout change** 🛒 — before committing a discount-calculation fix, `/verify` drives the full add-to-basket → checkout flow in a browser and confirms the displayed total.
-2. **New CLI flag in a Node/Go tool** — `/verify` builds the binary, runs it with and without the new flag, and checks output and exit codes match the intended contract.
-3. **Auth middleware refactor** 🔐 — `/verify` starts the server and exercises both an authorised and an unauthorised request, confirming a 200 and a 401 respectively.
-4. **📌 This project** — before committing the tidy-report work, `/verify` would set up a temporary collection exercising each sync state (new file, moved file, deleted file, stale `INDEX.xml` entry), run `uv run sync-index` against it, and confirm the report describes each state correctly. That complements your "one sociable test per sync state" commit — the tests assert behaviour, `/verify` watches the real output land.
-
----
-
-## 3. Headless mode (`claude -p`) 🤖
-
-*(Your curated reference: `collections/claudecode/en-headless.md`)*
-
-### What it does
-
-`claude -p "<prompt>"` runs Claude Code **non-interactively**: one prompt in, result out, exits. It's the CLI face of the Agent SDK and composes like any Unix tool:
-
-- **Pipes**: `cat build-error.txt | claude -p 'explain the root cause' > out.txt`
-- **Structured output**: `--output-format json` (with `--json-schema` for typed results)
-- **Permissions up front**: `--allowedTools "Bash,Read,Edit"` or `--permission-mode acceptEdits`
-- **Conversation state**: `--continue` / `--resume <session-id>`
-- **`--bare`**: fast, reproducible CI mode — but it **skips auto-discovery of skills, hooks, plugins, and CLAUDE.md**, which matters below ⚠️
-
-Crucially (from your own doc): **user-invoked skills and custom commands work in `-p` mode** — include `/skill-name` in the prompt string and Claude Code expands it before running. Only interactive-dialog commands like `/login` are unavailable.
-
-### When to reach for it
-
-- **CI/CD and scripts** — anywhere a human isn't at the keyboard.
-- **Scheduled/recurring jobs** — cron, GitHub Actions on a schedule.
-- **Composing Claude into pipelines** — when you want its output as data (JSON) for another tool.
-
-### Use case examples
-
-1. **PR linter in CI** 🔍 — `git diff main | claude -p "report typos as filename:line"` wired into a `package.json` script or GitHub Action.
-
-2. **Structured extraction** — `claude -p "Extract function names from auth.py" --output-format json --json-schema '...' | jq '.structured_output'` feeding a downstream script.
-
-3. **Nightly triage** 🌙 — a cron job runs `claude -p "Run the test suite and summarise any failures" --allowedTools "Bash,Read"` and posts the summary somewhere.
-
-4. **📌 This project** — your commands *are* end-to-end agentic workflows, and `-p` is exactly how you run them unattended:
-
- ```bash
- # Scheduled re-curation of a collection
- claude -p "/recurate-docs uv" --permission-mode acceptEdits
-
- # Query a collection from another script
- claude -p "/ask-docs claudecode how does --bare affect skills?" --output-format json | jq -r '.result'
- ```
-
----
-
-## Analysis: can `claude -p` combine with `/run` or `/verify`? 🔗
-
-**Yes — technically it works, and for a CLI project like yours it's one of the more sensible places to do it.** Since skills work in `-p` mode, `claude -p "/verify the sync-index report change" --permission-mode acceptEdits` is a valid invocation. But the docs stop short of blessing it as a pattern, so treat it with judgement:
-
-### Where the combination genuinely helps
-
-- **Headless `/verify` as a pre-merge smoke gate** 🚦 — a CI step (or local git hook) that runs `/verify` on the branch diff before merge. For *this* repo it's a good fit: the runtime surface is a fast, non-interactive CLI (`uv run sync-index …`), so there's nothing awkward to observe — stdout, exit codes, and file effects are all headless-friendly.
-- **Headless `/run` for artefact capture** — e.g. a scheduled job that runs the app and saves its output/report for humans to review later.
-
-### Where it doesn't
-
-- **Web/TUI-heavy projects** — `/run` and `/verify` often want to *watch* a live app; and in `-p` mode any background dev server is killed ~5 s after the result returns, so long-lived observation is awkward. Interactive sessions suit those better.
-- **With `--bare`** ⚠️ — bare mode skips skill discovery, so `/run`, `/verify`, and your custom commands won't load. If you want them headlessly, drop `--bare` (and accept the slower, environment-dependent startup) or pass the needed context via flags.
-- **Permissions** — headless runs can't prompt, so `/verify` needs its tools pre-approved (`--allowedTools "Bash(uv run *),Read,Edit"` or a permission mode), otherwise it aborts mid-flow.
-
-### The picture for docs-for-ai 🖼️
-
-Your instinct is right: your `.claude/commands/*.md` are the true end-to-end workflows of this project, so the **strongest pairing is headless + your own commands** (`claude -p "/recurate-docs …"` on a schedule, `claude -p "/ask-docs …"` from scripts). `/run` and `/verify` sit one layer below — they exercise the *Python CLI code* your commands rely on. A tidy division of labour:
-
-| Layer | Tool | Typical moment |
-| ----- | ---- | -------------- |
-| Python CLI change, exploring | `/run` (interactive) | "Show me the new report output" |
-| Python CLI change, gating | `/verify` (interactive; optionally headless in CI) | Before committing |
-| Whole-workflow automation | `claude -p "/curate-doc …"` etc. | Cron, CI, scripts |
-
-One caveat to close on: headless `/run`/`/verify` is *possible and sensible here*, but not an officially documented pattern — if it ever behaves oddly in CI, prefer running `/verify` interactively and keeping CI on plain `uv run pytest -m "not firecrawl"`. 😊
+- A headless `/verify` as a pre-merge gate for `src/` changes. This isn't a documented pattern, so try it by hand before relying on it over `uv run pytest -m "not firecrawl"`.
+- `claude -p "/ask-docs <collection> …" --output-format json | jq -r .result` to query a collection from another script.

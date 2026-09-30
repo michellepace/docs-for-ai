@@ -3,21 +3,21 @@
     <title>Settings</title>
     <description>Full reference - every setting under `[tool.uv]` and `[tool.uv.*]` sub-tables in `pyproject.toml`/`uv.toml`, with defaults and TOML examples. Grep by setting name (≈11k words)</description>
     <source_url>https://docs.astral.sh/uv/reference/settings/index.md</source_url>
-    <local_file>reference-settings.md</local_file>
+    <local_file>uv-reference-settings-index.md</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>CLI Reference</title>
     <description>Full reference - every command, subcommand, argument and option with defaults and `UV_*` equivalents. Grep by command, never read whole (≈102k words)</description>
     <source_url>https://docs.astral.sh/uv/reference/cli/index.md</source_url>
-    <local_file>reference-cli.md</local_file>
+    <local_file>uv-reference-cli-index.md</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>
     <title>Environment variables</title>
     <description>Full reference - Every environment variable uv defines or respects: `UV_*` flags, S3/GCS/Azure endpoints, proxy, TLS, XDG, shell and CI detection.</description>
     <source_url>https://docs.astral.sh/uv/reference/environment/index.md</source_url>
-    <local_file>reference-environment.md</local_file>
+    <local_file>uv-reference-environment-index.md</local_file>
     <curated_at>2026-09-28</curated_at>
   </source>
   <source>

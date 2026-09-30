@@ -1,10 +1,10 @@
 ---
 description: Curate a source URL into a collection
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "<collection> <url>"
 arguments: [collection, source_url]
 model: claude-opus-5-5
-effort: xhigh
+effort: high
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)
@@ -67,7 +67,7 @@ Skip this step if `description:` says `kept` — go to Step 4.
 
 Two reads feed the write:
 
-1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
+1. `~/.claude/docs-for-ai/.claude/skills/curate-doc/description-rules.md` — the rules and examples to follow.
 2. The **full** curated doc (however large) — what you're describing.
 
 The report's `title:` line is the `<title>` your description must complement.

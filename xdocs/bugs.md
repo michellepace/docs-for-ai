@@ -1,36 +1,53 @@
 ---
 title: Known bugs / issues
-updated: 2026-08-02
-status: both re-validated against current code and re-reproduced (2026-08-02) — still valid, unfixed
+updated: 2026-09-30
+status: all re-reproduced 2026-09-30 — unfixed
 ---
 
-## 1. Error pages curate as "✅ Success" (still valid)
+## 1. Soft-404 error pages curate as success
 
-**Where:** fetch path — `curate_doc.fetch_document()` → `direct_fetch.fetch_text` / `firecrawl_scrape.scrape`.
+**Where:** `curate_doc.fetch_document()` → `direct_fetch.fetch_text` / `firecrawl_scrape._perform_scrape`.
 
-**What happens:** a dead URL that returns an error page with **HTTP 200** (Vercel does this for `.md` twins) is fetched, written, indexed, and reported `🏁 Success! curated doc`, with `<curated_at>` refreshed unconditionally (in `curate_doc._add_or_update_source_in_index`). No content validation exists on either path — the only guards are a non-200 HTTP status (direct, in `direct_fetch.fetch_text`) and empty-content (firecrawl, in `firecrawl_scrape._perform_scrape`).
+**What happens:** a site that serves its error page with **HTTP 200** gets fetched, written, indexed and reported `🏁 Success! curated doc`, exit 0. Nothing checks the content: the direct route only rejects a non-200 status, and FireCrawl only rejects empty markdown. `sync-index` goes through the same `curate_doc.curate` and prints `ok`.
 
-**Junk title, per route:** the `.md`-twin case is the *direct* route, so the title comes from `direct_fetch.extract_title(body)` — frontmatter → first H1 → URL-slug fallback. It reads `Page Not Found` only if the error body actually carries that H1/frontmatter; otherwise it degrades to a URL-derived slug. On the *firecrawl* route the title is the page's `<title>` metadata, so `Page Not Found` is guaranteed there. Either way a junk title is stored.
+**Repro (direct route, free):** `uv run curate-doc <scratch-dir> https://nextjs.org/docs/this-page-does-not-exist-404-test` gives `title: Page Not Found`, exit 0. If Next.js starts returning a real 404, look for another soft-404 host by requesting a made-up page under each `direct-fetch-rules.toml` prefix and checking for HTTP 200.
 
-**Also via sync-index:** same entry point (`curate_doc.curate`, called from `sync_index._curate_or_error`); a recreated entry re-fetches the same error page and prints `ok` (in `sync_index._run_sync`).
+**Fix:** validate content on both routes and raise `CurationError` before anything is written. Two options:
 
-**Repro (verified 2026-07-08, re-verified 2026-08-02 — byte-identical output):** `uv run curate-doc collections/vercel https://vercel.com/docs/this-page-does-not-exist-404-test` → `163 chars, direct`, `<title>Page Not Found</title>`, exit 0, `🏁 Success! curated doc`.
+- **Heuristic:** reject suspicious titles ("Page Not Found", "404") or very short bodies. Free, but it depends on the language and phrasing of each site's error page.
+- **Control fetch:** also fetch a sibling that can't exist (last path segment → `xxxCONTROLxxx`). If that returns 200 with the same title, the page is the host's soft-404. This doesn't depend on wording, but every curate costs a second fetch, and on the FireCrawl route that fetch is paid.
 
-**Fix:** content-validation heuristic — suspicious titles ("Page Not Found", "404"), a minimum-length threshold, or per-site rules in `direct-fetch-rules.toml`. Must cover *both* fetch paths. Open question: drop the entry from INDEX.xml, or keep it and just report? (INDEX.xml is the source of truth, so the file stays either way.)
+Open question: in `sync-index`, should an existing entry that now soft-404s be dropped from INDEX.xml, or kept and reported as `FAIL`?
 
-## 2. `update-descriptions` silently ignores an unrecognised filename (still valid)
+## 2. `update-descriptions` silently skips an unmatched filename
 
-**Where:** `update_descriptions.py`. Reached via `/curate-doc` Step 3 and `/recurate-docs`.
+**Where:** `update_descriptions.update_descriptions()`. Called by the `/curate-doc` and `/recurate-docs` skills when they write descriptions.
 
-**What happens:** you pipe filename + description pairs; each is matched to an INDEX `<source>` by **exact** `<local_file>` (in `update_descriptions()` — plain dict-key match, no case/path normalisation). Word-count validation (20–30 words, in `_in_band_descriptions`) and entry-matching are separate passes that never talk. A filename matching no entry (typo, wrong case, stray suffix) is skipped with no message and no failure.
+**What happens:** each piped filename is matched to a `<source>` by exact `<local_file>`. A filename that matches nothing (typo, wrong case, a path) is skipped without any message. The word-count pass (`_in_band_descriptions`) still prints `✅ <file>: N words`, and that looks like success.
 
-Note there are **two distinct `✅` lines**: `✅ <file>: N words` (word-count only, from `_in_band_descriptions`) and `✅ Updated: <file>` (an actual write, from `update_descriptions`). The per-line word-count ✅ says nothing about whether the file exists in the index — it only ever meant "word count is fine".
+- Lone typo → `✅ typo.md: 10 words`, `no updates needed`, exit 0.
+- Real file + typo → `🏁 Updated 1 description(s)`, exit 0; the typo is never mentioned.
 
-**Observed:**
+An out-of-band word count is loud (`❌`, exit 1), but a description that went nowhere is silent. The `--help` epilog and `test_unmatched_filename_applies_nothing_and_succeeds` both lock in the silent exit 0.
 
-- Lone typo → `✅ typo.md: 27 words`, then `no updates needed`, exit 0.
-- Real file + typo → `🏁 Updated 1 description(s)`, exit 0; the typo vanishes without a trace.
+**Fix:** print `⚠️ No INDEX entry for <file>: skipped` for each unmatched filename and exit 1 if there were any, the same way word-count errors behave. Update the epilog and flip that test.
 
-**Why it's suspect (not really "by design"):** the `--help` epilog documents it — "Unmatched filenames are skipped without error." — but rests entirely on the happy-path assumption that Claude copies the filename verbatim from `curate-doc`'s `doc:` output line rather than typing it. The tell is the asymmetry *within the same tool*: an out-of-band word count is loud (❌ → `CurationError` → exit 1, raised through `main`), yet writing to a filename that isn't in the index is silent (exit 0). The more damaging failure is the quiet one.
+## 3. A host-root rule prefix appends `.md` to the hostname
 
-**Fix:** print `⚠️ No INDEX entry for <file>: skipped` per unmatched filename, and exit 1 if any matched nothing — mirroring how word-count errors already behave. (Not implemented; `test_unmatched_filename_applies_nothing_and_succeeds` currently locks in the silent exit-0.)
+**Where:** `direct_fetch._append_md_route()`.
+
+**What happens:** when a rule prefix is a bare host, curating its root URL fetches `<host>.md`, which is a different domain under Moldova's `.md` TLD. `https://docs.convex.dev/` → `https://docs.convex.dev.md`. Those hosts resolve to an unrelated server; today TLS fails, so the curate errors, but it still contacts that server. Path prefixes are fine (`https://clerk.com/docs/` → `https://clerk.com/docs.md`, HTTP 200).
+
+Affected prefixes: `docs.coderabbit.ai`, `docs.convex.dev`, `docs.firecrawl.dev`, `docs.marimo.io`, `modelcontextprotocol.io`.
+
+**Repro (free, no network):** `uv run python -c "from docs_for_ai.direct_fetch import *; print(resolve_route('https://docs.convex.dev/', load_direct_fetch_rules()).fetch_url)"`
+
+**Fix:** `_append_md_route` declines a URL with an empty path, so a host root falls through to FireCrawl (or `/index.md` once per-site suffixes land, see `ideas.md`).
+
+## 4. A mis-cased URL misses its rule and pays for FireCrawl
+
+**Where:** `direct_fetch._matches_prefix()`.
+
+**What happens:** prefix matching is case-sensitive, so `https://NextJS.org/Docs/app/…` matches no rule and is scraped via FireCrawl (paid) instead of direct-fetched. Nothing says why.
+
+**Fix:** lowercase the scheme and host before matching. Leave the path alone, because servers treat path case as significant (a mis-cased path should fail, not be silently corrected).

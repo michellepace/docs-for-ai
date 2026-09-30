@@ -1,5 +1,5 @@
 ---
-description: Get a grounded answer against a doc collection.
+description: Get a grounded answer against a doc collection
 disable-model-invocation: true
 argument-hint: "[collection] \"your question\""
 allowed-tools:

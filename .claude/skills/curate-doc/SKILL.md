@@ -67,7 +67,7 @@ Skip this step if `description:` says `kept` — go to Step 4.
 
 Two reads feed the write:
 
-1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
+1. `~/.claude/docs-for-ai/.claude/skills/curate-doc/description-rules.md` — the rules and examples to follow.
 2. The **full** curated doc (however large) — what you're describing.
 
 The report's `title:` line is the `<title>` your description must complement.

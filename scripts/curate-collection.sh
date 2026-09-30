@@ -4,7 +4,7 @@
 # Constraints:
 #   1. `claude -p` reads stdin as prompt input, so it gets </dev/null and the
 #      loop reads URLs on FD 3 — two guards against it eating the URL list.
-#   2. `claude -p` omits `--bare`: bare skips .claude/commands and bills the API.
+#   2. `claude -p` omits `--bare`: bare skips .claude/skills and bills the API.
 set -uo pipefail
 
 usage() {

@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-29
+updated: 2026-09-30
 description: unprioritised proposals; DONE ideas get deleted
 ---
 
@@ -38,10 +38,10 @@ Restructure `direct-fetch-rules.toml` so each site prefix maps to the suffix app
 - Only covers suffixes; a mid-URL rewrite would need its own section.
 - Benefit: I can always curate from the "page url as I see it on the website"
 
-## Idea: Curation commands should diff
+## Idea: Curation skills should diff
 
 So it becomes "whats changed" and shall I tweak/improve the description. Rather than "lets write the whole thing again." But sometimes I do want the descriptions all to be reset, so maybe we need a `--reset-descriptions` flag (remove the PLACEHOLDER, was a past LLM problem). Shooo, so much to do.
 
 ## Idea: Sync-index
 
-Should be "refresh-index". But rip it out to just run a .sh shell rather with `claude -p` and the curate-doc command?
+Should be "refresh-index". But rip it out to just run a .sh shell rather with `claude -p` and the `/curate-doc` skill?

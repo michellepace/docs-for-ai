@@ -75,12 +75,12 @@ source ~/.zshrc  # Use ~/.bashrc if that's your shell
 # 5. Install dependencies and git hooks (commit/push)
 uv sync && uv run pre-commit install
 
-# 6. Make the slash commands work anywhere
+# 6. Make the skills work anywhere
 # anchor (run from repo root)
 ln -sfn "$PWD" ~/.claude/docs-for-ai
-# make all slash commands work from anywhere
-mkdir -p ~/.claude/commands
-ln -sf ~/.claude/docs-for-ai/.claude/commands/*.md ~/.claude/commands/
+# link each skill folder into your personal skills
+mkdir -p ~/.claude/skills
+ln -sfn ~/.claude/docs-for-ai/.claude/skills/* ~/.claude/skills/
 
 # print the absolute path for step 7 below
 printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
@@ -135,7 +135,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 **Workflow:** `/curate-doc <collection> <url>` runs a Python script that fetches the source URL → writes the curated doc file → adds a `collections/<collection>/INDEX.xml` entry with a `PLACEHOLDER` description → Claude Code fills in the description.
 
-The `/curate-doc` command always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
+The `/curate-doc` skill always regenerates the description, whereas `/recurate-docs` only regenerates descriptions for files with content changes.
 
 **Source routing:** A doc is fetched directly when its URL is a GitHub blob, ends in `.md`/`.txt`, or matches a [direct-fetch-rules.toml](src/docs_for_ai/direct-fetch-rules.toml) rule; otherwise FireCrawl scrapes it.
 

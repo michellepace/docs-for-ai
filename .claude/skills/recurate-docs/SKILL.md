@@ -57,7 +57,7 @@ uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 
 Two reads feed every write:
 
-1. `~/.claude/docs-for-ai/.claude/references/description-rules.md` — the rules and examples to follow.
+1. `~/.claude/docs-for-ai/.claude/skills/curate-doc/description-rules.md` — the rules and examples to follow.
 2. The **full** doc, from the `~/...` path exactly as the report prints it (however large).
 
 Each entry's indented `title:` line is the `<title>` that description must complement.

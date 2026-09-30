@@ -4,7 +4,7 @@
 #
 # Constraints:
 #   1. `claude -p` reads stdin as prompt input, so it always gets </dev/null.
-#   2. `claude -p` omits `--bare`: bare skips .claude/commands and bills the API.
+#   2. `claude -p` omits `--bare`: bare skips .claude/skills and bills the API.
 set -uo pipefail
 
 usage() {
@@ -12,12 +12,12 @@ usage() {
 Run each line of a file as a prompt in its own `claude -p` session, in parallel.
 
 Usage:
-  scripts/run-parallel.sh <command-file> [jobs]
+  scripts/run-parallel.sh <prompt-file> [jobs]
   scripts/run-parallel.sh --help
 
 Arguments:
-  <command-file>  One prompt per line, e.g. `/curate-doc uv <url>`
-  [jobs]          Sessions to run at once (default 7), started 2s apart.
+  <prompt-file>  One prompt per line, e.g. `/curate-doc uv <url>`
+  [jobs]         Sessions to run at once (default 7), started 2s apart.
 
 Prints the log directory, then `[NN] exit=N  <prompt>` as each session ends;
 its output is in <log-dir>/NN.log (NN = position among non-blank lines).
@@ -27,7 +27,7 @@ Sessions run concurrently, so prompts that edit the same file can overwrite
 each other's edits.
 
 Example:
-  scripts/run-parallel.sh commands.txt 4
+  scripts/run-parallel.sh prompts.txt 4
 EOF
 }
 
@@ -43,14 +43,14 @@ if [ $# -lt 1 ] || [ $# -gt 2 ]; then
   exit 2
 fi
 
-command_file=$1
+prompt_file=$1
 jobs=${2-7}
 
-[ -r "$command_file" ] || {
-  printf 'error: cannot read command-file: %s\n' "$command_file" >&2
+[ -r "$prompt_file" ] || {
+  printf 'error: cannot read prompt-file: %s\n' "$prompt_file" >&2
   exit 2
 }
-command_file=$(realpath "$command_file") # resolve before the cd below
+prompt_file=$(realpath "$prompt_file") # resolve before the cd below
 
 case "$jobs" in
   '' | *[!0-9]* | 0)
@@ -72,7 +72,7 @@ printf '=== logs: %s\n' "$log_dir"
 # xargs -d '\n' passes each "NN <prompt>" line whole (by default it splits on
 # spaces and chokes on quotes); the inner sh gets it as $1 and $log_dir as $0.
 # shellcheck disable=SC2016 # single-quoted on purpose: the inner sh expands it
-grep -v '^[[:space:]]*$' "$command_file" \
+grep -v '^[[:space:]]*$' "$prompt_file" \
   | nl -w2 -n rz -s' ' \
   | while IFS= read -r line; do
     printf '%s\n' "$line"

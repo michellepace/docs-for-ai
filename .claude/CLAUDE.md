@@ -29,7 +29,7 @@ collections/
 </docs_index>
 ```
 
-User workflow (commands in `.claude/commands/`):
+User workflow (skills in `.claude/skills/`):
 
 - `/curate-doc <collection> <url>`: curate doc into collection
 - `/ask-docs <collection> <question>`: ask a question about a collection

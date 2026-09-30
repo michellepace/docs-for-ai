@@ -1,7 +1,7 @@
 ---
 title: Known bugs / issues
 updated: 2026-09-30
-status: both re-reproduced 2026-09-30 — unfixed
+status: all re-reproduced 2026-09-30 — unfixed
 ---
 
 ## 1. Soft-404 error pages curate as success
@@ -31,3 +31,23 @@ Open question: in `sync-index`, should an existing entry that now soft-404s be d
 An out-of-band word count is loud (`❌`, exit 1), but a description that went nowhere is silent. The `--help` epilog and `test_unmatched_filename_applies_nothing_and_succeeds` both lock in the silent exit 0.
 
 **Fix:** print `⚠️ No INDEX entry for <file>: skipped` for each unmatched filename and exit 1 if there were any, the same way word-count errors behave. Update the epilog and flip that test.
+
+## 3. A host-root rule prefix appends `.md` to the hostname
+
+**Where:** `direct_fetch._append_md_route()`.
+
+**What happens:** when a rule prefix is a bare host, curating its root URL fetches `<host>.md`, which is a different domain under Moldova's `.md` TLD. `https://docs.convex.dev/` → `https://docs.convex.dev.md`. Those hosts resolve to an unrelated server; today TLS fails, so the curate errors, but it still contacts that server. Path prefixes are fine (`https://clerk.com/docs/` → `https://clerk.com/docs.md`, HTTP 200).
+
+Affected prefixes: `docs.coderabbit.ai`, `docs.convex.dev`, `docs.firecrawl.dev`, `docs.marimo.io`, `modelcontextprotocol.io`.
+
+**Repro (free, no network):** `uv run python -c "from docs_for_ai.direct_fetch import *; print(resolve_route('https://docs.convex.dev/', load_direct_fetch_rules()).fetch_url)"`
+
+**Fix:** `_append_md_route` declines a URL with an empty path, so a host root falls through to FireCrawl (or `/index.md` once per-site suffixes land, see `ideas.md`).
+
+## 4. A mis-cased URL misses its rule and pays for FireCrawl
+
+**Where:** `direct_fetch._matches_prefix()`.
+
+**What happens:** prefix matching is case-sensitive, so `https://NextJS.org/Docs/app/…` matches no rule and is scraped via FireCrawl (paid) instead of direct-fetched. Nothing says why.
+
+**Fix:** lowercase the scheme and host before matching. Leave the path alone, because servers treat path case as significant (a mis-cased path should fail, not be silently corrected).

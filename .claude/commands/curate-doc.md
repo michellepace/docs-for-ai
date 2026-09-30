@@ -4,7 +4,7 @@ disable-model-invocation: false
 argument-hint: "<collection> <url>"
 arguments: [collection, source_url]
 model: claude-opus-5-5
-effort: xhigh
+effort: high
 allowed-tools:
   - Bash(find *)
   - Bash(printf *)

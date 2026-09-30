@@ -23,8 +23,9 @@ Prints the log directory, then `[NN] exit=N  <prompt>` as each session ends;
 its output is in <log-dir>/NN.log (NN = position among non-blank lines).
 exit=0 only means the session ended; read its log to see if the prompt worked.
 
-Sessions run concurrently, so prompts that edit the same file can overwrite
-each other's edits.
+Prompts editing the same file (e.g. a collection's INDEX.xml) can, rarely,
+overwrite each other's edit; the 2s stagger makes this unlikely. If an edit
+is lost, rerun that prompt.
 
 Example:
   scripts/run-parallel.sh prompts.txt 4

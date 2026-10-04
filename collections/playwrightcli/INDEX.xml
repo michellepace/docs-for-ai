@@ -127,7 +127,7 @@
   </source>
   <source>
     <title>Command Reference</title>
-    <description>Every command and its arguments by group, plus raw or JSON output for scripting; only page explaining locator generation, action recording and highlighting.</description>
+    <description>Every command and its arguments by group, plus raw or JSON output for scripting.</description>
     <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/capabilities.mdx</source_url>
     <local_file>agent-cli-capabilities.mdx</local_file>
     <curated_at>2026-10-04</curated_at>
@@ -158,6 +158,13 @@
     <description>Inspecting requests, faking API responses and errors, and testing offline behaviour.</description>
     <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/network-routing.mdx</source_url>
     <local_file>agent-cli-commands-network-routing.mdx</local_file>
+    <curated_at>2026-10-04</curated_at>
+  </source>
+  <source>
+    <title>Codegen &amp; Highlighting</title>
+    <description>Writing Playwright tests from the code each command prints, recording a flow the user performs by hand, generating locators, and highlighting elements.</description>
+    <source_url>https://github.com/microsoft/playwright.dev/blob/main/agent-cli/commands/codegen.mdx</source_url>
+    <local_file>agent-cli-commands-codegen.mdx</local_file>
     <curated_at>2026-10-04</curated_at>
   </source>
 </docs_index>

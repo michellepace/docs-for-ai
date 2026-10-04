@@ -15,29 +15,24 @@ Playwright comes with `playwright-cli`, a command-line interface for browser aut
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
-- Playwright for your language, **or** [Node.js](https://nodejs.org/) 20+ for the standalone `@playwright/cli` package
+- [Node.js](https://nodejs.org/) 20 or newer
 - A coding agent: Claude Code, GitHub Copilot, or similar
 
 ## Installation
 
-Install the standalone CLI globally (works with any language):
+Install `playwright-cli` globally:
 
 ```bash
 npm install -g @playwright/cli@latest
 playwright-cli --help
 ```
 
-Or use the CLI bundled with your Playwright install:
+Alternatively, install `@playwright/cli` as a local dependency and use `npx`:
 
 ```bash
-# JavaScript / TypeScript
+npm install -D @playwright/cli@latest
 npx playwright cli --help
-
-# Python
-python -m playwright cli --help
 ```
-
-When using a bundled entry point, replace `playwright-cli` with `npx playwright cli` or `python -m playwright cli` in the commands below.
 
 ### Installing skills
 
@@ -218,6 +213,17 @@ playwright-cli video-chapter <title>    # add chapter marker to video
 playwright-cli video-stop --filename=f  # stop video recording
 ```
 
+### WebMCP
+
+Pages can register their own tools for agents through the experimental [WebMCP](https://webmachinelearning.github.io/webmcp/) API. The tools a page registers are listed at the top of the page snapshot, and they can be called directly:
+
+```bash
+playwright-cli webmcp-list                       # list tools registered by the page
+playwright-cli webmcp-call <name> [--params]     # call one, passing a JSON object
+```
+
+Tool names, descriptions, schemas and results are provided by the page, so treat them as untrusted input.
+
 ## Sessions
 
 The CLI keeps the browser profile in memory by default — cookies and storage state are preserved between calls within a session but lost when the browser closes. Use `--persistent` to save the profile to disk.
@@ -246,6 +252,8 @@ playwright-cli close-all                # close all browsers
 playwright-cli kill-all                 # forcefully kill all browser processes
 playwright-cli -s=name delete-data      # delete user data for a named session
 ```
+
+A headless session shuts itself down after an hour without commands, so a session an agent forgot to close does not keep a browser running. Headed and attached browsers are never closed automatically. Change the timeout with `open --idle-timeout=<ms>` or `timeouts.idle` in the config file, and pass `0` to disable it.
 
 ## Monitoring
 
@@ -299,29 +307,11 @@ playwright-cli attach --extension
 
 This requires the [Playwright Extension](https://github.com/microsoft/playwright/blob/main/packages/extension/README.md) to be installed.
 
-## Debugging tests
-
-Coding agents can pause a test at the start, attach with `playwright-cli`, and explore the live browser — useful for diagnosing and fixing failures.
-
-```bash
-# JavaScript / TypeScript
-PLAYWRIGHT_HTML_OPEN=never npx playwright test --debug=cli
-# → Debugging Instructions with session name, e.g. tw-abcdef
-playwright-cli attach tw-abcdef
-
-# Python (pytest-playwright; -s keeps the attach line visible)
-pytest --playwright-debug=cli -s
-playwright-cli attach tw-abcdef
-```
-
-Keep the test running in the background while you attach. The installed skill documents this workflow for agents.
-
 ## Quick Reference
 
 | Action                    | Command                                             |
 | ------------------------- | --------------------------------------------------- |
 | **Install CLI**           | `npm install -g @playwright/cli@latest`             |
-| **Use bundled CLI**       | `npx playwright cli …` / `python -m playwright cli …` |
 | **Install skills**        | `playwright-cli install --skills`                   |
 | **Open a page**           | `playwright-cli open https://example.com`           |
 | **Click an element**      | `playwright-cli click e15`                          |
@@ -331,8 +321,7 @@ Keep the test running in the background while you attach. The installed skill do
 | **Run headed**            | `playwright-cli open https://example.com --headed`  |
 | **Use Firefox**           | `playwright-cli open --browser=firefox`             |
 | **Monitor sessions**      | `playwright-cli show`                               |
-| **Debug JS test**         | `npx playwright test --debug=cli`                   |
-| **Debug Python test**     | `pytest --playwright-debug=cli -s`                  |
+| **List page WebMCP tools** | `playwright-cli webmcp-list`                       |
 
 ## What's Next
 

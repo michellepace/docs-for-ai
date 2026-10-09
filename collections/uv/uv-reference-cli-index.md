@@ -148,19 +148,6 @@ May also be set with the `UV_WORKING_DIR` environment variable.
 
 [`--help`](#uv-auth-login--help), `-h` : Display the concise help for this command
 
-[`--keyring-provider`](#uv-auth-login--keyring-provider) *keyring-provider* : The keyring provider to use for storage of credentials.
-
-```
-Only `--keyring-provider native` is supported for `login`, which uses the system keyring via an integration built into uv.
-
-May also be set with the `UV_KEYRING_PROVIDER` environment variable.
-
-Possible values:
-
-- `disabled`: Do not use keyring for credential lookup
-- `subprocess`: Use the `keyring` command for credential lookup
-```
-
 [`--managed-python`](#uv-auth-login--managed-python) : Require use of uv-managed Python versions [env: UV_MANAGED_PYTHON=]
 
 ```
@@ -321,19 +308,6 @@ May also be set with the `UV_WORKING_DIR` environment variable.
 
 [`--help`](#uv-auth-logout--help), `-h` : Display the concise help for this command
 
-[`--keyring-provider`](#uv-auth-logout--keyring-provider) *keyring-provider* : The keyring provider to use for storage of credentials.
-
-```
-Only `--keyring-provider native` is supported for `logout`, which uses the system keyring via an integration built into uv.
-
-May also be set with the `UV_KEYRING_PROVIDER` environment variable.
-
-Possible values:
-
-- `disabled`: Do not use keyring for credential lookup
-- `subprocess`: Use the `keyring` command for credential lookup
-```
-
 [`--managed-python`](#uv-auth-logout--managed-python) : Require use of uv-managed Python versions [env: UV_MANAGED_PYTHON=]
 
 ```
@@ -479,17 +453,6 @@ May also be set with the `UV_WORKING_DIR` environment variable.
 ```
 
 [`--help`](#uv-auth-token--help), `-h` : Display the concise help for this command
-
-[`--keyring-provider`](#uv-auth-token--keyring-provider) *keyring-provider* : The keyring provider to use for reading credentials
-
-```
-May also be set with the `UV_KEYRING_PROVIDER` environment variable.
-
-Possible values:
-
-- `disabled`: Do not use keyring for credential lookup
-- `subprocess`: Use the `keyring` command for credential lookup
-```
 
 [`--managed-python`](#uv-auth-token--managed-python) : Require use of uv-managed Python versions [env: UV_MANAGED_PYTHON=]
 
@@ -6139,7 +6102,9 @@ Audit the project's dependencies.
 
 Dependencies are audited for known vulnerabilities, as well as 'adverse' statuses such as deprecation and quarantine.
 
-By default, all extras and groups within the project are audited. To exclude extras and/or groups from the audit, use the `--no-extra`, `--no-group`, and related options.
+By default, all extras and dependency groups within the project are audited, regardless of `tool.uv.default-groups`. To omit all dependency groups, use `--no-default-groups`. To exclude individual extras or groups, use `--no-extra` or `--no-group`.
+
+Auditing requires network access and cannot be performed in offline mode.
 
 ### Usage
 
@@ -6436,16 +6401,18 @@ Normally, configuration files are discovered in the current directory, parent di
 May also be set with the `UV_NO_CONFIG` environment variable.
 ```
 
-[`--no-default-groups`](#uv-audit--no-default-groups) : Don't audit the default dependency groups
+[`--no-default-groups`](#uv-audit--no-default-groups) : Don't audit dependency groups unless explicitly requested.
 
 ```
+By default, `uv audit` includes all dependency groups, regardless of `tool.uv.default-groups`. Groups can still be selected with `--only-group` or `--only-dev`.
+
 May also be set with the `UV_NO_DEFAULT_GROUPS` environment variable.
 ```
 
 [`--no-dev`](#uv-audit--no-dev) : Don't audit the development dependency group [env: UV_NO_DEV=]
 
 ```
-This option is an alias of `--no-group dev`. See `--no-default-groups` to exclude all default groups instead.
+This option is an alias of `--no-group dev`. See `--no-default-groups` to exclude all dependency groups instead.
 
 This option is only available when running in a project.
 ```
@@ -6485,12 +6452,6 @@ May also be set with the `UV_NO_SOURCES` environment variable.
 ```
 
 [`--no-sources-package`](#uv-audit--no-sources-package) *no-sources-package* : Don't use sources from the `tool.uv.sources` table for the specified packages \[env: `UV_NO_SOURCES_PACKAGE`=\]
-
-[`--offline`](#uv-audit--offline) : Disable network access [env: UV_OFFLINE=]
-
-```
-When disabled, uv will only use locally cached data and locally available files.
-```
 
 [`--only-dev`](#uv-audit--only-dev) : Only audit the development dependency group.
 
@@ -8573,7 +8534,9 @@ You can configure fine-grained logging using the `RUST_LOG` environment variable
 
 ### [uv tool audit](#uv-tool-audit)
 
-Audit installed tools and their dependencies
+Audit installed tools and their dependencies.
+
+Auditing requires network access and cannot be performed in offline mode.
 
 ### Usage
 
@@ -8692,12 +8655,6 @@ For example, spinners or progress bars.
 ```
 
 [`--no-python-downloads`](#uv-tool-audit--no-python-downloads) : Disable automatic downloads of Python.
-
-[`--offline`](#uv-tool-audit--offline) : Disable network access [env: UV_OFFLINE=]
-
-```
-When disabled, uv will only use locally cached data and locally available files.
-```
 
 [`--output-format`](#uv-tool-audit--output-format) *output-format* : Select the output format
 
@@ -9599,6 +9556,14 @@ By default, uv will refuse to replace executables that it does not manage.
 Implies `--reinstall`.
 ```
 
+[`--graalpy-mirror`](#uv-python-install--graalpy-mirror) *graalpy-mirror* : Set the URL to use as the source for downloading GraalPy installations.
+
+```
+The provided URL will replace `https://github.com/oracle/graalpython/releases/download` in, e.g., `https://github.com/oracle/graalpython/releases/download/graal-24.2.2/graalpy-24.2.2-macos-aarch64.tar.gz`.
+
+Distributions can be read from a local directory by using the `file://` URL scheme.
+```
+
 [`--help`](#uv-python-install--help), `-h` : Display the concise help for this command
 
 [`--install-dir`](#uv-python-install--install-dir), `-i` *install-dir* : The directory to store the Python installation in.
@@ -9683,6 +9648,14 @@ See `--directory` to change the working directory entirely.
 This setting has no effect when used in the `uv pip` interface.
 
 May also be set with the `UV_PROJECT` environment variable.
+```
+
+[`--pyodide-mirror`](#uv-python-install--pyodide-mirror) *pyodide-mirror* : Set the URL to use as the source for downloading Pyodide installations.
+
+```
+The provided URL will replace `https://github.com/pyodide/pyodide/releases/download` in, e.g., `https://github.com/pyodide/pyodide/releases/download/0.29.5/xbuildenv-0.29.5.tar.gz`.
+
+Distributions can be read from a local directory by using the `file://` URL scheme.
 ```
 
 [`--pypy-mirror`](#uv-python-install--pypy-mirror) *pypy-mirror* : Set the URL to use as the source for downloading PyPy installations.
@@ -9827,6 +9800,14 @@ See `--project` to only change the project root directory.
 May also be set with the `UV_WORKING_DIR` environment variable.
 ```
 
+[`--graalpy-mirror`](#uv-python-upgrade--graalpy-mirror) *graalpy-mirror* : Set the URL to use as the source for downloading GraalPy installations.
+
+```
+The provided URL will replace `https://github.com/oracle/graalpython/releases/download` in, e.g., `https://github.com/oracle/graalpython/releases/download/graal-24.2.2/graalpy-24.2.2-macos-aarch64.tar.gz`.
+
+Distributions can be read from a local directory by using the `file://` URL scheme.
+```
+
 [`--help`](#uv-python-upgrade--help), `-h` : Display the concise help for this command
 
 [`--install-dir`](#uv-python-upgrade--install-dir), `-i` *install-dir* : The directory Python installations are stored in.
@@ -9899,6 +9880,14 @@ See `--directory` to change the working directory entirely.
 This setting has no effect when used in the `uv pip` interface.
 
 May also be set with the `UV_PROJECT` environment variable.
+```
+
+[`--pyodide-mirror`](#uv-python-upgrade--pyodide-mirror) *pyodide-mirror* : Set the URL to use as the source for downloading Pyodide installations.
+
+```
+The provided URL will replace `https://github.com/pyodide/pyodide/releases/download` in, e.g., `https://github.com/pyodide/pyodide/releases/download/0.29.5/xbuildenv-0.29.5.tar.gz`.
+
+Distributions can be read from a local directory by using the `file://` URL scheme.
 ```
 
 [`--pypy-mirror`](#uv-python-upgrade--pypy-mirror) *pypy-mirror* : Set the URL to use as the source for downloading PyPy installations.
@@ -15248,12 +15237,6 @@ For example, spinners or progress bars.
 ```
 
 [`--no-python-downloads`](#uv-publish--no-python-downloads) : Disable automatic downloads of Python.
-
-[`--offline`](#uv-publish--offline) : Disable network access [env: UV_OFFLINE=]
-
-```
-When disabled, uv will only use locally cached data and locally available files.
-```
 
 [`--password`](#uv-publish--password), `-p` *password* : The password for the upload
 

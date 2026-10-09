@@ -119,6 +119,13 @@
     <curated_at>2026-10-09</curated_at>
   </source>
   <source>
+    <title>Let Claude coordinate ongoing work with Projects</title>
+    <description>Hand Claude a stream of related tasks in one conversation and let it run them as parallel cloud sessions that share repositories, instructions, and memory.</description>
+    <source_url>https://code.claude.com/docs/en/claude-projects</source_url>
+    <local_file>en-claude-projects.md</local_file>
+    <curated_at>2026-10-09</curated_at>
+  </source>
+  <source>
     <title>Message your other Claude Code sessions</title>
     <description>Let Claude list and message your other Claude Code sessions on this machine, and reach your sessions on other machines or in the cloud.</description>
     <source_url>https://code.claude.com/docs/en/cross-session-messaging</source_url>

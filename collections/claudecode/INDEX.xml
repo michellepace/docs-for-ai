@@ -67,7 +67,7 @@
     <description>Writing a public, unauthenticated streamable-HTTP MCP server for Claude Code: tool search, schema/output/timeout limits, `_meta`, connection lifecycle, resources, prompts, install paths.</description>
     <source_url>https://code.claude.com/docs/en/mcp</source_url>
     <local_file>en-mcp.md</local_file>
-    <curated_at>2026-09-19</curated_at>
+    <curated_at>2026-10-09</curated_at>
   </source>
   <source>
     <title>Plugins overview</title>

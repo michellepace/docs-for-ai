@@ -4,7 +4,7 @@
     <description>Full reference - every setting under `[tool.uv]` and `[tool.uv.*]` sub-tables in `pyproject.toml`/`uv.toml`, with defaults and TOML examples. Grep by setting name (≈11k words)</description>
     <source_url>https://docs.astral.sh/uv/reference/settings/index.md</source_url>
     <local_file>uv-reference-settings-index.md</local_file>
-    <curated_at>2026-09-28</curated_at>
+    <curated_at>2026-10-09</curated_at>
   </source>
   <source>
     <title>CLI Reference</title>

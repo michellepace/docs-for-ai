@@ -397,7 +397,7 @@ class TestGithubFilenameFromBlobUrl:
 
 
 class TestExtractMarkdownTitle:
-    """Markdown title: frontmatter → first H1 → URL-basename fallback."""
+    """Markdown title: frontmatter → first H1 → URL path fallback."""
 
     @pytest.mark.parametrize(
         ("content", "url", "expected"),
@@ -427,6 +427,12 @@ class TestExtractMarkdownTitle:
                 "https://raw.githubusercontent.com/o/r/main/docs/getting-started.md",
                 "Getting Started",
             ),
+            (
+                "## Project metadata\n",
+                "https://docs.astral.sh/uv/reference/settings/index.md",
+                "Settings",
+            ),
+            ("no headings here\n", "https://x.io/index.md", "Untitled"),
         ],
         ids=[
             "frontmatter-wins-over-h1",
@@ -438,6 +444,8 @@ class TestExtractMarkdownTitle:
             "unwraps-h1-anchor-link",
             "ignores-hash-in-code-fence",
             "url-basename-title-cased-fallback",
+            "index-page-is-titled-by-its-directory",
+            "root-index-page-is-untitled",
         ],
     )
     def test_resolves_title(self, content: str, url: str, expected: str) -> None:

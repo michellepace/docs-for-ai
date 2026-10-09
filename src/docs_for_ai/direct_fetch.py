@@ -262,9 +262,12 @@ def _title_from_h1(content: str) -> str | None:
 
 
 def _title_from_url(url: str) -> str:
-    """A human-readable fallback title derived from the URL's filename."""
-    basename = _strip_doc_suffix(urlparse(url).path.rsplit("/", 1)[-1])
-    return " ".join(w.capitalize() for w in basename.split("-")) or "Untitled"
+    """A human-readable fallback title derived from the URL's page name."""
+    segments = [s for s in _strip_doc_suffix(urlparse(url).path).split("/") if s]
+    if segments and segments[-1].lower() == "index":
+        segments.pop()  # an index page is named by its directory
+    name = segments[-1] if segments else ""
+    return " ".join(w.capitalize() for w in name.split("-")) or "Untitled"
 
 
 def _is_rst_adornment(line: str) -> bool:

@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.14"
+# requires-python = ">=3.15"
 # dependencies = ["rich>=15.0.0"]
 # ///
 """Report the state of every collection INDEX.xml in the repo."""

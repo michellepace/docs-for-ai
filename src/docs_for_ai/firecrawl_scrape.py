@@ -15,6 +15,7 @@ with warnings.catch_warnings():
         category=UserWarning,
     )
     from firecrawl import Firecrawl
+    from firecrawl.v2.types import Document
     from firecrawl.v2.utils.error_handler import (
         FirecrawlError,
         RateLimitError,
@@ -50,7 +51,8 @@ def _perform_scrape(firecrawl: Firecrawl, url: str) -> tuple[str, str]:
         max_age=86400000,  # Use cached content for speed (24 hours)
     )
 
-    if not result or not result.markdown:
+    # Document unless `alexandria=` is passed, which we never do
+    if not isinstance(result, Document) or not result.markdown:
         msg = f"No content scraped: {url}"
         raise CurationError(msg)
 

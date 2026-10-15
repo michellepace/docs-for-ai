@@ -1,6 +1,6 @@
 [build-system]
 # Packaged for the [project.scripts] CLIs only; never published.
-requires = ["uv_build>=0.12.13,<0.13"]
+requires = ["uv_build>=0.13.0,<0.14"]
 build-backend = "uv_build"
 
 [project]
@@ -8,9 +8,9 @@ name = "docs-for-ai"
 version = "0.1.0"
 description = "Curate and index clean docs for targeted AI context"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.15"
 dependencies = [
-  "firecrawl-py>=4.42.0", # scrape docs to markdown
+  "firecrawl-py>=4.50.0", # scrape docs to markdown
 ]
 
 [project.scripts]
@@ -20,11 +20,11 @@ update-descriptions = "docs_for_ai.update_descriptions:main"
 
 [dependency-groups]
 dev = [
-  "pre-commit>=4.6.2",
+  "pre-commit>=4.7.0",
   "pyright>=1.1.414",
   "pytest>=9.1.1",
   "rich>=15.0.0",
-  "ruff>=0.16.7",
+  "ruff>=0.17.0",
 ]
 
 
@@ -43,7 +43,7 @@ markers = [
 # =================================
 [tool.pyright]
 typeCheckingMode = "standard" # pyright's default; strict fights untyped libs
-pythonVersion = "3.14"
+pythonVersion = "3.15"
 venvPath = "."                # Claude Code Official: LSP plugin
 venv = ".venv"                # Claude Code Official: LSP plugin
 reportUnusedImport = false    # Ruff F401 covers it
@@ -55,7 +55,7 @@ reportDuplicateImport = false # Ruff F811
 # =================================
 [tool.ruff]
 line-length = 88
-target-version = "py314"
+target-version = "py315"
 # Protect corpus (ruff formats code blocks in md)
 extend-exclude = ["collections"]
 

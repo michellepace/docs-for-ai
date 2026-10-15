@@ -41,7 +41,7 @@ repos:
       - id: shellcheck              # lint shell (read-only, after shfmt)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.13.0
+    rev: 0.13.1
     hooks:
       - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 

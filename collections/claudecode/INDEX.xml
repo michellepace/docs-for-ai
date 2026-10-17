@@ -56,11 +56,18 @@
     <curated_at>2026-10-09</curated_at>
   </source>
   <source>
+    <title>Automate actions with hooks</title>
+    <description>Run shell commands automatically when Claude Code edits files, finishes tasks, or needs input. Format code, send notifications, validate commands, and enforce project rules.</description>
+    <source_url>https://code.claude.com/docs/en/hooks-guide</source_url>
+    <local_file>en-hooks-guide.md</local_file>
+    <curated_at>2026-10-17</curated_at>
+  </source>
+  <source>
     <title>Hooks reference</title>
     <description>Reference for Claude Code hook events, configuration schema, JSON input/output formats, exit codes, async hooks, HTTP hooks, prompt hooks, and MCP tool hooks.</description>
     <source_url>https://code.claude.com/docs/en/hooks</source_url>
     <local_file>en-hooks.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-17</curated_at>
   </source>
   <source>
     <title>MCP for Claude Code — authoring reference (hand scoped)</title>

@@ -88,7 +88,7 @@
     <description>Complete reference for plugin.json: every field with its type and default, accepted path forms, and the userConfig and environment variable schemas.</description>
     <source_url>https://code.claude.com/docs/en/plugins-reference</source_url>
     <local_file>en-plugins-reference.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-18</curated_at>
   </source>
   <source>
     <title>Run agents in parallel</title>

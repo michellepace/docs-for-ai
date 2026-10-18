@@ -4,7 +4,7 @@
 
 ## ⚠️ NOTE: Trimmed from original doc!
 
-Trimmed from <https://code.claude.com/docs/en/mcp.md>:
+Trimmed from https://code.claude.com/docs/en/mcp.md:
 
 - Scoped to **writing a public, unauthenticated remote server over streamable HTTP** that serves read-only content, plus the installation and verification facts to hand to a user.
 - Removed: local stdio, SSE and WebSocket transports, OAuth and header auth, plugin packaging, elicitation, channels, secrets in config, `claude mcp serve`, Claude Desktop import, and consumer-only troubleshooting.
@@ -16,7 +16,7 @@ Trimmed from <https://code.claude.com/docs/en/mcp.md>:
 ## Build a server
 
 - Protocol fundamentals: `~/.claude/docs-for-ai/collections/mcp/2026-07-28-develop-build-server.md`
-- Testing and Directory submission: `~/.claude/docs-for-ai/collections/claudeai/connectors-building.md`
+- Claude's MCP client across all surfaces (supported features, claude.ai limits, distribution): `~/.claude/docs-for-ai/collections/claudeai/connectors-building.md`
 - Reviewed connectors for reference: https://claude.ai/directory
 
 Build **streamable HTTP only**. SSE is deprecated, `claude mcp add --transport` can't add WebSocket, and one HTTP endpoint reaches every Claude surface.
@@ -48,7 +48,7 @@ If the install reports `Marketplace "claude-plugins-official" not found`, run `/
 One URL serves both paths, and you don't control which one a user takes.
 
 1. **`claude mcp add`** in Claude Code (below). Works with any sign-in.
-2. **claude.ai connector.** The user adds the same URL at <https://claude.ai/customize/connectors>, and it becomes available in claude.ai, Cowork, and Claude Code. On Team and Enterprise plans only admins can add connectors. claude.ai calls your URL from Anthropic's servers, not the user's machine, and has its own result-size and timeout limits. Test this path separately (see `claudeai`).
+2. **claude.ai connector.** The user adds the same URL at https://claude.ai/customize/connectors, and it becomes available in claude.ai, Cowork, and Claude Code. On Team and Enterprise plans only admins can add connectors. claude.ai calls your URL from Anthropic's servers, not the user's machine. claude.ai and Desktop cap results at ~150,000 characters and tool calls at 240 seconds. Test this path separately: `~/.claude/docs-for-ai/collections/claudeai/connectors-building-testing.md`.
 
 Connectors reach Claude Code only when it's signed in with a claude.ai subscription. These users need path 1:
 
@@ -220,6 +220,10 @@ Other limits and handling:
 **A tool that can run past 60 seconds must stream.** Answer the `tools/call` POST with a `text/event-stream` response, send a progress notification right away, and keep sending them more often than the 5-minute idle limit. A single JSON body sent at the end misses the first-byte deadline. Behind a buffering reverse proxy such as nginx, send `X-Accel-Buffering: no` so the events aren't held back.
 
 A main-conversation call still running after two minutes moves to a background task (v2.1.212+). Claude keeps working and gets your result later. The timers above still apply, and `/tasks` shows your latest reported progress. Calls from subagents and `claude -p` runs aren't backgrounded and keep blocking. **A slow tool is survivable; a silent one is not.**
+
+### Tool annotations
+
+Give every tool a `title` and `readOnlyHint: true`. Directory review requires both, and claude.ai can then run read-only tools without per-call confirmation. Other review rules, such as 64-character tool names and no instructions in descriptions: `~/.claude/docs-for-ai/collections/claudeai/connectors-building-review-criteria.md`.
 
 ### `_meta` annotations you can set
 

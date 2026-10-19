@@ -91,6 +91,13 @@
     <curated_at>2026-10-19</curated_at>
   </source>
   <source>
+    <title>Code intelligence plugins</title>
+    <description>Install a language server plugin so Claude sees type errors after edits and navigates code by symbol, and answer the LSP plugin recommendation dialog.</description>
+    <source_url>https://code.claude.com/docs/en/plugins/code-intelligence</source_url>
+    <local_file>en-plugins-code-intelligence.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
     <title>Run agents in parallel</title>
     <description>Compare the ways Claude Code can take on multiple tasks at once: subagents, agent view, agent teams, dynamic workflows, and projects.</description>
     <source_url>https://code.claude.com/docs/en/agents</source_url>
@@ -130,6 +137,13 @@
     <description>Hand Claude a stream of related tasks in one conversation and let it run them as parallel cloud sessions that share repositories, instructions, and memory.</description>
     <source_url>https://code.claude.com/docs/en/claude-projects</source_url>
     <local_file>en-claude-projects.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Configure cloud environments</title>
+    <description>Configure cloud environments for Claude Code cloud sessions: network access levels, environment variables, setup scripts, and environment caching.</description>
+    <source_url>https://code.claude.com/docs/en/cloud-environments</source_url>
+    <local_file>en-cloud-environments.md</local_file>
     <curated_at>2026-10-19</curated_at>
   </source>
   <source>

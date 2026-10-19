@@ -106,10 +106,10 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 | Collection | Collection Index | Description | Curated | Source |
 | :--------- | :--------------- | :---------- | :------ | :----- |
-| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-09-28 | [Official](https://biomejs.dev) |
-| 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-08-16 | [Official](https://claude.com/docs/) |
-| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-10-09 | [Official](https://code.claude.com/docs/) |
-| 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-08-16 | [Official](https://platform.claude.com/docs/) |
+| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-10-19 | [Official](https://biomejs.dev) |
+| 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-10-18 | [Official](https://claude.com/docs/) |
+| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-10-19 | [Official](https://code.claude.com/docs/) |
+| 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-10-19 | [Official](https://platform.claude.com/docs/) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
 | 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-07-27 | [Official](https://docs.coderabbit.ai) |
 | 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
@@ -121,10 +121,11 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-10-04 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
-| 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
+| 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2026-10-19 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager | 2026-10-12 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`ty/`](collections/ty/) | 📄 [`INDEX.xml`](collections/ty/INDEX.xml) | Python type checker (Astral) | 2026-10-19 | [Official](https://docs.astral.sh/ty/) |
+| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager (Astral) | 2026-10-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-07-14 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |

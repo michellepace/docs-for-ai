@@ -1,0 +1,135 @@
+<docs_index>
+  <source>
+    <title>Installing ty</title>
+    <description>Running via uvx, uv dev dependency or tool, standalone script, pip/pipx, mise, Docker, Bazel; upgrading and pinning versions; shell autocompletion.</description>
+    <source_url>https://docs.astral.sh/ty/installation/index.md</source_url>
+    <local_file>ty-installation-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Type checking</title>
+    <description>Running `ty check` on files or paths, how it finds your virtualenv and installed packages, `--python`, and `--watch` incremental rechecking.</description>
+    <source_url>https://docs.astral.sh/ty/type-checking/index.md</source_url>
+    <local_file>ty-type-checking-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Editor integration</title>
+    <description>Setting up ty's language server in VS Code, Neovim, Zed, PyCharm, Emacs or any LSP editor; keeping Pylance or basedpyright alongside it.</description>
+    <source_url>https://docs.astral.sh/ty/editors/index.md</source_url>
+    <local_file>ty-editors-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Configuration</title>
+    <description>Where ty finds pyproject.toml [tool.ty] or ty.toml, user-level config location, precedence when both exist, and how project, user and CLI settings merge</description>
+    <source_url>https://docs.astral.sh/ty/configuration/index.md</source_url>
+    <local_file>ty-configuration-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Module discovery</title>
+    <description>Fixing unresolved imports: first-party search paths (src layouts, environment.root), virtualenv/Conda/.venv detection order, --python, and PYTHONPATH handling</description>
+    <source_url>https://docs.astral.sh/ty/modules/index.md</source_url>
+    <local_file>ty-modules-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Python version</title>
+    <description>How the target version is inferred (requires-python, venv, 3.14 fallback), sys.version_info guards, version-dependent errors, and limited 3.7–3.9 support</description>
+    <source_url>https://docs.astral.sh/ty/python-version/index.md</source_url>
+    <local_file>ty-python-version-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Excluding files</title>
+    <description>src.include/exclude glob patterns, re-including default-excluded dirs with `!`, .gitignore handling, explicit CLI paths overriding excludes, and stray virtualenv diagnostics.</description>
+    <source_url>https://docs.astral.sh/ty/exclusions/index.md</source_url>
+    <local_file>ty-exclusions-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Rules</title>
+    <description>Setting rule levels (error, warn, ignore) via --error/--warn/--ignore flags or the [rules] config table, per rule or `all`, plus exit codes on warnings.</description>
+    <source_url>https://docs.astral.sh/ty/rules/index.md</source_url>
+    <local_file>ty-rules-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Suppression</title>
+    <description>Silencing errors inline or file-wide with `# ty: ignore[rule]` or `type: ignore`, multi-line and multi-tool comments, unused-ignore reporting, and @no_type_check.</description>
+    <source_url>https://docs.astral.sh/ty/suppression/index.md</source_url>
+    <local_file>ty-suppression-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Type system</title>
+    <description>Redeclaring variables with new types, intersection types and isinstance/hasattr narrowing, ty_extensions Intersection, top materializations, type-based unreachable branches for multi-version dependencies</description>
+    <source_url>https://docs.astral.sh/ty/features/type-system/index.md</source_url>
+    <local_file>ty-features-type-system-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Diagnostics</title>
+    <description>What ty error messages show: source snippets, related definitions, typo fix suggestions, and why a module is unavailable for your Python version</description>
+    <source_url>https://docs.astral.sh/ty/features/diagnostics/index.md</source_url>
+    <local_file>ty-features-diagnostics-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Language server</title>
+    <description>IDE features: navigation, auto-import completions, quick fixes, rename, inlay hints, Jupyter notebooks, supported/unsupported LSP methods table, no formatting (use Ruff)</description>
+    <source_url>https://docs.astral.sh/ty/features/language-server/index.md</source_url>
+    <local_file>ty-features-language-server-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Configuration</title>
+    <description>Every ty.toml/[tool.ty] option with defaults: rule severities, per-file overrides, silencing unresolved imports, return-type inference, strict narrowing, environment paths and Python version, output format.</description>
+    <source_url>https://docs.astral.sh/ty/reference/configuration/index.md</source_url>
+    <local_file>ty-reference-configuration-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Typing FAQ</title>
+    <description>Unknown, @Todo, Divergent and float* types; list invariance errors; Callable __name__ errors; unresolved imports; strict mode; missing-annotation warnings; monorepos; PEP 723 scripts; pre-commit; plugins.</description>
+    <source_url>https://docs.astral.sh/ty/reference/typing-faq/index.md</source_url>
+    <local_file>ty-reference-typing-faq-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Rules</title>
+    <description>Large searchable reference of every diagnostic rule: default severity, what triggers it, examples and fixes; includes opt-in strict rules like unsound-assignment, disjoint-cast, missing-override-decorator.</description>
+    <source_url>https://docs.astral.sh/ty/reference/rules/index.md</source_url>
+    <local_file>ty-reference-rules-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>CLI Reference</title>
+    <description>Every ty subcommand and flag: rule severity overrides, exit-code control, CI output formats, watch mode, --fix, --add-ignore, Python environment and version selection.</description>
+    <source_url>https://docs.astral.sh/ty/reference/cli/index.md</source_url>
+    <local_file>ty-reference-cli-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Exit codes</title>
+    <description>What exit codes 0, 1, 2 and 101 mean, and flags making warnings fail or pass CI: --exit-zero, --error-on-warning, --exit-zero-on-warning.</description>
+    <source_url>https://docs.astral.sh/ty/reference/exit-codes/index.md</source_url>
+    <local_file>ty-reference-exit-codes-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Environment variables</title>
+    <description>TY_* variables for config file, log level, flamegraph profiling, parallelism and output format, plus how VIRTUAL_ENV, Conda, PYTHONPATH and XDG_CONFIG_HOME are read.</description>
+    <source_url>https://docs.astral.sh/ty/reference/environment/index.md</source_url>
+    <local_file>ty-reference-environment-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>Editor settings</title>
+    <description>Language server options for VS Code and Neovim: diagnostic scope, inlay hints, auto-import completions, disabling language services, executable path, logging, uv integration.</description>
+    <source_url>https://docs.astral.sh/ty/reference/editor-settings/index.md</source_url>
+    <local_file>ty-reference-editor-settings-index.md</local_file>
+    <curated_at>2026-10-19</curated_at>
+  </source>
+</docs_index>

@@ -20,7 +20,7 @@ Each mode makes a different tradeoff between convenience and oversight. The tabl
 | [`acceptEdits`](#auto-approve-file-edits-with-acceptedits-mode) | Reads, file edits, and common filesystem commands (`mkdir`, `touch`, `mv`, `cp`, etc.) | Iterating on code you're reviewing |
 | [`plan`](#analyze-before-you-edit-with-plan-mode) | Reads, plus classifier-approved commands when [auto mode](#eliminate-prompts-with-auto-mode) is available | Exploring a codebase before changing it |
 | [`auto`](#eliminate-prompts-with-auto-mode) | Everything, with background safety checks | Long tasks, reducing prompt fatigue |
-| [`dontAsk`](#allow-only-pre-approved-tools-with-dontask-mode) | Reads and pre-approved tools; anything that would prompt is denied | Locked-down CI and scripts |
+| [`dontAsk`](#allow-only-pre-approved-tools-with-dontask-mode) | File reads inside your working directories and pre-approved tools; anything that would prompt is denied | Locked-down CI and scripts |
 | [`bypassPermissions`](#skip-all-checks-with-bypasspermissions-mode) | Everything | Isolated containers and VMs only |
 
 The mode that reviews every action is named **Manual** in the CLI, in `claude --help`, in the VS Code and JetBrains extensions, and in the desktop app. Its config value is `default`, which is what hooks and SDK integrations use. The CLI accepts `manual` as an alias wherever you type the value, for example `claude --permission-mode manual` or `"defaultMode": "manual"`.
@@ -51,7 +51,7 @@ Permission modes decide whether Claude asks before an action, and the [Bash sand
 | You want to | Start with | Isolation needed | Notes |
 | :- | :- | :- | :- |
 | Review every action yourself | Manual mode: `claude --permission-mode default` | None | Sensitive work, unfamiliar code |
-| Iterate locally with fewer prompts, without a classifier | Manual mode plus the Bash sandbox in [auto-allow mode](/docs/en/sandboxing#sandbox-modes): `claude --permission-mode default`, then run `/sandbox` and select auto-allow | The built-in Bash sandbox, on macOS, Linux, and WSL2 | Deny rules still apply, and ask rules that name a command, such as `Bash(git push *)`, still prompt. To turn the sandbox on from a settings file instead, set [`sandbox.enabled`](/docs/en/settings-reference#sandbox-enabled) to `true` |
+| Iterate locally with fewer prompts, without a classifier | Manual mode plus the Bash sandbox in [auto-allow mode](/docs/en/sandboxing#sandbox-modes): `claude --permission-mode default`, then run `/sandbox` and select auto-allow | The built-in Bash sandbox, on macOS, Linux, and WSL2 | Deny rules still apply, and ask rules that name a command, such as `Bash(git push *)`, still prompt. [Auto-allow mode](/docs/en/sandboxing#auto-allow-mode) covers other commands that can prompt. To turn the sandbox on from a settings file instead, set [`sandbox.enabled`](/docs/en/settings-reference#sandbox-enabled) to `true` |
 | Explore before changing anything | `claude --permission-mode plan` | None | Claude Code blocks edits until you [approve a plan](#review-and-approve-a-plan) |
 | Work hands-off in auto mode | `claude --permission-mode auto`, the [built-in starting permission mode](#which-mode-a-session-starts-in) with v2.1.283 or later | None; a sandbox or container adds defense in depth | Requires a [supported model](#eliminate-prompts-with-auto-mode), and your organization can [turn auto mode off](#eliminate-prompts-with-auto-mode) |
 | Run in CI with an exact allowlist | `claude -p "run the test suite" --permission-mode dontAsk --allowedTools "Bash(npm test)" "Read"` | None beyond what your CI runner provides | [Cloud sessions](/docs/en/claude-code-on-the-web) ignore `dontAsk` from settings files |
@@ -233,7 +233,6 @@ Each interface has its own control for switching permission modes during a sessi
     * **[Remote Control](/docs/en/remote-control) sessions** on your local machine: Manual, Accept edits, Plan, and Auto for a session you started yourself, and you can't select Bypass permissions from the app. To use Auto, the session has to meet the auto mode [availability requirements](#eliminate-prompts-with-auto-mode). For a project thread running on your computer, see [Run a thread on your own computer](/docs/en/claude-projects#run-a-thread-on-your-own-computer).
       * Except for Bypass permissions, the dropdown shows the permission mode the local session is in, including one set from the terminal. It updates when the permission mode changes in the app or in the terminal.
       * Sessions hosted by the [desktop app](/docs/en/desktop) or the [VS Code extension](/docs/en/vs-code) report permission mode changes to claude.ai as they happen, the same as sessions hosted in a terminal.
-      * Before v2.1.202, sessions connected with `/remote-control` or `claude --remote-control` didn't report their permission mode at all, so claude.ai and the mobile app could show a permission mode the session wasn't in. The mismatch affected only the label. Claude Code generated permission prompts from the session's actual permission mode, and they still appeared in the app for approval.
 
     For Remote Control, the local machine running the session must be signed in with your claude.ai account; API keys aren't supported. You can also set the starting permission mode when launching that local session:
 
@@ -338,8 +337,6 @@ Only Claude Sonnet 5 or later, Opus 4.7 or later, Haiku 5.5, and the Fable model
 
 To prevent developers from using auto mode, set `disableAutoMode` to `"disable"` in [managed settings](/docs/en/managed-settings). This removes `auto` from the `Shift+Tab` cycle, and a session started with `--permission-mode auto` starts in Manual instead. A session already running in auto mode leaves it when the setting reaches that session from an [admin-deployed source](/docs/en/managed-settings#which-managed-source-claude-code-uses), and shows `auto mode disabled by settings`. Before v2.1.251, a running session kept auto mode until it ended.
 
-In v2.1.158 through v2.1.206, auto mode was off on these providers until you set `CLAUDE_CODE_ENABLE_AUTO_MODE=1`, and Claude Code ignored `defaultMode: "auto"` on these providers unless the variable was also set. The variable is still accepted for compatibility and has no effect from v2.1.207 onward.
-
 ### Server-side classifier review
 
 In auto mode, Claude Code can ask the server to check the actions that [the decision order](#how-the-classifier-evaluates-actions) sends for review, as part of the session's model requests, in place of sending its own classifier requests. These sessions ask:
@@ -390,27 +387,21 @@ The classifier trusts your working directory and the remotes that were configure
 * Launching an autonomous agent loop that runs without human approval or a sandbox, such as one started with `--dangerously-skip-permissions` or `--no-sandbox`. This includes running a third-party agent or eval harness with isolation and per-action approval disabled, such as a runner started with `--yes-always`
 * [Claude in Chrome](/docs/en/chrome) browser actions that could send page content, cookies, or credentials off-origin
 * Deleting files in `/tmp`, `$TMPDIR`, or another shared scratch or cache directory by wildcard, glob, or age filter rather than by a specific named path
-* Including sensitive details in content sent, uploaded, published, or written to other people or shared systems, when your own message didn't authorize those details for that recipient. PR and issue bodies, commit messages, and comments count as this kind of outbound content when the repository is outside the trust boundary or public, including your organization's own public repositories; internal file paths, code names, live API response data such as emails or account identifiers, and infrastructure identifiers count as sensitive details. Live personal data from an API response in a PR or issue body, such as an email address, an account or organization identifier, or a usage metric, requires you to name those details and the recipient regardless of the repository's visibility or trust boundary. That check requires Claude Code v2.1.203 or later
+* Including sensitive details in content sent, uploaded, published, or written to other people or shared systems, when your own message didn't authorize those details for that recipient. PR and issue bodies, commit messages, and comments count as this kind of outbound content when the repository is outside the trust boundary or public, including your organization's own public repositories; internal file paths, code names, live API response data such as emails or account identifiers, and infrastructure identifiers count as sensitive details. Live personal data from an API response in a PR or issue body, such as an email address, an account or organization identifier, or a usage metric, requires you to name those details and the recipient regardless of the repository's visibility or trust boundary
 * Sending keystrokes to Claude Code's own tmux pane to drive its own interface, which the classifier treats as Claude changing its own permissions or oversight
 * Commenting out, deleting, or force-passing a test or assertion that guards security behavior, such as auth, access control, input validation, or sandboxing
 * Deleting or tearing down a stateful resource Claude didn't create in the session, when no more specific deletion rule applies and you didn't name that resource
 * Repointing an API base URL, proxy endpoint, webhook receiver, or registry mirror at a third-party host that doesn't fit the task, including in example files like `.env.example`
 * Changing where pushes go with `git remote set-url` or `git remote add`, unless you named the new remote
-* Pushing secrets or personal or entrusted data to a repository known to be public, or pushing confidential material there that isn't part of that repository's own work. A dotfiles repository's own subject matter is the one exception for personal or entrusted data, and content from a private repository reaching any public surface is blocked the same way; both refinements require Claude Code v2.1.203 or later. Before v2.1.203, personal data was grouped with confidential material and blocked only when it wasn't part of that repository's own work. When a repository's visibility isn't established, the classifier doesn't block on that alone; it judges the content against the other rules instead
+* Pushing secrets or personal or entrusted data to a repository known to be public, or pushing confidential material there that isn't part of that repository's own work. A dotfiles repository's own subject matter is the one exception for personal or entrusted data, and content from a private repository reaching any public surface is blocked the same way. When a repository's visibility isn't established, the classifier doesn't block on that alone; it judges the content against the other rules instead
 * Opening a pull request against a different repository or organization, forking with `gh repo fork`, or pushing to a third-party repository, unless you named that external target
-
-Several of these categories depend on [environment](/docs/en/auto-mode-config#define-trusted-infrastructure) entries, such as sensitive remote targets and protected IaC scopes, that you can narrow to concrete names.
-
-Claude Code v2.1.203 and later also block these by default:
-
 * Content from a sensitive local store, or from a file whose name, path, or type marks it as sensitive, entering a commit, a push, PR or issue text, a gist or paste, or a package publish, unless you named both the source and the destination. Session transcripts and conversation logs, credential and configuration dot-folders such as SSH keys, cloud credentials, browser profiles, and shell history, and user-data exports all count, and the repository being private doesn't clear it
-
-Claude Code v2.1.205 and later also block these by default:
-
 * Writing to Claude Code session transcripts, the `.jsonl` history files under `~/.claude/projects/` or your configured config directory, whether directly or through a shell command. The rule also covers the metadata lines Claude Code appends to each transcript entry for its own checks. Reading a transcript isn't blocked
 * A recursive forced delete such as `rm -rf "$VAR"` or `Remove-Item -Recurse -Force $dir` whose target is a shell variable that isn't assigned anywhere in the conversation the classifier sees, or a glob rooted at such a variable. The value came only from earlier command output, which the classifier never receives, so the classifier can't verify the deletion target against the other deletion rules. The block clears when you name the exact path being deleted, or when Claude re-runs the delete with the resolved literal path written into the command. Deletes whose target the classifier can resolve aren't affected.
 
   A glob directly under the variable, as in `rm -rf "$VAR"/*`, is a [critical path](#critical-paths) instead. `Remove-Item` targets that are a bare `*` or end in `/*` or `\*` never reach the classifier: Claude Code [denies them outright](#remove-item-in-powershell).
+
+Several of these categories depend on [environment](/docs/en/auto-mode-config#define-trusted-infrastructure) entries, such as sensitive remote targets and protected IaC scopes, that you can narrow to concrete names.
 
 Claude Code v2.1.257 and later also block these by default:
 
@@ -431,7 +422,7 @@ Claude Code v2.1.261 and later also block these by default:
 * Installing dependencies declared in your lock files or manifests
 * Reading `.env` and sending credentials to their matching API
 * Read-only HTTP requests
-* Pushing to any branch of the repository you're working in, including the default branch. A non-default branch whose name marks it as a deploy or publication target, such as `production` or `gh-pages`, isn't covered: the classifier judges a push there on its own terms. The push's content is still checked against the other rules, [`permissions.deny` rules](/docs/en/permissions#manage-permissions) can still block push commands [as written](/docs/en/permissions#bash-rule-limits) in every mode, and the remote's own branch protection still applies. Before v2.1.211, only pushes to the branch you started on, branches Claude created, and routine pushes to the default branch were allowed by default, and before v2.1.203 any direct push to the default branch was blocked
+* Pushing to any branch of the repository you're working in, including the default branch. A non-default branch whose name marks it as a deploy or publication target, such as `production` or `gh-pages`, isn't covered: the classifier judges a push there on its own terms. The push's content is still checked against the other rules, [`permissions.deny` rules](/docs/en/permissions#manage-permissions) can still block push commands [as written](/docs/en/permissions#bash-rule-limits) in every mode, and the remote's own branch protection still applies. Before v2.1.211, only pushes to the branch you started on, branches Claude created, and routine pushes to the default branch were allowed by default
 * Deleting the exact jobs Claude created earlier in the same session
 * Reading, reviewing, or writing security-related code, configs, and threat models as part of your task
 * Messages between agents working together in the same multi-agent session
@@ -448,7 +439,7 @@ Pushing to any branch of the repository you're working in and creating a pull re
   The first read outside the working directories
 </h3>
 
-While [`permissions.blockReadsOutsideWorkingDirectories`](/docs/en/settings-reference#permissions-blockreadsoutsideworkingdirectories) is off, file reads run without a prompt in auto mode, including reads outside the [working directories](/docs/en/permissions#working-directories). The first time Claude uses the Read, Grep, or Glob tool on a path outside them, Claude Code asks whether to allow that read.
+While [`permissions.blockReadsOutsideWorkingDirectories`](/docs/en/settings-reference#permissions-blockreadsoutsideworkingdirectories) is off, file reads other than [reads from network paths](/docs/en/permissions#network-paths) run without a prompt in auto mode, including reads outside the [working directories](/docs/en/permissions#working-directories). The first time Claude uses the Read, Grep, or Glob tool on a path outside them, Claude Code asks whether to allow that read.
 
 The prompt doesn't appear in non-interactive `-p` runs or background sessions; reads there run as before.
 
@@ -502,16 +493,18 @@ The following sections cover the order Claude Code evaluates an action in, how t
     Each action goes through a fixed decision order. The first matching step wins:
 
     1. Actions matching your [allow, ask, or deny rules](/docs/en/permissions#manage-permissions) resolve immediately, with these exceptions:
-       * Writes to [protected paths](#protected-paths) route to the classifier even when an allow rule matches
+       * Writes to [protected paths](#protected-paths) route to the classifier even when an allow rule matches. When the protected path is the file that a symlinked settings file points to, the write can prompt you instead, as the [protected paths](#protected-paths) list describes
        * No allow rule approves `rm` and `rmdir` removals targeting a [critical path](#critical-paths)
        * MCP tools marked [`requiresUserInteraction`](/docs/en/mcp#require-approval-for-a-specific-tool) prompt you directly even when an allow rule matches, and so do connector tools [your organization set to `ask`](/docs/en/mcp#organization-controls-on-connector-tools) in sessions where that setting reaches Claude Code
        * A shell command that carries [per-command allowed domains](/docs/en/sandboxing#per-command-allowed-domains-in-auto-mode) also routes to the classifier even when an allow rule matches, because a rule approves the command, not its hosts
        * Ask rules that match on a command's content, such as `Bash(git push *)`, fall back to a permission prompt
        * A write that the [symlink check](/docs/en/permissions#symlinks) resolves to a protected path prompts you when the path Claude requested isn't itself protected
+       * A read from a [network path](/docs/en/permissions#network-paths) prompts you even when an allow rule matches
     2. Read-only actions and file edits in your working directory are auto-approved, except writes to [protected paths](#protected-paths) and [the first read outside the working directories](#first-read-outside-the-working-directories), which prompts you
        * In a session with [server-side classifier review](#server-side-classifier-review), read-only and [sandboxed](/docs/en/sandboxing#sandbox-modes) shell commands wait for that review and are blocked if it flags them
        * A write inside your working directory that the [symlink check](/docs/en/permissions#symlinks) resolves to a location outside it prompts you
        * When Claude reads an [artifact someone else made](/docs/en/artifacts#read-an-artifact-shared-with-you), the approval cases listed in that section apply
+       * A read from a [network path](/docs/en/permissions#network-paths) prompts you
     3. Everything else goes to the classifier, apart from [critical-path removals](#critical-paths) under their default handling. The connector tools and `requiresUserInteraction` MCP tools that prompt you directly in step 1 never reach the classifier either, so neither an org-required approval nor a consent step is auto-approved
     4. If the classifier blocks, Claude receives the reason. In most sessions the reason names the rule the classifier matched, such as `[Data Exfiltration]`, rather than giving a written explanation; see [Review denials](/docs/en/auto-mode-config#review-denials)
 
@@ -563,7 +556,7 @@ If you set `dontAsk` mode, Claude Code auto-denies every tool call that would ot
 
 Claude Code denies calls matching your explicit [`ask` rules](/docs/en/permissions#manage-permissions) rather than prompting. It also denies the built-in `AskUserQuestion` tool even if your allow rules match it, and does the same to connector tools [your organization set to `ask`](/docs/en/mcp#organization-controls-on-connector-tools) in sessions where that setting reaches Claude Code. It denies MCP tools marked [`_meta["anthropic/requiresUserInteraction"]`](/docs/en/mcp#require-approval-for-a-specific-tool) the same way, because their approval card needs an answer this mode never collects.
 
-`rm` and `rmdir` removals targeting a [critical path](#critical-paths), such as `rm -rf /` and `rm -rf ~`, are denied even when an allow rule matches them or a `PreToolUse` hook allows them.
+`rm` and `rmdir` removals targeting a [critical path](#critical-paths), such as `rm -rf /` and `rm -rf ~`, are denied even when an allow rule matches them or a `PreToolUse` hook allows them. A read from a [network path](/docs/en/permissions#network-paths) is denied the same way.
 
 [Cloud sessions](/docs/en/claude-code-on-the-web) ignore `defaultMode: "dontAsk"`; see [bypassPermissions](#skip-all-checks-with-bypasspermissions-mode) for details.
 
@@ -602,14 +595,19 @@ The `--dangerously-skip-permissions` flag is equivalent.
 
 Claude Code refuses `bypassPermissions` in a session you start with [`--restricted`](/docs/en/cli-reference#cli-flags). `--restricted` requires Claude Code v2.1.248 or later.
 
-The first time you start an interactive session with this mode enabled, Claude Code shows a warning dialog asking you to accept responsibility for actions taken without permission checks:
+<span id="bypass-permissions-acceptance" />The first time you start an interactive session with this mode enabled, Claude Code shows a warning dialog asking you to accept responsibility for actions taken without permission checks:
 
 * **If you accept**: Claude Code sets `skipDangerousModePermissionPrompt` to `true` in `~/.claude/settings.json`, so later sessions skip the dialog. To see the dialog again, remove the key from that file or set it to `false`. The [`skipDangerousModePermissionPrompt` reference](/docs/en/settings-reference#skipdangerousmodepermissionprompt) lists the other settings files where you or your organization can set it.
 * **If you decline**: Claude Code exits.
 
-In [non-interactive mode](/docs/en/headless) no dialog is shown, and a [background session](/docs/en/agent-view) started with `--bg` is refused until you've accepted the dialog in an interactive session.
+In [non-interactive mode](/docs/en/headless) no dialog is shown. A [background session](/docs/en/agent-view) honors your acceptance when it's recorded in user or managed settings:
 
-On Linux and macOS, Claude Code refuses to start in this mode when running as root or under `sudo`:
+* With no acceptance recorded, `claude --bg --permission-mode bypassPermissions` is refused until you accept the dialog in an interactive session.
+* With `skipDangerousModePermissionPrompt` set only in `.claude/settings.local.json`, the background session starts with the bypass request ignored and pins the notice `Bypass permissions was requested at launch and ignored · if that was you, ~/.claude/settings.json needs "skipDangerousModePermissionPrompt": true`. Add that key to `~/.claude/settings.json`, then start a new background session. The session showing the notice still runs:
+  * With `--allow-dangerously-skip-permissions` ignored, `bypassPermissions` is left out of its `Shift+Tab` cycle.
+  * With `--permission-mode bypassPermissions` or `--dangerously-skip-permissions` ignored, the session starts in Manual mode instead.
+
+On Linux and macOS, Claude Code refuses to start in `bypassPermissions` mode when running as root or under `sudo`:
 
 ```text theme={null}
 --dangerously-skip-permissions cannot be used with root/sudo privileges for security reasons
@@ -662,6 +660,7 @@ Protected directories:
   * Markdown files in the project's [auto memory](/docs/en/memory#storage-location) directory, such as `~/.claude/projects/<project>/memory/`, in a session started without `--restricted`
   * Markdown files in a [subagent memory](/docs/en/sub-agents#enable-persistent-memory) directory, such as `.claude/agent-memory/`, in a session started without `--restricted`
 * A directory you loaded with [`--plugin-dir`](/docs/en/plugins/mods/create#change-a-mod-with-claude), because Claude Code reloads and runs a mod's code from it when a file changes
+* `~/.claude/dev-mods/`, or `dev-mods/` in the directory [`CLAUDE_CONFIG_DIR`](/docs/en/env-vars) points to, where Claude saves the [mods it writes for you](/docs/en/plugins/mods/create#ask-claude-for-a-mod)
 
 Protected files:
 
@@ -674,6 +673,7 @@ Protected files:
 * `.devcontainer.json`
 * `.ripgreprc`, `pyrightconfig.json`
 * `.mcp.json`, `.claude.json`
+* The file that your user, project, or local [settings file](/docs/en/settings#settings-files-and-who-they-affect) points to when the settings file is itself a symbolic link, for example into a dotfiles repository. In the modes that route protected-path writes to the classifier, a write to this file prompts you instead, even when an allow rule matches. If the file's own path is also that of a settings file, such as `.claude/settings.json` in another folder, the write goes to the classifier as other protected-path writes do
 
 ## Critical paths
 
@@ -689,10 +689,12 @@ Claude Code treats an `rm` or `rmdir` target as a critical path when it is any o
 
 * The filesystem root
 * Top-level directories, meaning any direct child of the root, such as `/usr`, `/etc`, or `/data`
-* Your home directory
-* Windows drive roots and their top-level directories, such as `C:\` and `C:\Windows`
+* Your home directory. On Windows, its 8.3 short name counts too, such as `C:\Users\LONGNA~1`
+* Windows drive roots and their top-level directories, such as `C:\` and `C:\Windows`. Spellings such as `\\?\C:\` and `\\localhost\C$` count as `C:\`
 * Your working directory and its parents
 * Your additional working directories and their parents, but only when the removal is a glob under one of them, such as `rm -rf <dir>/*`. `rm -rf <dir>` on the directory itself doesn't trigger this check
+
+The checks on the home directory's 8.3 short name and on the `\\?\C:\` and `\\localhost\C$` spellings require Claude Code v2.1.292 or later.
 
 ### Other targets that count as critical paths
 
@@ -707,6 +709,7 @@ Claude Code also treats the following `rm` and `rmdir` targets as critical paths
 | A target that is only the output of a command substitution, when the `rm` is recursive | `rm -rf "$(pwd)"` | Claude Code can't check the target before the command runs |
 | A trailing command substitution after a critical path | `rm -rf ~/$(cmd)` | Claude Code checks the path that would remain if the substitution expanded empty, here your home directory |
 | A target that is only backslashes | `rm -rf "\\"` | Git Bash on Windows reads a lone backslash as the current drive's root, so the check applies on every platform |
+| A Windows path that names a volume by GUID instead of a drive letter | `rm -rf '\\?\Volume{GUID}\work\build'` | The path doesn't say which drive it's on, so it could be a critical path. Requires Claude Code v2.1.292 or later |
 | Some targets that end in `/*` or `/*/` | `rm -rf logs/*/*`, `rm -rf logs/*/`, `cd logs && rm -rf a/*` | Claude Code can't tell before the command runs which directories they reach |
 
 To turn off the check on a target that is only command substitution output, set [`CLAUDE_CODE_DISABLE_SUBSTITUTION_RM_PROMPT=1`](/docs/en/env-vars#variables) in the environment that launches Claude Code.

@@ -15,6 +15,7 @@ Methods for interacting with Shiny app multiple UI component controller.
 | [playwright.controller.Accordion](https://shiny.posit.co/py/api/testing/playwright.controller.Accordion.html#shiny.playwright.controller.Accordion) | Controller for [`shiny.ui.accordion`](https://shiny.posit.co/py/api/core/ui.accordion.html#shiny.ui.accordion). |
 | [playwright.controller.AccordionPanel](https://shiny.posit.co/py/api/testing/playwright.controller.AccordionPanel.html#shiny.playwright.controller.AccordionPanel) | Controller for [`shiny.ui.accordion_panel`](https://shiny.posit.co/py/api/core/ui.accordion_panel.html#shiny.ui.accordion_panel). |
 | [playwright.controller.Card](https://shiny.posit.co/py/api/testing/playwright.controller.Card.html#shiny.playwright.controller.Card) | Controller for [`shiny.ui.card`](https://shiny.posit.co/py/api/core/ui.card.html#shiny.ui.card). |
+| [playwright.controller.Offcanvas](https://shiny.posit.co/py/api/testing/playwright.controller.Offcanvas.html#shiny.playwright.controller.Offcanvas) | Controller for [`shiny.ui.offcanvas`](https://shiny.posit.co/py/api/core/ui.offcanvas.html#shiny.ui.offcanvas). |
 | [playwright.controller.Popover](https://shiny.posit.co/py/api/testing/playwright.controller.Popover.html#shiny.playwright.controller.Popover) | Controller for [`shiny.ui.popover`](https://shiny.posit.co/py/api/core/ui.popover.html#shiny.ui.popover). |
 | [playwright.controller.Sidebar](https://shiny.posit.co/py/api/testing/playwright.controller.Sidebar.html#shiny.playwright.controller.Sidebar) | Controller for [`shiny.ui.sidebar`](https://shiny.posit.co/py/api/core/ui.sidebar.html#shiny.ui.sidebar). |
 | [playwright.controller.Toast](https://shiny.posit.co/py/api/testing/playwright.controller.Toast.html#shiny.playwright.controller.Toast) | Controller for [`shiny.ui.toast`](https://shiny.posit.co/py/api/core/ui.toast.html#shiny.ui.toast). |
@@ -106,8 +107,15 @@ Render output in a variety of ways.
 | [playwright.controller.OutputPlot](https://shiny.posit.co/py/api/testing/playwright.controller.OutputPlot.html#shiny.playwright.controller.OutputPlot) | Controller for [`shiny.ui.output_plot`](https://shiny.posit.co/py/api/core/ui.output_plot.html#shiny.ui.output_plot). |
 | [playwright.controller.OutputTable](https://shiny.posit.co/py/api/testing/playwright.controller.OutputTable.html#shiny.playwright.controller.OutputTable) | Controller for [`shiny.ui.output_table`](https://shiny.posit.co/py/api/core/ui.output_table.html#shiny.ui.output_table). |
 | [playwright.controller.OutputText](https://shiny.posit.co/py/api/testing/playwright.controller.OutputText.html#shiny.playwright.controller.OutputText) | Controller for [`shiny.ui.output_text`](https://shiny.posit.co/py/api/core/ui.output_text.html#shiny.ui.output_text). |
-| [playwright.controller.OutputTextVerbatim](https://shiny.posit.co/py/api/testing/playwright.controller.OutputTextVerbatim.html#shiny.playwright.controller.OutputTextVerbatim) | Controller for [`shiny.ui.output_text_verbatim`](https://shiny.posit.co/py/api/core/ui.output_text_verbatim.html#shiny.ui.output_text_verbatim). |
 | [playwright.controller.OutputUi](https://shiny.posit.co/py/api/testing/playwright.controller.OutputUi.html#shiny.playwright.controller.OutputUi) | Controller for [`shiny.ui.output_ui`](https://shiny.posit.co/py/api/core/ui.output_ui.html#shiny.ui.output_ui). |
+
+## App test values [Anchor](https://shiny.posit.co/py/api/testing/\#app-test-values)
+
+Read a session’s test-mode snapshot of input, output, and export values.
+
+|     |     |
+| --- | --- |
+| [playwright.controller.AppTestValues](https://shiny.posit.co/py/api/testing/playwright.controller.AppTestValues.html#shiny.playwright.controller.AppTestValues) | Read a Shiny session’s test-mode snapshot of `input`, `output`, and `export` values from a running app. |
 
 ## Playwright Expect [Anchor](https://shiny.posit.co/py/api/testing/\#playwright-expect)
 
@@ -131,6 +139,22 @@ Fixtures used for testing Shiny apps with Pytest.
 | [pytest.create\_app\_fixture](https://shiny.posit.co/py/api/testing/pytest.create_app_fixture.html#shiny.pytest.create_app_fixture) | Create a fixture for a local Shiny app directory. |
 | [pytest.ScopeName](https://shiny.posit.co/py/api/testing/pytest.ScopeName.html#shiny.pytest.ScopeName) | Pytest fixture scopes |
 
+## Test server [Anchor](https://shiny.posit.co/py/api/testing/\#test-server)
+
+Run a Shiny app’s server function in memory, without a browser.
+
+|     |     |
+| --- | --- |
+| [testserver.test\_server](https://shiny.posit.co/py/api/testing/testserver.test_server.html#shiny.testserver.test_server) | Run a Shiny server function, Express app, or `shiny.App` in memory for testing. |
+| [testserver.test\_server\_async](https://shiny.posit.co/py/api/testing/testserver.test_server_async.html#shiny.testserver.test_server_async) | The `async` counterpart to `test_server`, for use in `async` tests. |
+| [testserver.TestServerSession](https://shiny.posit.co/py/api/testing/testserver.TestServerSession.html#shiny.testserver.TestServerSession) | An in-memory Shiny session driven from ordinary (non-async) test code. |
+| [testserver.AsyncTestServerSession](https://shiny.posit.co/py/api/testing/testserver.AsyncTestServerSession.html#shiny.testserver.AsyncTestServerSession) | An in-memory Shiny session driven from async test code. |
+| [testserver.TestServerScope](https://shiny.posit.co/py/api/testing/testserver.TestServerScope.html#shiny.testserver.TestServerScope) | A namespaced view of a `TestServerSession`. |
+| [testserver.AsyncTestServerScope](https://shiny.posit.co/py/api/testing/testserver.AsyncTestServerScope.html#shiny.testserver.AsyncTestServerScope) | A namespaced view of an `AsyncTestServerSession`. |
+| [testserver.TestServerValue](https://shiny.posit.co/py/api/testing/testserver.TestServerValue.html#shiny.testserver.TestServerValue) | One input, output, or exported value, and how it turned out. |
+| [testserver.TestServerValues](https://shiny.posit.co/py/api/testing/testserver.TestServerValues.html#shiny.testserver.TestServerValues) | A point-in-time snapshot of a test session’s input, output, and export values. |
+| [testserver.DEFAULT\_CLIENT\_DATA](https://shiny.posit.co/py/api/testing/testserver.DEFAULT_CLIENT_DATA.html#shiny.testserver.DEFAULT_CLIENT_DATA) | Stand-ins for what a browser would report, sent when the session starts. |
+
 ## Run [Anchor](https://shiny.posit.co/py/api/testing/\#run)
 
 Methods for starting a local Shiny app in the background
@@ -139,3 +163,9 @@ Methods for starting a local Shiny app in the background
 | --- | --- |
 | [run.run\_shiny\_app](https://shiny.posit.co/py/api/testing/run.run_shiny_app.html#shiny.run.run_shiny_app) | Run a Shiny app in a subprocess. |
 | [run.ShinyAppProc](https://shiny.posit.co/py/api/testing/run.ShinyAppProc.html#shiny.run.ShinyAppProc) | Class that represents a running Shiny app process. |
+
+## Deprecated [Anchor](https://shiny.posit.co/py/api/testing/\#deprecated)
+
+|     |     |
+| --- | --- |
+| [playwright.controller.OutputTextVerbatim](https://shiny.posit.co/py/api/testing/playwright.controller.OutputTextVerbatim.html#shiny.playwright.controller.OutputTextVerbatim) | Deprecated. Use [`OutputCode`](https://shiny.posit.co/py/api/testing/playwright.controller.OutputCode.html#shiny.playwright.controller.OutputCode) instead. |

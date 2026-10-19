@@ -12,14 +12,14 @@ This command asks you a series of questions about what kind of app you want to c
 and then provides all the boilerplate code you need to get started with a working app.
 
 ```bash
-shiny create
+uvx shiny create
 ```
 
 ![Running the shiny create command from a terminal, accepting default options, opening in Positron, and running the Shiny Application with the Run button.](assets/shiny-create-positron.mp4){class="img-shadow"}
 
 You can also get started faster by using one of our [starter templates](/templates/).
 There are templates for common use cases.
-For example, [data dashboards](templates/dashboard/), [applications](/templates/database-explorer/), [streaming](/templates/monitor-database/) updates, or [data entry](/templates/survey/).
+For example, [data dashboards](/templates/dashboard/), [applications](/templates/database-explorer/), [streaming](/templates/monitor-database/) updates, or [data entry](/templates/survey/).
 
 
 ## Run your Shiny application

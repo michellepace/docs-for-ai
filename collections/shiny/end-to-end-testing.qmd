@@ -35,6 +35,13 @@ Imagine you've built a beautiful, interactive Shiny app.  You want to make sure 
 
 Learn more at the [official Playwright documentation](https://playwright.dev/python/).
 
+::: {.callout-tip}
+## Do you need a browser for this test?
+
+End-to-end tests are the only way to check what the user actually sees, but they're also the slowest to run and the most fiddly to keep passing.
+If a test only cares about what your *server* computes — that an output has the right value, that a bad input raises — the [`local_server` fixture](unit-testing.qmd#testing-the-server-function) can check it in memory, with no browser at all.
+:::
+
 ### Let's Build and Test a Simple Shiny App!
 
 We'll start with a super simple example to show you the basics.  Follow along, and you'll be writing your own tests in no time!
@@ -77,13 +84,17 @@ Now for the exciting part – writing the test code!
 2.  **Copy and paste this code:**
 
 ```python
-from shiny.playwright import controller
-from shiny.run import ShinyAppProc
 from playwright.sync_api import Page
+from shiny.playwright import controller
+from shiny.pytest import create_app_fixture
+from shiny.run import ShinyAppProc
 
-def test_basic_app(page: Page, local_app: ShinyAppProc) -> None:
+app = create_app_fixture(["app.py"])
+
+
+def test_basic_app(page: Page, app: ShinyAppProc) -> None:
     # Navigate to the app URL when it's ready
-    page.goto(local_app.url)
+    page.goto(app.url)
 
     # Controller objects for interacting with specific Shiny components
     txt = controller.OutputText(page, "txt")
@@ -100,7 +111,7 @@ def test_basic_app(page: Page, local_app: ShinyAppProc) -> None:
 - **Understand role of Fixtures**
     - **ShinyAppProc**: Manages a Shiny application subprocess, handling lifecycle (startup, shutdown) and providing access to output streams.
     - **page**: Playwright object representing the browser tab.
-    - **local_app**: Running instance of the Shiny application.
+    - **app**: Running instance of the Shiny application.
 
 -  **Understand role of Controllers**
 
@@ -123,7 +134,7 @@ Before you run the test, you need to install a couple of things:
 1.  **Install pytest and pytest-playwright**: Open your terminal (or command prompt) and type:
 
 ```bash
-pip install pytest pytest-playwright
+uv pip install pytest pytest-playwright
 ```
 
 2.  **Navigate to your app's directory**: In the terminal, use the `cd` command to go to the folder where you saved `app.py` and `test_basic_app.py`.
@@ -131,7 +142,7 @@ pip install pytest pytest-playwright
 3.  **Run the test**: Type the following command and press Enter:
 
 ```bash
-pytest
+uv run pytest
 ```
 
 You should see output similar to this:
@@ -153,13 +164,13 @@ What does this mean?
 If you want to see what Playwright is doing, you can run the test in "headed" mode. This will open a browser window and show you the interactions.
 
 ```bash
-pytest --headed
+uv run pytest --headed
 ```
 
 You can also specify a particular browser:
 
 ```bash
-pytest --browser firefox
+uv run pytest --browser firefox
 ```
 
 ### Adding Tests to an Existing Shiny App
@@ -170,7 +181,7 @@ If you already have a Shiny app, you can easily add tests:
 1. Run the shiny add test command:
 
 ```bash
-shiny add test
+uv run shiny add test
 ```
 
 1. Answer the prompts: It will ask for the path to your app file (e.g., `app.py`) and a name for your test file (e.g., `test_myapp.py`). Remember, the test file name must start with `test_`.
@@ -186,20 +197,20 @@ Before generating tests, make sure you have:
 - Shiny testing dependencies installed. If you haven't installed the extras yet:
 
 ```bash
-pip install "shiny[add-test]"
+uv pip install "shiny[add-test]"
 ```
 
 #### Choosing a provider for generating tests
 
 ```bash
 # Anthropic (default)
-shiny add test --app app.py
+uv run shiny add test --app app.py
 
 # OpenAI (will use gpt-5)
-shiny add test --app app.py --provider openai
+uv run shiny add test --app app.py --provider openai
 
 # explicitly use gpt-5-mini model
-shiny add test --app app.py --provider openai --model gpt-5-mini
+uv run shiny add test --app app.py --provider openai --model gpt-5-mini
 ```
 
 ### Troubleshooting Common Issues
@@ -212,6 +223,8 @@ shiny add test --app app.py --provider openai --model gpt-5-mini
 
 You've taken your first steps into the world of Shiny app testing! Here are some resources to help you learn more:
 
+- [Test mode](test-mode.qmd) - Assert on server-side state (inputs, outputs, and internal reactive values) in your end-to-end tests.
+- [Unit testing](unit-testing.qmd#testing-the-server-function) - Test the same server-side state without a browser, with the `local_server` fixture.
 - [Shiny testing API documentation](https://shiny.posit.co/py/api/testing/) - This is your go-to guide for all the available testing methods in Shiny.
 - [Playwright documentation](https://playwright.dev/python/) - Learn more about Playwright's powerful features.
 - [pytest documentation](https://docs.pytest.org/en/stable/)
@@ -224,7 +237,7 @@ If your app uses [OpenTelemetry tracing](opentelemetry.qmd), you may want to dis
 
 ```bash
 export SHINY_OTEL_COLLECT=none
-pytest
+uv run pytest
 ```
 :::
 

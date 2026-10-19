@@ -10,7 +10,7 @@ description = "Curate and index clean docs for targeted AI context"
 readme = "README.md"
 requires-python = ">=3.15"
 dependencies = [
-  "firecrawl-py>=4.50.0", # scrape docs to markdown
+  "firecrawl-py>=4.53.0", # scrape docs to markdown
 ]
 
 [project.scripts]
@@ -24,7 +24,7 @@ dev = [
   "pyright>=1.1.414",
   "pytest>=9.1.1",
   "rich>=15.0.0",
-  "ruff>=0.17.0",
+  "ruff>=0.17.1",
 ]
 
 

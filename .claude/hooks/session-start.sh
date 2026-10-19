@@ -8,6 +8,12 @@ fi
 
 cd "$CLAUDE_PROJECT_DIR"
 settings=.claude/settings.json
+uv_version=0.13.1 # match local uv (and uv-pre-commit rev)
+
+# Cloud image ships an older uv; swap it before anything else runs uv
+if [ "$(uv self version --short)" != "$uv_version" ]; then
+  uv self update "$uv_version" || echo "⚠️ uv not updated to $uv_version" >&2
+fi
 
 uv sync
 uv run pre-commit install

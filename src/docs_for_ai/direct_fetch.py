@@ -19,7 +19,11 @@ HTTP_NOT_FOUND = 404
 FETCH_TIMEOUT_SECONDS = 30
 USER_AGENT = "docs-for-ai-curate/1.0"
 DIRECT_FETCH_RULES_PATH = Path(__file__).parent / "direct-fetch-rules.toml"
-FRONTMATTER_TITLE_RE = re.compile(r"^title:\s*(?P<val>.+?)\s*$", re.MULTILINE)
+# In precedence order; Quarto index pages may set only `pagetitle`.
+FRONTMATTER_TITLE_KEYS = ("title", "pagetitle")
+FRONTMATTER_TITLE_RE = re.compile(
+    rf"^(?P<key>{'|'.join(FRONTMATTER_TITLE_KEYS)}):[ \t]*(?P<val>.*)$", re.MULTILINE
+)
 ANCHOR_LINK_RE = re.compile(r"^\[(?P<text>.+?)\]\(#.*\)$")
 # Accepted shapes: a blob file on main/master ending in .md/.mdx/.qmd.
 # Groups: owner, repo, ref, path-without-extension, extension.
@@ -232,24 +236,32 @@ def github_filename_from_blob_url(url: str) -> str:
     return f"{slug or 'index'}.{match.group(5).lower()}"
 
 
-def _title_from_frontmatter(content: str) -> str | None:
-    """The title declared in the document's YAML frontmatter, if any."""
-    if not content.startswith("---\n"):
-        return None
-    end = content.find("\n---", len("---\n"))
-    if end == -1:
-        return None
-    match = FRONTMATTER_TITLE_RE.search(content[len("---\n") : end])
-    if match is None:
-        return None
-    return match.group("val").strip().strip("\"'") or None
+def _split_frontmatter(content: str) -> tuple[str, str]:
+    """`(frontmatter, body)`; frontmatter is empty when the doc has none."""
+    text = content.lstrip()
+    if text.startswith("---\n"):
+        end = text.find("\n---", len("---\n"))
+        if end != -1:
+            return text[len("---\n") : end], text[end + len("\n---") :]
+    return "", text
 
 
-def _title_from_h1(content: str) -> str | None:
-    """The document's first H1 heading as plain text, if any."""
+def _title_from_frontmatter(frontmatter: str) -> str | None:
+    """The first non-empty value among `FRONTMATTER_TITLE_KEYS`, if any."""
+    values = {
+        match.group("key"): match.group("val").strip().strip("\"'")
+        for match in FRONTMATTER_TITLE_RE.finditer(frontmatter)
+    }
+    return next(
+        (values[key] for key in FRONTMATTER_TITLE_KEYS if values.get(key)), None
+    )
+
+
+def _title_from_h1(body: str) -> str | None:
+    """The first H1 heading in a document body as plain text, if any."""
     # A '#' line inside a code fence isn't a heading
     in_fence = False
-    for line in content.splitlines():
+    for line in body.splitlines():
         stripped = line.strip()
         if stripped.startswith(("```", "~~~")):
             in_fence = not in_fence
@@ -291,10 +303,11 @@ def _title_from_rst(content: str) -> str | None:
 
 
 def extract_md_title(content: str, markdown_url: str) -> str:
-    """Resolve a title: frontmatter, else first H1, else the URL filename."""
+    """Resolve a title: frontmatter, else the body's first H1, else the URL."""
+    frontmatter, body = _split_frontmatter(content)
     return (
-        _title_from_frontmatter(content)
-        or _title_from_h1(content)
+        _title_from_frontmatter(frontmatter)
+        or _title_from_h1(body)
         or _title_from_url(markdown_url)
     )
 

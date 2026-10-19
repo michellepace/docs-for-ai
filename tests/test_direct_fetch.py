@@ -397,7 +397,7 @@ class TestGithubFilenameFromBlobUrl:
 
 
 class TestExtractMarkdownTitle:
-    """Markdown title: frontmatter → first H1 → URL path fallback."""
+    """Markdown title: frontmatter title → pagetitle → body H1 → URL path."""
 
     @pytest.mark.parametrize(
         ("content", "url", "expected"),
@@ -419,6 +419,27 @@ class TestExtractMarkdownTitle:
             ),
             ("---\ndescription: x\n---\n# Python versions\n", "x", "Python versions"),
             ("---\ntitle: ''\n---\n# Real Heading\n", "x", "Real Heading"),
+            (
+                "---\ntitle:\nauthor: Ada\n---\n# Real Heading\n",
+                "x",
+                "Real Heading",
+            ),
+            (
+                '---\npagetitle: "Shiny Components"\n---\n# Heading\n',
+                "x",
+                "Shiny Components",
+            ),
+            (
+                "---\npagetitle: Shiny Chatbots\ntitle: Chatbots\n---\n",
+                "x",
+                "Chatbots",
+            ),
+            ("\n---\ntitle: RAG\n---\n# Not this\n", "x", "RAG"),
+            (
+                "---\nlisting:\n  # sort: false keeps order\n---\n# Real Heading\n",
+                "x",
+                "Real Heading",
+            ),
             ("# First steps\n\nbody\n", "x", "First steps"),
             ("# [CLI Reference](#cli-reference)\n", "x", "CLI Reference"),
             ("```python\n# not a heading\n```\n# Real Title\n", "x", "Real Title"),
@@ -440,6 +461,11 @@ class TestExtractMarkdownTitle:
             "strips-single-quotes",
             "missing-title-key-falls-to-h1",
             "empty-title-falls-to-h1",
+            "empty-title-does-not-take-the-next-line",
+            "pagetitle-names-a-page-without-title",
+            "title-wins-over-pagetitle",
+            "frontmatter-after-leading-blank-line",
+            "yaml-comment-in-frontmatter-is-not-an-h1",
             "first-h1-without-frontmatter",
             "unwraps-h1-anchor-link",
             "ignores-hash-in-code-fence",

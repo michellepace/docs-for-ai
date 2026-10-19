@@ -1,8 +1,50 @@
-Shiny for Python can be installed can be installed via `pip` or `conda`.
+Shiny for Python can be installed via `uv`, `pip`, or `conda`.
 
+- [uv](https://shiny.posit.co/py/get-started/install.html)
 - [pip](https://shiny.posit.co/py/get-started/install.html)
 - [conda](https://shiny.posit.co/py/get-started/install.html)
-- [uv](https://shiny.posit.co/py/get-started/install.html)
+
+You can install `shiny` using `uv pip`
+
+```
+uv pip install shiny
+```
+
+If you already have `shiny` installed, and you want to upgrade the `shiny` packages, you will need to use the `--upgrade` flag.
+
+```
+uv pip install --upgrade shiny htmltools
+```
+
+NoteVirtual environments
+
+When building Shiny applications, especially in a production environment, it is best practice to use a virtual environment.
+
+Why use a virtual environment?
+
+- Keeps your application’s dependencies isolated from other global Python packages.
+- Makes your application easier to [deploy and share](https://shiny.posit.co/py/get-started/deploy.html).
+- Helps avoid version conflicts between different projects.
+
+You can also use `uv` to create virtual environments with `uv venv` to create a Python `.venv` directory.
+
+```
+# Create and move into your shiny application directory
+mkdir myapp
+cd myapp
+
+# Create a virtual environment, defaults to .venv
+uv venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+# .venv\Scripts\Activate.ps1 # on Windows (PowerShell)
+
+# Your prompt will prepend with the current directory name
+
+# Install into venv
+uv pip install shiny
+```
 
 Before installing you may want to upgrade `pip` and install `wheel`. This will help with making your installations faster and less error-prone.
 
@@ -100,47 +142,9 @@ conda activate shiny
 # Your prompt will be pre-pended with shiny
 ```
 
-You can install `shiny` using `uv pip`
+### Agent Skills [Anchor](https://shiny.posit.co/py/get-started/install.html\#agent-skills)
 
-```
-uv pip install shiny
-```
-
-If you already have `shiny` installed, and you want to upgrade the `shiny` packages, you will need to use the `--upgrade` flag.
-
-```
-uv pip install --upgrade shiny htmltools
-```
-
-NoteVirtual environments
-
-When building Shiny applications, especially in a production environment, it is best practice to use a virtual environment.
-
-Why use a virtual environment?
-
-- Keeps your application’s dependencies isolated from other global Python packages.
-- Makes your application easier to [deploy and share](https://shiny.posit.co/py/get-started/deploy.html).
-- Helps avoid version conflicts between different projects.
-
-You can also use `uv` to create virtual environments with `uv venv` to create a Python `.venv` directory.
-
-```
-# Create and move into your shiny application directory
-mkdir myapp
-cd myapp
-
-# Create a virtual environment, defaults to .venv
-uv venv
-
-# Activate the virtual environment
-source .venv/bin/activate
-# .venv\Scripts\Activate.ps1 # on Windows (PowerShell)
-
-# Your prompt will prepend with the current directory name
-
-# Install into venv
-uv pip install shiny
-```
+If you use a coding agent such as Claude Code or Cursor, we also recommend installing Shiny’s bundled [Agent Skills](https://shiny.posit.co/py/get-started/agent-skills.html). They teach your agent how to build, style, test, and debug Shiny for Python apps using shiny’s public APIs.
 
 ## Positron [Anchor](https://shiny.posit.co/py/get-started/install.html\#positron)
 

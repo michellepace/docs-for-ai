@@ -59,7 +59,8 @@ Reactively render output.
 | [express.render.DataGrid](https://shiny.posit.co/py/api/express/express.render.DataGrid.html#shiny.express.render.DataGrid) | Holds the data and options for a [`data_frame`](https://shiny.posit.co/py/api/core/render.data_frame.html#shiny.render.data_frame) output, for a spreadsheet-like view. |
 | [express.render.text](https://shiny.posit.co/py/api/express/express.render.text.html#shiny.express.render.text) | Reactively render text. |
 | [express.render.ui](https://shiny.posit.co/py/api/express/express.render.ui.html#shiny.express.render.ui) | Reactively render HTML content. |
-| [express.render.download](https://shiny.posit.co/py/api/express/express.render.download.html#shiny.express.render.download) | Decorator to register a function to handle a download. |
+| [express.render.download\_button](https://shiny.posit.co/py/api/express/express.render.download_button.html#shiny.express.render.download_button) | Reactively render a download button. |
+| [express.render.download\_link](https://shiny.posit.co/py/api/express/express.render.download_link.html#shiny.express.render.download_link) | Reactively render a download link. |
 | [express.render.image](https://shiny.posit.co/py/api/express/express.render.image.html#shiny.express.render.image) | Reactively render a image file as an HTML image. |
 | [express.render.express](https://shiny.posit.co/py/api/express/express.render.express.html#shiny.express.render.express) | Reactively render HTML content with output captured as in Shiny Express |
 
@@ -70,14 +71,17 @@ Tools for creating, arranging, and styling UI components.
 |     |     |
 | --- | --- |
 | [express.ui.page\_opts](https://shiny.posit.co/py/api/express/express.ui.page_opts.html#shiny.express.ui.page_opts) | Set page-level options for the current app. |
+| [express.ui.page\_html](https://shiny.posit.co/py/api/express/express.ui.page_html.html#shiny.express.ui.page_html) | Create a page from a complete HTML document that you own. |
 | [express.ui.sidebar](https://shiny.posit.co/py/api/express/express.ui.sidebar.html#shiny.express.ui.sidebar) | Context manager for sidebar element |
 | [express.ui.layout\_columns](https://shiny.posit.co/py/api/express/express.ui.layout_columns.html#shiny.express.ui.layout_columns) | Context manager for responsive, column-based grid layouts, based on a 12-column grid. |
 | [express.ui.layout\_column\_wrap](https://shiny.posit.co/py/api/express/express.ui.layout_column_wrap.html#shiny.express.ui.layout_column_wrap) | Context manager for a grid-like, column-first layout |
 | [express.ui.card](https://shiny.posit.co/py/api/express/express.ui.card.html#shiny.express.ui.card) | Context manager for Bootstrap card component |
 | [express.ui.card\_header](https://shiny.posit.co/py/api/express/express.ui.card_header.html#shiny.express.ui.card_header) | Context manager for a card header container |
+| [express.ui.card\_body](https://shiny.posit.co/py/api/express/express.ui.card_body.html#shiny.express.ui.card_body) | Card body container |
 | [express.ui.card\_footer](https://shiny.posit.co/py/api/express/express.ui.card_footer.html#shiny.express.ui.card_footer) | Context manager for a card footer container |
 | [express.ui.value\_box](https://shiny.posit.co/py/api/express/express.ui.value_box.html#shiny.express.ui.value_box) | Context manager for a value box |
 | [express.ui.value\_box\_theme](https://shiny.posit.co/py/api/express/express.ui.value_box_theme.html#shiny.express.ui.value_box_theme) | Value box theme |
+| [express.ui.offcanvas](https://shiny.posit.co/py/api/express/express.ui.offcanvas.html#shiny.express.ui.offcanvas) | Create an offcanvas panel. |
 | [express.ui.popover](https://shiny.posit.co/py/api/express/express.ui.popover.html#shiny.express.ui.popover) | Context manager for a popover |
 | [express.ui.tooltip](https://shiny.posit.co/py/api/express/express.ui.tooltip.html#shiny.express.ui.tooltip) | Context manager for a tooltip |
 | [express.ui.accordion](https://shiny.posit.co/py/api/express/express.ui.accordion.html#shiny.express.ui.accordion) | Context manager for a vertically collapsing accordion. |
@@ -107,6 +111,19 @@ Create a set of panels that can be navigated between.
 | [express.ui.insert\_nav\_panel](https://shiny.posit.co/py/api/express/express.ui.insert_nav_panel.html#shiny.express.ui.insert_nav_panel) | Create a new nav panel in an existing navset. |
 | [express.ui.remove\_nav\_panel](https://shiny.posit.co/py/api/express/express.ui.remove_nav_panel.html#shiny.express.ui.remove_nav_panel) | Remove a nav item from a navigation container. |
 | [express.ui.update\_nav\_panel](https://shiny.posit.co/py/api/express/express.ui.update_nav_panel.html#shiny.express.ui.update_nav_panel) | Show/hide a navigation item |
+
+## Bookmarking [Anchor](https://shiny.posit.co/py/api/express/\#bookmarking)
+
+Saving and restoring app state
+
+|     |     |
+| --- | --- |
+| [express.ui.input\_bookmark\_button](https://shiny.posit.co/py/api/express/express.ui.input_bookmark_button.html#shiny.express.ui.input_bookmark_button) | Button for bookmarking/sharing. |
+| [bookmark.restore\_input](https://shiny.posit.co/py/api/express/bookmark.restore_input.html#shiny.bookmark.restore_input) | Restore an input value |
+| [bookmark.Bookmark](https://shiny.posit.co/py/api/express/bookmark.Bookmark.html#shiny.bookmark.Bookmark) | A session’s bookmarking interface. |
+| [bookmark.BookmarkState](https://shiny.posit.co/py/api/express/bookmark.BookmarkState.html#shiny.bookmark.BookmarkState) | The state being written while a bookmark is saved. |
+| [bookmark.RestoreState](https://shiny.posit.co/py/api/express/bookmark.RestoreState.html#shiny.bookmark.RestoreState) | The state read back when a session is restored from a bookmark. |
+| [Integration](https://shiny.posit.co/py/api/express/bookmark_integration.html) | Decorators to set save and restore directories. |
 
 ## Chat interface [Anchor](https://shiny.posit.co/py/api/express/\#chat-interface)
 
@@ -187,6 +204,9 @@ Programmatically update input values.
 | [express.ui.update\_sidebar](https://shiny.posit.co/py/api/express/express.ui.update_sidebar.html#shiny.express.ui.update_sidebar) | Update a sidebar’s visibility. |
 | [express.ui.update\_tooltip](https://shiny.posit.co/py/api/express/express.ui.update_tooltip.html#shiny.express.ui.update_tooltip) | Update tooltip contents. |
 | [express.ui.update\_popover](https://shiny.posit.co/py/api/express/express.ui.update_popover.html#shiny.express.ui.update_popover) | Update the contents or title of a popover. |
+| [express.ui.hide\_offcanvas](https://shiny.posit.co/py/api/express/express.ui.hide_offcanvas.html#shiny.express.ui.hide_offcanvas) | Hide an offcanvas panel. |
+| [express.ui.show\_offcanvas](https://shiny.posit.co/py/api/express/express.ui.show_offcanvas.html#shiny.express.ui.show_offcanvas) | Show an offcanvas panel. |
+| [express.ui.toggle\_offcanvas](https://shiny.posit.co/py/api/express/express.ui.toggle_offcanvas.html#shiny.express.ui.toggle_offcanvas) | Toggle an offcanvas panel’s visibility. |
 | [express.ui.update\_accordion](https://shiny.posit.co/py/api/express/express.ui.update_accordion.html#shiny.express.ui.update_accordion) | Dynamically set accordions’ states. |
 | [express.ui.update\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.update_accordion_panel.html#shiny.express.ui.update_accordion_panel) | Dynamically update accordion panel contents. |
 | [express.ui.insert\_accordion\_panel](https://shiny.posit.co/py/api/express/express.ui.insert_accordion_panel.html#shiny.express.ui.insert_accordion_panel) | Insert an accordion panel into an existing accordion. |
@@ -234,7 +254,8 @@ Allow users to upload and download files.
 |     |     |
 | --- | --- |
 | [express.ui.input\_file](https://shiny.posit.co/py/api/express/express.ui.input_file.html#shiny.express.ui.input_file) | Create a file upload control that can be used to upload one or more files. |
-| [express.render.download](https://shiny.posit.co/py/api/express/express.render.download.html#shiny.express.render.download) | Decorator to register a function to handle a download. |
+| [express.render.download\_button](https://shiny.posit.co/py/api/express/express.render.download_button.html#shiny.express.render.download_button) | Reactively render a download button. |
+| [express.render.download\_link](https://shiny.posit.co/py/api/express/express.render.download_link.html#shiny.express.render.download_link) | Reactively render a download link. |
 
 ## Dynamic UI [Anchor](https://shiny.posit.co/py/api/express/\#dynamic-ui)
 
@@ -290,3 +311,9 @@ Tools for creating HTML/CSS/JS
 | --- | --- |
 | [express.is\_express\_app](https://shiny.posit.co/py/api/express/express.is_express_app.html#shiny.express.is_express_app) | Detect whether an app file is a Shiny express app |
 | [express.wrap\_express\_app](https://shiny.posit.co/py/api/express/express.wrap_express_app.html#shiny.express.wrap_express_app) | Wrap a Shiny Express mode app into a Shiny `App` object. |
+
+## Deprecated [Anchor](https://shiny.posit.co/py/api/express/\#deprecated)
+
+|     |     |
+| --- | --- |
+| [express.render.download](https://shiny.posit.co/py/api/express/express.render.download.html#shiny.express.render.download) | Deprecated. Use [`download_button`](https://shiny.posit.co/py/api/core/render.download_button.html#shiny.render.download_button) (or [`download_link`](https://shiny.posit.co/py/api/core/render.download_link.html#shiny.render.download_link)) instead. |

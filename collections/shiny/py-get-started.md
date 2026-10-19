@@ -21,6 +21,8 @@ def plot():
     )
 ```
 
+Starting Python…
+
 ## Why Shiny? [Anchor](https://shiny.posit.co/py/get-started/\#why-shiny)
 
 Shiny for Python empowers you to bring your data to life with interactive applications that are easy to build, customize, and share.
@@ -33,7 +35,7 @@ Create sophisticated web apps in pure Python, using libraries you already know a
 
 Build delightful user interfaces using an extensive library of simple yet composable [components](https://shiny.posit.co/py/components/) and [layouts](https://shiny.posit.co/py/layouts/). As your app grows, you’ll also appreciate advanced features like [modules](https://shiny.posit.co/py/docs/modules.html), [theming](https://shiny.posit.co/py/docs/ui-customize.html), [non-blocking tasks](https://shiny.posit.co/py/docs/nonblocking.html), [bookmarking](https://shiny.posit.co/blog/posts/shiny-python-1.4/), and more.
 
-- **Ready for AI**
+- **Easily integrate AI into your applications**
 
 Quickly build [beautiful AI apps](https://shiny.posit.co/py/docs/genai-inspiration.html) like [chatbots](https://shiny.posit.co/py/docs/genai-chatbots.html) and other [streaming](https://shiny.posit.co/py/docs/genai-stream.html) interfaces.
 

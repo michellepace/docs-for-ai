@@ -121,7 +121,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-10-04 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
-| 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2025-11-02 | [Official](https://shiny.posit.co/py/) |
+| 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2026-10-19 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
 | 📦 [`ty/`](collections/ty/) | 📄 [`INDEX.xml`](collections/ty/INDEX.xml) | Python type checker (Astral) | 2026-10-19 | [Official](https://docs.astral.sh/ty/) |

@@ -18,7 +18,6 @@
     "python.terminal.activateEnvironment": false,
 
     // 🐍 Ruff: Python lint & format (rules in pyproject.toml)
-    "ruff.nativeServer": "on", // for speed
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,

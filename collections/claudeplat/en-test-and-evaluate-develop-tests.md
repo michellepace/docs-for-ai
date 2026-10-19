@@ -6,7 +6,9 @@ description: Define measurable success criteria for your LLM application and bui
 
 Building a successful LLM-based application starts with clearly defining your success criteria and then designing evaluations to measure performance against them. This cycle is central to prompt engineering.
 
-![Flowchart of prompt engineering: test cases, preliminary prompt, iterative testing and refinement, final validation, ship](https://platform.claude.com/docs/images/how-to-prompt-eng.png)
+<Frame>
+  ![Flowchart of prompt engineering: test cases, preliminary prompt, iterative testing and refinement, final validation, ship](https://platform.claude.com/docs/images/how-to-prompt-eng.svg)
+</Frame>
 
 ## Define your success criteria
 
@@ -96,10 +98,10 @@ Here are some criteria that might be important for your use case. This list is n
 Most use cases need multidimensional evaluation along several success criteria.
 
 <Accordion title="Example multidimensional criteria for sentiment analysis">
-  |      | Criteria                                                                                                                                                                                                                                                           |
-  | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-  | Bad  | The model should classify sentiments well                                                                                                                                                                                                                          |
-  | Good | On a held-out test set of 10,000 diverse Twitter posts, the sentiment analysis model should achieve: - an F1 score of at least 0.85 - 99.5% of outputs are non-toxic - 90% of errors would cause inconvenience, not egregious error\* - 95% response time \< 200ms |
+  |      | Criteria                                                                                                                                                                                                                                                                               |
+  | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | Bad  | The model should classify sentiments well                                                                                                                                                                                                                                              |
+  | Good | On a held-out test set of 10,000 diverse Twitter posts, the sentiment analysis model should achieve:<br />- an F1 score of at least 0.85<br />- 99.5% of outputs are non-toxic<br />- 90% of errors would cause inconvenience, not egregious error\*<br />- 95% response time \< 200ms |
 
   \*In reality, you would also define what "inconvenience" and "egregious" mean.
 </Accordion>
@@ -149,8 +151,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(prompt: str):
           message = client.messages.create(
-              model="claude-opus-5",
-              max_tokens=50,
+              model="claude-opus-5-5",
+              max_tokens=1024,
               messages=[{"role": "user", "content": prompt}],
           )
           return next(block.text for block in message.content if block.type == "text")
@@ -162,7 +164,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       outputs = [
           get_completion(
-              f"Classify this as 'positive', 'negative', 'neutral', or 'mixed': {tweet['text']}"
+              f"Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: {tweet['text']}"
           )
           for tweet in tweets
       ]
@@ -192,8 +194,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(prompt: string): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
-          max_tokens: 50,
+          model: "claude-opus-5-5",
+          max_tokens: 1024,
           messages: [{ role: "user", content: prompt }]
         });
         const textBlock = message.content.find((block) => block.type === "text");
@@ -207,7 +209,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       let correctCount = 0;
       for (const tweet of tweets) {
         const output = await getCompletion(
-          `Classify this as 'positive', 'negative', 'neutral', or 'mixed': ${tweet.text}`
+          `Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: ${tweet.text}`
         );
         if (evaluateExactMatch(output, tweet.sentiment)) {
           correctCount++;
@@ -234,8 +236,8 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           var message = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
-              MaxTokens = 50,
+              Model = Model.ClaudeOpus5_5,
+              MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = prompt }],
           });
           return ContentText(message);
@@ -263,7 +265,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       foreach (var tweet in tweets)
       {
           var output = await GetCompletion(
-              $"Classify this as 'positive', 'negative', 'neutral', or 'mixed': {tweet.Text}");
+              $"Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: {tweet.Text}");
           if (EvaluateExactMatch(output, tweet.Sentiment))
           {
               correct++;
@@ -304,8 +306,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       func getCompletion(prompt string) string {
       	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
-      		MaxTokens: 50,
+      		Model:     anthropic.ModelClaudeOpus5_5,
+      		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
       		},
@@ -323,7 +325,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       func main() {
       	correct := 0
       	for _, item := range tweets {
-      		output := getCompletion("Classify this as 'positive', 'negative', 'neutral', or 'mixed': " + item.Text)
+      		output := getCompletion("Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: " + item.Text)
       		if evaluateExactMatch(output, item.Sentiment) {
       			correct++
       		}
@@ -357,8 +359,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       String getCompletion(String prompt) {
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
-              .maxTokens(50L)
+              .model(Model.CLAUDE_OPUS_5_5)
+              .maxTokens(1024L)
               .addUserMessage(prompt)
               .build();
           return contentText(client.messages().create(params));
@@ -372,7 +374,7 @@ Most use cases need multidimensional evaluation along several success criteria.
           int correct = 0;
           for (var tweet : tweets) {
               var output = getCompletion(
-                  "Classify this as 'positive', 'negative', 'neutral', or 'mixed': " + tweet.text());
+                  "Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: " + tweet.text());
               if (evaluateExactMatch(output, tweet.sentiment())) {
                   correct++;
               }
@@ -397,8 +399,8 @@ Most use cases need multidimensional evaluation along several success criteria.
       function getCompletion(Client $client, string $prompt): string
       {
           $message = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
-              maxTokens: 50,
+              model: Model::CLAUDE_OPUS_5_5,
+              maxTokens: 1024,
               messages: [
                   [
                       'role' => 'user',
@@ -418,7 +420,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           $text = '';
           foreach ($message->content as $block) {
-              if ($block instanceof TextBlock) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
                   $text .= $block->text;
               }
           }
@@ -429,7 +431,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       foreach ($tweets as $tweet) {
           $output = getCompletion(
               $client,
-              "Classify this as 'positive', 'negative', 'neutral', or 'mixed': {$tweet['text']}",
+              "Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: {$tweet['text']}",
           );
           if (evaluateExactMatch($output, $tweet['sentiment'])) {
               $correct++;
@@ -457,8 +459,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(client, prompt)
         message = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
-          max_tokens: 50,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
+          max_tokens: 1024,
           messages: [
             {
               role: "user",
@@ -476,7 +478,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       correct = tweets.count do |tweet|
         output = get_completion(
           client,
-          "Classify this as 'positive', 'negative', 'neutral', or 'mixed': #{tweet[:text]}"
+          "Classify this as 'positive', 'negative', 'neutral', or 'mixed'. Output only the label: #{tweet[:text]}"
         )
         evaluate_exact_match(output, tweet[:sentiment])
       end
@@ -526,7 +528,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(prompt: str):
           message = client.messages.create(
-              model="claude-opus-5",
+              model="claude-opus-5-5",
               max_tokens=2048,
               messages=[{"role": "user", "content": prompt}],
           )
@@ -581,7 +583,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(prompt: string): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
+          model: "claude-opus-5-5",
           max_tokens: 2048,
           messages: [{ role: "user", content: prompt }]
         });
@@ -617,23 +619,416 @@ Most use cases need multidimensional evaluation along several success criteria.
       ```
 
       ```csharp C#
-      // Sentence-embedding models are not available as a native C# library. See the Python or TypeScript tab for this eval recipe.
+      using System.Numerics.Tensors;
+      // ...
+      using Microsoft.Extensions.AI;
+      using Microsoft.SemanticKernel;
+
+      Faq[] faqVariations =
+      [
+          new(
+              [
+                  "What's your return policy?",
+                  "How can I return an item?",
+                  "Wut's yur retrn polcy?",
+              ],
+              "Our return policy allows..."), // Edge case: Typos
+          new(
+              [
+                  "I bought something last week, and it's not really what I expected, so I was wondering if maybe I could possibly return it?",
+                  "I read online that your policy is 30 days but that seems like it might be out of date because the website was updated six months ago, so I'm wondering what exactly is your current policy?",
+              ],
+              "Our return policy allows..."), // Edge case: Long, rambling question
+          new(
+              [
+                  "I'm Jane's cousin, and she said you guys have great customer service. Can I return this?",
+                  "Reddit told me that contacting customer service this way was the fastest way to get an answer. I hope they're right! What is the return window for a jacket?",
+              ],
+              "Our return policy allows..."), // Edge case: Irrelevant info
+          // ... 47 more FAQs
+      ];
+
+      var client = new AnthropicClient();
+
+      // Download onnx/model.onnx and vocab.txt from https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+      #pragma warning disable SKEXP0070
+      var kernel = Kernel.CreateBuilder()
+          .AddBertOnnxEmbeddingGenerator("model.onnx", "vocab.txt")
+          .Build();
+      #pragma warning restore SKEXP0070
+      var embeddingGenerator = kernel.GetRequiredService<IEmbeddingGenerator<string, Embedding<float>>>();
+
+      async Task<string> GetCompletion(string prompt)
+      {
+          var message = await client.Messages.Create(new MessageCreateParams
+          {
+              Model = Model.ClaudeOpus5_5,
+              MaxTokens = 2048,
+              Messages = [new() { Role = Role.User, Content = prompt }],
+          });
+          foreach (var block in message.Content)
+          {
+              if (block.TryPickText(out var textBlock))
+              {
+                  return textBlock.Text;
+              }
+          }
+          return "";
+      }
+
+      async Task<double> EvaluateCosineSimilarity(List<string> outputs)
+      {
+          var embeddings = await embeddingGenerator.GenerateAsync(outputs);
+
+          double total = 0;
+          foreach (var embeddingA in embeddings)
+          {
+              foreach (var embeddingB in embeddings)
+              {
+                  total += TensorPrimitives.CosineSimilarity(embeddingA.Vector.Span, embeddingB.Vector.Span);
+              }
+          }
+          return total / (embeddings.Count * embeddings.Count);
+      }
+
+      foreach (var faq in faqVariations)
+      {
+          var outputs = new List<string>();
+          foreach (var question in faq.Questions)
+          {
+              outputs.Add(await GetCompletion(question));
+          }
+          var similarityScore = await EvaluateCosineSimilarity(outputs);
+          Console.WriteLine($"FAQ Consistency Score: {similarityScore * 100}%");
+      }
+
+      record Faq(string[] Questions, string Answer);
       ```
 
       ```go Go
-      // Sentence-embedding models are not available as a native Go library. See the Python or TypeScript tab for this eval recipe.
+      import (
+      	"context"
+      	"fmt"
+      	"log"
+      	"math"
+
+      // ...
+      	"github.com/knights-analytics/hugot"
+      	"github.com/knights-analytics/hugot/pipelines"
+      )
+
+      var client = anthropic.NewClient()
+
+      type faq struct {
+      	Questions []string
+      	Answer    string
+      }
+
+      var faqVariations = []faq{
+      	{
+      		[]string{
+      			"What's your return policy?",
+      			"How can I return an item?",
+      			"Wut's yur retrn polcy?",
+      		},
+      		"Our return policy allows...",
+      	}, // Edge case: Typos
+      	{
+      		[]string{
+      			"I bought something last week, and it's not really what I expected, so I was wondering if maybe I could possibly return it?",
+      			"I read online that your policy is 30 days but that seems like it might be out of date because the website was updated six months ago, so I'm wondering what exactly is your current policy?",
+      		},
+      		"Our return policy allows...",
+      	}, // Edge case: Long, rambling question
+      	{
+      		[]string{
+      			"I'm Jane's cousin, and she said you guys have great customer service. Can I return this?",
+      			"Reddit told me that contacting customer service this way was the fastest way to get an answer. I hope they're right! What is the return window for a jacket?",
+      		},
+      		"Our return policy allows...",
+      	}, // Edge case: Irrelevant info
+      	// ... 47 more FAQs
+      }
+
+      func getCompletion(prompt string) string {
+      	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
+      		Model:     anthropic.ModelClaudeOpus5_5,
+      		MaxTokens: 2048,
+      		Messages: []anthropic.MessageParam{
+      			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
+      		},
+      	})
+      	if err != nil {
+      		log.Fatal(err)
+      	}
+      	for _, block := range message.Content {
+      		if textBlock, ok := block.AsAny().(anthropic.TextBlock); ok {
+      			return textBlock.Text
+      		}
+      	}
+      	return ""
+      }
+
+      func cosineSimilarity(embeddingA, embeddingB []float32) float64 {
+      	var dot, normA, normB float64
+      	for i := range embeddingA {
+      		dot += float64(embeddingA[i] * embeddingB[i])
+      		normA += float64(embeddingA[i] * embeddingA[i])
+      		normB += float64(embeddingB[i] * embeddingB[i])
+      	}
+      	return dot / (math.Sqrt(normA) * math.Sqrt(normB))
+      }
+
+      func evaluateCosineSimilarity(embeddingPipeline *pipelines.FeatureExtractionPipeline, outputs []string) float64 {
+      	result, err := embeddingPipeline.RunPipeline(context.Background(), outputs)
+      	if err != nil {
+      		log.Fatal(err)
+      	}
+
+      	total := 0.0
+      	for _, embeddingA := range result.Embeddings {
+      		for _, embeddingB := range result.Embeddings {
+      			total += cosineSimilarity(embeddingA, embeddingB)
+      		}
+      	}
+      	return total / float64(len(result.Embeddings)*len(result.Embeddings))
+      }
+
+      func main() {
+      	ctx := context.Background()
+      	session, err := hugot.NewGoSession(ctx)
+      	if err != nil {
+      		log.Fatal(err)
+      	}
+      	defer session.Destroy()
+
+      	downloadOptions := hugot.NewDownloadOptions()
+      	downloadOptions.OnnxFilePath = "onnx/model.onnx"
+      	modelPath, err := hugot.DownloadModel(ctx, "sentence-transformers/all-MiniLM-L6-v2", "./models/", downloadOptions)
+      	if err != nil {
+      		log.Fatal(err)
+      	}
+      	embeddingPipeline, err := hugot.NewPipeline(session, hugot.FeatureExtractionConfig{
+      		ModelPath: modelPath,
+      		Name:      "embeddingPipeline",
+      	})
+      	if err != nil {
+      		log.Fatal(err)
+      	}
+
+      	for _, item := range faqVariations {
+      		var outputs []string
+      		for _, question := range item.Questions {
+      			outputs = append(outputs, getCompletion(question))
+      		}
+      		similarityScore := evaluateCosineSimilarity(embeddingPipeline, outputs)
+      		fmt.Printf("FAQ Consistency Score: %v%%\n", similarityScore*100)
+      	}
+      }
       ```
 
       ```java Java
-      // Sentence-embedding models are not available as a native Java library. See the Python or TypeScript tab for this eval recipe.
+      import dev.langchain4j.data.segment.TextSegment;
+      import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
+      import dev.langchain4j.store.embedding.CosineSimilarity;
+      // ...
+
+      record Faq(List<String> questions, String answer) {}
+
+      List<Faq> faqVariations = List.of(
+          new Faq(
+              List.of(
+                  "What's your return policy?",
+                  "How can I return an item?",
+                  "Wut's yur retrn polcy?"),
+              "Our return policy allows..."), // Edge case: Typos
+          new Faq(
+              List.of(
+                  "I bought something last week, and it's not really what I expected, so I was wondering if maybe I could possibly return it?",
+                  "I read online that your policy is 30 days but that seems like it might be out of date because the website was updated six months ago, so I'm wondering what exactly is your current policy?"),
+              "Our return policy allows..."), // Edge case: Long, rambling question
+          new Faq(
+              List.of(
+                  "I'm Jane's cousin, and she said you guys have great customer service. Can I return this?",
+                  "Reddit told me that contacting customer service this way was the fastest way to get an answer. I hope they're right! What is the return window for a jacket?"),
+              "Our return policy allows...") // Edge case: Irrelevant info
+          // ... 47 more FAQs
+      );
+
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      String getCompletion(String prompt) {
+          var params = MessageCreateParams.builder()
+              .model(Model.CLAUDE_OPUS_5_5)
+              .maxTokens(2048L)
+              .addUserMessage(prompt)
+              .build();
+          Message message = client.messages().create(params);
+          return message.content().stream()
+              .flatMap(block -> block.text().stream())
+              .map(textBlock -> textBlock.text())
+              .findFirst()
+              .orElse("");
+      }
+
+      double evaluateCosineSimilarity(List<String> outputs) {
+          var embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+          var segments = outputs.stream().map(TextSegment::from).toList();
+          var embeddings = embeddingModel.embedAll(segments).content();
+
+          double total = 0;
+          for (var embeddingA : embeddings) {
+              for (var embeddingB : embeddings) {
+                  total += CosineSimilarity.between(embeddingA, embeddingB);
+              }
+          }
+          return total / (embeddings.size() * embeddings.size());
+      }
+
+      void main() {
+          for (var faq : faqVariations) {
+              var outputs = faq.questions().stream().map(this::getCompletion).toList();
+              double similarityScore = evaluateCosineSimilarity(outputs);
+              IO.println("FAQ Consistency Score: " + similarityScore * 100 + "%");
+          }
+      }
       ```
 
       ```php PHP
-      // Sentence-embedding models are not available as a native PHP library. See the Python or TypeScript tab for this eval recipe.
+      use function Codewithkyrian\Transformers\Pipelines\pipeline;
+
+      $client = new Client();
+
+      $faqVariations = [
+          [
+              'questions' => [
+                  "What's your return policy?",
+                  'How can I return an item?',
+                  "Wut's yur retrn polcy?",
+              ],
+              'answer' => 'Our return policy allows...',
+          ], // Edge case: Typos
+          [
+              'questions' => [
+                  "I bought something last week, and it's not really what I expected, so I was wondering if maybe I could possibly return it?",
+                  "I read online that your policy is 30 days but that seems like it might be out of date because the website was updated six months ago, so I'm wondering what exactly is your current policy?",
+              ],
+              'answer' => 'Our return policy allows...',
+          ], // Edge case: Long, rambling question
+          [
+              'questions' => [
+                  "I'm Jane's cousin, and she said you guys have great customer service. Can I return this?",
+                  "Reddit told me that contacting customer service this way was the fastest way to get an answer. I hope they're right! What is the return window for a jacket?",
+              ],
+              'answer' => 'Our return policy allows...',
+          ], // Edge case: Irrelevant info
+          // ... 47 more FAQs
+      ];
+
+      function getCompletion(Client $client, string $prompt): string
+      {
+          $message = $client->messages->create(
+              model: Model::CLAUDE_OPUS_5_5,
+              maxTokens: 2048,
+              messages: [
+                  [
+                      'role' => 'user',
+                      'content' => $prompt,
+                  ],
+              ],
+          );
+          foreach ($message->content as $block) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
+                  return $block->text;
+              }
+          }
+          return '';
+      }
+
+      function evaluateCosineSimilarity(array $outputs): float
+      {
+          $extractor = pipeline('embeddings', 'Xenova/all-MiniLM-L6-v2');
+          $embeddings = $extractor($outputs, normalize: true, pooling: 'mean');
+
+          $total = 0.0;
+          foreach ($embeddings as $embeddingA) {
+              foreach ($embeddings as $embeddingB) {
+                  // Vectors are normalized, so cosine similarity is the dot product
+                  $total += array_sum(array_map(fn ($valueA, $valueB) => $valueA * $valueB, $embeddingA, $embeddingB));
+              }
+          }
+          return $total / count($embeddings) ** 2;
+      }
+
+      foreach ($faqVariations as $faq) {
+          $outputs = array_map(fn ($question) => getCompletion($client, $question), $faq['questions']);
+          $similarityScore = evaluateCosineSimilarity($outputs);
+          echo 'FAQ Consistency Score: ' . ($similarityScore * 100) . '%' . PHP_EOL;
+      }
       ```
 
       ```ruby Ruby
-      # Sentence-embedding models are not available as a native Ruby library. See the Python or TypeScript tab for this eval recipe.
+      require "informers"
+
+      client = Anthropic::Client.new
+
+      faq_variations = [
+        {
+          questions: [
+            "What's your return policy?",
+            "How can I return an item?",
+            "Wut's yur retrn polcy?"
+          ],
+          answer: "Our return policy allows..."
+        }, # Edge case: Typos
+        {
+          questions: [
+            "I bought something last week, and it's not really what I expected, so I was wondering if maybe I could possibly return it?",
+            "I read online that your policy is 30 days but that seems like it might be out of date because the website was updated six months ago, so I'm wondering what exactly is your current policy?"
+          ],
+          answer: "Our return policy allows..."
+        }, # Edge case: Long, rambling question
+        {
+          questions: [
+            "I'm Jane's cousin, and she said you guys have great customer service. Can I return this?",
+            "Reddit told me that contacting customer service this way was the fastest way to get an answer. I hope they're right! What is the return window for a jacket?"
+          ],
+          answer: "Our return policy allows..."
+        } # Edge case: Irrelevant info
+        # ... 47 more FAQs
+      ]
+
+      def get_completion(client, prompt)
+        message = client.messages.create(
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
+          max_tokens: 2048,
+          messages: [
+            {
+              role: "user",
+              content: prompt
+            }
+          ]
+        )
+        text_block = message.content.find { |block| block.is_a?(Anthropic::Models::TextBlock) }
+        text_block ? text_block.text : ""
+      end
+
+      def evaluate_cosine_similarity(outputs)
+        model = Informers.pipeline("embedding", "sentence-transformers/all-MiniLM-L6-v2")
+        embeddings = model.(outputs)
+
+        # Vectors are normalized, so cosine similarity is the dot product
+        total = embeddings.sum do |embedding_a|
+          embeddings.sum { |embedding_b| embedding_a.zip(embedding_b).sum { |value_a, value_b| value_a * value_b } }
+        end
+        total / embeddings.length**2
+      end
+
+      faq_variations.each do |faq|
+        outputs = faq[:questions].map { |question| get_completion(client, question) }
+        similarity_score = evaluate_cosine_similarity(outputs)
+        puts "FAQ Consistency Score: #{similarity_score * 100}%"
+      end
       ```
     </CodeGroup>
   </Accordion>
@@ -668,7 +1063,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(prompt: str):
           message = client.messages.create(
-              model="claude-opus-5",
+              model="claude-opus-5-5",
               max_tokens=1024,
               messages=[{"role": "user", "content": prompt}],
           )
@@ -713,7 +1108,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(prompt: string): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
+          model: "claude-opus-5-5",
           max_tokens: 1024,
           messages: [{ role: "user", content: prompt }]
         });
@@ -741,7 +1136,9 @@ Most use cases need multidimensional evaluation along several success criteria.
         }
         const lcs = lcsLengths[candidateWords.length][referenceWords.length];
 
-        if (lcs === 0) return 0;
+        if (lcs === 0) {
+          return 0;
+        }
         const precision = lcs / candidateWords.length;
         const recall = lcs / referenceWords.length;
         return (2 * precision * recall) / (precision + recall);
@@ -781,7 +1178,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           var message = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
+              Model = Model.ClaudeOpus5_5,
               MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = prompt }],
           });
@@ -879,7 +1276,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       func getCompletion(prompt string) string {
       	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
+      		Model:     anthropic.ModelClaudeOpus5_5,
       		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
@@ -965,7 +1362,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       String getCompletion(String prompt) {
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addUserMessage(prompt)
               .build();
@@ -1032,7 +1429,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       function getCompletion(Client $client, string $prompt): string
       {
           $message = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
+              model: Model::CLAUDE_OPUS_5_5,
               maxTokens: 1024,
               messages: [
                   [
@@ -1074,7 +1471,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           $text = '';
           foreach ($message->content as $block) {
-              if ($block instanceof TextBlock) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
                   $text .= $block->text;
               }
           }
@@ -1116,7 +1513,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(client, prompt)
         message = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
           max_tokens: 1024,
           messages: [
             {
@@ -1191,7 +1588,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(prompt: str):
           message = client.messages.create(
-              model="claude-opus-5",
+              model="claude-opus-5-5",
               max_tokens=2048,
               messages=[{"role": "user", "content": prompt}],
           )
@@ -1207,8 +1604,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           response = client.messages.create(
-              model="claude-opus-5",
-              max_tokens=50,
+              model="claude-opus-5-5",
+              max_tokens=1024,
               messages=[{"role": "user", "content": tone_prompt}],
           )
           return int(
@@ -1248,7 +1645,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(prompt: string): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
+          model: "claude-opus-5-5",
           max_tokens: 2048,
           messages: [{ role: "user", content: prompt }]
         });
@@ -1265,8 +1662,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         const response = await client.messages.create({
-          model: "claude-opus-5",
-          max_tokens: 50,
+          model: "claude-opus-5-5",
+          max_tokens: 1024,
           messages: [{ role: "user", content: tonePrompt }]
         });
         const textBlock = response.content.find((block) => block.type === "text");
@@ -1307,7 +1704,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           var message = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
+              Model = Model.ClaudeOpus5_5,
               MaxTokens = 2048,
               Messages = [new() { Role = Role.User, Content = prompt }],
           });
@@ -1327,8 +1724,8 @@ Most use cases need multidimensional evaluation along several success criteria.
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var response = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
-              MaxTokens = 50,
+              Model = Model.ClaudeOpus5_5,
+              MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = tonePrompt }],
           });
           return int.Parse(ContentText(response).Trim());
@@ -1388,7 +1785,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       func getCompletion(prompt string) string {
       	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
+      		Model:     anthropic.ModelClaudeOpus5_5,
       		MaxTokens: 2048,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
@@ -1409,8 +1806,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       	// Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
       	response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
-      		MaxTokens: 50,
+      		Model:     anthropic.ModelClaudeOpus5_5,
+      		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(tonePrompt)),
       		},
@@ -1461,7 +1858,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       String getCompletion(String prompt) {
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(2048L)
               .addUserMessage(prompt)
               .build();
@@ -1478,8 +1875,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
-              .maxTokens(50L)
+              .model(Model.CLAUDE_OPUS_5_5)
+              .maxTokens(1024L)
               .addUserMessage(tonePrompt)
               .build();
           var judgment = contentText(client.messages().create(params));
@@ -1512,7 +1909,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       function getCompletion(Client $client, string $prompt): string
       {
           $message = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
+              model: Model::CLAUDE_OPUS_5_5,
               maxTokens: 2048,
               messages: [
                   [
@@ -1536,8 +1933,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           $response = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
-              maxTokens: 50,
+              model: Model::CLAUDE_OPUS_5_5,
+              maxTokens: 1024,
               messages: [
                   [
                       'role' => 'user',
@@ -1547,7 +1944,7 @@ Most use cases need multidimensional evaluation along several success criteria.
           );
           $scoreText = trim(contentText($response));
           if (filter_var($scoreText, FILTER_VALIDATE_INT) === false) {
-              throw new RuntimeException("Unexpected rating from grader: {$scoreText}");
+              throw new \RuntimeException("Unexpected rating from grader: {$scoreText}");
           }
           return (int) $scoreText;
       }
@@ -1556,7 +1953,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           $text = '';
           foreach ($message->content as $block) {
-              if ($block instanceof TextBlock) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
                   $text .= $block->text;
               }
           }
@@ -1590,7 +1987,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(client, prompt)
         message = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
           max_tokens: 2048,
           messages: [
             {
@@ -1613,8 +2010,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         response = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
-          max_tokens: 50,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
+          max_tokens: 1024,
           messages: [
             {
               role: "user",
@@ -1663,7 +2060,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(prompt: str):
           message = client.messages.create(
-              model="claude-opus-5",
+              model="claude-opus-5-5",
               max_tokens=1024,
               messages=[{"role": "user", "content": prompt}],
           )
@@ -1687,8 +2084,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           response = client.messages.create(
-              model="claude-opus-5",
-              max_tokens=50,
+              model="claude-opus-5-5",
+              max_tokens=1024,
               messages=[{"role": "user", "content": binary_prompt}],
           )
           return (
@@ -1735,7 +2132,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(prompt: string): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
+          model: "claude-opus-5-5",
           max_tokens: 1024,
           messages: [{ role: "user", content: prompt }]
         });
@@ -1764,8 +2161,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         const response = await client.messages.create({
-          model: "claude-opus-5",
-          max_tokens: 50,
+          model: "claude-opus-5-5",
+          max_tokens: 1024,
           messages: [{ role: "user", content: binaryPrompt }]
         });
         const textBlock = response.content.find((block) => block.type === "text");
@@ -1803,7 +2200,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           var message = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
+              Model = Model.ClaudeOpus5_5,
               MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = prompt }],
           });
@@ -1833,8 +2230,8 @@ Most use cases need multidimensional evaluation along several success criteria.
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var response = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
-              MaxTokens = 50,
+              Model = Model.ClaudeOpus5_5,
+              MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = binaryPrompt }],
           });
           return ContentText(response).Trim().ToLowerInvariant() == "no";
@@ -1899,7 +2296,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       func getCompletion(prompt string) string {
       	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
+      		Model:     anthropic.ModelClaudeOpus5_5,
       		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
@@ -1929,8 +2326,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       	// Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
       	response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
-      		MaxTokens: 50,
+      		Model:     anthropic.ModelClaudeOpus5_5,
+      		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(binaryPrompt)),
       		},
@@ -1980,7 +2377,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       String getCompletion(String prompt) {
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addUserMessage(prompt)
               .build();
@@ -2006,8 +2403,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
-              .maxTokens(50L)
+              .model(Model.CLAUDE_OPUS_5_5)
+              .maxTokens(1024L)
               .addUserMessage(binaryPrompt)
               .build();
           var judgment = contentText(client.messages().create(params));
@@ -2044,7 +2441,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       function getCompletion(Client $client, string $prompt): string
       {
           $message = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
+              model: Model::CLAUDE_OPUS_5_5,
               maxTokens: 1024,
               messages: [
                   [
@@ -2077,8 +2474,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           $response = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
-              maxTokens: 50,
+              model: Model::CLAUDE_OPUS_5_5,
+              maxTokens: 1024,
               messages: [
                   [
                       'role' => 'user',
@@ -2093,7 +2490,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           $text = '';
           foreach ($message->content as $block) {
-              if ($block instanceof TextBlock) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
                   $text .= $block->text;
               }
           }
@@ -2133,7 +2530,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(client, prompt)
         message = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
           max_tokens: 1024,
           messages: [
             {
@@ -2163,8 +2560,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         response = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
-          max_tokens: 50,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
+          max_tokens: 1024,
           messages: [
             {
               role: "user",
@@ -2242,7 +2639,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(conversation: list):
           message = client.messages.create(
-              model="claude-opus-5",
+              model="claude-opus-5-5",
               max_tokens=1024,
               messages=conversation,
           )
@@ -2261,8 +2658,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           response = client.messages.create(
-              model="claude-opus-5",
-              max_tokens=50,
+              model="claude-opus-5-5",
+              max_tokens=1024,
               messages=[{"role": "user", "content": ordinal_prompt}],
           )
           return int(
@@ -2326,7 +2723,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       async function getCompletion(conversation: Anthropic.MessageParam[]): Promise<string> {
         const message = await client.messages.create({
-          model: "claude-opus-5",
+          model: "claude-opus-5-5",
           max_tokens: 1024,
           messages: conversation
         });
@@ -2353,8 +2750,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         const response = await client.messages.create({
-          model: "claude-opus-5",
-          max_tokens: 50,
+          model: "claude-opus-5-5",
+          max_tokens: 1024,
           messages: [{ role: "user", content: ordinalPrompt }]
         });
         const textBlock = response.content.find((block) => block.type === "text");
@@ -2407,7 +2804,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           var message = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
+              Model = Model.ClaudeOpus5_5,
               MaxTokens = 1024,
               Messages = [.. conversation.Select(turn => new MessageParam
               {
@@ -2436,8 +2833,8 @@ Most use cases need multidimensional evaluation along several success criteria.
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var response = await client.Messages.Create(new MessageCreateParams
           {
-              Model = Model.ClaudeOpus5,
-              MaxTokens = 50,
+              Model = Model.ClaudeOpus5_5,
+              MaxTokens = 1024,
               Messages = [new() { Role = Role.User, Content = ordinalPrompt }],
           });
           return int.Parse(ContentText(response).Trim());
@@ -2521,7 +2918,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       func getCompletion(conversation []turn) string {
       	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
+      		Model:     anthropic.ModelClaudeOpus5_5,
       		MaxTokens: 1024,
       		Messages:  toMessageParams(conversation),
       	})
@@ -2546,8 +2943,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       	// Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
       	response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-      		Model:     anthropic.ModelClaudeOpus5,
-      		MaxTokens: 50,
+      		Model:     anthropic.ModelClaudeOpus5_5,
+      		MaxTokens: 1024,
       		Messages: []anthropic.MessageParam{
       			anthropic.NewUserMessage(anthropic.NewTextBlock(ordinalPrompt)),
       		},
@@ -2607,7 +3004,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       String getCompletion(List<Turn> conversation) {
           var builder = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L);
           for (var turn : conversation) {
               if (turn.role().equals("user")) {
@@ -2635,8 +3032,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           var params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
-              .maxTokens(50L)
+              .model(Model.CLAUDE_OPUS_5_5)
+              .maxTokens(1024L)
               .addUserMessage(ordinalPrompt)
               .build();
           var judgment = contentText(client.messages().create(params));
@@ -2681,7 +3078,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       function getCompletion(Client $client, array $conversation): string
       {
           $message = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
+              model: Model::CLAUDE_OPUS_5_5,
               maxTokens: 1024,
               messages: $conversation,
           );
@@ -2706,8 +3103,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
           // Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
           $response = $client->messages->create(
-              model: Model::CLAUDE_OPUS_5,
-              maxTokens: 50,
+              model: Model::CLAUDE_OPUS_5_5,
+              maxTokens: 1024,
               messages: [
                   [
                       'role' => 'user',
@@ -2717,7 +3114,7 @@ Most use cases need multidimensional evaluation along several success criteria.
           );
           $scoreText = trim(contentText($response));
           if (filter_var($scoreText, FILTER_VALIDATE_INT) === false) {
-              throw new RuntimeException("Unexpected rating from grader: {$scoreText}");
+              throw new \RuntimeException("Unexpected rating from grader: {$scoreText}");
           }
           return (int) $scoreText;
       }
@@ -2726,7 +3123,7 @@ Most use cases need multidimensional evaluation along several success criteria.
       {
           $text = '';
           foreach ($message->content as $block) {
-              if ($block instanceof TextBlock) {
+              if ($block instanceof \Anthropic\Messages\TextBlock) {
                   $text .= $block->text;
               }
           }
@@ -2772,7 +3169,7 @@ Most use cases need multidimensional evaluation along several success criteria.
 
       def get_completion(client, conversation)
         message = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
           max_tokens: 1024,
           messages: conversation
         )
@@ -2793,8 +3190,8 @@ Most use cases need multidimensional evaluation along several success criteria.
 
         # Generally best practice to use a different model to evaluate than the model used to generate the evaluated output
         response = client.messages.create(
-          model: Anthropic::Model::CLAUDE_OPUS_5,
-          max_tokens: 50,
+          model: Anthropic::Model::CLAUDE_OPUS_5_5,
+          max_tokens: 1024,
           messages: [
             {
               role: "user",
@@ -2845,7 +3242,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     A given use case, or even a specific success criteria for that use case, might require several rubrics for holistic evaluation.
   </Note>
 * **Empirical or specific:** For example, instruct the LLM to output only 'correct' or 'incorrect', or to judge from a scale of 1–5. Purely qualitative evaluations are hard to assess quickly and at scale.
-* **Encourage reasoning:** Ask the LLM to reason first before producing an evaluation score, and then discard the reasoning. This increases evaluation performance, particularly for tasks requiring complex judgment.
+* **Encourage reasoning:** Use a grader model with [thinking](https://platform.claude.com/docs/en/build-with-claude/thinking) on, so that it reasons before it produces an evaluation score. This increases evaluation performance, particularly for tasks requiring complex judgment.
 
 <Accordion title="Example: LLM-based grading">
   <CodeGroup exclude="shell">
@@ -2857,12 +3254,12 @@ When deciding which method to use to grade evals, choose the fastest, most relia
         return f"""Grade this answer based on the rubric:
         <rubric>{rubric}</rubric>
         <answer>{answer}</answer>
-        Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags."""
+        Output 'correct' or 'incorrect' in <result> tags."""
 
 
     def grade_completion(output, golden_answer):
         grader_message = client.messages.create(
-            model="claude-opus-5",
+            model="claude-opus-5-5",
             max_tokens=2048,
             messages=[
                 {"role": "user", "content": build_grader_prompt(output, golden_answer)}
@@ -2894,7 +3291,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
 
     def get_completion(prompt: str):
         message = client.messages.create(
-            model="claude-opus-5",
+            model="claude-opus-5-5",
             max_tokens=1024,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -2916,12 +3313,12 @@ When deciding which method to use to grade evals, choose the fastest, most relia
       return `Grade this answer based on the rubric:
     <rubric>${rubric}</rubric>
     <answer>${answer}</answer>
-    Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.`;
+    Output 'correct' or 'incorrect' in <result> tags.`;
     }
 
     async function gradeCompletion(output: string, goldenAnswer: string): Promise<string> {
       const graderResponse = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 2048,
         messages: [{ role: "user", content: buildGraderPrompt(output, goldenAnswer) }]
       });
@@ -2946,7 +3343,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
 
     async function getCompletion(prompt: string): Promise<string> {
       const message = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         messages: [{ role: "user", content: prompt }]
       });
@@ -2972,7 +3369,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
             Grade this answer based on the rubric:
             <rubric>{rubric}</rubric>
             <answer>{answer}</answer>
-            Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.
+            Output 'correct' or 'incorrect' in <result> tags.
             """;
     }
 
@@ -2980,7 +3377,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     {
         var graderResponse = await client.Messages.Create(new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 2048,
             Messages = [new() { Role = Role.User, Content = BuildGraderPrompt(output, goldenAnswer) }],
         });
@@ -3002,7 +3399,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     {
         var message = await client.Messages.Create(new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages = [new() { Role = Role.User, Content = prompt }],
         });
@@ -3053,12 +3450,12 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     	return fmt.Sprintf(`Grade this answer based on the rubric:
     <rubric>%s</rubric>
     <answer>%s</answer>
-    Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.`, rubric, answer)
+    Output 'correct' or 'incorrect' in <result> tags.`, rubric, answer)
     }
 
     func gradeCompletion(output, goldenAnswer string) string {
     	graderResponse, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-    		Model:     anthropic.ModelClaudeOpus5,
+    		Model:     anthropic.ModelClaudeOpus5_5,
     		MaxTokens: 2048,
     		Messages: []anthropic.MessageParam{
     			anthropic.NewUserMessage(anthropic.NewTextBlock(buildGraderPrompt(output, goldenAnswer))),
@@ -3075,7 +3472,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
 
     func getCompletion(prompt string) string {
     	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-    		Model:     anthropic.ModelClaudeOpus5,
+    		Model:     anthropic.ModelClaudeOpus5_5,
     		MaxTokens: 1024,
     		Messages: []anthropic.MessageParam{
     			anthropic.NewUserMessage(anthropic.NewTextBlock(prompt)),
@@ -3134,12 +3531,12 @@ When deciding which method to use to grade evals, choose the fastest, most relia
             Grade this answer based on the rubric:
             <rubric>%s</rubric>
             <answer>%s</answer>
-            Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.""".formatted(rubric, answer);
+            Output 'correct' or 'incorrect' in <result> tags.""".formatted(rubric, answer);
     }
 
     String gradeCompletion(String output, String goldenAnswer) {
         var params = MessageCreateParams.builder()
-            .model(Model.CLAUDE_OPUS_5)
+            .model(Model.CLAUDE_OPUS_5_5)
             .maxTokens(2048L)
             .addUserMessage(buildGraderPrompt(output, goldenAnswer))
             .build();
@@ -3149,7 +3546,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
 
     String getCompletion(String prompt) {
         var params = MessageCreateParams.builder()
-            .model(Model.CLAUDE_OPUS_5)
+            .model(Model.CLAUDE_OPUS_5_5)
             .maxTokens(1024L)
             .addUserMessage(prompt)
             .build();
@@ -3177,14 +3574,14 @@ When deciding which method to use to grade evals, choose the fastest, most relia
         Grade this answer based on the rubric:
         <rubric>{$rubric}</rubric>
         <answer>{$answer}</answer>
-        Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.
+        Output 'correct' or 'incorrect' in <result> tags.
         PROMPT;
     }
 
     function gradeCompletion(Client $client, string $output, string $goldenAnswer): string
     {
         $graderResponse = $client->messages->create(
-            model: Model::CLAUDE_OPUS_5,
+            model: Model::CLAUDE_OPUS_5_5,
             maxTokens: 2048,
             messages: [
                 [
@@ -3213,7 +3610,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     function getCompletion(Client $client, string $prompt): string
     {
         $message = $client->messages->create(
-            model: Model::CLAUDE_OPUS_5,
+            model: Model::CLAUDE_OPUS_5_5,
             maxTokens: 1024,
             messages: [
                 [
@@ -3229,7 +3626,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
     {
         $text = '';
         foreach ($message->content as $block) {
-            if ($block instanceof TextBlock) {
+            if ($block instanceof \Anthropic\Messages\TextBlock) {
                 $text .= $block->text;
             }
         }
@@ -3258,13 +3655,13 @@ When deciding which method to use to grade evals, choose the fastest, most relia
         Grade this answer based on the rubric:
         <rubric>#{rubric}</rubric>
         <answer>#{answer}</answer>
-        Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags.
+        Output 'correct' or 'incorrect' in <result> tags.
       PROMPT
     end
 
     def grade_completion(client, output, golden_answer)
       grader_response = client.messages.create(
-        model: Anthropic::Model::CLAUDE_OPUS_5,
+        model: Anthropic::Model::CLAUDE_OPUS_5_5,
         max_tokens: 2048,
         messages: [
           {
@@ -3290,7 +3687,7 @@ When deciding which method to use to grade evals, choose the fastest, most relia
 
     def get_completion(client, prompt)
       message = client.messages.create(
-        model: Anthropic::Model::CLAUDE_OPUS_5,
+        model: Anthropic::Model::CLAUDE_OPUS_5_5,
         max_tokens: 1024,
         messages: [
           {

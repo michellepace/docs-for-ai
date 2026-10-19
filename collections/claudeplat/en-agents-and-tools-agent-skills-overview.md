@@ -5,7 +5,7 @@ description: Agent Skills are modular capabilities that extend Claude's function
 ---
 
 <Note>
-  For how zero data retention (ZDR) applies to this feature, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+  To learn how zero data retention (ZDR) applies to this feature, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
 </Note>
 
 ## Why use Skills
@@ -113,7 +113,9 @@ Progressive disclosure ensures only relevant content occupies the context window
 
 Skills run in a code execution environment where Claude has filesystem access, bash commands, and code execution capabilities. Skills exist as directories on a virtual machine, and Claude interacts with them using the same bash commands you'd use to navigate files on your computer.
 
-![Agent Skills Architecture - showing how Skills integrate with the agent's configuration and virtual machine](https://platform.claude.com/docs/images/agent-skills-architecture.png)
+<Frame>
+  ![Agent Skills Architecture - showing how Skills integrate with the agent's configuration and virtual machine](https://platform.claude.com/docs/images/agent-skills-architecture.svg)
+</Frame>
 
 **How Claude accesses Skill content:**
 
@@ -135,25 +137,23 @@ Here's how Claude loads and uses the custom `pdf-processing` Skill from the earl
 4. **Claude determines:** Form filling is not needed, so FORMS.md is not read
 5. **Claude executes:** Uses instructions from SKILL.md to complete the task
 
-![Skills loading into context window - showing the progressive loading of skill metadata and content](https://platform.claude.com/docs/images/agent-skills-context-window.png)
+<Frame>
+  ![Skills loading into context window - showing the progressive loading of skill metadata and content](https://platform.claude.com/docs/images/agent-skills-context-window.svg)
+</Frame>
 
 ## Where Skills work
 
 Skills are available across Claude's agent products:
 
 <Note>
-  Claude Platform on AWS and Microsoft Foundry inherit the same Skills behavior as the Claude API in all following sections.
+  Claude Platform on AWS and Microsoft Foundry inherit the same Skills behavior as the Claude API in all following sections, except where [Limitations and constraints](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#limitations-and-constraints) says otherwise.
 </Note>
 
 ### Claude API
 
 The Claude API supports both pre-built Agent Skills and custom Skills. Both work identically: specify the relevant `skill_id` in the `container` parameter along with the [code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool).
 
-**Prerequisites:** Using Skills through the API requires the [code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool), whose container Skills run in, and one beta header:
-
-* `skills-2025-10-02` - Enables Skills functionality
-
-Add a second header, `files-api-2025-04-14`, when you use the [Files API](https://platform.claude.com/docs/en/build-with-claude/files) to upload input files to the container or download files a Skill produces.
+**Prerequisites:** Using Skills through the API requires the [code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool), whose container Skills run in.
 
 Use pre-built Agent Skills by referencing their `skill_id` (`pptx`, `xlsx`, `docx`, or `pdf`), or create and upload your own through the Skills API (`/v1/skills` endpoints). Custom Skills are shared workspace-wide: all workspace members can access them.
 
@@ -275,7 +275,7 @@ For audit logging of Skills API operations, see [Audit logging](https://platform
 
 ## Limitations and constraints
 
-Claude Platform on AWS and Microsoft Foundry follow the same limitations as the Claude API in the following subsections.
+Claude Platform on AWS and Microsoft Foundry follow the same limitations as the Claude API in the following subsections. In addition, on Microsoft Foundry, the [Skill version download endpoint](https://platform.claude.com/docs/en/api/beta/skills/versions/download) (`GET /v1/skills/{skill_id}/versions/{version}/content`) is not supported.
 
 ### Cross-surface availability
 

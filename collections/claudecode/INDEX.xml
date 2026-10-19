@@ -18,14 +18,14 @@
     <description>Give Claude persistent instructions with CLAUDE.md or AGENTS.md files, and let Claude accumulate learnings automatically with auto memory.</description>
     <source_url>https://code.claude.com/docs/en/memory</source_url>
     <local_file>en-memory.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Model configuration</title>
     <description>Configure which model Claude Code uses, effort levels, extended context, and the auto-compact window</description>
     <source_url>https://code.claude.com/docs/en/model-config</source_url>
     <local_file>en-model-config.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Tools reference</title>
@@ -39,21 +39,21 @@
     <description>Control what Claude Code can access and do with fine-grained permission rules, modes, and managed policies.</description>
     <source_url>https://code.claude.com/docs/en/permissions</source_url>
     <local_file>en-permissions.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Choose a permission mode</title>
     <description>Control whether Claude asks before acting. Switch permission modes with Shift+Tab in the CLI, the mode indicator in VS Code, or Desktop's mode selector.</description>
     <source_url>https://code.claude.com/docs/en/permission-modes</source_url>
     <local_file>en-permission-modes.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>
     <description>Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom commands and bundled skills.</description>
     <source_url>https://code.claude.com/docs/en/skills</source_url>
     <local_file>en-skills.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Automate actions with hooks</title>
@@ -67,7 +67,7 @@
     <description>Reference for Claude Code hook events, configuration schema, JSON input/output formats, exit codes, async hooks, HTTP hooks, prompt hooks, and MCP tool hooks.</description>
     <source_url>https://code.claude.com/docs/en/hooks</source_url>
     <local_file>en-hooks.md</local_file>
-    <curated_at>2026-10-17</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>MCP for Claude Code — authoring reference (hand scoped)</title>
@@ -151,7 +151,7 @@
     <description>Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.</description>
     <source_url>https://code.claude.com/docs/en/headless</source_url>
     <local_file>en-headless.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Agent SDK overview</title>
@@ -165,7 +165,7 @@
     <description>Complete API reference for the Python Agent SDK, including all functions, types, and classes.</description>
     <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
     <local_file>en-agent-sdk-python.md</local_file>
-    <curated_at>2026-10-09</curated_at>
+    <curated_at>2026-10-19</curated_at>
   </source>
   <source>
     <title>Commands</title>

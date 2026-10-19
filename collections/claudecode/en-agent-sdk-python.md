@@ -450,6 +450,49 @@ for session in list_sessions(directory="/path/to/project"):
         print(session.summary)
 ```
 
+### `fork_session()`
+
+Copies a session's transcript into a new session so you can take the conversation in another direction while the original stays unchanged. To branch from an earlier point in the conversation, pass `up_to_message_id`. Synchronous.
+
+```python theme={null}
+def fork_session(
+    session_id: str,
+    directory: str | None = None,
+    up_to_message_id: str | None = None,
+    title: str | None = None,
+) -> ForkSessionResult
+```
+
+#### Parameters
+
+| Parameter | Type | Default | Description |
+| :- | :- | :- | :- |
+| `session_id` | `str` | required | UUID of the session to fork |
+| `directory` | `str \| None` | `None` | Project directory path. When omitted, searches all project directories |
+| `up_to_message_id` | `str \| None` | `None` | Copy the transcript up to and including the message with this UUID, such as a `uuid` from [`get_session_messages()`](#get_session_messages). When omitted, copies the whole transcript |
+| `title` | `str \| None` | `None` | Title for the fork. When omitted, the SDK derives one from the original session, followed by `(fork)` |
+
+Returns a `ForkSessionResult` whose `session_id` is the new session's UUID. Pass it as [`resume`](#claudeagentoptions) to continue the fork. The fork doesn't include the original session's [file checkpoints](/docs/en/agent-sdk/file-checkpointing), so you can't rewind it to a checkpoint captured before the fork.
+
+`fork_session()` raises:
+
+* `ValueError`: `session_id` or `up_to_message_id` is not a valid UUID
+* `ValueError`: the session has no messages, or `up_to_message_id` matches no message in the transcript
+* `FileNotFoundError`: the session cannot be found
+
+#### Example
+
+Fork the most recent session under a new title, then resume the fork. The original session keeps its own history.
+
+```python theme={null}
+from claude_agent_sdk import fork_session, list_sessions
+
+sessions = list_sessions(directory="/path/to/project", limit=1)
+if sessions:
+    forked = fork_session(sessions[0].session_id, title="Try the OAuth approach")
+    print(forked.session_id)  # pass as ClaudeAgentOptions(resume=...) to continue the fork
+```
+
 ## Classes
 
 ### `ClaudeSDKClient`
@@ -487,7 +530,7 @@ class ClaudeSDKClient:
 | `receive_response()` | Receive messages until and including a ResultMessage |
 | `interrupt()` | Send interrupt signal (only works in streaming mode) |
 | `set_permission_mode(mode)` | Change the permission mode for the current session |
-| `set_model(model)` | Change the model for the current session. Pass `None` to reset to [Claude Code's default model](/docs/en/model-config) |
+| `set_model(model)` | Change the model for the current session. Pass `None` to reset to [Claude Code's default model](/docs/en/model-config). A session in `auto` mode [changes to `default` mode](/docs/en/agent-sdk/permissions#auto-mode-auto) if the new model doesn't support auto mode |
 | `rewind_files(user_message_id)` | Restore files to their state at the specified user message. Requires `enable_file_checkpointing=True`. See [File checkpointing](/docs/en/agent-sdk/file-checkpointing) |
 | `get_mcp_status()` | Get the status of all configured MCP servers. Returns [`McpStatusResponse`](#mcpstatusresponse) |
 | `get_context_usage()` | Get a breakdown of context window usage by category, skill, and tool. The same data `/context` shows in an interactive session. Returns [`ContextUsageResponse`](#contextusageresponse). To compute the breakdown, Claude Code makes several token-counting API requests that don't appear in the message stream; see [how these requests are handled](#contextusageresponse) |
@@ -827,7 +870,7 @@ class ClaudeAgentOptions:
 | Property | Type | Default | Description |
 | :- | :- | :- | :- |
 | `tools` | `list[str] \| ToolsPreset \| None` | `None` | Tools configuration. Use `{"type": "preset", "preset": "claude_code"}` for Claude Code's default tools |
-| `allowed_tools` | `list[str]` | `[]` | Tools to auto-approve without prompting. This does not restrict Claude to only these tools. If you name one of the [task-tracking tools](/docs/en/agent-sdk/todo-tracking#model-availability) here, Claude Code also opts the session in. Other unlisted tools fall through to `permission_mode` and `can_use_tool`. Use `disallowed_tools` to block tools. See [Permissions](/docs/en/agent-sdk/permissions#allow-and-deny-rules) |
+| `allowed_tools` | `list[str]` | `[]` | Tools to auto-approve without prompting, apart from reads from [network paths](/docs/en/permissions#network-paths). This does not restrict Claude to only these tools. If you name one of the [task-tracking tools](/docs/en/agent-sdk/todo-tracking#model-availability) here, Claude Code also opts the session in. Other unlisted tools fall through to `permission_mode` and `can_use_tool`. Use `disallowed_tools` to block tools. See [Permissions](/docs/en/agent-sdk/permissions#allow-and-deny-rules) |
 | `system_prompt` | `str \| SystemPromptPreset \| SystemPromptCustom \| SystemPromptFile \| None` | `None` | System prompt configuration. Pass a string for a custom prompt, `{"type": "preset", "preset": "claude_code"}` for Claude Code's system prompt with optional `"append"`, `{"type": "custom", "prompt": "..."}` for a custom prompt that can also set `"snapshot"`, or `{"type": "file", "path": "..."}` to load a large prompt from disk. See [`SystemPromptPreset`](#systempromptpreset), [`SystemPromptCustom`](#systempromptcustom), and [`SystemPromptFile`](#systempromptfile) |
 | `mcp_servers` | `dict[str, McpServerConfig] \| str \| Path` | `{}` | MCP server configurations or path to config file |
 | `strict_mcp_config` | `bool` | `False` | When `True`, use only the servers passed in `mcp_servers` and ignore project `.mcp.json`, user settings, plugin-provided MCP servers, and [claude.ai connectors](/docs/en/mcp#use-mcp-servers-from-claude-ai). Maps to the CLI `--strict-mcp-config` flag |
@@ -893,7 +936,9 @@ options = ClaudeAgentOptions(
 ```
 
 * `API_TIMEOUT_MS`: per-request timeout on the Anthropic client, in milliseconds. Default `600000`. Applies to the main loop and all subagents.
-* `CLAUDE_CODE_MAX_RETRIES`: maximum API retries. Default `10`, capped at `15`. Each retry gets its own `API_TIMEOUT_MS` window, so worst-case wall time is roughly `API_TIMEOUT_MS × (CLAUDE_CODE_MAX_RETRIES + 1)` plus backoff. For unattended runs that need to wait through longer outages, set [`CLAUDE_CODE_RETRY_WATCHDOG=1`](/docs/en/errors#tune-retry-behavior): it retries transient capacity errors indefinitely and, on Claude Code v2.1.199 or later, raises the default for other transient errors to `300` and removes the cap on this variable.
+* `CLAUDE_CODE_MAX_RETRIES`: maximum API retries. Default `10`, capped at `15`. Each retry gets its own `API_TIMEOUT_MS` window.
+
+  For unattended runs that need to wait through longer outages, set [`CLAUDE_CODE_RETRY_WATCHDOG=1`](/docs/en/errors#tune-retry-behavior): it retries transient capacity errors indefinitely and, on Claude Code v2.1.199 or later, raises the default for other transient errors to `300` and removes the cap on this variable.
 * `CLAUDE_ASYNC_AGENT_STALL_TIMEOUT_MS`: stall watchdog for subagents. While the stream watchdog is on, the default is `CLAUDE_STREAM_IDLE_TIMEOUT_MS` plus 5 minutes, which comes to `600000` unless you raise that variable. With the stream watchdog off, the default is `600000`. Before v2.1.257, the default was always `600000`.
 
   The timer resets on each stream event. On a stall, Claude Code aborts the subagent and reports the stall to the parent. For a background subagent, it also marks the task failed and attaches any partial result.
@@ -1674,6 +1719,8 @@ Several fields carry diagnostic detail about how the conversation ended:
 * `errors`: loop-level error strings such as the max-turns message. Populated only on the `error_*` subtypes.
 * `terminal_reason`: why the query loop ended, such as `"completed"`, `"max_turns"`, `"api_error"`, `"aborted_streaming"`, or `"aborted_tools"`. A value of `"aborted_streaming"` or `"aborted_tools"` means the turn was aborted before completing. Common causes are [`interrupt()`](#claudesdkclient) and a permission callback returning [`PermissionResultDeny`](#permissionresultdeny) with `interrupt=True`. `None` on CLI versions that predate the field, on results from local commands such as `/voice` or `/usage`, which bypass the query loop, or on synthesized error results emitted when the session fails fatally. Mirrors the TypeScript SDK's [`SDKResultMessage.terminal_reason`](/docs/en/agent-sdk/typescript#sdkresultmessage), which lists the full set of values.
 * `origin`: origin of the user message that triggered this turn. In [streaming input mode](/docs/en/agent-sdk/streaming-vs-single-mode), check this to tell the result of your own prompt, where `origin` is `None` or `{"kind": "human"}`, from the result of an injected turn such as a background-task notification. Requires Python Agent SDK 0.2.137 or later.
+
+When several background tasks finish close together, Claude Code can answer their notifications in one turn rather than one turn each. You still receive one `ResultMessage` per notification, in order, each with an `origin` whose `kind` is `"task-notification"`. All but the last have `num_turns` set to `0` and an empty `result`, and the last one carries the turn that answers them all.
 
 The `usage` dict covers the main agent loop only and excludes subagent and other nested or auxiliary model calls. In [streaming input mode](/docs/en/agent-sdk/streaming-vs-single-mode), the values are per-turn. Prefer `model_usage` for token and cost accounting. The `usage` dict contains the following keys when present:
 
@@ -3091,7 +3138,7 @@ Grep returns this dict shape in each output mode. Which optional keys are presen
 **Tool name:** `TodoWrite`
 
 <Note>
-  The following tools are available by default only on Claude 3.x models, Opus 4 through 4.7, Sonnet 4 through 4.6, and Haiku 4.5. On every other model, including model IDs Claude Code doesn't recognize, they aren't available unless you opt in:
+  The following tools are available by default only on Claude Opus 4.7, Claude Sonnet 4.6, Claude Haiku 4.5, and earlier models. On every other model, including model IDs Claude Code doesn't recognize, they aren't available unless you opt in:
 
   * `TodoWrite`
   * `TaskCreate`
@@ -3516,8 +3563,10 @@ class SandboxSettings(TypedDict, total=False):
 <Note>
   The sandbox depends on platform support and, on Linux, tools like `bubblewrap` and `socat`. By default, when `enabled` is `True` but the sandbox can't start, commands run unsandboxed with a warning on stderr. This default differs from the TypeScript SDK, where `failIfUnavailable` defaults to `true`.
 
-  Set `"failIfUnavailable": True` in your sandbox settings to stop instead. The key isn't declared on `SandboxSettings` yet, but the SDK forwards it to Claude Code, which honors it. `query()` then reports a `ResultMessage` with `subtype="error_during_execution"` and the reason in `errors`. Because this is a single-shot `query()` call, the SDK raises after yielding that error result, so wrap the loop in a try block to continue past it. See [Handle the result](/docs/en/agent-sdk/agent-loop#handle-the-result) for the error contract.
+  Set `"failIfUnavailable": True` in your sandbox settings to stop instead. The SDK forwards `failIfUnavailable` to Claude Code along with the declared `SandboxSettings` fields. `query()` then reports a `ResultMessage` with `subtype="error_during_execution"` and the reason in `errors`. Because this is a single-shot `query()` call, the SDK raises after yielding that error result, so wrap the loop in a try block to continue past it. See [Handle the result](/docs/en/agent-sdk/agent-loop#handle-the-result) for the error contract.
 </Note>
+
+To keep sandboxed commands from writing to a file, list its absolute path under [`denyWrite`](/docs/en/settings-reference#sandbox-filesystem-denywrite) in your sandbox settings, such as `"filesystem": {"denyWrite": ["/home/user/project/.env"]}`. The SDK forwards `filesystem` to Claude Code along with the declared `SandboxSettings` fields. Once the sandbox starts, it blocks writes to each absolute path you listed.
 
 #### Example usage
 

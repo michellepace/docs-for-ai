@@ -43,28 +43,28 @@
   </source>
   <source>
     <title>Caching</title>
-    <description>Learn how to cache data and UI in Next.js</description>
+    <description>Cache Components with `use cache`: caching data or UI, streaming uncached data in Suspense, runtime APIs, static shell prerendering, and prefetching.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/caching</source_url>
     <local_file>app-getting-started-caching.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Font Optimization</title>
-    <description>Learn how to optimize fonts in Next.js</description>
+    <description>Self-host Google and local fonts with next/font to avoid layout shift and requests to Google, applied app-wide via the root layout.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/fonts</source_url>
     <local_file>app-getting-started-fonts.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Image Optimization</title>
-    <description>Learn how to optimize images in Next.js</description>
+    <description>Serve resized, lazy-loaded images with next/image: local and remote sources, width and height to stop layout shift, remotePatterns allowlisting.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/images</source_url>
     <local_file>app-getting-started-images.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Proxy</title>
-    <description>Learn how to use Proxy</description>
+    <description>Formerly Middleware: run code before a request completes to rewrite, redirect or modify headers, scoped by a matcher; not for full auth.</description>
     <source_url>https://nextjs.org/docs/app/getting-started/proxy</source_url>
     <local_file>app-getting-started-proxy.md</local_file>
     <curated_at>2026-08-14</curated_at>
@@ -155,35 +155,35 @@
   </source>
   <source>
     <title>redirect</title>
-    <description>API Reference for the redirect function.</description>
+    <description>Redirect with a 307 from components, Route Handlers or Server Actions; why it must sit outside try/catch and can't run in event handlers.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/redirect</source_url>
     <local_file>app-api-reference-functions-redirect.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>permanentRedirect</title>
-    <description>API Reference for the permanentRedirect function.</description>
+    <description>Redirect with a 308 from Server and Client Components, Route Handlers or Server Actions, choosing push or replace history behaviour.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/functions/permanentRedirect</source_url>
     <local_file>app-api-reference-functions-permanentredirect.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>loading.js</title>
-    <description>API reference for the loading.js file.</description>
+    <description>Instant loading UI while a route segment streams via Suspense; why no fallback shows for layouts reading runtime data, and soft 404s.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/loading</source_url>
     <local_file>app-api-reference-file-conventions-loading.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Metadata Files API Reference</title>
-    <description>API documentation for the metadata file conventions.</description>
+    <description>Favicon, icon, Open Graph image, robots.txt, sitemap and manifest as static or code-generated files, and excluding them from the Proxy matcher.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/file-conventions/metadata</source_url>
     <local_file>app-api-reference-file-conventions-metadata.md</local_file>
     <curated_at>2026-08-14</curated_at>
   </source>
   <source>
     <title>Font Module</title>
-    <description>Optimizing loading web fonts with the built-in `next/font` loaders.</description>
+    <description>Every next/font option such as weight, subsets, display and variable, plus multiple fonts, Tailwind CSS variables and a shared font definitions file.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/components/font</source_url>
     <local_file>app-api-reference-components-font.md</local_file>
     <curated_at>2026-08-14</curated_at>
@@ -197,7 +197,7 @@
   </source>
   <source>
     <title>next.config.js</title>
-    <description>Learn how to configure your application with next.config.js.</description>
+    <description>Write the config as CommonJS, ESM or TypeScript, or as an async function per build phase, and unit test its redirects and rewrites.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js</source_url>
     <local_file>app-api-reference-config-next-config-js.md</local_file>
     <curated_at>2026-08-14</curated_at>
@@ -211,7 +211,7 @@
   </source>
   <source>
     <title>redirects</title>
-    <description>Add redirects to your Next.js app.</description>
+    <description>Map old paths to new ones in next.config.js: 307 vs 308, wildcard and regex matching, header, cookie and query conditions.</description>
     <source_url>https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects</source_url>
     <local_file>app-api-reference-config-next-config-js-redirects.md</local_file>
     <curated_at>2026-08-14</curated_at>
@@ -246,7 +246,7 @@
   </source>
   <source>
     <title>How to use fonts</title>
-    <description>Learn how to use fonts in Next.js</description>
+    <description>Pages Router: self-host Google and local fonts with next/font in pages/_app to avoid layout shift and requests to Google.</description>
     <source_url>https://nextjs.org/docs/pages/getting-started/fonts</source_url>
     <local_file>pages-getting-started-fonts.md</local_file>
     <curated_at>2026-08-14</curated_at>

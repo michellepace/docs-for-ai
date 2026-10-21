@@ -72,7 +72,7 @@ Two reads feed the write:
 
 The report's `title:` line is the `<title>` your description must complement.
 
-Then pipe the description straight in (the script rejects fewer than 8 or more than 25 words) — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe the description straight in (the script rejects fewer than 10 or more than 25 words) — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'

@@ -1,7 +1,7 @@
 <docs_index>
   <source>
     <title>Overview</title>
-    <description>Learn about Cowork, Anthropic's agentic workspace</description>
+    <description>Cowork, Claude Desktop's agentic workspace for multi-step tasks on local files; why it ignores ~/.claude skills unless added in Customize.</description>
     <source_url>https://claude.com/docs/cowork/overview</source_url>
     <local_file>cowork-overview.md</local_file>
     <curated_at>2026-10-18</curated_at>

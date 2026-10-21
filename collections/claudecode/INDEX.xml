@@ -43,10 +43,10 @@
   </source>
   <source>
     <title>Choose a permission mode</title>
-    <description>Control whether Claude asks before acting. Switch permission modes with Shift+Tab in the CLI, the mode indicator in VS Code, or Desktop's mode selector.</description>
+    <description>Control whether Claude asks before acting. Switch permission modes with Shift+Tab in the CLI, the mode indicator in VS Code, or the mode selector in Desktop.</description>
     <source_url>https://code.claude.com/docs/en/permission-modes</source_url>
     <local_file>en-permission-modes.md</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Extend Claude with skills</title>

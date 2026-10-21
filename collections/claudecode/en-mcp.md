@@ -1,6 +1,6 @@
 # MCP for Claude Code — authoring reference (hand scoped)
 
-> For MCP server authors: building a public, unauthenticated streamable-HTTP server for Claude Code — error responses, the two install paths and tool naming, tool search, schema/output/timeout limits, `_meta` annotations, connection lifecycle, resources and prompts.
+> Building a no-auth HTTP MCP server: how users install it, how Claude finds its tools, and the limits it must meet.
 
 ## ⚠️ NOTE: Trimmed from original doc!
 

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 DESCRIP_MIN_WORDS = 10
-DESCRIP_MAX_WORDS = 25
+DESCRIP_MAX_WORDS = 30
 LINES_PER_ENTRY = 2  # filename line + description line
 
 type DescriptionsByFile = dict[str, str]

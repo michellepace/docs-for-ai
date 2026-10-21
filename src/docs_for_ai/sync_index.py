@@ -46,14 +46,15 @@ class SyncReport(NamedTuple):
 # Collection files that must survive a sync.
 _PROTECTED_FILES = {"INDEX.xml", "README.md"}
 
-# Reason tag per description-resetting outcome; any other placeholder in
-# INDEX.xml was carried over from an earlier run.
-_PLACEHOLDER_REASONS = {
+# Reason tag per outcome that resets a description; any other reset was
+# a placeholder carried over from an earlier run.
+_RESET_REASONS = {
     curate_doc.DocOutcome.NEW: "new source",
     curate_doc.DocOutcome.CHANGED: "content changed",
     curate_doc.DocOutcome.RECREATED: "file recreated",
 }
 _CARRIED_OVER_REASON = "kept placeholder"
+_FILLED_REASON = "placeholder filled"
 
 
 def read_index_sources(index_path: Path) -> list[IndexSource]:
@@ -111,13 +112,30 @@ def files_needing_description(index_path: Path) -> dict[str, str]:
     }
 
 
-def _placeholder_reasons(results: list[curate_doc.CurationResult]) -> dict[str, str]:
+def _reset_reasons(results: list[curate_doc.CurationResult]) -> dict[str, str]:
     """Reason tag per curated file whose outcome reset its description."""
     return {
-        result.local_file: _PLACEHOLDER_REASONS[result.outcome]
+        result.local_file: _RESET_REASONS[result.outcome]
         for result in results
-        if result.outcome in _PLACEHOLDER_REASONS
+        if result.outcome in _RESET_REASONS
     }
+
+
+def _publisher_summary_lines(report: SyncReport) -> list[str]:
+    """Section listing docs described from their publisher's summary this run."""
+    reasons = _reset_reasons(report.successes)
+    filled = sorted(
+        result.local_file
+        for result in report.successes
+        if result.description_source is curate_doc.DescriptionSource.PUBLISHER_SUMMARY
+    )
+    if not filled:
+        return []
+    return [
+        "",
+        f"PUBLISHER SUMMARY ({len(filled)})",
+        *(f"  {name}  ({reasons.get(name, _FILLED_REASON)})" for name in filled),
+    ]
 
 
 def format_sync_report(report: SyncReport) -> str:
@@ -138,7 +156,7 @@ def format_sync_report(report: SyncReport) -> str:
             lines += [f"  {failure.source_url}", f"    {error}"]
 
     if report.placeholder_files:
-        reasons = _placeholder_reasons(report.successes)
+        reasons = _reset_reasons(report.successes)
         paths = {
             filename: format_path_for_display(report.collection_dir / filename)
             for filename in sorted(report.placeholder_files)
@@ -150,6 +168,8 @@ def format_sync_report(report: SyncReport) -> str:
                 f"  {path:<{width}}  ({reasons.get(filename, _CARRIED_OVER_REASON)})",
                 f"    title: {report.placeholder_files[filename]}",
             ]
+
+    lines += _publisher_summary_lines(report)
 
     needed = len(report.placeholder_files)
     noun = "description" if needed == 1 else "descriptions"
@@ -219,7 +239,8 @@ def main() -> None:
 changes:
   - Re-fetches each doc from its <source_url>, overwriting the file and
     updating its entry. <description> is kept if the content is unchanged
-    (ignoring whitespace); otherwise it becomes PLACEHOLDER.
+    (ignoring whitespace); otherwise it becomes PLACEHOLDER, or for a
+    doc from a trusted site, its own summary when it fits the word band.
   - Deletes files not listed as a <local_file>. INDEX.xml, README.md,
     dotfiles and subdirectories are kept.
   - Never removes an INDEX.xml source; a failed one is left as it was.

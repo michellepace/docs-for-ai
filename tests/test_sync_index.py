@@ -62,10 +62,10 @@ def run_sync(
 def stub_fetches(
     monkeypatch: pytest.MonkeyPatch, docs: dict[str, str | Exception]
 ) -> None:
-    """Serve canned content per fetch URL, offline; FireCrawl is forbidden.
+    """Serve `docs[fetch_url]` offline; FireCrawl is forbidden.
 
-    Keys are FETCH urls — https://example.com/ is under the `append-md` rule,
-    so it fetches `<canonical>.md`. An Exception value is raised, not returned.
+    Keys are fetch URLs, not INDEX source URLs: the stubbed `append-md` rule
+    fetches `<page>` as `<page>.md`.
     """
 
     def fetch(url: str) -> str:
@@ -79,22 +79,37 @@ def stub_fetches(
     monkeypatch.setattr(
         curate_doc.direct_fetch,
         "load_direct_fetch_rules",
-        lambda: {"append-md": ["https://example.com/"]},
+        lambda: {
+            "append-md": ["https://example.com/", "https://code.claude.com/docs/"]
+        },
     )
     monkeypatch.setattr(curate_doc.direct_fetch, "fetch_text", fetch)
     monkeypatch.setattr(curate_doc.firecrawl_scrape, "scrape", forbid_scrape)
 
 
-def create_collection(tmp_path: Path, doc_content: str, description: str) -> Path:
+def create_collection(
+    tmp_path: Path,
+    doc_content: str,
+    description: str,
+    source_url: str = "https://example.com/doc",
+) -> Path:
     """A collection holding one indexed doc ('doc.md') sourced from …/doc."""
     collection_dir = tmp_path / "collection"
     collection_dir.mkdir()
     (collection_dir / "doc.md").write_text(doc_content)
     create_index_xml(
         collection_dir / "INDEX.xml",
-        [make_source("doc.md", "https://example.com/doc", description)],
+        [make_source("doc.md", source_url, description)],
     )
     return collection_dir
+
+
+CLAUDE_URL = "https://code.claude.com/docs/doc"  # trusted site: has a summary
+CLAUDE_SUMMARY = (
+    "Run shell commands at points in Claude Code's lifecycle"
+    " to format, block, or log what Claude does."
+)
+CLAUDE_DOC = f"# Hooks\n\n> {CLAUDE_SUMMARY}\n"
 
 
 def make_result(
@@ -111,6 +126,7 @@ def make_result(
         route="direct",
         title=local_file,
         description=PLACEHOLDER_DESCRIPTION,
+        description_source=curate_doc.DescriptionSource.PLACEHOLDER,
         initialised=False,
     )
 
@@ -160,6 +176,7 @@ def test_report_omits_empty_sections() -> None:
 
     assert "FAILED" not in output
     assert "NEEDS DESCRIPTION" not in output
+    assert "PUBLISHER SUMMARY" not in output
 
 
 def test_report_counts_line_and_gate_reflect_the_run() -> None:
@@ -311,6 +328,39 @@ def test_sync_flags_kept_placeholder_description(
     assert "doc.md" in needs_section
     assert "(kept placeholder)" in needs_section
     assert "    title: Fetched fresh" in needs_section
+
+
+def test_sync_lists_changed_claude_doc_under_publisher_summary(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, "# Hooks\n\n> Old summary.\n", "Old description", CLAUDE_URL
+    )
+    stub_fetches(monkeypatch, {f"{CLAUDE_URL}.md": CLAUDE_DOC})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    index_path = collection_dir / "INDEX.xml"
+    assert read_index_description(index_path, "doc.md") == CLAUDE_SUMMARY
+    assert "PUBLISHER SUMMARY (1)\n  doc.md  (content changed)\n" in out
+    assert "NEEDS DESCRIPTION" not in out
+
+
+def test_sync_tags_placeholder_filled_by_publisher_summary(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection_dir = create_collection(
+        tmp_path, CLAUDE_DOC, PLACEHOLDER_DESCRIPTION, CLAUDE_URL
+    )
+    stub_fetches(monkeypatch, {f"{CLAUDE_URL}.md": CLAUDE_DOC})
+
+    out = run_sync(collection_dir, monkeypatch, capsys)
+
+    assert "PUBLISHER SUMMARY (1)\n  doc.md  (placeholder filled)\n" in out
 
 
 def test_sync_keeps_description_regenerated_after_reset(

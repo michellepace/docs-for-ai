@@ -62,7 +62,7 @@ Two reads feed every write:
 
 Each entry's indented `title:` line is the `<title>` that description must complement.
 
-Then pipe one description per entry (the script rejects fewer than 8 or more than 25 words) — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe one description per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
@@ -91,10 +91,10 @@ Report completion in this format, filling each slot from the scripts' output:
 - Total docs:            [M]
 - Successfully curated:  [X]
 - Failed to curate:      [Y]
-- Descriptions updated:  [D]
+- Descriptions updated:  [D: docs under `NEEDS DESCRIPTION` + `PUBLISHER SUMMARY`]
 
 💡 What changed in `$collection`:
-- [one line per `NEEDS DESCRIPTION` doc, from its reason tag]
+- [one line per doc under `NEEDS DESCRIPTION` or `PUBLISHER SUMMARY`, from its reason tag]
 ```
 
 </report_format>

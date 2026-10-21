@@ -63,7 +63,7 @@ Errors print actionable info. Propose fixes but await user approval; proceed ONL
 
 ## Step 3. Write the description
 
-Skip this step if `description:` says `kept` — go to Step 4.
+Run this step only if `description:` says `PLACEHOLDER (pending)`; otherwise go to Step 4.
 
 Two reads feed the write:
 
@@ -72,7 +72,7 @@ Two reads feed the write:
 
 The report's `title:` line is the `<title>` your description must complement.
 
-Then pipe the description straight in (the script rejects fewer than 8 or more than 25 words) — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe the description straight in — the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
@@ -97,7 +97,7 @@ Report completion in this format, filling each slot from the scripts' output:
 - Source URL: `<url: line>`
 - [Created/Overwrote] doc: `<doc: path>`
 - [Indexed/Reindexed] index: `<index: path>`
-- Description: <N words ✓, or kept>
+- Description: <N words ✓, kept, or publisher summary>
 
 "*<description, if written>*"
 ```

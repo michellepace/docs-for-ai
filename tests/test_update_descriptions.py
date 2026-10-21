@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from docs_for_ai.index_io import DESCRIP_MAX_WORDS, DESCRIP_MIN_WORDS
 from docs_for_ai.update_descriptions import main, parse_descriptions
 
 if TYPE_CHECKING:
@@ -16,7 +17,8 @@ def words(count: int) -> str:
     return " ".join(["word"] * count)
 
 
-IN_BAND = words(25)
+IN_BAND = words(DESCRIP_MAX_WORDS)
+NEED_BAND = f"need {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS}"
 
 
 class _InteractiveStdin(io.StringIO):
@@ -62,7 +64,9 @@ def run_cli(
     return exit_code, capsys.readouterr().out
 
 
-@pytest.mark.parametrize("word_count", [8, 25], ids=["at-min", "at-max"])
+@pytest.mark.parametrize(
+    "word_count", [DESCRIP_MIN_WORDS, DESCRIP_MAX_WORDS], ids=["at-min", "at-max"]
+)
 def test_in_band_description_is_applied_with_success_verdict(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -84,7 +88,9 @@ def test_in_band_description_is_applied_with_success_verdict(
 
 
 @pytest.mark.parametrize(
-    "word_count", [7, 26], ids=["just-below-band", "just-above-band"]
+    "word_count",
+    [DESCRIP_MIN_WORDS - 1, DESCRIP_MAX_WORDS + 1],
+    ids=["just-below-band", "just-above-band"],
 )
 def test_out_of_band_description_is_flagged_and_withheld(
     tmp_path: Path,
@@ -100,7 +106,7 @@ def test_out_of_band_description_is_flagged_and_withheld(
     )
 
     assert exit_code == 1
-    assert f"❌ doc-a.md: {word_count} words (need 8-25)" in out
+    assert f"❌ doc-a.md: {word_count} words ({NEED_BAND})" in out
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 
@@ -117,8 +123,8 @@ def test_out_of_band_entry_does_not_block_in_band_sibling(
 
     # The per-file verdicts, exit 1, and closing steer drive the repair loop
     assert exit_code == 1
-    assert "✅ doc-a.md: 25 words" in out
-    assert "❌ doc-b.md: 2 words (need 8-25)" in out
+    assert f"✅ doc-a.md: {DESCRIP_MAX_WORDS} words" in out
+    assert f"❌ doc-b.md: 2 words ({NEED_BAND})" in out
     assert "rerun with only those" in out
 
     # In-band doc-a is applied immediately; flagged doc-b keeps its old description
@@ -228,8 +234,8 @@ def test_cli_entry_point_propagates_exit_1_while_applying_in_band_sibling(
     )
 
     assert result.returncode == 1
-    assert "✅ doc-a.md: 25 words" in result.stdout
-    assert "❌ doc-b.md: 2 words (need 8-25)" in result.stdout
+    assert f"✅ doc-a.md: {DESCRIP_MAX_WORDS} words" in result.stdout
+    assert f"❌ doc-b.md: 2 words ({NEED_BAND})" in result.stdout
     content = index_path.read_text(encoding="utf-8")
     assert f"<description>{IN_BAND}</description>" in content
     assert "old B" in content

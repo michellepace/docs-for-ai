@@ -7,14 +7,17 @@ from itertools import batched
 from typing import TYPE_CHECKING
 
 from docs_for_ai.errors import CurationError
-from docs_for_ai.index_io import write_index
+from docs_for_ai.index_io import (
+    DESCRIP_MAX_WORDS,
+    DESCRIP_MIN_WORDS,
+    fits_word_band,
+    write_index,
+)
 from docs_for_ai.paths import normalise_collection_dir
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-DESCRIP_MIN_WORDS = 8
-DESCRIP_MAX_WORDS = 25
 LINES_PER_ENTRY = 2  # filename line + description line
 
 type DescriptionsByFile = dict[str, str]
@@ -40,7 +43,7 @@ def _in_band_descriptions(descriptions: DescriptionsByFile) -> DescriptionsByFil
     in_band: DescriptionsByFile = {}
     for local_file, description in descriptions.items():
         count = len(description.split())
-        if DESCRIP_MIN_WORDS <= count <= DESCRIP_MAX_WORDS:
+        if fits_word_band(description):
             print(f"✅ {local_file}: {count} words")
             in_band[local_file] = description
         else:

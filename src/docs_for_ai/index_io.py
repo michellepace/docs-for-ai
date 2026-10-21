@@ -9,6 +9,14 @@ if TYPE_CHECKING:
 # Default <description> for a new/uncurated source
 PLACEHOLDER_DESCRIPTION = "PLACEHOLDER"
 
+DESCRIP_MIN_WORDS = 10
+DESCRIP_MAX_WORDS = 30
+
+
+def fits_word_band(description: str) -> bool:
+    """Check the description word count is within range."""
+    return DESCRIP_MIN_WORDS <= len(description.split()) <= DESCRIP_MAX_WORDS
+
 
 def write_index(root: ET.Element, index_path: Path) -> None:
     """Write INDEX.xml with indentation and trailing newline (POSIX convention)."""

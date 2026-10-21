@@ -86,6 +86,8 @@ ignore = [ # ignore incompatible or overly pedantic rules
   "S603",    # subprocess call: check for execution of untrusted input
   "S607",    # Partial executable paths (controlled test env)
   "DTZ011",  # date.today() appropriate for matching script behavior
+  "PLR0913", # fixtures/params are injected by name; arg count is fine
+  "PLR0917", # fixtures/params are injected by name; arg count is fine
 ]
 
 [tool.ruff.lint.pydocstyle]

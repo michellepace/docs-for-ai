@@ -91,10 +91,10 @@ Report completion in this format, filling each slot from the scripts' output:
 - Total docs:            [M]
 - Successfully curated:  [X]
 - Failed to curate:      [Y]
-- Descriptions updated:  [D]
+- Descriptions updated:  [D: docs under `NEEDS DESCRIPTION` + `PUBLISHER SUMMARY`]
 
 💡 What changed in `$collection`:
-- [one line per `NEEDS DESCRIPTION` doc, from its reason tag]
+- [one line per doc under `NEEDS DESCRIPTION` or `PUBLISHER SUMMARY`, from its reason tag]
 ```
 
 </report_format>

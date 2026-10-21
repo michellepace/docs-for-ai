@@ -1,6 +1,7 @@
 """curate-doc tests: fetch the cheapest route; rule-site twins collapse to one source.
 
-Descriptions survive unless content really changed.
+Descriptions survive unless content really changed; Claude docs fill from the
+publisher's own summary.
 """
 
 import subprocess
@@ -41,6 +42,39 @@ URL_GH_BLOB_404 = (
 
 DOC_URL = "https://example.com/docs/hello.md"  # no rule: recorded as-is → hello.md
 DOC_CONTENT = "# Hello\n\nFirst paragraph.\n\nSecond paragraph.\n"
+
+
+CLAUDE_CODE_URL = "https://code.claude.com/docs/en/hooks"
+CLAUDE_CODE_SUMMARY = (
+    "Run shell commands at points in Claude Code's lifecycle"
+    " to format, block, or log what Claude does."
+)
+CLAUDE_CODE_DOC = f"""\
+> ## Documentation Index
+> Fetch the complete documentation index at: https://code.claude.com/docs/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Hooks reference
+
+> {CLAUDE_CODE_SUMMARY}
+
+Hooks are user-defined shell commands.
+"""
+
+
+PLATFORM_URL = "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+PLATFORM_SUMMARY = (
+    "Cache repeated prompt prefixes to cut latency and cost,"
+    " with breakpoints, lifetimes, and pricing explained."
+)
+PLATFORM_DOC = f"""\
+---
+title: Prompt caching
+description: {PLATFORM_SUMMARY}
+---
+
+Prompt caching lets you reuse prompt prefixes.
+"""
 
 
 def run_script(*args: str) -> tuple[int, str]:
@@ -521,6 +555,110 @@ def test_curate_reports_pending_when_placeholder_carried_over(
     index_path = collection / "INDEX.xml"
     assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
     assert "description: PLACEHOLDER (pending)" in out
+
+
+@pytest.mark.parametrize(
+    ("url", "doc", "local_file", "summary"),
+    [
+        (CLAUDE_CODE_URL, CLAUDE_CODE_DOC, "en-hooks.md", CLAUDE_CODE_SUMMARY),
+        (
+            PLATFORM_URL,
+            PLATFORM_DOC,
+            "en-build-with-claude-prompt-caching.md",
+            PLATFORM_SUMMARY,
+        ),
+    ],
+    ids=["summary-line", "frontmatter"],
+)
+def test_curate_describes_new_trusted_site_doc_from_publisher_summary(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    url: str,
+    doc: str,
+    local_file: str,
+    summary: str,
+) -> None:
+    collection = tmp_path / "coll"
+    stub_direct_fetch(monkeypatch, doc)
+
+    out = run_curate(collection, url, monkeypatch, capsys)
+
+    index_path = collection / "INDEX.xml"
+    assert read_index_description(index_path, local_file) == summary
+    assert "description: publisher summary\n" in out
+
+
+def test_curate_leaves_placeholder_when_publisher_summary_is_too_short(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    collection = tmp_path / "coll"
+    short_summary = "Learn about hooks."
+    stub_direct_fetch(
+        monkeypatch, CLAUDE_CODE_DOC.replace(CLAUDE_CODE_SUMMARY, short_summary)
+    )
+
+    result = curate_doc.curate(collection, CLAUDE_CODE_URL)
+
+    index_path = collection / "INDEX.xml"
+    assert read_index_description(index_path, result.local_file) == (
+        PLACEHOLDER_DESCRIPTION
+    )
+
+
+def test_curate_ignores_summary_line_on_untrusted_site(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    collection = tmp_path / "coll"
+    curate_offline(collection, CLAUDE_CODE_DOC, monkeypatch)
+
+    index_path = collection / "INDEX.xml"
+    assert read_index_description(index_path, "hello.md") == PLACEHOLDER_DESCRIPTION
+
+
+def test_curate_fills_carried_over_placeholder_on_unchanged_trusted_site_doc(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    collection = tmp_path / "coll"
+    stub_direct_fetch(monkeypatch, CLAUDE_CODE_DOC)
+    local_file = curate_doc.curate(collection, CLAUDE_CODE_URL).local_file
+    index_path = collection / "INDEX.xml"
+    set_index_description(index_path, local_file, PLACEHOLDER_DESCRIPTION)
+
+    curate_doc.curate(collection, CLAUDE_CODE_URL)
+
+    assert read_index_description(index_path, local_file) == CLAUDE_CODE_SUMMARY
+
+
+def test_curate_reports_kept_when_changed_doc_republishes_same_summary(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    collection = tmp_path / "coll"
+    stub_direct_fetch(monkeypatch, CLAUDE_CODE_DOC)
+    local_file = curate_doc.curate(collection, CLAUDE_CODE_URL).local_file
+    stub_direct_fetch(monkeypatch, CLAUDE_CODE_DOC + "\nA new paragraph.\n")
+
+    out = run_curate(collection, CLAUDE_CODE_URL, monkeypatch, capsys)
+
+    index_path = collection / "INDEX.xml"
+    assert read_index_description(index_path, local_file) == CLAUDE_CODE_SUMMARY
+    assert "description: kept — publisher summary unchanged\n" in out
+
+
+def test_curate_keeps_written_description_over_publisher_summary_when_unchanged(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    collection = tmp_path / "coll"
+    stub_direct_fetch(monkeypatch, CLAUDE_CODE_DOC)
+    local_file = curate_doc.curate(collection, CLAUDE_CODE_URL).local_file
+    index_path = collection / "INDEX.xml"
+    set_index_description(index_path, local_file, "Generated description")
+
+    curate_doc.curate(collection, CLAUDE_CODE_URL)
+
+    assert read_index_description(index_path, local_file) == "Generated description"
 
 
 def test_cli_report_shows_created_doc_and_constant_success_gate(

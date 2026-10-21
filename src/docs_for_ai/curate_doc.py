@@ -10,25 +10,38 @@ from urllib.parse import urlparse
 
 from docs_for_ai import direct_fetch, firecrawl_scrape
 from docs_for_ai.errors import CurationError
-from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION, write_index
+from docs_for_ai.index_io import (
+    PLACEHOLDER_DESCRIPTION,
+    fits_word_band,
+    write_index,
+)
 from docs_for_ai.paths import (
     collection_label,
     format_path_for_display,
     normalise_collection_dir,
 )
+from docs_for_ai.publisher_summary import publisher_summary
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
 class DocOutcome(StrEnum):
-    """Fate of a source's description, decided at write time."""
+    """How a fetched doc compares with the doc file its INDEX entry records."""
 
     NEW = "new"  # no INDEX entry for this canonical URL
     UNCHANGED = "unchanged"  # fetched bytes identical to the entry's doc file
     WHITESPACE_ONLY = "whitespace-only"  # differs only in whitespace
-    CHANGED = "changed"  # real content change — description resets
+    CHANGED = "changed"  # content differs beyond whitespace
     RECREATED = "recreated"  # entry exists but its doc file is missing
+
+
+class DescriptionSource(StrEnum):
+    """Where a recorded description came from."""
+
+    KEPT = "kept"
+    PUBLISHER_SUMMARY = "publisher-summary"
+    PLACEHOLDER = "placeholder"
 
 
 class CurationResult(NamedTuple):
@@ -43,6 +56,7 @@ class CurationResult(NamedTuple):
     route: Literal["direct", "firecrawl"]
     title: str
     description: str
+    description_source: DescriptionSource
     initialised: bool
 
 
@@ -146,21 +160,35 @@ def _classify_outcome(
     return DocOutcome.CHANGED
 
 
-def _decide_description(outcome: DocOutcome, existing: _ExistingEntry | None) -> str:
-    """Keep the existing description only when the fetch matches the recorded file."""
+def _decide_description(
+    outcome: DocOutcome, existing: _ExistingEntry | None, doc: FetchedDoc
+) -> tuple[str, DescriptionSource]:
+    """Written description if unchanged, else publisher summary, else PLACEHOLDER."""
+    recorded = existing.description if existing is not None else ""
     keep = {DocOutcome.UNCHANGED, DocOutcome.WHITESPACE_ONLY}
-    if outcome in keep and existing is not None and existing.description:
-        return existing.description
-    return PLACEHOLDER_DESCRIPTION
+    if outcome in keep and recorded not in {"", PLACEHOLDER_DESCRIPTION}:
+        return recorded, DescriptionSource.KEPT
+    summary = publisher_summary(doc.content, doc.source_url)
+    if summary is None or not fits_word_band(summary):
+        return PLACEHOLDER_DESCRIPTION, DescriptionSource.PLACEHOLDER
+    if summary == recorded:
+        return recorded, DescriptionSource.KEPT
+    return summary, DescriptionSource.PUBLISHER_SUMMARY
 
 
-def _description_note(outcome: DocOutcome, description: str) -> str:
+def _description_note(result: CurationResult) -> str:
     """The report's `description:` value — the fate Claude keys Step 3 off."""
-    if description == PLACEHOLDER_DESCRIPTION:
-        return "PLACEHOLDER (pending)"
-    if outcome is DocOutcome.WHITESPACE_ONLY:
-        return "kept — whitespace-only change"
-    return "kept — content unchanged"
+    match result.description_source:
+        case DescriptionSource.PLACEHOLDER:
+            return "PLACEHOLDER (pending)"
+        case DescriptionSource.PUBLISHER_SUMMARY:
+            return "publisher summary"
+        case DescriptionSource.KEPT if result.outcome is DocOutcome.UNCHANGED:
+            return "kept — content unchanged"
+        case DescriptionSource.KEPT if result.outcome is DocOutcome.WHITESPACE_ONLY:
+            return "kept — whitespace-only change"
+        case DescriptionSource.KEPT:
+            return "kept — publisher summary unchanged"
 
 
 def _add_or_update_source_in_index(
@@ -273,6 +301,11 @@ changes:
   place. <description> is kept if the content is unchanged (ignoring
   whitespace); otherwise it becomes PLACEHOLDER.
 
+description:
+  A doc from a trusted site (Claude docs: claude.com, code.claude.com,
+  platform.claude.com) whose description would be PLACEHOLDER gets the
+  site's own summary instead, if that is within the word band.
+
 exit:
   0 on success; 1 with `❌ <reason>`, having changed nothing.
 """,
@@ -291,12 +324,7 @@ exit:
 
 
 def curate(collection_dir: Path, source_url: str) -> CurationResult:
-    """Curate one source URL into a collection.
-
-    A description survives only when the fetched document matches the doc file its
-    INDEX entry records (compared before the overwrite, ignoring whitespace); new,
-    changed, or recreated docs reset it to PLACEHOLDER.
-    """
+    """Curate one source URL into a collection."""
     source_url = source_url.rstrip("/")
     index_path = collection_dir / "INDEX.xml"
 
@@ -333,7 +361,7 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
 
     doc_action = _write_fetched_document(collection_dir, doc)
 
-    description = _decide_description(outcome, existing)
+    description, description_source = _decide_description(outcome, existing, doc)
 
     # doc.source_url is canonical: query/fragment-free, re-resolves to this route
     index_action = _add_or_update_source_in_index(
@@ -350,6 +378,7 @@ def curate(collection_dir: Path, source_url: str) -> CurationResult:
         route="firecrawl" if fetch_route.doc_format is None else "direct",
         title=doc.title,
         description=description,
+        description_source=description_source,
         initialised=not index_exists,
     )
 
@@ -368,7 +397,7 @@ def _format_curate_report(collection_dir: Path, result: CurationResult) -> str:
             f"  url:    {result.canonical_url}",
             f"  fetch:  {result.chars:,} chars, {result.route}",
             f"  title:  {result.title}",
-            f"  description: {_description_note(result.outcome, result.description)}",
+            f"  description: {_description_note(result)}",
         ]
     )
     return "\n".join(lines)

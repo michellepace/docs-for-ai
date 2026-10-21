@@ -14,7 +14,7 @@ collections/
     └── *.{md,mdx,qmd,txt}  # Curated doc files
 ```
 
-`INDEX.xml` is written programmatically; only `<description>` is LLM-generated. Every collection follows this exact schema, with each leaf element always on one line:
+`INDEX.xml` is written programmatically; only `<description>` may be LLM-generated. Every collection follows this exact schema, with each leaf element always on one line:
 
 ```xml
 <docs_index>

@@ -63,7 +63,7 @@ Errors print actionable info. Propose fixes but await user approval; proceed ONL
 
 ## Step 3. Write the description
 
-Skip this step if `description:` says `kept` — go to Step 4.
+Run this step only if `description:` says `PLACEHOLDER (pending)`; otherwise go to Step 4.
 
 Two reads feed the write:
 
@@ -97,7 +97,7 @@ Report completion in this format, filling each slot from the scripts' output:
 - Source URL: `<url: line>`
 - [Created/Overwrote] doc: `<doc: path>`
 - [Indexed/Reindexed] index: `<index: path>`
-- Description: <N words ✓, or kept>
+- Description: <N words ✓, kept, or publisher summary>
 
 "*<description, if written>*"
 ```

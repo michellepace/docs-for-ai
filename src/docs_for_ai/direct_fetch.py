@@ -236,7 +236,7 @@ def github_filename_from_blob_url(url: str) -> str:
     return f"{slug or 'index'}.{match.group(5).lower()}"
 
 
-def _split_frontmatter(content: str) -> tuple[str, str]:
+def split_frontmatter(content: str) -> tuple[str, str]:
     """`(frontmatter, body)`; frontmatter is empty when the doc has none."""
     text = content.lstrip()
     if text.startswith("---\n"):
@@ -304,7 +304,7 @@ def _title_from_rst(content: str) -> str | None:
 
 def extract_md_title(content: str, markdown_url: str) -> str:
     """Resolve a title: frontmatter, else the body's first H1, else the URL."""
-    frontmatter, body = _split_frontmatter(content)
+    frontmatter, body = split_frontmatter(content)
     return (
         _title_from_frontmatter(frontmatter)
         or _title_from_h1(body)

@@ -6,12 +6,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from docs_for_ai.update_descriptions import (
-    DESCRIP_MAX_WORDS,
-    DESCRIP_MIN_WORDS,
-    main,
-    parse_descriptions,
-)
+from docs_for_ai.index_io import DESCRIP_MAX_WORDS, DESCRIP_MIN_WORDS
+from docs_for_ai.update_descriptions import main, parse_descriptions
 
 if TYPE_CHECKING:
     from pathlib import Path

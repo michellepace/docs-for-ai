@@ -62,7 +62,7 @@ Two reads feed every write:
 
 Each entry's indented `title:` line is the `<title>` that description must complement.
 
-Then pipe one description per entry (the script rejects fewer than 10 or more than 25 words) — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe one description per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'

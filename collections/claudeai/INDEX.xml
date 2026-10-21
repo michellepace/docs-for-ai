@@ -1,135 +1,135 @@
 <docs_index>
   <source>
     <title>Overview</title>
-    <description>Cowork, Claude Desktop's agentic workspace for multi-step tasks on local files; why it ignores ~/.claude skills unless added in Customize.</description>
+    <description>Cowork: Claude Desktop's agentic workspace; loads skills from Customize, not ~/.claude.</description>
     <source_url>https://claude.com/docs/cowork/overview</source_url>
     <local_file>cowork-overview.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Build an MCP server for Claude</title>
     <description>Build a remote MCP server that people use as a connector in Claude: where it runs, authentication, what it exposes, size and timeout limits, and distribution.</description>
     <source_url>https://claude.com/docs/connectors/building</source_url>
     <local_file>connectors-building.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Decide what to include in your plugin</title>
     <description>Decide which pieces your Claude plugin needs: an MCP connector backed by a server you host, skills, commands, agents, or UI, and how they're listed together.</description>
     <source_url>https://claude.com/docs/connectors/building/what-to-build</source_url>
     <local_file>connectors-building-what-to-build.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Authentication for connectors</title>
     <description>Meet Claude's OAuth requirements for remote MCP servers: supported authentication types, client registration, discovery, callback URLs, and token refresh.</description>
     <source_url>https://claude.com/docs/connectors/building/authentication</source_url>
     <local_file>connectors-building-authentication.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Model Context Protocol (MCP)</title>
     <description>Get oriented to the Model Context Protocol, the open standard behind Claude's connectors: local and remote servers, tools, resources, and prompts.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp</source_url>
     <local_file>connectors-building-mcp.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Lazy authentication for MCP servers</title>
     <description>Let users call public tools immediately and defer OAuth until a protected tool is actually invoked.</description>
     <source_url>https://claude.com/docs/connectors/building/lazy-authentication</source_url>
     <local_file>connectors-building-lazy-authentication.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Enterprise Managed Auth for connectors</title>
     <description>Accept identity assertions from enterprise SSO so users connect to your MCP server without a separate OAuth consent step.</description>
     <source_url>https://claude.com/docs/connectors/building/enterprise-managed-auth</source_url>
     <local_file>connectors-building-enterprise-managed-auth.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Directory connectors vs custom connectors</title>
     <description>Compare directory-listed and custom connectors: Anthropic review, in-product discovery, install links, Suggested Connectors, and per-tenant URL listings.</description>
     <source_url>https://claude.com/docs/connectors/building/directory-vs-custom</source_url>
     <local_file>connectors-building-directory-vs-custom.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Test your connector</title>
     <description>Test your MCP server against Claude as a custom connector before you submit it to the directory, including a local server exposed through a tunnel.</description>
     <source_url>https://claude.com/docs/connectors/building/testing</source_url>
     <local_file>connectors-building-testing.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Troubleshoot your connector</title>
     <description>Diagnose and resolve common connection, authorization, and tool-call failures for custom and directory MCP connectors</description>
     <source_url>https://claude.com/docs/connectors/building/troubleshooting</source_url>
     <local_file>connectors-building-troubleshooting.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Connector pre-submission checklist</title>
     <description>Check your MCP connector against what Anthropic reviewers test, including tool design, prompt-injection patterns, and functional quality, before you submit.</description>
     <source_url>https://claude.com/docs/connectors/building/review-criteria</source_url>
     <local_file>connectors-building-review-criteria.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Manage your listing after publishing</title>
     <description>Update your MCP server, plugin, and directory listing after publication, keep your listing URL stable, and delist when you need to.</description>
     <source_url>https://claude.com/docs/connectors/building/after-publishing</source_url>
     <local_file>connectors-building-after-publishing.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Manage your directory listing</title>
     <description>Track submissions, monitor server health and usage metrics, and edit your directory listing</description>
     <source_url>https://claude.com/docs/connectors/building/managing-your-listing</source_url>
     <local_file>connectors-building-managing-your-listing.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Get started with MCP Apps</title>
     <description>Try example MCP Apps in Claude Desktop, then use the MCP Apps SDK, examples, and agent skills to add interactive UI to your own MCP server.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/getting-started</source_url>
     <local_file>connectors-building-mcp-apps-getting-started.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Design guidelines</title>
     <description>Design MCP Apps that feel native to Claude: display modes, mobile layout, visual style, interaction patterns, and the host's style variables.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/design-guidelines</source_url>
     <local_file>connectors-building-mcp-apps-design-guidelines.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Blend your MCP App with Claude's theme</title>
     <description>Make your MCP App's background transparent and style it with Claude's host style variables so it blends into the conversation in light and dark mode.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/transparent-theming</source_url>
     <local_file>connectors-building-mcp-apps-transparent-theming.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Supersede older widget instances</title>
     <description>Keep only the newest copy of an MCP App widget active when Claude calls its tool more than once in a conversation, using a server key and BroadcastChannel.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/instance-supersession</source_url>
     <local_file>connectors-building-mcp-apps-instance-supersession.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Open external links from MCP Apps</title>
     <description>Declare allowed link destinations so ui/open-link requests from your directory connector's MCP App open without Claude's confirmation modal.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/external-links</source_url>
     <local_file>connectors-building-mcp-apps-external-links.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
   <source>
     <title>Troubleshoot MCP Apps</title>
     <description>Debug MCP Apps in Claude with developer tools on desktop and iOS, and fix invisible apps, large tool results, iOS-only request failures, and ui.domain errors.</description>
     <source_url>https://claude.com/docs/connectors/building/mcp-apps/troubleshooting</source_url>
     <local_file>connectors-building-mcp-apps-troubleshooting.md</local_file>
-    <curated_at>2026-10-18</curated_at>
+    <curated_at>2026-10-21</curated_at>
   </source>
 </docs_index>

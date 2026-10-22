@@ -1,86 +1,72 @@
 <docs_index>
   <source>
-    <title>Configure Biome</title>
+    <title>Language support</title>
     <description>PLACEHOLDER</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/configure-biome.mdx</source_url>
-    <local_file>src-content-docs-en-configuration-configure-biome.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>Set up your editor</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/editors.mdx</source_url>
-    <local_file>src-content-docs-en-configuration-editors.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/introduction/language-support.mdx</source_url>
+    <local_file>src-content-docs-en-introduction-language-support.mdx</local_file>
+    <curated_at>2026-10-22</curated_at>
   </source>
   <source>
     <title>Quick start</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/installation/quick-start.mdx</source_url>
     <local_file>src-content-docs-en-installation-quick-start.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-22</curated_at>
+  </source>
+  <source>
+    <title>Configure Biome</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/configure-biome.mdx</source_url>
+    <local_file>src-content-docs-en-configuration-configure-biome.mdx</local_file>
+    <curated_at>2026-10-22</curated_at>
+  </source>
+  <source>
+    <title>Set up your editor</title>
+    <description>PLACEHOLDER</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/editors.mdx</source_url>
+    <local_file>src-content-docs-en-configuration-editors.mdx</local_file>
+    <curated_at>2026-10-22</curated_at>
   </source>
   <source>
     <title>Integrate with your VCS</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/integrate-with-vcs.mdx</source_url>
     <local_file>src-content-docs-en-configuration-integrate-with-vcs.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>Language support</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/introduction/language-support.mdx</source_url>
-    <local_file>src-content-docs-en-introduction-language-support.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>Philosophy</title>
-    <description>Brief contributor ethos: public decision-making, specific error messages with fix hints, minimal options, jargon-free naming, inclusive language, terminal output readable without color.</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/internals/philosophy.mdx</source_url>
-    <local_file>src-content-docs-en-internals-philosophy.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-22</curated_at>
   </source>
   <source>
     <title>Linter</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/index.mdx</source_url>
     <local_file>src-content-docs-en-linter-index.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>useSortedClasses (JavaScript)</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/rules/use-sorted-classes/javascript.mdx</source_url>
-    <local_file>src-content-docs-en-linter-rules-use-sorted-classes-javascript.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>Continuous Integration</title>
-    <description>Recipe contrasting `biome ci` with `biome check`, plus GitHub Actions, reviewdog PR comments and GitLab code-quality pipeline examples, including extended-config dependencies.</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/continuous-integration.mdx</source_url>
-    <local_file>src-content-docs-en-recipes-continuous-integration.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
-  </source>
-  <source>
-    <title>Git Hooks</title>
-    <description>Recipes for formatting and linting staged files with Lefthook, Husky plus lint-staged, git-format-staged, pre-commit framework, or shell scripts, including re-staging fixes.</description>
-    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/git-hooks.mdx</source_url>
-    <local_file>src-content-docs-en-recipes-git-hooks.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-22</curated_at>
   </source>
   <source>
     <title>Configuration</title>
     <description>PLACEHOLDER</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/configuration.mdx</source_url>
     <local_file>src-content-docs-en-reference-configuration.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-22</curated_at>
   </source>
   <source>
     <title>VS Code extension</title>
     <description>Setup and settings reference: format, fix and sort imports on save, multi-root workspaces, custom binary path, Cursor install, LSP trace troubleshooting, 2.x upgrade.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/vscode.mdx</source_url>
     <local_file>src-content-docs-en-reference-vscode.mdx</local_file>
-    <curated_at>2026-10-19</curated_at>
+    <curated_at>2026-10-22</curated_at>
+  </source>
+  <source>
+    <title>Continuous Integration</title>
+    <description>Recipe contrasting `biome ci` with `biome check`, plus GitHub Actions, reviewdog PR comments and GitLab code-quality pipeline examples, including extended-config dependencies.</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/continuous-integration.mdx</source_url>
+    <local_file>src-content-docs-en-recipes-continuous-integration.mdx</local_file>
+    <curated_at>2026-10-22</curated_at>
+  </source>
+  <source>
+    <title>Git Hooks</title>
+    <description>Recipes for formatting and linting staged files with Lefthook, Husky plus lint-staged, git-format-staged, pre-commit framework, or shell scripts, including re-staging fixes.</description>
+    <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/git-hooks.mdx</source_url>
+    <local_file>src-content-docs-en-recipes-git-hooks.mdx</local_file>
+    <curated_at>2026-10-22</curated_at>
   </source>
 </docs_index>

@@ -173,9 +173,9 @@ Regenerate "Descriptions":
 - Get status `uv run scripts/collection_status.py`
 - Framing shifted from "semantic search" to **LLM routing**, re-curate all.
 
-`scripts/curate-collection.sh`
+`scripts/run-parallel.sh`
 
-- Bulk-curates a collection from a URL file, one `claude -p` session per URL.
+- Bulk-curates from a prompt file (`/curate-doc <collection> <url>` per line), one `claude -p` session each; use `jobs=1` for one collection to avoid `INDEX.xml` edit races.
 - One day to replace `/recurate-docs` and `sync-index`... maybe (look deeply).
 
 direct-fetch-rules.toml

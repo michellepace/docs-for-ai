@@ -106,7 +106,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 
 | Collection | Collection Index | Description | Curated | Source |
 | :--------- | :--------------- | :---------- | :------ | :----- |
-| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-10-19 | [Official](https://biomejs.dev) |
+| 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-10-22 | [Official](https://biomejs.dev) |
 | 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-10-21 | [Official](https://claude.com/docs/) |
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-10-19 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-10-21 | [Official](https://platform.claude.com/docs/) |
@@ -118,14 +118,14 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`mcp/`](collections/mcp/) | 📄 [`INDEX.xml`](collections/mcp/INDEX.xml) | AI integration standard | 2026-08-14 | [Official](https://modelcontextprotocol.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-09-26 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-10-04 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
+| 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-10-22 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shadcn/`](collections/shadcn/) | 📄 [`INDEX.xml`](collections/shadcn/INDEX.xml) | React UI components | 2025-12-16 | [Official](https://ui.shadcn.com), [Guide](https://shadcn.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2026-10-19 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2025-10-15 | [Official](https://tailwindcss.com/docs/) |
 | 📦 [`tailwindplus/`](collections/tailwindplus/) | 📄 [`INDEX.xml`](collections/tailwindplus/INDEX.xml) | Paid UI components | 2025-11-16 | [Official](https://tailwindcss.com/plus) |
-| 📦 [`ty/`](collections/ty/) | 📄 [`INDEX.xml`](collections/ty/INDEX.xml) | Python type checker (Astral) | 2026-10-19 | [Official](https://docs.astral.sh/ty/) |
-| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager (Astral) | 2026-10-19 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
+| 📦 [`ty/`](collections/ty/) | 📄 [`INDEX.xml`](collections/ty/INDEX.xml) | Python type checker (Astral) | 2026-10-22 | [Official](https://docs.astral.sh/ty/) |
+| 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager (Astral) | 2026-10-22 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-07-14 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2025-11-05 | [Official](https://vitest.dev) |
 | 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-01-03 | [Official](https://zustand.docs.pmnd.rs) |
@@ -173,9 +173,9 @@ Regenerate "Descriptions":
 - Get status `uv run scripts/collection_status.py`
 - Framing shifted from "semantic search" to **LLM routing**, re-curate all.
 
-`scripts/curate-collection.sh`
+`scripts/run-parallel.sh`
 
-- Bulk-curates a collection from a URL file, one `claude -p` session per URL.
+- Bulk-curates from a prompt file (`/curate-doc <collection> <url>` per line), one `claude -p` session each; use `jobs=1` for one collection to avoid `INDEX.xml` edit races.
 - One day to replace `/recurate-docs` and `sync-index`... maybe (look deeply).
 
 direct-fetch-rules.toml

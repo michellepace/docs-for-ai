@@ -9,26 +9,24 @@ set -uo pipefail
 
 usage() {
   cat <<'EOF'
-Run each line of a file as a prompt in its own `claude -p` session, in parallel.
+Run each line of a file as its own `claude -p` session, in parallel.
 
-Usage:
-  scripts/run-parallel.sh <prompt-file> [jobs]
-  scripts/run-parallel.sh --help
+Usage: scripts/run-parallel.sh --effort <level> <prompt-file> [jobs]
 
-Arguments:
-  <prompt-file>  One prompt per line, e.g. `/curate-doc uv <url>`
-  [jobs]         Sessions to run at once (default 7), started 2s apart.
+  --effort <level>  low|medium|high|xhigh|max (all sessions)
+  <prompt-file>     One prompt per line, blank lines skipped. Runs from the
+                    repo root, so skills work: `/curate-doc uv <url>`
+  [jobs]            Max concurrent sessions (default 7)
 
-Prints the log directory, then `[NN] exit=N  <prompt>` as each session ends;
-its output is in <log-dir>/NN.log (NN = position among non-blank lines).
-exit=0 only means the session ended; read its log to see if the prompt worked.
+Output: `=== logs: <dir>`, then `[NN] exit=N  <prompt>` as each session
+ends. NN numbers the non-blank lines; the full transcript is <dir>/NN.log.
+exit=0 only means the session ended: check its log for the result.
+Exits non-zero if any session failed.
 
-Prompts editing the same file (e.g. a collection's INDEX.xml) can, rarely,
-overwrite each other's edit; the 2s stagger makes this unlikely. If an edit
-is lost, rerun that prompt.
+Starts are staggered 2s so sessions editing the same file rarely clash.
+If an edit is lost, rerun that prompt.
 
-Example:
-  scripts/run-parallel.sh prompts.txt 4
+Example: scripts/run-parallel.sh --effort high prompts.txt 4
 EOF
 }
 
@@ -39,13 +37,23 @@ case "${1-}" in
     ;;
 esac
 
-if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+if [ "${1-}" != --effort ] || [ $# -lt 3 ] || [ $# -gt 4 ]; then
   usage >&2
   exit 2
 fi
 
-prompt_file=$1
-jobs=${2-7}
+effort=$2
+prompt_file=$3
+jobs=${4-7}
+
+# claude only warns on an unknown level and runs at the default, so check here
+case "$effort" in
+  low | medium | high | xhigh | max) ;;
+  *)
+    printf 'error: effort must be one of low|medium|high|xhigh|max: %s\n' "$effort" >&2
+    exit 2
+    ;;
+esac
 
 [ -r "$prompt_file" ] || {
   printf 'error: cannot read prompt-file: %s\n' "$prompt_file" >&2
@@ -68,10 +76,11 @@ command -v claude >/dev/null || {
 cd "$(dirname "$0")/.." || exit 1 # start claude here so this repo's .claude/ loads
 
 log_dir=$(mktemp -d -t run-parallel-XXXXXX)
-printf '=== logs: %s\n' "$log_dir"
+printf '=== logs: %s  (effort: %s)\n' "$log_dir" "$effort"
 
 # xargs -d '\n' passes each "NN <prompt>" line whole (by default it splits on
-# spaces and chokes on quotes); the inner sh gets it as $1 and $log_dir as $0.
+# spaces and chokes on quotes); the inner sh gets $log_dir as $0, $effort as
+# $1, and that line as $2.
 # shellcheck disable=SC2016 # single-quoted on purpose: the inner sh expands it
 grep -v '^[[:space:]]*$' "$prompt_file" \
   | nl -w2 -n rz -s' ' \
@@ -80,13 +89,13 @@ grep -v '^[[:space:]]*$' "$prompt_file" \
     sleep 2 # start sessions 2s apart
   done \
   | xargs -d '\n' -n1 -P "$jobs" sh -c '
-      n=${1%% *}
-      prompt=${1#* }
-      claude -p "$prompt" </dev/null >"$0/$n.log" 2>&1
+      n=${2%% *}
+      prompt=${2#* }
+      claude -p --effort "$1" "$prompt" </dev/null >"$0/$n.log" 2>&1
       status=$?
       printf "[%s] exit=%d  %s\n" "$n" "$status" "$prompt"
       exit "$status"
-    ' "$log_dir"
+    ' "$log_dir" "$effort"
 status=$?
 
 printf '\n=== DONE: logs in %s\n' "$log_dir"

@@ -91,6 +91,13 @@
     <curated_at>2026-10-21</curated_at>
   </source>
   <source>
+    <title>Plugin commands reference</title>
+    <description>Reference for the claude plugin shell commands, /plugin and /reload-plugins in a session, and the flags that load a plugin for one session.</description>
+    <source_url>https://code.claude.com/docs/en/plugins/cli-reference</source_url>
+    <local_file>en-plugins-cli-reference.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
     <title>Code intelligence plugins</title>
     <description>Install a language server plugin so Claude sees type errors after edits and navigates code by symbol, and answer the LSP plugin recommendation dialog.</description>
     <source_url>https://code.claude.com/docs/en/plugins/code-intelligence</source_url>
@@ -180,6 +187,13 @@
     <source_url>https://code.claude.com/docs/en/agent-sdk/python</source_url>
     <local_file>en-agent-sdk-python.md</local_file>
     <curated_at>2026-10-19</curated_at>
+  </source>
+  <source>
+    <title>CLI reference</title>
+    <description>Complete reference for Claude Code command-line interface, including commands and flags.</description>
+    <source_url>https://code.claude.com/docs/en/cli-reference</source_url>
+    <local_file>en-cli-reference.md</local_file>
+    <curated_at>2026-10-24</curated_at>
   </source>
   <source>
     <title>Commands</title>

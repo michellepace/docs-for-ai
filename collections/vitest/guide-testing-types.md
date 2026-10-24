@@ -51,7 +51,7 @@ When types don't match, `.toEqualTypeOf` and `.toExtend` use a special helper ty
 expectTypeOf({ a: 1 }).toEqualTypeOf<{ a: string }>()
 ```
 
-Is an assertion that will fail, since `{a: 1}` has type `{a: number}` and not `{a: string}`.  The error message in this case will read something like this:
+Is an assertion that will fail, since `{a: 1}` has type `{a: number}` and not `{a: string}`. The error message in this case will read something like this:
 
 ```
 test/test.ts:999:999 - error TS2344: Type '{ a: string; }' does not satisfy the constraint '{ a: \\"Expected: string, Actual: number\\"; }'.

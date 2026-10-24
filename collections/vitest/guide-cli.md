@@ -67,7 +67,7 @@ vitest related /src/index.ts /src/hello-world.js
 ```
 
 ::: tip
-Don't forget that Vitest runs with enabled watch mode by default. If you are using tools like `lint-staged`, you  should also pass `--run` option, so that command can exit normally.
+Don't forget that Vitest runs with enabled watch mode by default. If you are using tools like `lint-staged`, you should also pass `--run` option, so that command can exit normally.
 
 ```js [.lintstagedrc.js]
 export default {
@@ -79,7 +79,7 @@ export default {
 
 ### `vitest bench`
 
-Run only [benchmark](/guide/features.html#benchmarking) tests, which compare performance results.
+Run only [benchmark](/guide/features#benchmarking) tests, which compare performance results.
 
 ### `vitest init`
 
@@ -122,7 +122,51 @@ tests/test1.test.ts
 tests/test2.test.ts
 ```
 
-Since Vitest 4.1, you may pass `--static-parse` to [parse test files](/api/advanced/vitest#parsespecifications) instead of running them to collect tests. Vitest parses test files with limited concurrency, defaulting to `os.availableParallelism()`. You can change it via the `--static-parse-concurrency` option.
+Since Vitest 5, `vitest list` [parses test files](/api/advanced/vitest#parsespecifications) statically instead of running them to collect tests. Pass `--no-static-parse` to run the files instead. Vitest parses test files with limited concurrency, defaulting to `os.availableParallelism()`. You can change it via the `--static-parse-concurrency` option.
+
+### `vitest doctor`
+
+`vitest doctor` measures how much faster the test suite would run under alternative configurations by running it under each of them. The candidates are picked based on the current config:
+
+```bash
+vitest doctor
+```
+
+```
+Results (min of 3 runs each)
+
+  baseline (pool: forks · isolate: true)  4.08s
+  pool: 'threads'                         3.64s (-11%)
+  pool: 'vmThreads'                       1.33s (-67%)
+  isolate: false                          1.28s (-69%)
+
+Recommendation: pool: 'vmThreads' (-67%)
+
+  // vitest.config.ts
+  import { defineConfig } from 'vitest/config'
+
+  export default defineConfig({
+    test: {
+      pool: 'vmThreads', // measured -67% on this suite
+    },
+  })
+```
+
+The `isolate: false` candidate is additionally validated by running the suite twice with a shuffled file order: if any test depends on isolation, the candidate is reported as failed instead of recommended. When several candidates are close to the fastest, doctor prefers the one that keeps per-file isolation.
+
+Doctor also probes lower [`maxWorkers`](/config/maxworkers) values on top of the winning configuration: every worker funnels its transform requests through the single main-thread Vite server, so past a certain count more workers make the run slower, not faster. Starting from half the current worker count, doctor keeps halving while the suite gets at least 5% faster, and includes the winning value in the recommendation.
+
+Suites running a DOM or a custom environment are measured under both vm pools, `vmThreads` and `vmForks`: they amortize the environment creation cost by keeping one environment per worker while every file still gets a fresh VM context. `vmForks` uses child processes instead of worker threads: each child gets its own heap and garbage collector, so either pool can come out faster depending on the suite, and `vmForks` is the vm option for suites that cannot run in worker threads.
+
+Projects running `jsdom` are also measured under `environment: 'happy-dom'` when the package is installed. The swap is applied per project; projects on other environments keep them. happy-dom implements the DOM differently than jsdom, so tests that depend on layout or navigation should be verified before adopting the swap. When the [fs module cache](/config/fsmodulecache) is off, doctor measures `fsModuleCache: true` after an untimed priming run that populates the cache, so the reported time is what repeated runs pay.
+
+Every measurement runs the full suite, including browser projects: `isolate: false` also affects browser mode. Candidates that cannot affect browser projects (`pool`, `environment`, the fs module cache) are picked based on the node-side projects only.
+
+Failing candidates are reported with an excerpt of their errors. If the suite fails under the current configuration, doctor aborts and shows the errors: it needs a passing baseline to compare against.
+
+Short suites are measured multiple times and the best time is reported, so the comparison reflects a warm steady state. Doctor runs the full suite several times, so it takes a multiple of a normal run's time. See [Improving Performance](/guide/improving-performance) for the trade-offs behind every candidate.
+
+Doctor measures and reports the baseline even when there are no candidates to compare. Configurations on a `vm` pool are additionally compared against `pool: 'threads'` with `isolate: false`, which also reuses workers but shares module state between files; a configuration already on one vm pool is still measured under the other.
 
 ## Shell Autocompletions
 
@@ -388,10 +432,10 @@ Shortcut to set all coverage thresholds to 100 (default: `false`)
 
 ### coverage.thresholds.perFile
 
-* **CLI:** `--coverage.thresholds.perFile`
+* **CLI:** `--coverage.thresholds.perFile <boolean>`
 * **Config:** [coverage.thresholds.perFile](/config/coverage#coverage-thresholds-perfile)
 
-Check thresholds per file. See `--coverage.thresholds.lines`, `--coverage.thresholds.functions`, `--coverage.thresholds.branches` and `--coverage.thresholds.statements` for the actual thresholds (default: `false`)
+Check thresholds per file. See `--coverage.thresholds.lines`, `--coverage.thresholds.functions`, `--coverage.thresholds.branches` and `--coverage.thresholds.statements` for the actual thresholds (default: `false`). Object form is available in config files only.
 
 ### coverage.thresholds.autoUpdate
 
@@ -490,12 +534,19 @@ Apply exclusions again after coverage has been remapped to original sources. (de
 
 Directory of HTML coverage output to be served in UI mode and HTML reporter.
 
+### coverage.autoAttachSubprocess
+
+* **CLI:** `--coverage.autoAttachSubprocess`
+* **Config:** [coverage.autoAttachSubprocess](/config/coverage#coverage-autoattachsubprocess)
+
+Track coverage of the `node:child_process` and `node:worker_threads` spawned during test run. Supported only by `v8` provider. (default: false)
+
 ### mode
 
 * **CLI:** `--mode <name>`
 * **Config:** [mode](/config/mode)
 
-Override Vite mode (default: `test` or `benchmark`)
+Override Vite mode (default: `test`)
 
 ### isolate
 
@@ -510,6 +561,13 @@ Run every test file in isolation. To disable isolation, use `--no-isolate` (defa
 * **Config:** [globals](/config/globals)
 
 Inject apis globally
+
+### injectCjsGlobals
+
+* **CLI:** `--injectCjsGlobals`
+* **Config:** [injectCjsGlobals](/config/injectcjsglobals)
+
+Inject CommonJS variables (`module`, `exports`, `require`, `__filename`, `__dirname`) into every test module. To disable, use `--no-inject-cjs-globals` (default: `true`)
 
 ### dom
 
@@ -537,48 +595,6 @@ Run all tests in a specific browser. Some browsers are only available for specif
 
 Run the browser in headless mode (i.e. without opening the GUI (Graphical User Interface)). If you are running Vitest in CI, it will be enabled by default (default: `process.env.CI`)
 
-### browser.api.port
-
-* **CLI:** `--browser.api.port [port]`
-* **Config:** [browser.api.port](/config/browser/api#api-port)
-
-Specify server port. Note if the port is already being used, Vite will automatically try the next available port so this may not be the actual port the server ends up listening on. If true will be set to `63315`
-
-### browser.api.host
-
-* **CLI:** `--browser.api.host [host]`
-* **Config:** [browser.api.host](/config/browser/api#api-host)
-
-Specify which IP addresses the server should listen on. Set this to `0.0.0.0` or `true` to listen on all addresses, including LAN and public addresses
-
-### browser.api.strictPort
-
-* **CLI:** `--browser.api.strictPort`
-* **Config:** [browser.api.strictPort](/config/browser/api#api-strictport)
-
-Set to true to exit if port is already in use, instead of automatically trying the next available port
-
-### browser.api.allowExec
-
-* **CLI:** `--browser.api.allowExec`
-* **Config:** [browser.api.allowExec](/config/browser/api#api-allowexec)
-
-Allow API to execute code. (Be careful when enabling this option in untrusted environments)
-
-### browser.api.allowWrite
-
-* **CLI:** `--browser.api.allowWrite`
-* **Config:** [browser.api.allowWrite](/config/browser/api#api-allowwrite)
-
-Allow API to edit files. (Be careful when enabling this option in untrusted environments)
-
-### browser.isolate
-
-* **CLI:** `--browser.isolate`
-* **Config:** [browser.isolate](/config/browser/isolate)
-
-Run every browser test file in isolation. To disable isolation, use `--browser.isolate=false` (default: `true`)
-
 ### browser.ui
 
 * **CLI:** `--browser.ui`
@@ -593,18 +609,19 @@ Show Vitest UI when running tests (default: `!process.env.CI`)
 
 Default position for the details panel in browser mode. Either `right` (horizontal split) or `bottom` (vertical split) (default: `right`)
 
-### browser.fileParallelism
-
-* **CLI:** `--browser.fileParallelism`
-
-Should browser test files run in parallel. Use `--browser.fileParallelism=false` to disable (default: `true`)
-
 ### browser.connectTimeout
 
 * **CLI:** `--browser.connectTimeout <timeout>`
 * **Config:** [browser.connectTimeout](/config/browser/connecttimeout)
 
 If connection to the browser takes longer, the test suite will fail (default: `60_000`)
+
+### browser.dependencySourcemaps
+
+* **CLI:** `--browser.dependencySourcemaps`
+* **Config:** [browser.dependencySourcemaps](/config/browser/dependencysourcemaps)
+
+Serve sourcemaps of dependencies to the browser in headless runs, used by devtools when debugging into `node_modules`. Reported test errors are source-mapped either way. Use `--browser.dependencySourcemaps=false` to speed up test runs if you don't step into dependency code (default: `true`)
 
 ### browser.trackUnhandledErrors
 
@@ -620,12 +637,33 @@ Control if Vitest catches uncaught exceptions so they can be reported (default: 
 
 Enable trace view mode. Supported: "on", "off", "on-first-retry", "on-all-retries", "retain-on-failure".
 
+### browser.traceView.enabled
+
+* **CLI:** `--browser.traceView.enabled`
+* **Config:** [browser.traceView.enabled](/config/browser/traceview#traceview-enabled)
+
+Enable Vitest trace-view collection for browser tests (default: `false`)
+
+### browser.traceView.recordCanvas
+
+* **CLI:** `--browser.traceView.recordCanvas`
+* **Config:** [browser.traceView.recordCanvas](/config/browser/traceview#traceview-recordcanvas)
+
+Capture canvas pixels in trace-view snapshots (default: `false`)
+
+### browser.traceView.inlineImages
+
+* **CLI:** `--browser.traceView.inlineImages`
+* **Config:** [browser.traceView.inlineImages](/config/browser/traceview#traceview-inlineimages)
+
+Inline loaded image pixels in trace-view snapshots (default: `false`)
+
 ### browser.locators.exact
 
 * **CLI:** `--browser.locators.exact`
 * **Config:** [browser.locators.exact](/config/browser/locators#locators-exact)
 
-Should locators match the text exactly by default (default: `false`)
+Should locators match the text exactly by default (default: `true`)
 
 ### pool
 
@@ -704,6 +742,13 @@ Allow tests and suites that are marked as only (default: `!process.env.CI`)
 
 Ignore any unhandled errors that occur
 
+### changed
+
+* **CLI:** `--changed [since]`
+* **Config:** [changed](/config/changed)
+
+Run tests that are affected by the changed files (default: `false`)
+
 ### sequence.shuffle.files
 
 * **CLI:** `--sequence.shuffle.files`
@@ -737,14 +782,14 @@ Set the randomization seed. This option will have no effect if `--sequence.shuff
 * **CLI:** `--sequence.hooks <order>`
 * **Config:** [sequence.hooks](/config/sequence#sequence-hooks)
 
-Changes the order in which hooks are executed. Accepted values are: "stack", "list" and "parallel". Visit [`sequence.hooks`](/config/sequence#sequence-hooks) for more information (default: `"parallel"`)
+Changes the order in which hooks are executed. Accepted values are: "stack", "list" and "parallel". Visit [`sequence.hooks`](/config/sequence#sequence-hooks) for more information (default: `"stack"`)
 
 ### sequence.setupFiles
 
 * **CLI:** `--sequence.setupFiles <order>`
 * **Config:** [sequence.setupFiles](/config/sequence#sequence-setupfiles)
 
-Changes the order in which setup files are executed. Accepted values are: "list" and "parallel". If set to "list", will run setup files in the order they are defined. If set to "parallel", will run setup files in parallel (default: `"parallel"`)
+Changes the order in which setup files are executed. Accepted values are: "list" and "parallel". If set to "list", will run setup files in the order they are defined. If set to "parallel", will run setup files in parallel (default: `"list"`)
 
 ### inspect
 
@@ -800,6 +845,13 @@ Delay in milliseconds between retry attempts (default: `0`)
 
 Regex pattern to match error messages that should trigger a retry. Only errors matching this pattern will cause a retry (default: retry on all errors)
 
+### repeats
+
+* **CLI:** `--repeats <number>`
+* **Config:** [repeats](/config/repeats)
+
+Repeat every test a specific number of times regardless of the result (default: `0`)
+
 ### diff.aAnnotation
 
 * **CLI:** `--diff.aAnnotation <annotation>`
@@ -854,7 +906,7 @@ Placeholder for an empty first or last line (default: `""`)
 * **CLI:** `--diff.expand`
 * **Config:** [diff.expand](/config/diff#diff-expand)
 
-Expand all common lines (default: `true`)
+Expand all common lines (default: `false`)
 
 ### diff.includeChangeCounts
 
@@ -875,7 +927,7 @@ Omit annotation lines from the output (default: `false`)
 * **CLI:** `--diff.printBasicPrototype`
 * **Config:** [diff.printBasicPrototype](/config/diff#diff-printbasicprototype)
 
-Print basic prototype Object and Array (default: `true`)
+Print basic prototype Object and Array (default: `false`)
 
 ### diff.maxDepth
 
@@ -954,6 +1006,13 @@ Allow JavaScript files to be typechecked. By default takes the value from tsconf
 
 Ignore type errors from source files
 
+### typecheck.build
+
+* **CLI:** `--typecheck.build`
+* **Config:** [typecheck.build](/config/typecheck#typecheck-build)
+
+Use TypeScript build mode
+
 ### typecheck.tsconfig
 
 * **CLI:** `--typecheck.tsconfig <path>`
@@ -970,9 +1029,9 @@ Minimum time in milliseconds it takes to spawn the typechecker
 
 ### project
 
-* **CLI:** `--project <name>`
+* **CLI:** `-p, --project <name>`
 
-The name of the project to run if you are using Vitest workspace feature. This can be repeated for multiple projects: `--project=1 --project=2`. You can also filter projects using wildcards like `--project=packages*`, and exclude projects with `--project=!pattern`.
+The name of the project to run if you are using Vitest workspace feature. This can be repeated for multiple projects: `--project=1 --project=2`. You can also filter projects using wildcards like `--project=packages*`, and exclude projects with `--project=!pattern`. A project runs if it matches no negated pattern and, when regular patterns are also given, matches at least one of them.
 
 ### slowTestThreshold
 
@@ -988,12 +1047,33 @@ Threshold in milliseconds for a test or suite to be considered slow (default: `3
 
 Default timeout of a teardown function in milliseconds (default: `10000`)
 
+### cache
+
+* **CLI:** `--cache`
+* **Config:** [cache](/config/cache)
+
+Store the results of test runs to run failed and longer test files first (default: `true`)
+
 ### maxConcurrency
 
 * **CLI:** `--maxConcurrency <number>`
 * **Config:** [maxConcurrency](/config/maxconcurrency)
 
 Maximum number of concurrent tests and suites during test file execution (default: `5`)
+
+### fsModuleCache
+
+* **CLI:** `--fsModuleCache`
+* **Config:** [fsModuleCache](/config/fsmodulecache)
+
+Cache transformed modules on the file system and reuse them between reruns (default: `true`)
+
+### fsModuleCachePath
+
+* **CLI:** `--fsModuleCachePath <path>`
+* **Config:** [fsModuleCachePath](/config/fsmodulecachepath)
+
+Directory where the `fsModuleCache` is stored (default: `node_modules/.vitest-cache`)
 
 ### expect.requireAssertions
 
@@ -1035,7 +1115,7 @@ Collect test and suite locations in the `location` property
 * **CLI:** `--attachmentsDir <dir>`
 * **Config:** [attachmentsDir](/config/attachmentsdir)
 
-The directory where attachments from `context.annotate` are stored in (default: `.vitest-attachments`)
+The directory where attachments from `context.annotate` are stored in (default: `.vitest/attachments`)
 
 ### run
 
@@ -1077,7 +1157,7 @@ List all available tags instead of running tests. `--list-tags=json` will output
 
 * **CLI:** `--clearCache`
 
-Delete all Vitest caches, including `experimental.fsModuleCache`, without running any tests. This will reduce the performance in the subsequent test run.
+Delete all Vitest caches, including the `fsModuleCache`, without running any tests. This will reduce the performance in the subsequent test run.
 
 ### tagsFilter
 
@@ -1092,12 +1172,12 @@ Run only tests with the specified tags. You can use logical operators `&&` (and)
 
 Should Vitest throw an error if test has a tag that is not defined in the config. (default: `true`)
 
-### experimental.fsModuleCache
+### sharedViteServer
 
-* **CLI:** `--experimental.fsModuleCache`
-* **Config:** [experimental.fsModuleCache](/config/experimental#experimental-fsmodulecache)
+* **CLI:** `--sharedViteServer`
+* **Config:** [sharedViteServer](/config/sharedviteserver)
 
-Enable caching of modules on the file system between reruns.
+Let inline projects that don't modify the Vite config reuse the Vite server of the config that declares them. (default: `true`)
 
 ### experimental.importDurations.print
 
@@ -1155,6 +1235,13 @@ Controls whether Vitest will use Node.js Loader API to process in-source or mock
 
 Custom provider for detecting changed files. (default: `git`)
 
+### experimental.recordDependencies
+
+* **CLI:** `--experimental.recordDependencies`
+* **Config:** [experimental.recordDependencies](/config/experimental#experimental-recorddependencies)
+
+Record the modules loaded by every test file in the cache and use the records with `--changed` and `--related` instead of the static module graph. A test file without a record always runs. (default: `false`)
+
 ### experimental.preParse
 
 * **CLI:** `--experimental.preParse`
@@ -1162,18 +1249,33 @@ Custom provider for detecting changed files. (default: `git`)
 
 Parse test specifications before running them. This will apply `.only` flag and test name pattern across all files without running them. (default: `false`)
 
-### changed
+### experimental.diagnostics.isolate
 
-* **Type:** `boolean | string`
-* **Default:** false
+* **CLI:** `--experimental.diagnostics.isolate`
+* **Config:** [experimental.diagnostics.isolate](/config/experimental#experimental-diagnostics-isolate)
 
-Run tests only against changed files. If no value is provided, it will run tests against uncommitted changes (including staged and unstaged).
+Print a hint estimating how much time `isolate: false` would save when `isolate: true` spends a significant amount of time spawning a worker per test file. (default: `true`)
 
-To run tests against changes made in the last commit, you can use `--changed HEAD~1`. You can also pass commit hash (e.g. `--changed 09a9920`) or branch name (e.g. `--changed origin/develop`).
+### experimental.diagnostics.environment
 
-When used with code coverage the report will contain only the files that were related to the changes.
+* **CLI:** `--experimental.diagnostics.environment`
+* **Config:** [experimental.diagnostics.environment](/config/experimental#experimental-diagnostics-environment)
 
-If paired with the [`forceRerunTriggers`](/config/forcereruntriggers) config option it will run the whole test suite if at least one of the files listed in the `forceRerunTriggers` list changes. By default, changes to the Vitest config file and `package.json` will always rerun the whole suite.
+Print a hint when re-creating a DOM environment for every test file dominates the run and a `vm` pool would set it up once per worker. (default: `true`)
+
+### experimental.diagnostics.import
+
+* **CLI:** `--experimental.diagnostics.import`
+* **Config:** [experimental.diagnostics.import](/config/experimental#experimental-diagnostics-import)
+
+Print a hint when test files repeatedly evaluate the same module graph (typical for barrel-file imports) and `isolate: false` would evaluate it once per worker. (default: `true`)
+
+### experimental.diagnostics.transform
+
+* **CLI:** `--experimental.diagnostics.transform`
+* **Config:** [experimental.diagnostics.transform](/config/experimental#experimental-diagnostics-transform)
+
+Print a hint when transforming modules dominates the run and `fsModuleCache` would persist the results across runs. (default: `true`)
 
 ### shard
 
@@ -1198,14 +1300,14 @@ You cannot use this option with `--watch` enabled (enabled in dev by default).
 :::
 
 ::: tip
-If `--reporter=blob` is used without an output file, the default path will include the current shard config to avoid collisions with other Vitest processes.
+If `--reporter=blob` is used without an output file, the default path will include the current shard config and blob label from `VITEST_BLOB_LABEL` or the blob reporter `label` option to avoid collisions with other Vitest processes.
 :::
 
 ### merge-reports
 
 * **Type:** `boolean | string`
 
-Merges every blob report located in the specified folder (`.vitest-reports` by default). You can use any reporters with this command (except [`blob`](/guide/reporters#blob-reporter)):
+Merges every blob report located in the specified folder (`.vitest/blob/` by default). You can use any reporters with this command (except [`blob`](/guide/reporters#blob-reporter)):
 
 ```sh
 vitest --merge-reports --reporter=junit

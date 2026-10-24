@@ -1,121 +1,366 @@
 <docs_index>
   <source>
-    <title>Getting Started</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide</source_url>
-    <local_file>guide.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>allowOnly</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/config/allowonly</source_url>
-    <local_file>config-allowonly.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Browser Mode {#browser-mode}</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/browser</source_url>
-    <local_file>guide-browser.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Component Testing</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/browser/component-testing</source_url>
-    <local_file>guide-browser-component-testing.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Why Browser Mode</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/browser/why</source_url>
-    <local_file>guide-browser-why.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Command Line Interface</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/cli</source_url>
-    <local_file>guide-cli.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Test Environment</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/environment</source_url>
-    <local_file>guide-environment.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Extending Matchers</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/extending-matchers</source_url>
-    <local_file>guide-extending-matchers.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Features</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/features</source_url>
-    <local_file>guide-features.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Improving Performance</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/improving-performance</source_url>
-    <local_file>guide-improving-performance.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>In-Source Testing</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/in-source</source_url>
-    <local_file>guide-in-source.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Mocking</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/mocking</source_url>
-    <local_file>guide-mocking.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Reporters</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/reporters</source_url>
-    <local_file>guide-reporters.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Testing Types</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/testing-types</source_url>
-    <local_file>guide-testing-types.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
-    <title>Vitest UI</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://vitest.dev/guide/ui</source_url>
-    <local_file>guide-ui.md</local_file>
-    <curated_at>2026-05-25</curated_at>
-  </source>
-  <source>
     <title>Why Vitest</title>
-    <description>PLACEHOLDER</description>
+    <description>Rationale for a Vite-native runner: shares `vite.config.js` and plugins with your app, Jest-compatible API for drop-in migration, parallel workers, watch-by-default.</description>
     <source_url>https://vitest.dev/guide/why</source_url>
     <local_file>guide-why.md</local_file>
-    <curated_at>2026-05-25</curated_at>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Getting Started</title>
+    <description>Install Vitest and run a first test: Vite/Node version requirements, `.test.`/`.spec.` file naming, `bun run test` vs `bun test`, plus example projects per framework.</description>
+    <source_url>https://vitest.dev/guide</source_url>
+    <local_file>guide.md</local_file>
+    <curated_at>2026-10-24</curated_at>
   </source>
   <source>
     <title>Configuring Vitest</title>
-    <description>PLACEHOLDER</description>
+    <description>Choosing `vitest.config` versus `vite.config`, the `test` property, extending defaults with `configDefaults` or `mergeConfig`, and skipping dependency install prompts.</description>
     <source_url>https://vitest.dev/config</source_url>
     <local_file>config.md</local_file>
-    <curated_at>2026-05-25</curated_at>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Features</title>
+    <description>High-level capability tour; notably why only `VITE_` env vars load, `.concurrent` tests needing local `expect`, and handling unhandled errors.</description>
+    <source_url>https://vitest.dev/guide/features</source_url>
+    <local_file>guide-features.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Writing Tests</title>
+    <description>Test basics: `describe` grouping, default test file patterns, TypeScript without type-checking, `.only`/`.skip`/`.todo`, `test.for` parameterized cases versus `test.each`, and `globals: true` setup.</description>
+    <source_url>https://vitest.dev/guide/learn/writing-tests</source_url>
+    <local_file>guide-learn-writing-tests.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Using Matchers</title>
+    <description>Choosing between `toBe`, `toEqual` and `toStrictEqual`, float rounding with `toBeCloseTo`, partial object matching, asymmetric matchers, why `toThrow` needs a wrapper function, and `expect.soft`.</description>
+    <source_url>https://vitest.dev/guide/learn/matchers</source_url>
+    <local_file>guide-learn-matchers.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Testing Asynchronous Code</title>
+    <description>Await promises or use `.resolves`/`.rejects`, wrap callbacks, guard skipped assertions with `expect.assertions`, raise the 5s timeout, and fix unhandled rejection failures.</description>
+    <source_url>https://vitest.dev/guide/learn/async</source_url>
+    <local_file>guide-learn-async.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Setup and Teardown</title>
+    <description>Beginner intro to `beforeEach`/`afterAll` hooks, `describe` scoping and nested execution order, `onTestFinished` cleanup, `test.extend` fixtures, and `setupFiles`.</description>
+    <source_url>https://vitest.dev/guide/learn/setup-teardown</source_url>
+    <local_file>guide-learn-setup-teardown.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Mock Functions</title>
+    <description>Beginner intro to `vi.fn`, `vi.spyOn` and `vi.mock`: stubbing return values, asserting calls, `mockClear` vs `mockReset` vs `mockRestore`, and why `.mock.calls` sees mutated arguments.</description>
+    <source_url>https://vitest.dev/guide/learn/mock-functions</source_url>
+    <local_file>guide-learn-mock-functions.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Snapshot Testing</title>
+    <description>Beginner intro to `toMatchSnapshot`, inline and file snapshots, updating with `vitest -u`, ignoring timestamps/IDs via property matchers, and snapshotting thrown errors.</description>
+    <source_url>https://vitest.dev/guide/learn/snapshots</source_url>
+    <local_file>guide-learn-snapshots.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Testing in Practice</title>
+    <description>Deciding what to test, when to mock versus use real dependencies, edge cases, reproducing bugs with failing tests, and organizing test files with `describe`.</description>
+    <source_url>https://vitest.dev/guide/learn/testing-in-practice</source_url>
+    <local_file>guide-learn-testing-in-practice.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Debugging Failing Tests</title>
+    <description>Beginner walkthrough of reading failure diffs and isolating a test, then fixing tests that pass alone but fail in the suite, missing `await`, leaked mocks and "document is not defined".</description>
+    <source_url>https://vitest.dev/guide/learn/debugging-tests</source_url>
+    <local_file>guide-learn-debugging-tests.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Writing Tests with AI</title>
+    <description>Prompting AI agents for good tests and reviewing their output: Jest APIs like `jest.fn()` slipping in, over-mocking, leaked mocks, weak assertions, and watch mode hanging agents (use `vitest run`).</description>
+    <source_url>https://vitest.dev/guide/learn/writing-tests-with-ai</source_url>
+    <local_file>guide-learn-writing-tests-with-ai.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Why Browser Mode</title>
+    <description>Real browser versus jsdom or happy-dom simulation and its false results; drawbacks: slower startup and no replacement for end-to-end runners.</description>
+    <source_url>https://vitest.dev/guide/browser/why</source_url>
+    <local_file>guide-browser-why.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Browser Mode {#browser-mode}</title>
+    <description>Set up and run tests in a real browser: `vitest init browser`, choosing a provider, `browser.instances`, headless, framework render packages, and why `vi.spyOn` on module exports and `alert` fail.</description>
+    <source_url>https://vitest.dev/guide/browser</source_url>
+    <local_file>guide-browser.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Configuring Playwright</title>
+    <description>Set up `@vitest/browser-playwright` and pass `launchOptions`, `contextOptions`, `actionTimeout` or `persistentContext`; connect to a remote or Docker Playwright server via `wsEndpoint`.</description>
+    <source_url>https://vitest.dev/config/browser/playwright</source_url>
+    <local_file>config-browser-playwright.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Configuring Preview</title>
+    <description>Set up the `@vitest/browser-preview` provider in your default browser, and its limits: no headless mode, duplicate browser instances, CDP, or real `userEvent` integration.</description>
+    <source_url>https://vitest.dev/config/browser/preview</source_url>
+    <local_file>config-browser-preview.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Multiple Setups</title>
+    <description>Run tests across chromium, firefox and webkit with `browser.instances`, vary `setupFiles` or `provide` per instance, and filter by `--project` name.</description>
+    <source_url>https://vitest.dev/guide/browser/multiple-setups</source_url>
+    <local_file>guide-browser-multiple-setups.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Component Testing</title>
+    <description>Patterns for testing UI components in Browser Mode: mocking children and APIs with MSW, forms, error boundaries, accessibility, debugging failing selectors, using Testing Library via `page.elementLocator()`, and migrating from Jest.</description>
+    <source_url>https://vitest.dev/guide/browser/component-testing</source_url>
+    <local_file>guide-browser-component-testing.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Visual Regression Testing</title>
+    <description>Screenshot testing with `toMatchScreenshot`: creating and updating references, reading diffs, thresholds and custom comparators, fixing flaky font or size mismatches, and consistent references via CI, Azure or Chromatic.</description>
+    <source_url>https://vitest.dev/guide/browser/visual-regression-testing</source_url>
+    <local_file>guide-browser-visual-regression-testing.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Trace View  5.0.0</title>
+    <description>Replay browser test steps as DOM snapshots in Vitest UI or the HTML report for CI failures; add `page.mark()` entries, inspect retries, and fix missing images, canvas or fonts.</description>
+    <source_url>https://vitest.dev/guide/browser/trace-view</source_url>
+    <local_file>guide-browser-trace-view.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Playwright Traces</title>
+    <description>Enable the `trace` option to record trace files on failure or retry, set `tracesDir`, add `page.mark()` timeline markers, and open them with `npx playwright show-trace`.</description>
+    <source_url>https://vitest.dev/guide/browser/playwright-traces</source_url>
+    <local_file>guide-browser-playwright-traces.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>ARIA Snapshots  4.1.4 {#aria-snapshots}</title>
+    <description>Assert accessibility trees with `toMatchAriaSnapshot()`: the YAML-like format, regex patterns surviving `--update`, doubled backslash escaping, and `/children` partial or exact matching.</description>
+    <source_url>https://vitest.dev/guide/browser/aria-snapshots</source_url>
+    <local_file>guide-browser-aria-snapshots.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Context</title>
+    <description>Built-in context (`expect`, `skip`, `signal`, `bench`) and custom fixtures via `test.extend`: `onCleanup` teardown, worker/file scopes, `test.override`, and fixture-aware `test.beforeAll`.</description>
+    <source_url>https://vitest.dev/guide/test-context</source_url>
+    <local_file>guide-test-context.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Run Lifecycle</title>
+    <description>Execution order of `globalSetup`, setup files, workers and hooks (incl. nested `aroundEach`/`beforeEach`), which run in main process vs worker, and watch-mode reruns.</description>
+    <source_url>https://vitest.dev/guide/lifecycle</source_url>
+    <local_file>guide-lifecycle.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Snapshot</title>
+    <description>Inline and `toMatchFileSnapshot` snapshots, updating with `-u`, why CI fails on obsolete snapshots, custom serializers, matchers and domain adapters, and Jest output differences.</description>
+    <source_url>https://vitest.dev/guide/snapshot</source_url>
+    <local_file>guide-snapshot.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Tags 4.1.0 {#test-tags}</title>
+    <description>Label tests to share `timeout`/`retry` options and run subsets with `--tags-filter` expressions; covers `@module-tag`, priority conflicts, `strictTags` errors and `TestRunner.matchesTags`.</description>
+    <source_url>https://vitest.dev/guide/test-tags</source_url>
+    <local_file>guide-test-tags.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Annotations</title>
+    <description>Attach messages and file attachments to tests with `annotate`, and why annotations only appear on failure in the default reporter versus `verbose`, `junit`, `github-actions` and `tap`.</description>
+    <source_url>https://vitest.dev/guide/test-annotations</source_url>
+    <local_file>guide-test-annotations.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Extending Matchers</title>
+    <description>Write custom matchers with `expect.extend`, type them via the `Matchers` interface, handle async matchers, and use `this` helpers like `isNot`, `equals` and `utils`.</description>
+    <source_url>https://vitest.dev/guide/extending-matchers</source_url>
+    <local_file>guide-extending-matchers.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Testing Types</title>
+    <description>Write `*.test-d.ts` type tests with `expectTypeOf` or `assertType`, enable `--typecheck`, decode cryptic mismatch errors, and catch false-passing `@ts-expect-error` typos.</description>
+    <source_url>https://vitest.dev/guide/testing-types</source_url>
+    <local_file>guide-testing-types.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Benchmarking</title>
+    <description>Write `bench` fixture benchmarks, run via `vitest bench`, compare with `bench.compare()`, assert `toBeFasterThan`, store baselines, and avoid misleading results.</description>
+    <source_url>https://vitest.dev/guide/benchmarking</source_url>
+    <local_file>guide-benchmarking.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>In-Source Testing</title>
+    <description>Write tests inside source files via `import.meta.vitest` and `includeSource` to reach private state; strip them from production builds with `define` (Vite, Rollup, webpack) and add `vitest/importMeta` types.</description>
+    <source_url>https://vitest.dev/guide/in-source</source_url>
+    <local_file>guide-in-source.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Command Line Interface</title>
+    <description>Large reference to search: `run`, `related`, `list` and `doctor` (finds a faster pool) commands, `file:line` filtering, shell completions, every flag, `--shard`.</description>
+    <source_url>https://vitest.dev/guide/cli</source_url>
+    <local_file>guide-cli.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Filtering</title>
+    <description>Run one file, test name (`-t`), line number or tag; `.only`, `.skip`, `.todo`, why `.only` fails CI, and why filtered runs stay slow.</description>
+    <source_url>https://vitest.dev/guide/filtering</source_url>
+    <local_file>guide-filtering.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Projects</title>
+    <description>Run monorepo or multi-config setups (formerly `workspace`) in one process: glob patterns, inline configs, `extends` inheritance, unsupported project options, `--project` filtering, nested projects and `DEBUG=vitest:projects`.</description>
+    <source_url>https://vitest.dev/guide/projects</source_url>
+    <local_file>guide-projects.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Test Environment</title>
+    <description>Choosing `node`, `jsdom`, `happy-dom` or `edge-runtime`, per-file `@vitest-environment` comments, fixing `unknown extension .css` errors, and writing custom environments.</description>
+    <source_url>https://vitest.dev/guide/environment</source_url>
+    <local_file>guide-environment.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Reporters</title>
+    <description>Choose and combine output formats without losing defaults (`configDefaults.reporters`), set `outputFile`, customise JUnit names, GitHub Actions job summaries, merge sharded `blob` reports, debug hanging processes.</description>
+    <source_url>https://vitest.dev/guide/reporters</source_url>
+    <local_file>guide-reporters.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Vitest UI</title>
+    <description>Run `--ui` live or a static `html` reporter for CI and `singleFile` sharing; module graph shows slow imports and transformed code.</description>
+    <source_url>https://vitest.dev/guide/ui</source_url>
+    <local_file>guide-ui.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>IDE Integrations</title>
+    <description>Links to the official VS Code extension, built-in JetBrains support (WebStorm, IntelliJ, PhpStorm), and the paid Wallaby.js run-as-you-type plugin.</description>
+    <source_url>https://vitest.dev/guide/ide</source_url>
+    <local_file>guide-ide.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Coverage</title>
+    <description>Choosing `v8` vs `istanbul`, why untested files are missing from the report (`coverage.include`), `-- @preserve` ignore comments that survive esbuild, and custom reporters/providers.</description>
+    <source_url>https://vitest.dev/guide/coverage</source_url>
+    <local_file>guide-coverage.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Database Transaction per Test</title>
+    <description>Roll back each test's DB writes via `aroundEach` and a file-scoped `db` fixture; share one connection per worker with `isolate: false`.</description>
+    <source_url>https://vitest.dev/guide/recipes/db-transaction</source_url>
+    <local_file>guide-recipes-db-transaction.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Cancellable Test Resources</title>
+    <description>Stop hung tests on `timeout`, `--bail` or Ctrl+C by passing the test context `signal` to `fetch`, child processes, timers and polling helpers.</description>
+    <source_url>https://vitest.dev/guide/recipes/cancellable</source_url>
+    <local_file>guide-recipes-cancellable.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Waiting for Async Conditions</title>
+    <description>Choose between `expect.poll`, `vi.waitFor` and `vi.waitUntil` to replace flaky `setTimeout` sleeps: retry semantics, `timeout`/`interval` defaults, fake timers.</description>
+    <source_url>https://vitest.dev/guide/recipes/wait-for</source_url>
+    <local_file>guide-recipes-wait-for.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Type Narrowing in Tests</title>
+    <description>Replace `as` casts and `!` with `expect.assert` on possibly-undefined values; why `toBeTruthy`/`toBeDefined` don't narrow types, plus `typeof`/`instanceof` narrowing.</description>
+    <source_url>https://vitest.dev/guide/recipes/type-narrowing</source_url>
+    <local_file>guide-recipes-type-narrowing.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Custom Assertion Helpers</title>
+    <description>Make failures in reusable helpers that call `expect` point at the test's call site, not the helper's internals, using `vi.defineHelper`.</description>
+    <source_url>https://vitest.dev/guide/recipes/custom-assertions</source_url>
+    <local_file>guide-recipes-custom-assertions.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Watching Non-Imported Files</title>
+    <description>Why watch mode misses edits to templates, fixtures or files read via `fs`; map them to tests with `watchTriggerPatterns` instead of `forceRerunTriggers`.</description>
+    <source_url>https://vitest.dev/guide/recipes/watch-templates</source_url>
+    <local_file>guide-recipes-watch-templates.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Domain Locators</title>
+    <description>Add custom browser locator methods with `locators.extend` when `getByRole` can't express a query: Playwright selector strings, chained/filtered locators, interaction helpers, and `LocatorSelectors` type augmentation.</description>
+    <source_url>https://vitest.dev/guide/recipes/browser-locators</source_url>
+    <local_file>guide-recipes-browser-locators.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Schema-Driven Assertions</title>
+    <description>Reuse Zod, Valibot or ArkType schemas in tests via `expect.schemaMatching`, e.g. checking mock call arguments or generated UUIDs and timestamps.</description>
+    <source_url>https://vitest.dev/guide/recipes/schema-matching</source_url>
+    <local_file>guide-recipes-schema-matching.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Auto-Cleanup with `using`</title>
+    <description>Auto-restore `vi.spyOn`, `vi.fn` and `vi.doMock` at block exit without `afterEach`, mock for part of a test only, TypeScript/Node version requirements, and the `onTestFinished` fallback.</description>
+    <source_url>https://vitest.dev/guide/recipes/explicit-resources</source_url>
+    <local_file>guide-recipes-explicit-resources.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Conditional Mocking with `vi.when`</title>
+    <description>Return different values per argument with `calledWith` and `thenResolve`/`thenThrowOnce`, including action and matcher ordering, `onUnmatched`, and `toHaveBeenExhausted`.</description>
+    <source_url>https://vitest.dev/guide/recipes/conditional-mocking</source_url>
+    <local_file>guide-recipes-conditional-mocking.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Per-File Isolation Settings</title>
+    <description>Speed up unit tests with `isolate: false` via `projects` while keeping integration tests isolated; which files are unsafe to deisolate and checking with `--shuffle`.</description>
+    <source_url>https://vitest.dev/guide/recipes/disable-isolation</source_url>
+    <local_file>guide-recipes-disable-isolation.md</local_file>
+    <curated_at>2026-10-24</curated_at>
+  </source>
+  <source>
+    <title>Comparisons with Other Test Runners</title>
+    <description>Whether to choose Vitest over Jest, Mocha or uvu, and how it pairs with Playwright, Cypress or WebdriverIO for E2E and real-browser tests.</description>
+    <source_url>https://vitest.dev/guide/comparisons</source_url>
+    <local_file>guide-comparisons.md</local_file>
+    <curated_at>2026-10-24</curated_at>
   </source>
 </docs_index>

@@ -47,7 +47,7 @@ npm install -D vitest @vitest/browser-preview
 ```
 
 ```bash [yarn]
-yarn add -D vitest @vitest/browser-preview
+yarn add -D vitest vite @vitest/browser-preview
 ```
 
 ```bash [pnpm]
@@ -76,7 +76,7 @@ npm install -D vitest @vitest/browser-playwright
 ```
 
 ```bash [yarn]
-yarn add -D vitest @vitest/browser-playwright
+yarn add -D vitest vite @vitest/browser-playwright
 ```
 
 ```bash [pnpm]
@@ -98,7 +98,7 @@ npm install -D vitest @vitest/browser-webdriverio
 ```
 
 ```bash [yarn]
-yarn add -D vitest @vitest/browser-webdriverio
+yarn add -D vitest vite @vitest/browser-webdriverio
 ```
 
 ```bash [pnpm]
@@ -134,9 +134,7 @@ export default defineConfig({
 ```
 
 ::: info
-Vitest assigns port `63315` to avoid conflicts with the development server, allowing you to run both in parallel. You can change that with the [`browser.api`](/config/browser/api) option.
-
-The CLI does not print the Vite server URL automatically. You can press "b" to print the URL when running in watch mode.
+Vitest assigns port `63315` to avoid conflicts with the development server, allowing you to run both in parallel. You can change that with the [`api`](/config/api) option. The port is bound when the first browser is launched, or on startup if `api` or `ui` is enabled.
 :::
 
 If you have not used Vite before, make sure you have your framework's plugin installed and specified in the config. Some frameworks might require extra configuration to work - check their Vite related documentation to be sure.
@@ -324,10 +322,10 @@ The browser option in Vitest depends on the provider. Vitest will fail, if you p
 
 Vitest uses [Vite dev server](https://vitejs.dev/guide/#browser-support) to run your tests, so we only support features specified in the [`esbuild.target`](https://vitejs.dev/config/shared-options.html#esbuild) option (`esnext` by default).
 
-By default, Vite targets browsers which support the native [ES Modules](https://caniuse.com/es6-module), native [ESM dynamic import](https://caniuse.com/es6-module-dynamic-import), and [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta). On top of that, we utilize [`BroadcastChannel`](https://caniuse.com/?search=BroadcastChannel) to communicate between iframes:
+By default, Vite targets browsers which support the native [ES Modules](https://caniuse.com/es6-module), native [ESM dynamic import](https://caniuse.com/es6-module-dynamic-import), and [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta). On top of that, we utilize [`BroadcastChannel`](https://caniuse.com/?search=BroadcastChannel) to communicate between iframes and `WeakRef` with `FinalizationRegistry` to track mocks without preventing garbage collection:
 
 * Chrome >=87
-* Firefox >=78
+* Firefox >=79
 * Safari >=15.4
 * Edge >=88
 
@@ -352,6 +350,8 @@ Since Vitest 3.2, if you don't have the `browser` option in your config but spec
 :::
 
 By default, Vitest will automatically open the browser UI for development. Your tests will run inside an iframe in the center. You can configure the viewport by selecting the preferred dimensions, calling `page.viewport` inside the test, or setting default values in [the config](/config/browser/viewport).
+
+For an alternative debugging model that captures DOM snapshots for every test instead of showing a live iframe, see [Trace View](/guide/browser/trace-view).
 
 ## Headless
 
@@ -454,7 +454,7 @@ import { render } from 'vitest-browser-vue'
 import Component from './Component.vue'
 
 test('properly handles v-model', async () => {
-  const screen = render(Component)
+  const screen = await render(Component)
 
   // Asserts initial state.
   await expect.element(screen.getByText('Hi, my name is Alice')).toBeInTheDocument()
@@ -477,7 +477,7 @@ import { expect, test } from 'vitest'
 import Greeter from './greeter.svelte'
 
 test('greeting appears on click', async () => {
-  const screen = render(Greeter, { name: 'World' })
+  const screen = await render(Greeter, { name: 'World' })
 
   const button = screen.getByRole('button')
   await button.click()
@@ -621,7 +621,7 @@ test('renders a message', async () => {
 
 ### Thread Blocking Dialogs
 
-When using Vitest Browser, it's important to note that thread blocking dialogs like `alert` or `confirm` cannot be used natively. This is because they block the web page, which means Vitest cannot continue communicating with the page, causing the execution to hang.
+When using Vitest Browser, it's important to note that thread blocking dialogs like `alert`, `confirm` or `print` cannot be used natively. This is because they block the web page, which means Vitest cannot continue communicating with the page, causing the execution to hang.
 
 In such situations, Vitest provides default mocks with default returned values for these APIs. This ensures that if the user accidentally uses synchronous popup web APIs, the execution would not hang. However, it's still recommended for the user to mock these web APIs for a better experience. Read more in [Mocking](/guide/mocking).
 

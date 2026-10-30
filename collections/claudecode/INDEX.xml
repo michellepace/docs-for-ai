@@ -223,4 +223,11 @@
     <local_file>en-commands.md</local_file>
     <curated_at>2026-10-30</curated_at>
   </source>
+  <source>
+    <title>All settings</title>
+    <description>Complete reference for every Claude Code settings.json key: where each one goes, its type and default, and a paste-ready example, with an index of every key.</description>
+    <source_url>https://code.claude.com/docs/en/settings-reference</source_url>
+    <local_file>en-settings-reference.md</local_file>
+    <curated_at>2026-10-30</curated_at>
+  </source>
 </docs_index>

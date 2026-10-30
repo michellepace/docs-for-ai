@@ -18,7 +18,7 @@ repos:
       - id: check-toml
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.3
+    rev: v0.24.0
     hooks:
       - id: markdownlint-cli2       # rules .markdownlint-cli2.yaml
         args: [--fix]
@@ -41,7 +41,7 @@ repos:
       - id: shellcheck              # lint shell (read-only, after shfmt)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.13.1
+    rev: 0.13.6
     hooks:
       - id: uv-lock                 # sync uv.lock ↔ pyproject.toml
 

@@ -4,328 +4,328 @@
     <description>Whether to choose Biome over separate Prettier and ESLint setups: one package and config, speed benchmarks, editor support, and migration path.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/introduction/why-biome.mdx</source_url>
     <local_file>src-content-docs-en-introduction-why-biome.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Comparison with other tools</title>
     <description>Biome versus Prettier, ESLint and Oxc: output compatibility, speed benchmarks, rule naming, plugin limits, type-aware linting and language coverage.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/introduction/comparison-with-other-tools.mdx</source_url>
     <local_file>src-content-docs-en-introduction-comparison-with-other-tools.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Language support</title>
     <description>Which languages Biome parses, formats and lints; enabling experimental Vue/Svelte/Astro and embedded CSS/GraphQL, JSONC trailing-comma defaults, and `.gs` Apps Script globals.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/introduction/language-support.mdx</source_url>
     <local_file>src-content-docs-en-introduction-language-support.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Quick start</title>
     <description>Three-step first run: install with `-E` version pinning, generate `biome.json` via `biome init`, then `biome check --write` to apply fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/installation/quick-start.mdx</source_url>
     <local_file>src-content-docs-en-installation-quick-start.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Install Biome</title>
     <description>npm/pnpm/yarn/bun/deno with exact-version pinning, or the Node-free standalone binary via install script, Homebrew, Winget, pacman, Docker; upgrading with `biome upgrade` and `biome migrate`.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/installation/install-biome.mdx</source_url>
     <local_file>src-content-docs-en-installation-install-biome.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Configure Biome</title>
     <description>How `biome.json` is structured and discovered, per-language overrides, `files.includes` globs with `!`/`!!` exclusions, why files are ignored, and which well-known JSON files allow comments.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/configure-biome.mdx</source_url>
     <local_file>src-content-docs-en-configuration-configure-biome.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Set up your editor</title>
     <description>Install the extension for VS Code, Cursor, Zed or IntelliJ, make Biome the default formatter, wire Helix via `biome lsp-proxy`, and find Neovim, Vim, Emacs and Sublime plugins.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/editors.mdx</source_url>
     <local_file>src-content-docs-en-configuration-editors.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Integrate with your VCS</title>
     <description>Respect `.gitignore` via `vcs.useIgnoreFile`, and check only changed or staged files with `--changed`, `--since` and `--staged`, e.g. in pre-commit hooks.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/configuration/integrate-with-vcs.mdx</source_url>
     <local_file>src-content-docs-en-configuration-integrate-with-vcs.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Formatter</title>
     <description>Running `biome format --write`, default formatter options in `biome.json`, shell glob pitfalls, and skipping files or code with `biome-ignore format` comments.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/formatter/index.mdx</source_url>
     <local_file>src-content-docs-en-formatter-index.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Differences with Prettier</title>
     <description>Why Biome's output deliberately differs from Prettier's: quoted property keys, parentheses, arrow type-parameter trailing commas, and invalid code left unformatted.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/formatter/differences-with-prettier.md</source_url>
     <local_file>src-content-docs-en-formatter-differences-with-prettier.md</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Formatter Option Philosophy</title>
     <description>Why requests for new formatting options get declined, and why Prettier-compatibility options like `--bracket-same-line` exist only as legacy.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/formatter/option-philosophy.md</source_url>
     <local_file>src-content-docs-en-formatter-option-philosophy.md</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Suppressions</title>
     <description>Silence lint, assist or plugin diagnostics with `biome-ignore` comments for one line, a range (`biome-ignore-start`/`-end`) or whole file (`biome-ignore-all`); fixes `suppression/unused` errors.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/analyzer/suppressions.mdx</source_url>
     <local_file>src-content-docs-en-analyzer-suppressions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Linter</title>
     <description>Safe vs unsafe fixes (`--write --unsafe`), rule and group severity, `--only`/`--skip`, domains, rule groups, ESLint migration, and why v2 linting is slow or memory-hungry.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/index.mdx</source_url>
     <local_file>src-content-docs-en-linter-index.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Domains</title>
-    <description>Framework rule groups (React, Vue, Svelte, Next, tests…) set via `linter.domains`: which dependencies auto-enable each, its rules and globals, and why `project`/`types` slow linting.</description>
+    <description>Framework rule groups (React, Vue, Svelte, Next, TanStack Query, tests…) set via `linter.domains`: which dependencies auto-enable each, its rules and globals, and why `project`/`types` slow linting.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/domains.mdx</source_url>
     <local_file>src-content-docs-en-linter-domains.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Linter Plugins</title>
     <description>Write custom lint rules as GritQL `.grit` or JavaScript plugins: choosing between them, `register_diagnostic()`, auto-fix rewrites, `includes` scoping, CSS/JSON targets, and the JS semantic model API.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/plugins.mdx</source_url>
     <local_file>src-content-docs-en-linter-plugins.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>JavaScript Rules</title>
-    <description>Large table to search for any JS/TS/JSX rule's group, purpose and safe/unsafe fix; includes React, Vue, Next.js and Playwright rules and recommended-rule default severities.</description>
+    <description>Large table to search for any JS/TS/JSX rule's group, purpose and safe/unsafe fix; includes React, Vue, Svelte, Next.js and Playwright rules and recommended-rule default severities.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/javascript/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-javascript-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
     <description>Large lookup table to search: finds the Biome JS/TS lint rule equivalent to an ESLint, typescript-eslint, React, jsx-a11y, unicorn, Jest/Vitest, Vue or other plugin rule when migrating; lists Biome-exclusive rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/javascript/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-javascript-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>CSS Rules</title>
     <description>Find which rule flags `!important`, unknown properties, duplicates or specificity issues; shows group, recommended status, fix safety and default severity, not rule options.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/css/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-css-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
     <description>Maps Stylelint and `@eslint/css` rules to their Biome CSS lint equivalents for migration, and lists Biome-exclusive CSS rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/css/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-css-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>JSON Rules</title>
-    <description>Every JSON lint rule by group with fix and recommended status, including `package.json` dependency, license and script checks and Biome config rules.</description>
+    <description>Every JSON lint rule by group with fix and recommended status, including `package.json` dependency, license, engines and script checks and Biome config rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/json/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-json-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
     <description>Maps `@eslint/json` and `package.json` ESLint plugin rules to their Biome JSON lint rule equivalents, and lists Biome-only JSON rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/json/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-json-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>HTML Rules</title>
     <description>Lookup table of HTML lint rules by group (a11y, Vue, Svelte, Astro, Tailwind), showing which are recommended, their severity and fix safety.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/html/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-html-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
     <description>Maps html-eslint, jsx-a11y, Vue, Svelte, Astro and Tailwind plugin rules to their Biome HTML lint equivalents for migration, and lists Biome-exclusive HTML rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/html/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-html-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Markdown Rules</title>
-    <description>The five Markdown lint rules by group: nursery heading-structure and fenced code language rules, plus `noEmptySource`; none currently recommended.</description>
+    <description>The six Markdown lint rules by group: nursery heading-structure, fenced code language and Unicode BOM rules, plus `noEmptySource`; none currently recommended.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/markdown/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-markdown-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
-    <description>Maps markdownlint rules (MD001, MD025, MD040, MD041) to their Biome Markdown lint equivalents for migration, and lists Biome-exclusive Markdown rules.</description>
+    <description>Maps markdownlint rules (MD001, MD025, MD040, MD041) and `@eslint/markdown` `no-multiple-h1` to their Biome Markdown lint equivalents for migration; `noEmptySource` is Biome-exclusive.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/markdown/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-markdown-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>YAML Rules</title>
-    <description>Only two YAML lint rules exist: nursery `noDuplicateMapKeys` for repeated map keys and suspicious `noEmptySource`; neither recommended nor auto-fixable.</description>
+    <description>Only three YAML lint rules exist: nursery `noDuplicateMapKeys` and `noYamlBooleanKeys`, plus suspicious `noEmptySource`; none recommended or auto-fixable.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/yaml/rules.mdx</source_url>
     <local_file>src-content-docs-en-linter-yaml-rules.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Rules sources</title>
-    <description>Maps eslint-plugin-yml's `no-empty-document` to Biome's `noEmptySource` for YAML lint migration, and lists the Biome-exclusive `noDuplicateMapKeys` rule.</description>
+    <description>Maps eslint-plugin-yml's `no-boolean-key` and `no-empty-document` to Biome YAML lint rules for migration; `noDuplicateMapKeys` is the only Biome-exclusive rule.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/linter/yaml/sources.mdx</source_url>
     <local_file>src-content-docs-en-linter-yaml-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Assist</title>
     <description>How assist actions differ from lint rules, applying them on save via `source.fixAll.biome` code actions, and enforcing or skipping them in `biome check` with `--enforce-assist`.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/index.mdx</source_url>
     <local_file>src-content-docs-en-assist-index.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>JavaScript Actions</title>
     <description>Lists JS/TS assist actions such as `organizeImports` (the only one on by default) and sorting JSX attributes, object keys, enum and interface members, all with safe fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/javascript/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-javascript-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Maps ESLint import/key/enum/JSX-prop sorting rules (core, perfectionist, eslint-plugin-import, react, tailwindcss) to equivalent Biome JavaScript assist actions like `organizeImports` and `useSortedKeys`.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/javascript/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-javascript-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>CSS Actions</title>
     <description>Lists assist actions available for CSS files: only `useSortedProperties`, which sorts properties and nested rules with a safe fix.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/css/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-css-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Which CSS assist actions come from other tools: only Biome-exclusive `useSortedProperties` is listed, with no ported actions yet.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/css/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-css-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>JSON Actions</title>
     <description>Lists the assist actions for JSON files: `useSortedKeys` to sort object keys and `useSortedPackageJson` to order `package.json` fields, both safe fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/json/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-json-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Maps JSON sorting tools to Biome assist actions: `@eslint/json` `sort-keys` to `useSortedKeys`, and `sort-package-json`, Sherif and package-json ESLint plugins to `useSortedPackageJson`.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/json/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-json-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>HTML Actions</title>
     <description>Assist actions for HTML files: `noDuplicateClasses` removes repeated `class` names and `useSortedAttributes` orders attributes and framework directives, both safe fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/html/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-html-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Maps HTML, Vue, Svelte and Astro attribute-sorting ESLint rules to Biome's HTML `useSortedAttributes` action, and better-tailwindcss `no-duplicate-classes` to `noDuplicateClasses`.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/html/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-html-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Markdown Actions</title>
     <description>Confirms Biome currently has no assist actions for Markdown files; the page only has the icon legend and a link for suggesting rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/markdown/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-markdown-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Which Markdown assist actions come from other tools: currently empty, with no Biome-exclusive or ported Markdown actions listed.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/markdown/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-markdown-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>YAML Actions</title>
     <description>Confirms Biome currently has no assist actions for YAML files; the page only has the icon legend and a link for suggesting rules.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/yaml/actions.mdx</source_url>
     <local_file>src-content-docs-en-assist-yaml-actions.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Actions sources</title>
     <description>Which YAML assist actions come from other tools: currently empty, with no Biome-exclusive or ported YAML actions listed.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/assist/yaml/sources.mdx</source_url>
     <local_file>src-content-docs-en-assist-yaml-sources.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>CLI</title>
     <description>Large reference to search, not read: every command's flags, including `--staged`/`--changed`, `--only`/`--skip`, CI `--reporter` formats, formatter overrides, and `BIOME_*` env vars.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/cli.mdx</source_url>
     <local_file>src-content-docs-en-reference-cli.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Configuration</title>
     <description>Large reference to search: every `biome.json` option with type and default, plus `extends` nesting, `overrides`, per-language settings and glob syntax like `!!` force-ignore.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/configuration.mdx</source_url>
     <local_file>src-content-docs-en-reference-configuration.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>VS Code extension</title>
     <description>Enable format, fix and import sorting on save; every `biome.*` setting, e.g. `biome.lsp.bin` and `inlineConfig`; LSP trace, multi-root workspaces, 2.x migration.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/vscode.mdx</source_url>
     <local_file>src-content-docs-en-reference-vscode.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Zed extension</title>
     <description>Set Biome as per-language formatter in `.zed/settings.json`, fix and organize imports on save, pick the binary, and why global settings break other languages.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/zed.mdx</source_url>
     <local_file>src-content-docs-en-reference-zed.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Language server</title>
     <description>For editor-extension authors: supported LSP methods, settings like `configuration_path`, `inline_config` and `go_to_definition`, `lsp-proxy`, `stdin` and daemon integration, and where logs live.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/reference/language-server.mdx</source_url>
     <local_file>src-content-docs-en-reference-language-server.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Continuous Integration</title>
     <description>How `biome ci` differs from `biome check`, with GitHub Actions (`setup-biome`, reviewdog) and GitLab code-quality report examples.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/continuous-integration.mdx</source_url>
     <local_file>src-content-docs-en-recipes-continuous-integration.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
   <source>
     <title>Git Hooks</title>
     <description>Run Biome on staged files before commit or push with Lefthook, Husky with lint-staged, `pre-commit` hooks, or shell scripts; `--no-errors-on-unmatched` and re-staging fixes.</description>
     <source_url>https://github.com/biomejs/website/blob/main/src/content/docs/en/recipes/git-hooks.mdx</source_url>
     <local_file>src-content-docs-en-recipes-git-hooks.mdx</local_file>
-    <curated_at>2026-10-22</curated_at>
+    <curated_at>2026-10-30</curated_at>
   </source>
 </docs_index>

@@ -1274,6 +1274,8 @@ class PermissionResultAllow:
 | `updated_input` | `dict[str, Any] \| None` | `None` | Modified input to use instead of original |
 | `updated_permissions` | `list[PermissionUpdate] \| None` | `None` | Permission updates to apply |
 
+If you return `PermissionResultAllow` with more than 4,096 items in `updated_permissions`, Claude Code treats the result as invalid and denies the tool call. Each [`PermissionUpdate`](#permissionupdate) counts as one item, and so does each entry in its `rules` or `directories` list. The denial message ends with `updatedPermissions may hold at most 4096 updates, rules and directories in all.` To avoid the denial, return 4,096 items or fewer.
+
 ### `PermissionResultDeny`
 
 Result indicating the tool call should be denied.
@@ -3320,7 +3322,7 @@ A `disallowed_tools` entry or a deny rule that still names either name is ignore
 
 ### TaskStop
 
-**Tool name:** `TaskStop`. The previous names `KillShell` and `KillBash` are still accepted as aliases.
+**Tool name:** `TaskStop`. You can still use the previous names `KillShell` and `KillBash` in permission rules, in hook matchers, and in the `tools`, `allowed_tools`, and `disallowed_tools` options.
 
 **Input:**
 

@@ -142,7 +142,7 @@ def test_repiping_an_identical_description_reports_unchanged_and_succeeds(
     assert "no updates needed" in out
 
 
-def test_unmatched_filename_applies_nothing_and_succeeds(
+def test_unindexed_filename_fails_naming_it_and_writes_nothing(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -150,11 +150,14 @@ def test_unmatched_filename_applies_nothing_and_succeeds(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
 
     exit_code, out = run_cli(
-        monkeypatch, capsys, tmp_path, f"doc-missing.md|{IN_BAND}\n"
+        monkeypatch,
+        capsys,
+        tmp_path,
+        f"doc-a.md|{IN_BAND}\ndoc-missing.md|{IN_BAND}\n",
     )
 
-    assert exit_code == 0
-    assert "no updates needed" in out
+    assert exit_code == 1
+    assert "❌ Not in INDEX.xml: doc-missing.md" in out
     assert "old description" in index_path.read_text(encoding="utf-8")
 
 

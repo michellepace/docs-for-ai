@@ -84,8 +84,15 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
     return updated_count
 
 
+def _reject_unindexed_files(index_path: Path, descriptions: DescriptionsByFile) -> None:
+    root = ET.parse(index_path).getroot()
+    indexed = {source.findtext("local_file") for source in root.findall("source")}
+    if unindexed := sorted(descriptions.keys() - indexed):
+        msg = f"Not in INDEX.xml: {', '.join(unindexed)}"
+        raise CurationError(msg)
+
+
 def _run_update(collection_dir: Path, descriptions_text: str) -> None:
-    """Apply in-band descriptions, then fail if any were out of band."""
     index_path = collection_dir / "INDEX.xml"
     if not index_path.exists():
         msg = f"Not a collection: {index_path} not found"
@@ -95,6 +102,8 @@ def _run_update(collection_dir: Path, descriptions_text: str) -> None:
     if not descriptions:
         msg = "No descriptions found on stdin (see --help for the format)"
         raise CurationError(msg)
+
+    _reject_unindexed_files(index_path, descriptions)
 
     in_band = _in_band_descriptions(descriptions)
     print()
@@ -135,8 +144,7 @@ stdin:
   Split at the first |, both parts trimmed; blank lines are ignored.
 
 exit:
-  0 on success, even if a filename matched no source (nothing is
-  written for it); 1 with `❌ <reason>`.
+  0 on success; 1 with `❌ <reason>`.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

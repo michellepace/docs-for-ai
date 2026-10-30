@@ -79,8 +79,29 @@
   <source>
     <title>Plugins overview</title>
     <description>Understand what a Claude Code plugin is, when you need one instead of a standalone skill or MCP server, and which page to read to install or create one.</description>
-    <source_url>https://code.claude.com/docs/en/plugins</source_url>
-    <local_file>en-plugins.md</local_file>
+    <source_url>https://code.claude.com/docs/en/plugins/overview</source_url>
+    <local_file>en-plugins-overview.md</local_file>
+    <curated_at>2026-10-30</curated_at>
+  </source>
+  <source>
+    <title>Add components to a plugin</title>
+    <description>Add skills, hooks, MCP servers, and every other component type to a Claude Code plugin, with an example that validates for each.</description>
+    <source_url>https://code.claude.com/docs/en/plugins/components</source_url>
+    <local_file>en-plugins-components.md</local_file>
+    <curated_at>2026-10-30</curated_at>
+  </source>
+  <source>
+    <title>Plugin dependencies</title>
+    <description>Declare the plugins your plugin depends on, with version ranges such as ^1.2, and see how Claude Code installs, resolves, and prunes them.</description>
+    <source_url>https://code.claude.com/docs/en/plugins/dependencies</source_url>
+    <local_file>en-plugins-dependencies.md</local_file>
+    <curated_at>2026-10-30</curated_at>
+  </source>
+  <source>
+    <title>Test plugins with evals</title>
+    <description>Write eval cases for your Claude Code plugin, run them with claude plugin eval, grade the results, compare against a no-plugin baseline, and gate CI on the score.</description>
+    <source_url>https://code.claude.com/docs/en/plugin-evals</source_url>
+    <local_file>en-plugin-evals.md</local_file>
     <curated_at>2026-10-30</curated_at>
   </source>
   <source>

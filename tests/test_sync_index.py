@@ -131,14 +131,9 @@ def make_result(
     )
 
 
-def test_report_lists_placeholder_files_as_home_paths_with_reasons(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    home = tmp_path.resolve()
-    monkeypatch.setattr(Path, "home", lambda: home)
-    collection_dir = home / "repo" / "collections" / "shiny"
+def test_report_lists_placeholder_files_as_file_title_reason_rows() -> None:
     report = SyncReport(
-        collection_dir=collection_dir,
+        collection_dir=Path("collections/shiny"),
         total_sources=2,
         successes=[
             make_result("a.md", curate_doc.DocOutcome.NEW),
@@ -151,15 +146,12 @@ def test_report_lists_placeholder_files_as_home_paths_with_reasons(
 
     output = format_sync_report(report)
 
-    lines = output.splitlines()
-    a_line = next(line for line in lines if "a.md" in line)
-    b_line = next(line for line in lines if "b.md" in line)
-    assert a_line.startswith("  ~/repo/collections/shiny/a.md")
-    assert a_line.endswith("(new source)")
-    assert b_line.startswith("  ~/repo/collections/shiny/b.md")
-    assert b_line.endswith("(content changed)")
-    assert lines[lines.index(a_line) + 1] == "    title: Alpha guide"
-    assert lines[lines.index(b_line) + 1] == "    title: Beta guide"
+    assert (
+        "NEEDS DESCRIPTION (2)\n"
+        "file|title|reason\n"
+        "a.md|Alpha guide|new source\n"
+        "b.md|Beta guide|content changed\n"
+    ) in output
 
 
 def test_report_omits_empty_sections() -> None:
@@ -306,17 +298,16 @@ def test_sync_resets_description_when_refetched_content_changed(
 
     index_path = collection_dir / "INDEX.xml"
     assert read_index_description(index_path, "doc.md") == PLACEHOLDER_DESCRIPTION
-    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
-    assert "doc.md" in needs_section
-    assert "(content changed)" in needs_section
+    assert (
+        "NEEDS DESCRIPTION (1)\nfile|title|reason\ndoc.md|Doc|content changed\n" in out
+    )
 
 
-def test_sync_flags_kept_placeholder_description(
+def test_sync_lists_unchanged_doc_still_on_placeholder_as_needing_description(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    """An unchanged doc whose description was never written stays flagged."""
     collection_dir = create_collection(
         tmp_path, "# Fetched fresh", PLACEHOLDER_DESCRIPTION
     )
@@ -324,10 +315,10 @@ def test_sync_flags_kept_placeholder_description(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
-    assert "doc.md" in needs_section
-    assert "(kept placeholder)" in needs_section
-    assert "    title: Fetched fresh" in needs_section
+    assert (
+        "NEEDS DESCRIPTION (1)\nfile|title|reason\n"
+        "doc.md|Fetched fresh|kept placeholder\n"
+    ) in out
 
 
 def test_sync_lists_changed_claude_doc_under_publisher_summary(
@@ -344,11 +335,14 @@ def test_sync_lists_changed_claude_doc_under_publisher_summary(
 
     index_path = collection_dir / "INDEX.xml"
     assert read_index_description(index_path, "doc.md") == CLAUDE_SUMMARY
-    assert "PUBLISHER SUMMARY (1)\n  doc.md  (content changed)\n" in out
+    assert (
+        "PUBLISHER SUMMARY (1)\nfile|title|reason\ndoc.md|Hooks|content changed\n"
+        in out
+    )
     assert "NEEDS DESCRIPTION" not in out
 
 
-def test_sync_tags_placeholder_filled_by_publisher_summary(
+def test_sync_lists_placeholder_claude_doc_under_publisher_summary(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -360,7 +354,11 @@ def test_sync_tags_placeholder_filled_by_publisher_summary(
 
     out = run_sync(collection_dir, monkeypatch, capsys)
 
-    assert "PUBLISHER SUMMARY (1)\n  doc.md  (placeholder filled)\n" in out
+    assert (
+        "PUBLISHER SUMMARY (1)\nfile|title|reason\ndoc.md|Hooks|placeholder filled\n"
+        in out
+    )
+    assert "NEEDS DESCRIPTION" not in out
 
 
 def test_sync_keeps_description_regenerated_after_reset(
@@ -438,7 +436,7 @@ def test_sync_fetches_missing_file_instead_of_pruning_entry(
     assert "sources 1 · curated 1 · failed 0" in out
 
 
-def test_sync_flags_recreated_doc_as_needing_description(
+def test_sync_resets_recreated_doc_and_lists_it_as_needing_description(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -461,9 +459,10 @@ def test_sync_flags_recreated_doc_as_needing_description(
 
     description = read_index_description(index_path, "missing-doc.md")
     assert description == PLACEHOLDER_DESCRIPTION
-    needs_section = out.split("NEEDS DESCRIPTION (1)")[1]
-    assert "missing-doc.md" in needs_section
-    assert "(file recreated)" in needs_section
+    assert (
+        "NEEDS DESCRIPTION (1)\nfile|title|reason\n"
+        "missing-doc.md|Fetched fresh|file recreated\n"
+    ) in out
 
 
 def test_sync_deletes_files_not_in_index_and_keeps_protected_files(

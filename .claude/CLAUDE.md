@@ -38,7 +38,7 @@ CLIs, run directly or called by the skills above:
 ```shell
 uv run curate-doc --help          # Fetch a doc from a URL into a collection
 uv run sync-index --help          # Re-sync a collection to its INDEX.xml
-uv run update-descriptions --help # Pipe filename/description pairs into INDEX.xml
+uv run update-descriptions --help # Pipe file|description lines into INDEX.xml
 ```
 
 ## Development

@@ -7,7 +7,6 @@ model: claude-opus-5-5
 effort: high
 allowed-tools:
   - Bash(find *)
-  - Bash(git diff *)
   - Bash(printf *)
   - Bash(uv run --directory * sync-index *)
   - Bash(uv run --directory * update-descriptions *)
@@ -55,25 +54,19 @@ uv run --directory ~/.claude/docs-for-ai sync-index "collections/$collection"
 
 ## Step 3. Write the descriptions — `NEEDS DESCRIPTION` entries only
 
-Two reads feed every write:
+Each row's `title` is the `<title>` the description must complement. Two reads feed every write:
 
 1. `~/.claude/docs-for-ai/.claude/skills/curate-doc/description-rules.md` — the rules to follow.
-2. The **full** doc, from the `~/...` path exactly as the report prints it (however large).
+2. The **full** doc at `~/.claude/docs-for-ai/collections/$collection/<file>` (however large).
 
-Each entry's indented `title:` line is the `<title>` that description must complement.
-
-Then pipe one description per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
+Then pipe one `file|description` line per entry — all in **one** command; the quoted `<<'EOF'` keeps apostrophes and backticks shell-safe:
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
-getting-started.md
-Description for this file here
-en-hooks.md
-Description for the hooks doc here
+getting-started.md|Description for this file here
+en-hooks.md|Description for the hooks doc here
 EOF
 ```
-
-Word count is enforced; on ❌, rewrite the flagged description(s) and rerun with only those.
 
 **Verify before proceeding:** no `PLACEHOLDER` remains in `~/.claude/docs-for-ai/collections/$collection/INDEX.xml`; otherwise suggest a self-healing action and await user confirmation.
 
@@ -94,7 +87,7 @@ Report completion in this format, filling each slot from the scripts' output:
 - Descriptions updated:  [D: docs under `NEEDS DESCRIPTION` + `PUBLISHER SUMMARY`]
 
 💡 What changed in `$collection`:
-- [one line per doc under `NEEDS DESCRIPTION` or `PUBLISHER SUMMARY`, from its reason tag]
+- [one line per doc under `NEEDS DESCRIPTION` or `PUBLISHER SUMMARY`, from its reason column]
 ```
 
 </report_format>

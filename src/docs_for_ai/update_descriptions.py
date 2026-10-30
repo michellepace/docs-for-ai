@@ -3,7 +3,6 @@
 import argparse
 import sys
 import xml.etree.ElementTree as ET
-from itertools import batched
 from typing import TYPE_CHECKING
 
 from docs_for_ai.errors import CurationError
@@ -18,23 +17,21 @@ from docs_for_ai.paths import normalise_collection_dir
 if TYPE_CHECKING:
     from pathlib import Path
 
-LINES_PER_ENTRY = 2  # filename line + description line
-
 type DescriptionsByFile = dict[str, str]
 
 
 def parse_descriptions(text: str) -> DescriptionsByFile:
-    """Parse filename/description line pairs into a {local_file: description} map."""
-    non_blank_lines = [line.strip() for line in text.splitlines() if line.strip()]
-
+    """Parse `local_file|description` lines, rejecting any line without a `|`."""
     descriptions: DescriptionsByFile = {}
-    for entry in batched(non_blank_lines, LINES_PER_ENTRY, strict=False):
-        if len(entry) == LINES_PER_ENTRY:
-            local_file, description = entry
-            descriptions[local_file] = description
-        else:
-            print(f"no description for {entry[0]}: skipping")
-
+    for line_number, raw_line in enumerate(text.splitlines(), 1):
+        line = raw_line.strip()
+        if not line:
+            continue
+        local_file, separator, description = line.partition("|")
+        if not separator:
+            msg = f"No '|' on line {line_number}: {line}"
+            raise CurationError(msg)
+        descriptions[local_file.strip()] = description.strip()
     return descriptions
 
 
@@ -55,7 +52,7 @@ def _in_band_descriptions(descriptions: DescriptionsByFile) -> DescriptionsByFil
 
 
 def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> int:
-    """Apply matching descriptions to INDEX.xml, write if changed, return count."""
+    """Apply matching descriptions to INDEX.xml; return how many changed."""
     root = ET.parse(index_path).getroot()
 
     updated_count = 0
@@ -88,7 +85,7 @@ def update_descriptions(index_path: Path, descriptions: DescriptionsByFile) -> i
 
 
 def _run_update(collection_dir: Path, descriptions_text: str) -> None:
-    """Apply piped descriptions to the collection's INDEX.xml."""
+    """Apply in-band descriptions, then fail if any were out of band."""
     index_path = collection_dir / "INDEX.xml"
     if not index_path.exists():
         msg = f"Not a collection: {index_path} not found"
@@ -127,17 +124,19 @@ def main() -> None:
         description="Set INDEX.xml descriptions from stdin, matched by <local_file>.",
         epilog=f"""\
 stdin:
-  Line pairs for any subset of sources, piped via a quoted heredoc so
+  One line per source, any subset, piped via a quoted heredoc so
   quotes, $ and backticks stay literal:
     uv run update-descriptions collections/<name> <<'EOF'
-    <local_file>     bare filename as in INDEX.xml, not a path
-    <description>    one line, {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words
-    ...              more pairs; blank lines are ignored
+    <local_file>|<description>
+    ...
     EOF
+  <local_file>: bare filename as in INDEX.xml, not a path.
+  <description>: {DESCRIP_MIN_WORDS}-{DESCRIP_MAX_WORDS} words.
+  Split at the first |, both parts trimmed; blank lines are ignored.
 
 exit:
-  0 even if a filename matched no source (skipped, with only its
-  word-count ✅ printed); 1 with `❌ <reason>`.
+  0 on success, even if a filename matched no source (nothing is
+  written for it); 1 with `❌ <reason>`.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

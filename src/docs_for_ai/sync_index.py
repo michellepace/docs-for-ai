@@ -8,11 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple
 from docs_for_ai import curate_doc
 from docs_for_ai.errors import CurationError
 from docs_for_ai.index_io import PLACEHOLDER_DESCRIPTION
-from docs_for_ai.paths import (
-    collection_label,
-    format_path_for_display,
-    normalise_collection_dir,
-)
+from docs_for_ai.paths import collection_label, normalise_collection_dir
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -46,7 +42,7 @@ class SyncReport(NamedTuple):
 # Collection files that must survive a sync.
 _PROTECTED_FILES = {"INDEX.xml", "README.md"}
 
-# Reason tag per outcome that resets a description; any other reset was
+# Reason per outcome that resets a description; any other reset was
 # a placeholder carried over from an earlier run.
 _RESET_REASONS = {
     curate_doc.DocOutcome.NEW: "new source",
@@ -91,7 +87,7 @@ def delete_orphan_files(collection_dir: Path, indexed_files: set[str]) -> list[s
 def _curate_or_error(
     collection_dir: Path, source_url: str
 ) -> curate_doc.CurationResult | SyncFailure:
-    """Curate one source in-process; a failure returns its `SyncFailure`."""
+    """Curate one source in-process, catching any failure."""
     try:
         return curate_doc.curate(collection_dir, source_url)
     except CurationError as exc:
@@ -113,7 +109,7 @@ def files_needing_description(index_path: Path) -> dict[str, str]:
 
 
 def _reset_reasons(results: list[curate_doc.CurationResult]) -> dict[str, str]:
-    """Reason tag per curated file whose outcome reset its description."""
+    """Reason per curated file whose outcome reset its description."""
     return {
         result.local_file: _RESET_REASONS[result.outcome]
         for result in results
@@ -121,20 +117,18 @@ def _reset_reasons(results: list[curate_doc.CurationResult]) -> dict[str, str]:
     }
 
 
-def _publisher_summary_lines(report: SyncReport) -> list[str]:
-    """Section listing docs described from their publisher's summary this run."""
-    reasons = _reset_reasons(report.successes)
-    filled = sorted(
-        result.local_file
-        for result in report.successes
-        if result.description_source is curate_doc.DescriptionSource.PUBLISHER_SUMMARY
-    )
-    if not filled:
+type FileTitleReason = tuple[str, str, str]
+
+
+def _row_section(heading: str, rows: list[FileTitleReason]) -> list[str]:
+    """A headed `file|title|reason` section, sorted by file; empty if no rows."""
+    if not rows:
         return []
     return [
         "",
-        f"PUBLISHER SUMMARY ({len(filled)})",
-        *(f"  {name}  ({reasons.get(name, _FILLED_REASON)})" for name in filled),
+        f"{heading} ({len(rows)})",
+        "file|title|reason",
+        *("|".join(row) for row in sorted(rows)),
     ]
 
 
@@ -155,21 +149,30 @@ def format_sync_report(report: SyncReport) -> str:
             error = failure.error.removesuffix(f" — {failure.source_url}")
             lines += [f"  {failure.source_url}", f"    {error}"]
 
-    if report.placeholder_files:
-        reasons = _reset_reasons(report.successes)
-        paths = {
-            filename: format_path_for_display(report.collection_dir / filename)
-            for filename in sorted(report.placeholder_files)
-        }
-        width = max(len(path) for path in paths.values())
-        lines += ["", f"NEEDS DESCRIPTION ({len(paths)})"]
-        for filename, path in paths.items():
-            lines += [
-                f"  {path:<{width}}  ({reasons.get(filename, _CARRIED_OVER_REASON)})",
-                f"    title: {report.placeholder_files[filename]}",
-            ]
-
-    lines += _publisher_summary_lines(report)
+    reasons = _reset_reasons(report.successes)
+    lines += _row_section(
+        "NEEDS DESCRIPTION",
+        [
+            (file, title, reasons.get(file, _CARRIED_OVER_REASON))
+            for file, title in report.placeholder_files.items()
+        ],
+    )
+    publisher_described = [
+        result
+        for result in report.successes
+        if result.description_source is curate_doc.DescriptionSource.PUBLISHER_SUMMARY
+    ]
+    lines += _row_section(
+        "PUBLISHER SUMMARY",
+        [
+            (
+                result.local_file,
+                result.title,
+                reasons.get(result.local_file, _FILLED_REASON),
+            )
+            for result in publisher_described
+        ],
+    )
 
     needed = len(report.placeholder_files)
     noun = "description" if needed == 1 else "descriptions"
@@ -182,7 +185,6 @@ def format_sync_report(report: SyncReport) -> str:
 
 
 def _run_sync(collection_dir: Path) -> None:
-    """Sync one collection to its INDEX.xml."""
     index_path = collection_dir / "INDEX.xml"
 
     if not collection_dir.exists() or not collection_dir.is_dir():

@@ -76,12 +76,9 @@ Then pipe the description straight in — the quoted `<<'EOF'` keeps apostrophes
 
 ```shell
 uv run --directory ~/.claude/docs-for-ai update-descriptions "collections/$collection" <<'EOF'
-overview-shiny-for-python.md
-Description for doc on single line
+overview-shiny-for-python.md|Description for doc on single line
 EOF
 ```
-
-Word count is enforced; on ❌, rewrite the description and rerun until it passes.
 
 ## Step 4. Report success
 

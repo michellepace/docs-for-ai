@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from docs_for_ai.index_io import DESCRIP_MAX_WORDS, DESCRIP_MIN_WORDS
-from docs_for_ai.update_descriptions import main, parse_descriptions
+from docs_for_ai.update_descriptions import main
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -76,9 +76,7 @@ def test_in_band_description_is_applied_with_success_verdict(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
     description = words(word_count)
 
-    exit_code, out = run_cli(
-        monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n"
-    )
+    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md|{description}\n")
 
     assert exit_code == 0
     assert f"✅ doc-a.md: {word_count} words" in out
@@ -101,9 +99,7 @@ def test_out_of_band_description_is_flagged_and_withheld(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
     description = words(word_count)
 
-    exit_code, out = run_cli(
-        monkeypatch, capsys, tmp_path, f"doc-a.md\n{description}\n"
-    )
+    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md|{description}\n")
 
     assert exit_code == 1
     assert f"❌ doc-a.md: {word_count} words ({NEED_BAND})" in out
@@ -118,7 +114,7 @@ def test_out_of_band_entry_does_not_block_in_band_sibling(
     index_path = make_collection(tmp_path, {"doc-a.md": "old A", "doc-b.md": "old B"})
 
     exit_code, out = run_cli(
-        monkeypatch, capsys, tmp_path, f"doc-a.md\n{IN_BAND}\ndoc-b.md\ntoo short\n"
+        monkeypatch, capsys, tmp_path, f"doc-a.md|{IN_BAND}\ndoc-b.md|too short\n"
     )
 
     # The per-file verdicts, exit 1, and closing steer drive the repair loop
@@ -127,7 +123,6 @@ def test_out_of_band_entry_does_not_block_in_band_sibling(
     assert f"❌ doc-b.md: 2 words ({NEED_BAND})" in out
     assert "rerun with only those" in out
 
-    # In-band doc-a is applied immediately; flagged doc-b keeps its old description
     content = index_path.read_text(encoding="utf-8")
     assert f"<description>{IN_BAND}</description>" in content
     assert "old B" in content
@@ -140,7 +135,7 @@ def test_repiping_an_identical_description_reports_unchanged_and_succeeds(
 ) -> None:
     make_collection(tmp_path, {"doc-a.md": IN_BAND})
 
-    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md\n{IN_BAND}\n")
+    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md|{IN_BAND}\n")
 
     assert exit_code == 0
     assert "unchanged: doc-a.md" in out
@@ -155,7 +150,7 @@ def test_unmatched_filename_applies_nothing_and_succeeds(
     index_path = make_collection(tmp_path, {"doc-a.md": "old description"})
 
     exit_code, out = run_cli(
-        monkeypatch, capsys, tmp_path, f"doc-missing.md\n{IN_BAND}\n"
+        monkeypatch, capsys, tmp_path, f"doc-missing.md|{IN_BAND}\n"
     )
 
     assert exit_code == 0
@@ -168,14 +163,14 @@ def test_missing_index_reports_not_a_collection(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md\n{IN_BAND}\n")
+    exit_code, out = run_cli(monkeypatch, capsys, tmp_path, f"doc-a.md|{IN_BAND}\n")
 
     assert exit_code == 1
     assert "Not a collection" in out
     assert str(tmp_path / "INDEX.xml") in out
 
 
-def test_empty_stdin_reports_no_descriptions(
+def test_blank_only_stdin_reports_no_descriptions(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -201,23 +196,42 @@ def test_interactive_run_without_piped_stdin_is_rejected(
     assert "No descriptions piped to stdin" in out
 
 
-def test_parse_pairs_filename_and_description_lines_skipping_blanks() -> None:
-    text = "\ndoc-a.md\nDescription for A\n\ndoc-b.md\nDescription for B\n"
-
-    result = parse_descriptions(text)
-
-    assert result == {"doc-a.md": "Description for A", "doc-b.md": "Description for B"}
-
-
-def test_parse_warns_and_drops_trailing_filename_without_description(
+def test_each_line_splits_on_first_pipe_trimming_spaces_and_skipping_blanks(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    text = "doc-a.md\nDescription for A\ndoc-c.md\n"
+    index_path = make_collection(tmp_path, {"doc-a.md": "old A", "doc-b.md": "old B"})
+    with_pipe = f"Run `a | b` to {words(DESCRIP_MIN_WORDS)}"
 
-    result = parse_descriptions(text)
+    run_cli(
+        monkeypatch,
+        capsys,
+        tmp_path,
+        f"\n doc-a.md | {IN_BAND} \n\ndoc-b.md|{with_pipe}\n",
+    )
 
-    assert result == {"doc-a.md": "Description for A"}
-    assert "no description for doc-c.md: skipping" in capsys.readouterr().out
+    content = index_path.read_text(encoding="utf-8")
+    assert f"<description>{IN_BAND}</description>" in content
+    assert f"<description>{with_pipe}</description>" in content
+
+
+def test_line_without_pipe_fails_citing_its_line_number_and_writes_nothing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    index_path = make_collection(tmp_path, {"doc-a.md": "old A", "doc-b.md": "old B"})
+
+    exit_code, out = run_cli(
+        monkeypatch, capsys, tmp_path, f"\ndoc-a.md|{IN_BAND}\ndoc-b.md {IN_BAND}\n"
+    )
+
+    assert exit_code == 1
+    assert f"❌ No '|' on line 3: doc-b.md {IN_BAND}" in out
+    content = index_path.read_text(encoding="utf-8")
+    assert "old A" in content
+    assert "old B" in content
 
 
 def test_cli_entry_point_propagates_exit_1_while_applying_in_band_sibling(
@@ -227,7 +241,7 @@ def test_cli_entry_point_propagates_exit_1_while_applying_in_band_sibling(
 
     result = subprocess.run(
         ["uv", "run", "update-descriptions", str(tmp_path)],
-        input=f"doc-a.md\n{IN_BAND}\ndoc-b.md\ntoo short\n",
+        input=f"doc-a.md|{IN_BAND}\ndoc-b.md|too short\n",
         capture_output=True,
         text=True,
         check=False,

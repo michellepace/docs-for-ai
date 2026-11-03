@@ -91,11 +91,11 @@
     <curated_at>2025-10-15</curated_at>
   </source>
   <source>
-    <title>Theme variables - Core concepts - Tailwind CSS</title>
-    <description>`@theme` directive for design tokens, namespace mappings (`--color-*`, `--font-*`, `--spacing-*`, `--breakpoint-*`), extending/overriding defaults, `@keyframes` definitions, `inline`/`static` options, CSS variable output, JavaScript access via `getComputedStyle`.</description>
-    <source_url>https://tailwindcss.com/docs/theme</source_url>
-    <local_file>theme.md</local_file>
-    <curated_at>2025-11-16</curated_at>
+    <title>Theme</title>
+    <description>Define, override or remove `@theme` variables, which namespace creates which utility, fixing `var()` references with `inline`; plus a searchable list of every default value.</description>
+    <source_url>https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/theme.mdx</source_url>
+    <local_file>src-docs-theme.mdx</local_file>
+    <curated_at>2026-11-03</curated_at>
   </source>
   <source>
     <title>font-family - Typography - Tailwind CSS</title>
@@ -105,11 +105,11 @@
     <curated_at>2025-11-16</curated_at>
   </source>
   <source>
-    <title>Preflight - Base styles - Tailwind CSS</title>
-    <description>Base reset styles built on modern-normalize: margin/padding/border resets, unstyled headings/lists, block-level images with `max-width: 100%`, form input normalisation, `[hidden]` attribute enforcement, extending via `@layer base`, disabling by omitting `preflight.css` import.</description>
-    <source_url>https://tailwindcss.com/docs/preflight</source_url>
-    <local_file>preflight.md</local_file>
-    <curated_at>2025-11-17</curated_at>
+    <title>Preflight</title>
+    <description>Base stylesheet built on modern-normalize that `@import "tailwindcss"` injects: why headings, lists and images lose browser defaults, fixing widgets its border reset breaks, and disabling it.</description>
+    <source_url>https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/preflight.mdx</source_url>
+    <local_file>src-docs-preflight.mdx</local_file>
+    <curated_at>2026-11-03</curated_at>
   </source>
   <source>
     <title>Upgrade guide - Getting started - Tailwind CSS</title>

@@ -2,6 +2,7 @@ gitignore: true
 
 ignores:
   - "collections/**"
+  - ".claude/skills/playwright-cli/**" # Vendored `playwright-cli install --skills`
 
 config:
   default: true     # Enable all rules by default

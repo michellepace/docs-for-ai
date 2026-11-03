@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Core concepts
 2. Dark mode
@@ -96,14 +96,14 @@ Again you can manage this however you like, even storing the preference server-s
   - [Using a data attribute](https://tailwindcss.com/docs/dark-mode#using-a-data-attribute)
   - [With system theme support](https://tailwindcss.com/docs/dark-mode#with-system-theme-support)
 
-![Build UIs that don’t suck — 5-day mini-course](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcourse-promo.a67fd268.jpg&w=384&q=75)
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
 
-5-day mini-course
-
-Build UIs that don’t suck.
-
-Short, tactical video lessons from the creator of Tailwind CSS, delivered directly to your inbox every day for a week.
-
-[Get the free course →](https://tailwindcss.com/build-uis-that-dont-suck)
-
-Copyright © 2025 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

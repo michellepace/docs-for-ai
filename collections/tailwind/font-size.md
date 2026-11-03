@@ -1,4 +1,13 @@
-# Typography - font-size
+[Home](https://tailwindcss.com/) v4.3
+
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+
+1. Typography
+2. font-size
+
+Typography
+
+# font-size
 
 Utilities for controlling the font size of an element.
 
@@ -20,161 +29,122 @@ Utilities for controlling the font size of an element.
 | `text-(length:<custom-property>)` | `font-size: var(<custom-property>);` |
 | `text-[<value>]` | `font-size: <value>;` |
 
-## Examples
+## [Examples](https://tailwindcss.com/docs/font-size\#examples)
 
-### Basic example
+### [Basic example](https://tailwindcss.com/docs/font-size\#basic-example)
 
 Use utilities like `text-sm` and `text-lg` to set the font size of an element:
 
-<Figure>
+text-sm
 
-<Example>
-  {
-    <div className="flex flex-col gap-8">
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-sm</span>
-        <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-base</span>
-        <p className="text-base font-medium text-gray-900 dark:text-gray-200">
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-lg</span>
-        <p className="text-lg font-medium text-gray-900 dark:text-gray-200">
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-xl</span>
-        <p className="text-xl font-medium text-gray-900 dark:text-gray-200">
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-2xl</span>
-        <p className="text-2xl font-medium text-gray-900 dark:text-gray-200">
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-    </div>
-  }
-</Example>
+The quick brown fox jumps over the lazy dog.
 
-```html
-<!-- [!code classes:text-sm,text-base,text-lg,text-xl,text-2xl] -->
-<p class="text-sm ...">The quick brown fox ...</p>
-<p class="text-base ...">The quick brown fox ...</p>
-<p class="text-lg ...">The quick brown fox ...</p>
-<p class="text-xl ...">The quick brown fox ...</p>
-<p class="text-2xl ...">The quick brown fox ...</p>
+text-base
+
+The quick brown fox jumps over the lazy dog.
+
+text-lg
+
+The quick brown fox jumps over the lazy dog.
+
+text-xl
+
+The quick brown fox jumps over the lazy dog.
+
+text-2xl
+
+The quick brown fox jumps over the lazy dog.
+
+```
+<p class="text-sm ...">The quick brown fox ...</p><p class="text-base ...">The quick brown fox ...</p><p class="text-lg ...">The quick brown fox ...</p><p class="text-xl ...">The quick brown fox ...</p><p class="text-2xl ...">The quick brown fox ...</p>
 ```
 
-</Figure>
-
-### Setting the line-height
+### [Setting the line-height](https://tailwindcss.com/docs/font-size\#setting-the-line-height)
 
 Use utilities like `text-sm/6` and `text-lg/7` to set the font size and line-height of an element at the same time:
 
-<Figure>
+text-sm/6
 
-<Example>
-  {
-    <div className="flex flex-col gap-8">
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-sm/6</span>
-        <p className="text-sm/6 text-gray-900 dark:text-gray-200">
-          So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made
-          my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the
-          kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-sm/7</span>
-        <p className="text-sm/7 text-gray-900 dark:text-gray-200">
-          So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made
-          my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the
-          kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
-        </p>
-      </div>
-      <div>
-        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">text-sm/8</span>
-        <p className="text-sm/8 text-gray-900 dark:text-gray-200">
-          So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made
-          my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the
-          kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
-        </p>
-      </div>
-    </div>
-  }
-</Example>
+So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I _was_ a marine biologist.
 
-```html
-<!-- [!code classes:text-sm/6,text-sm/7,text-sm/8] -->
-<p class="text-sm/6 ...">So I started to walk into the water...</p>
-<p class="text-sm/7 ...">So I started to walk into the water...</p>
-<p class="text-sm/8 ...">So I started to walk into the water...</p>
+text-sm/7
+
+So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I _was_ a marine biologist.
+
+text-sm/8
+
+So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I _was_ a marine biologist.
+
+```
+<p class="text-sm/6 ...">So I started to walk into the water...</p><p class="text-sm/7 ...">So I started to walk into the water...</p><p class="text-sm/8 ...">So I started to walk into the water...</p>
 ```
 
-</Figure>
+### [Using a custom value](https://tailwindcss.com/docs/font-size\#using-a-custom-value)
 
-### Using a custom value
+Use the`text-[<value>]`syntaxto set the font size based on a completely custom value:
 
-Use the `text-[<value>]` syntax to set the font size based on a completely custom value:
-
-```html
-<p class="text-[14px] ...">Lorem ipsum dolor sit amet...</p>
+```
+<p class="text-[14px] ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
-For CSS variables, you can also use the `text-(length:<custom-property>)` syntax:
+For CSS variables, you can also use the`text-(length:<custom-property>)`syntax:
 
-```html
-<p class="text-(length:--my-text-size) ...">Lorem ipsum dolor sit amet...</p>
+```
+<p class="text-(length:--my-text-size) ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
-This is just a shorthand for `text-[length:var(<custom-property>)]` that adds the `var()` function for you automatically.
+This is just a shorthand for`text-[length:var(<custom-property>)]`that adds the `var()` function for you automatically.
 
-### Responsive design
+### [Responsive design](https://tailwindcss.com/docs/font-size\#responsive-design)
 
-Prefix a `font-size` utility with a breakpoint variant like `md:` to only apply the utility at medium screen sizes and above:
+Prefix a`font-size` utilitywith a breakpoint variant like `md:` to only apply the utility at mediumscreen sizes and above:
 
-```html
-<p class="text-sm md:text-base ...">Lorem ipsum dolor sit amet...</p>
+```
+<p class="text-sm md:text-base ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
 Learn more about using variants in the [variants documentation](https://tailwindcss.com/docs/hover-focus-and-other-states).
 
-## Customising your theme
+## [Customizing your theme](https://tailwindcss.com/docs/font-size\#customizing-your-theme)
 
-Use the `--text-*` theme variables to customise the font size utilities in your project:
+Use the `--text-*` theme variables to customize the font sizeutilities in your project:
 
-```css
-@theme {
-  --text-tiny: 0.625rem;
-}
+```
+@theme {  --text-tiny: 0.625rem; }
 ```
 
-Now the `text-tiny` utility can be used in your markup:
+Now the`text-tiny`utility can be used in your markup:
 
-```html
-<div class="text-tiny">
-  <!-- ... -->
-</div>
+```
+<div class="text-tiny">  <!-- ... --></div>
 ```
 
 You can also provide default `line-height`, `letter-spacing`, and `font-weight` values for a font size:
 
-```css
-@theme {
-  --text-tiny: 0.625rem;
-  --text-tiny--line-height: 1.5rem;
-  --text-tiny--letter-spacing: 0.125rem;
-  --text-tiny--font-weight: 500;
-}
+```
+@theme {  --text-tiny: 0.625rem;  --text-tiny--line-height: 1.5rem;   --text-tiny--letter-spacing: 0.125rem;   --text-tiny--font-weight: 500; }
 ```
 
-Learn more about customising your theme in the [theme documentation](https://tailwindcss.com/docs/theme#customizing-your-theme).
+Learn more about customizing your theme in the [theme documentation](https://tailwindcss.com/docs/theme#customizing-your-theme).
+
+### On this page
+
+- [Quick reference](https://tailwindcss.com/docs/font-size#quick-reference)
+- [Examples](https://tailwindcss.com/docs/font-size#examples)
+  - [Basic example](https://tailwindcss.com/docs/font-size#basic-example)
+  - [Setting the line-height](https://tailwindcss.com/docs/font-size#setting-the-line-height)
+  - [Using a custom value](https://tailwindcss.com/docs/font-size#using-a-custom-value)
+  - [Responsive design](https://tailwindcss.com/docs/font-size#responsive-design)
+- [Customizing your theme](https://tailwindcss.com/docs/font-size#customizing-your-theme)
+
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
+
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

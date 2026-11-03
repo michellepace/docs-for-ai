@@ -1,3 +1,10 @@
+[Home](https://tailwindcss.com/) v4.3
+
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+
+1. Core concepts
+2. Styling with utility classes
+
 Core concepts
 
 # Styling with utility classes
@@ -12,18 +19,18 @@ ChitChat
 
 You have a new message!
 
-```html
+```
 <div class="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">  <img class="size-12 shrink-0" src="/img/logo.svg" alt="ChitChat Logo" />  <div>    <div class="text-xl font-medium text-black dark:text-white">ChitChat</div>    <p class="text-gray-500 dark:text-gray-400">You have a new message!</p>  </div></div>
 ```
 
 For example, in the UI above we've used:
 
-- The [display](https://tailwindcss.com/docs/display#flex) and [padding](https://tailwindcss.com/docs/padding) utilities ( `flex`, `shrink-0`, and `p-6`) to control the overall layout
-- The [max-width](https://tailwindcss.com/docs/max-width) and [margin](https://tailwindcss.com/docs/margin) utilities ( `max-w-sm` and `mx-auto`) to constrain the card width and center it horizontally
-- The [background-color](https://tailwindcss.com/docs/background-color), [border-radius](https://tailwindcss.com/docs/border-radius), and [box-shadow](https://tailwindcss.com/docs/box-shadow) utilities ( `bg-white`, `rounded-xl`, and `shadow-lg`) to style the card's appearance
-- The [width](https://tailwindcss.com/docs/width) and [height](https://tailwindcss.com/docs/height) utilities ( `size-12`) to set the width and height of the logo image
-- The [gap](https://tailwindcss.com/docs/gap) utilities ( `gap-x-4`) to handle the spacing between the logo and the text
-- The [font-size](https://tailwindcss.com/docs/font-size), [color](https://tailwindcss.com/docs/text-color), and [font-weight](https://tailwindcss.com/docs/font-weight) utilities ( `text-xl`, `text-black`, `font-medium`, etc.) to style the card text
+- The [display](https://tailwindcss.com/docs/display#flex) and [padding](https://tailwindcss.com/docs/padding) utilities (`flex`, `shrink-0`, and `p-6`) to control the overall layout
+- The [max-width](https://tailwindcss.com/docs/max-width) and [margin](https://tailwindcss.com/docs/margin) utilities (`max-w-sm` and `mx-auto`) to constrain the card width and center it horizontally
+- The [background-color](https://tailwindcss.com/docs/background-color), [border-radius](https://tailwindcss.com/docs/border-radius), and [box-shadow](https://tailwindcss.com/docs/box-shadow) utilities (`bg-white`, `rounded-xl`, and `shadow-lg`) to style the card's appearance
+- The [width](https://tailwindcss.com/docs/width) and [height](https://tailwindcss.com/docs/height) utilities (`size-12`) to set the width and height of the logo image
+- The [gap](https://tailwindcss.com/docs/gap) utilities (`gap-x-4`) to handle the spacing between the logo and the text
+- The [font-size](https://tailwindcss.com/docs/font-size), [color](https://tailwindcss.com/docs/text-color), and [font-weight](https://tailwindcss.com/docs/font-weight) utilities (`text-xl`, `text-black`, `font-medium`, etc.) to style the card text
 
 Styling things this way contradicts a lot of traditional best practices, but once you try it you'll quickly notice some really important benefits:
 
@@ -47,7 +54,7 @@ But using utility classes has many important advantages over inline styles, for 
 
 This component is fully responsive and includes a button with hover and active styles, and is built entirely with utility classes:
 
-![Woman's Face](https://tailwindcss.com/_next/static/media/erin-lindford.90b9d461.jpg)
+![Woman's Face](https://tailwindcss.com/_next/static/media/erin-lindford.0sv7~gc~8i-hf.jpg)
 
 Erin Lindford
 
@@ -55,7 +62,7 @@ Product Engineer
 
 Message
 
-```html
+```
 <div class="flex flex-col gap-2 p-8 sm:flex-row sm:items-center sm:gap-6 sm:py-4 ...">  <img class="mx-auto block h-24 rounded-full sm:mx-0 sm:shrink-0" src="/img/erin-lindford.jpg" alt="" />  <div class="space-y-2 text-center sm:text-left">    <div class="space-y-0.5">      <p class="text-lg font-semibold text-black">Erin Lindford</p>      <p class="font-medium text-gray-500">Product Engineer</p>    </div>    <button class="border-purple-200 text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700 ...">      Message    </button>  </div></div>
 ```
 
@@ -69,7 +76,7 @@ Hover over this button to see the background color change
 
 Save changes
 
-```html
+```
 <button class="bg-sky-500 hover:bg-sky-700 ...">Save changes</button>
 ```
 
@@ -79,7 +86,7 @@ Here's what the generated CSS looks like for the `hover:bg-sky-700` class:
 
 Generated CSS
 
-```css
+```
 .hover\:bg-sky-700 {  &:hover {    background-color: var(--color-sky-700);  }}
 ```
 
@@ -87,13 +94,15 @@ Notice how this class does nothing _unless_ the element is hovered? Its _only_ j
 
 This is different from how you'd write traditional CSS, where a single class would usually provide the styles for many states:
 
-```html
+HTML
+
+```
 <button class="btn">Save changes</button><style>  .btn {    background-color: var(--color-sky-500);    &:hover {      background-color: var(--color-sky-700);    }  }</style>
 ```
 
 You can even stack variants in Tailwind to apply a utility when multiple conditions match, like combining `hover:` and `disabled:`
 
-```html
+```
 <button class="bg-sky-500 disabled:hover:bg-sky-500 ...">Save changes</button>
 ```
 
@@ -117,7 +126,7 @@ Resize this example to see the layout change
 
 06
 
-```html
+```
 <div class="grid grid-cols-2 sm:grid-cols-3">  <!-- ... --></div>
 ```
 
@@ -125,7 +134,7 @@ In the example above, the `sm:` prefix makes sure that `grid-cols-3` only trigge
 
 Generated CSS
 
-```css
+```
 .sm\:grid-cols-3 {  @media (width >= 40rem) {    grid-template-columns: repeat(3, minmax(0, 1fr));  }}
 ```
 
@@ -149,7 +158,7 @@ Writes upside-down
 The Zero Gravity Pen can be used to write in any orientation,
 including upside-down. It even works in outer space.
 
-```html
+```
 <div class="bg-white dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5">  <div>    <span class="inline-flex items-center justify-center rounded-md bg-indigo-500 p-2 shadow-lg">      <svg        class="h-6 w-6 text-white"        fill="none"        viewBox="0 0 24 24"        stroke="currentColor"        aria-hidden="true"      >        <!-- ... -->      </svg>    </span>  </div>  <h3 class="text-gray-900 dark:text-white mt-5 text-base font-medium tracking-tight ">Writes upside-down</h3>  <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm ">    The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.  </p></div>
 ```
 
@@ -157,7 +166,7 @@ Just like with hover states or media queries, the important thing to understand 
 
 Generated CSS
 
-```css
+```
 .dark\:bg-gray-800 {  @media (prefers-color-scheme: dark) {    background-color: var(--color-gray-800);  }}
 ```
 
@@ -167,13 +176,17 @@ Learn more in the [dark mode](https://tailwindcss.com/docs/dark-mode) documentat
 
 A lot of the time with Tailwind you'll even use multiple classes to build up the value for a single CSS property, for example adding multiple filters to an element:
 
-```html
+HTML
+
+```
 <div class="blur-sm grayscale">  <!-- ... --></div>
 ```
 
 Both of these effects rely on the `filter` property in CSS, so Tailwind uses CSS variables to make it possible to compose these effects together:
 
-```css
+Generated CSS
+
+```
 .blur-sm {  --tw-blur: blur(var(--blur-sm));  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-grayscale,);}.grayscale {  --tw-grayscale: grayscale(100%);  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-grayscale,);}
 ```
 
@@ -187,25 +200,33 @@ Many utilities in Tailwind are driven by [theme variables](https://tailwindcss.c
 
 When you need to use a one-off value outside of your theme, use the special square bracket syntax for specifying arbitrary values:
 
-```html
+HTML
+
+```
 <button class="bg-[#316ff6] ...">  Sign in with Facebook</button>
 ```
 
 This can be useful for one-off colors outside of your color palette _(like the Facebook blue above)_, but also when you need a complex custom value like a very specific grid:
 
-```html
+HTML
+
+```
 <div class="grid grid-cols-[24rem_2.5rem_minmax(0,1fr)]">  <!-- ... --></div>
 ```
 
 It's also useful when you need to use CSS features like `calc()`, even if you are using your theme values:
 
-```html
+HTML
+
+```
 <div class="max-h-[calc(100dvh-(--spacing(6)))]">  <!-- ... --></div>
 ```
 
 There's even a syntax for generating completely arbitrary CSS including an arbitrary property name, which can be useful for setting CSS variables:
 
-```html
+HTML
+
+```
 <div class="[--gutter-width:1rem] lg:[--gutter-width:2rem]">  <!-- ... --></div>
 ```
 
@@ -219,7 +240,7 @@ It does this by scanning all of the files in your project looking for any symbol
 
 Button.jsx
 
-```javascript
+```
 export default function Button({ size, children }) {  let sizeClasses = {    md: "px-4 py-2 rounded-md text-base",    lg: "px-5 py-3 rounded-lg text-lg",  }[size];  return (    <button type="button" className={`font-bold ${sizeClasses}`}>      {children}    </button>  );}
 ```
 
@@ -235,25 +256,29 @@ Sometimes you need to style an element under a combination of conditions, for ex
 
 Here's an example of what that looks like with Tailwind:
 
-```html
+HTML
+
+```
 <button class="dark:lg:data-current:hover:bg-indigo-600 ...">  <!-- ... --></button>
 ```
 
 Simplified CSS
 
-```css
+```
 @media (prefers-color-scheme: dark) and (width >= 64rem) {  button[data-current]:hover {    background-color: var(--color-indigo-600);  }}
 ```
 
 Tailwind also supports things like `group-hover`, which let you style an element when a specific parent is hovered:
 
-```html
+HTML
+
+```
 <a href="#" class="group rounded-lg p-8">  <!-- ... -->  <span class="group-hover:underline">Read more…</span></a>
 ```
 
 Simplified CSS
 
-```css
+```
 @media (hover: hover) {  a:hover span {    text-decoration-line: underline;  }}
 ```
 
@@ -261,13 +286,15 @@ This `group-*` syntax works with other variants too, like `group-focus`, `group-
 
 For really complex scenarios _(especially when styling HTML you don't control)_, Tailwind supports [arbitrary variants](https://tailwindcss.com/docs/adding-custom-styles#arbitrary-variants) which let you write any selector you want, directly in a class name:
 
-```html
+HTML
+
+```
 <div class="[&>[data-active]+span]:text-blue-600 ...">  <span data-active><!-- ... --></span>  <span>This text will be blue</span></div>
 ```
 
 Simplified CSS
 
-```css
+```
 div > [data-active] + span {  color: var(--color-blue-600);}
 ```
 
@@ -277,13 +304,15 @@ Inline styles are still very useful in Tailwind CSS projects, particularly when 
 
 branded-button.jsx
 
-```jsx
+```
 export function BrandedButton({ buttonColor, textColor, children }) {  return (    <button      style={{        backgroundColor: buttonColor,        color: textColor,      }}      className="rounded-md px-3 py-1.5 font-medium"    >      {children}    </button>  );}
 ```
 
 You might also reach for an inline style for very complicated arbitrary values that are difficult to read when formatted as a class name:
 
-```html
+HTML
+
+```
 <div class="grid-[2fr_max(0,var(--gutter-width))_calc(var(--gutter-width)+10px)]"><div style="grid-template-columns: 2fr max(0, var(--gutter-width)) calc(var(--gutter-width) + 10px)">  <!-- ... --></div>
 ```
 
@@ -291,7 +320,7 @@ Another useful pattern is setting CSS variables based on dynamic sources using i
 
 branded-button.jsx
 
-```jsx
+```
 export function BrandedButton({ buttonColor, buttonColorHover, textColor, children }) {  return (    <button      style={{        "--bg-color": buttonColor,        "--bg-color-hover": buttonColorHover,        "--text-color": textColor,      }}      className="bg-(--bg-color) text-(--text-color) hover:bg-(--bg-color-hover) ..."    >      {children}    </button>  );}
 ```
 
@@ -301,18 +330,46 @@ When you build entire projects with just utility classes, you'll inevitably find
 
 For example, here the utility classes for each avatar image are repeated five separate times:
 
+#### Contributors
+
+204
+
+![](https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)
+
+[- 198 others](https://tailwindcss.com/docs/styling-with-utility-classes#)
+
+```
+<div>  <div class="flex items-center space-x-2 text-base">    <h4 class="font-semibold text-slate-900">Contributors</h4>    <span class="bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 ...">204</span>  </div>  <div class="mt-3 flex -space-x-2 overflow-hidden">    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt="" />    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />  </div>  <div class="mt-3 text-sm font-medium">    <a href="#" class="text-blue-500">+ 198 others</a>  </div></div>
+```
+
+Don't panic! In practice this isn't the problem you might be worried it is, and the strategies for dealing with it are things you already do every day.
+
 ### [Using loops](https://tailwindcss.com/docs/styling-with-utility-classes\#using-loops)
 
 A lot of the time a design element that shows up more than once in the rendered page is only actually authored once because the actual markup is rendered in a loop.
 
 For example, the duplicate avatars at the beginning of this guide would almost certainly be rendered in a loop in a real project:
 
+#### Contributors
+
+204
+
+![](https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)![](https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80)
+
+[- 198 others](https://tailwindcss.com/docs/styling-with-utility-classes#)
+
+```
+<div>  <div class="flex items-center space-x-2 text-base">    <h4 class="font-semibold text-slate-900">Contributors</h4>    <span class="bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 ...">204</span>  </div>  <div class="mt-3 flex -space-x-2 overflow-hidden">    {#each contributors as user}      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src={user.avatarUrl} alt={user.handle} />    {/each}  </div>  <div class="mt-3 text-sm font-medium">    <a href="#" class="text-blue-500">+ 198 others</a>  </div></div>
+```
+
+When elements are rendered in a loop like this, the actual class list is only written once so there's no actual duplication problem to solve.
+
 ### [Using multi-cursor editing](https://tailwindcss.com/docs/styling-with-utility-classes\#using-multi-cursor-editing)
 
 When duplication is localized to a group of elements in a single file, the easiest way to deal with it is to use [multi-cursor editing](https://code.visualstudio.com/docs/editor/codebasics#_multiple-selections-multicursor) to quickly select and edit the class list for each element at once:
 
-```html
-<nav class="flex justify-center space-x-4">  <a href="/dashboard" class="font-mediu rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Home  </a>  <a href="/team" class="font-mediu rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Team  </a>  <a href="/projects" class="font-mediu rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Projects  </a>  <a href="/reports" class="font-mediu rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Reports  </a></nav>
+```
+<nav class="flex justify-center space-x-4">  <a href="/dashboard" class="font-bold rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Home  </a>  <a href="/team" class="font-bold rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Team  </a>  <a href="/projects" class="font-bold rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Projects  </a>  <a href="/reports" class="font-bold rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">    Reports  </a></nav>
 ```
 
 You'd be surprised at how often this ends up being the best solution. If you can quickly edit all of the duplicated class lists simultaneously, there's no benefit to introducing any additional abstraction.
@@ -329,7 +386,7 @@ Private Villa
 
 $299 USD per night
 
-```jsx
+```
 export function VacationCard({ img, imgAlt, eyebrow, title, pricing, url }) {  return (    <div>      <img className="rounded-lg" src={img} alt={imgAlt} />      <div className="mt-4">        <div className="text-xs font-bold text-sky-500">{eyebrow}</div>        <div className="mt-1 font-bold text-gray-700">          <a href={url} className="hover:underline">            {title}          </a>        </div>        <div className="mt-2 text-sm text-gray-600">{pricing}</div>      </div>    </div>  );}
 ```
 
@@ -345,11 +402,15 @@ Here's what a `btn-primary` class might look like, using [theme variables](https
 
 Save changes
 
-```html
+HTML
+
+```
 <button class="btn-primary">Save changes</button>
 ```
 
-```css
+CSS
+
+```
 @import "tailwindcss";@layer components {  .btn-primary {    border-radius: calc(infinity * 1px);    background-color: var(--color-violet-500);    padding-inline: --spacing(5);    padding-block: --spacing(2);    font-weight: var(--font-weight-semibold);    color: var(--color-white);    box-shadow: var(--shadow-md);    &:hover {      @media (hover: hover) {        background-color: var(--color-violet-700);      }    }  }}
 ```
 
@@ -361,11 +422,15 @@ Again though, for anything that's more complicated than just a single HTML eleme
 
 When you add two classes that target the same CSS property, the class that appears later in the stylesheet wins. So in this example, the element will receive `display: grid` even though `flex` comes last in the actual `class` attribute:
 
-```html
+HTML
+
+```
 <div class="grid flex">  <!-- ... --></div>
 ```
 
-```css
+CSS
+
+```
 .flex {  display: flex;}.grid {  display: grid;}
 ```
 
@@ -373,7 +438,7 @@ In general, you should just never add two conflicting classes to the same elemen
 
 example.jsx
 
-```jsx
+```
 export function Example({ gridLayout }) {  return <div className={gridLayout ? "grid" : "flex"}>{/* ... */}</div>;}
 ```
 
@@ -385,13 +450,13 @@ When you really need to force a specific utility class to take effect and have n
 
 HTML
 
-```html
+```
 <div class="bg-teal-500 bg-red-500!">  <!-- ... --></div>
 ```
 
 Generated CSS
 
-```css
+```
 .bg-red-500\! {  background-color: var(--color-red-500) !important;}.bg-teal-500 {  background-color: var(--color-teal-500);}
 ```
 
@@ -401,13 +466,13 @@ If you're adding Tailwind to a project that has existing complex CSS with high s
 
 app.css
 
-```css
+```
 @import "tailwindcss" important;
 ```
 
 Compiled CSS
 
-```css
+```
 @layer utilities {  .flex {    display: flex !important;  }  .gap-4 {    gap: 1rem !important;  }  .underline {    text-decoration-line: underline !important;  }}
 ```
 
@@ -417,12 +482,47 @@ If your project has class names that conflict with Tailwind CSS utilities, you c
 
 app.css
 
-```css
+```
 @import "tailwindcss" prefix(tw);
 ```
 
 Compiled CSS
 
-```css
+```
 @layer theme {  :root {    --tw-color-red-500: oklch(0.637 0.237 25.331);  }}@layer utilities {  .tw\:text-red-500 {    color: var(--tw-color-red-500);  }}
 ```
+
+### On this page
+
+- [Overview](https://tailwindcss.com/docs/styling-with-utility-classes#overview)
+  - [Why not just use inline styles?](https://tailwindcss.com/docs/styling-with-utility-classes#why-not-just-use-inline-styles)
+- [Thinking in utility classes](https://tailwindcss.com/docs/styling-with-utility-classes#thinking-in-utility-classes)
+  - [Styling hover and focus states](https://tailwindcss.com/docs/styling-with-utility-classes#styling-hover-and-focus-states)
+  - [Media queries and breakpoints](https://tailwindcss.com/docs/styling-with-utility-classes#media-queries-and-breakpoints)
+  - [Targeting dark mode](https://tailwindcss.com/docs/styling-with-utility-classes#targeting-dark-mode)
+  - [Using class composition](https://tailwindcss.com/docs/styling-with-utility-classes#using-class-composition)
+  - [Using arbitrary values](https://tailwindcss.com/docs/styling-with-utility-classes#using-arbitrary-values)
+  - [Complex selectors](https://tailwindcss.com/docs/styling-with-utility-classes#complex-selectors)
+  - [When to use inline styles](https://tailwindcss.com/docs/styling-with-utility-classes#when-to-use-inline-styles)
+- [Managing duplication](https://tailwindcss.com/docs/styling-with-utility-classes#managing-duplication)
+  - [Using loops](https://tailwindcss.com/docs/styling-with-utility-classes#using-loops)
+  - [Using multi-cursor editing](https://tailwindcss.com/docs/styling-with-utility-classes#using-multi-cursor-editing)
+  - [Using components](https://tailwindcss.com/docs/styling-with-utility-classes#using-components)
+  - [Using custom CSS](https://tailwindcss.com/docs/styling-with-utility-classes#using-custom-css)
+- [Managing style conflicts](https://tailwindcss.com/docs/styling-with-utility-classes#managing-style-conflicts)
+  - [Conflicting utility classes](https://tailwindcss.com/docs/styling-with-utility-classes#conflicting-utility-classes)
+  - [Using the important modifier](https://tailwindcss.com/docs/styling-with-utility-classes#using-the-important-modifier)
+  - [Using the important flag](https://tailwindcss.com/docs/styling-with-utility-classes#using-the-important-flag)
+  - [Using the prefix option](https://tailwindcss.com/docs/styling-with-utility-classes#using-the-prefix-option)
+
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
+
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

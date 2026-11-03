@@ -1,10 +1,19 @@
+[Home](https://tailwindcss.com/) v4.3
+
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+
+1. Typography
+2. font-family
+
+Typography
+
 # font-family
 
 Utilities for controlling the font family of an element.
 
 | Class | Styles |
 | --- | --- |
-| `font-sans` | `font-family: var(--font-sans); /* ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' */` |
+| `font-sans` | `font-family: var(--font-sans); /* -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' */` |
 | `font-serif` | `font-family: var(--font-serif); /* ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif */` |
 | `font-mono` | `font-family: var(--font-mono); /* ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace */` |
 | `font-(family-name:<custom-property>)` | `font-family: var(<custom-property>);` |
@@ -28,7 +37,7 @@ font-mono
 
 The quick brown fox jumps over the lazy dog.
 
-```html
+```
 <p class="font-sans ...">The quick brown fox ...</p><p class="font-serif ...">The quick brown fox ...</p><p class="font-mono ...">The quick brown fox ...</p>
 ```
 
@@ -36,13 +45,13 @@ The quick brown fox jumps over the lazy dog.
 
 Use the`font-[<value>]`syntaxto set the font family based on a completely custom value:
 
-```html
+```
 <p class="font-[Open_Sans] ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
 For CSS variables, you can also use the`font-(family-name:<custom-property>)`syntax:
 
-```html
+```
 <p class="font-(family-name:--my-font) ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
@@ -52,7 +61,7 @@ This is just a shorthand for`font-[family-name:var(<custom-property>)]`that adds
 
 Prefix a`font-family` utilitywith a breakpoint variant like `md:` to only apply the utility at mediumscreen sizes and above:
 
-```html
+```
 <p class="font-sans md:font-serif ...">  Lorem ipsum dolor sit amet...</p>
 ```
 
@@ -62,31 +71,31 @@ Learn more about using variants in the [variants documentation](https://tailwind
 
 Use the `--font-*` theme variables to customize the font familyutilities in your project:
 
-```css
+```
 @theme {  --font-display: "Oswald", sans-serif; }
 ```
 
 Now the`font-display`utility can be used in your markup:
 
-```html
+```
 <div class="font-display">  <!-- ... --></div>
 ```
 
 You can also provide default `font-feature-settings` and `font-variation-settings` values for a font family:
 
-```css
+```
 @theme {  --font-display: "Oswald", sans-serif;  --font-display--font-feature-settings: "cv02", "cv03", "cv04", "cv11";   --font-display--font-variation-settings: "opsz" 32; }
 ```
 
 If needed, use the [@font-face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face) at-rule to load custom fonts:
 
-```css
+```
 @font-face {  font-family: Oswald;  font-style: normal;  font-weight: 200 700;  font-display: swap;  src: url("/fonts/Oswald.woff2") format("woff2");}
 ```
 
 If you're loading a font from a service like [Google Fonts](https://fonts.google.com/), make sure to put the `@import` at the very top of your CSS file:
 
-```css
+```
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");@import "tailwindcss";@theme {  --font-roboto: "Roboto", sans-serif; }
 ```
 
@@ -102,3 +111,15 @@ Learn more about customizing your theme in the [theme documentation](https://tai
   - [Using a custom value](https://tailwindcss.com/docs/font-family#using-a-custom-value)
   - [Responsive design](https://tailwindcss.com/docs/font-family#responsive-design)
 - [Customizing your theme](https://tailwindcss.com/docs/font-family#customizing-your-theme)
+
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
+
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

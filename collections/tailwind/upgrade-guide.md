@@ -1,4 +1,13 @@
-# Upgrade guide from v3 to v4
+[Home](https://tailwindcss.com/) v4.3
+
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+
+1. Getting started
+2. Upgrade guide
+
+Getting started
+
+# Upgrade guide
 
 Upgrading your Tailwind CSS projects from v3 to v4.
 
@@ -12,8 +21,8 @@ If you'd like to upgrade a project from v3 to v4, you can use our upgrade tool t
 
 Terminal
 
-```bash
-npx @tailwindcss/upgrade
+```
+$ npx @tailwindcss/upgrade
 ```
 
 For most projects, the upgrade tool will automate the entire migration process including updating your dependencies, migrating your configuration file to CSS, and handling any changes to your template files.
@@ -34,7 +43,7 @@ Additionally, in v4 imports and vendor prefixing is now handled for you automati
 
 postcss.config.mjs
 
-```js
+```
 export default {  plugins: {    "postcss-import": {},    tailwindcss: {},    autoprefixer: {},    "@tailwindcss/postcss": {},  },};
 ```
 
@@ -44,7 +53,7 @@ If you're using Vite, we recommend migrating from the PostCSS plugin to our new 
 
 vite.config.ts
 
-```ts
+```
 import { defineConfig } from "vite";import tailwindcss from "@tailwindcss/vite";export default defineConfig({  plugins: [    tailwindcss(),  ],});
 ```
 
@@ -54,7 +63,7 @@ In v4, Tailwind CLI lives in a dedicated `@tailwindcss/cli` package. Update any 
 
 Terminal
 
-```bash
+```
 npx tailwindcss -i input.css -o output.cssnpx @tailwindcss/cli -i input.css -o output.css
 ```
 
@@ -76,7 +85,7 @@ In v4 you import Tailwind using a regular CSS `@import` statement, not using the
 
 CSS
 
-```css
+```
 @tailwind base;@tailwind components;@tailwind utilities;@import "tailwindcss";
 ```
 
@@ -125,7 +134,7 @@ To update your project for these changes, replace all the v3 utilities with thei
 
 HTML
 
-```html
+```
 <input class="shadow-sm" /><input class="shadow-xs" /><input class="shadow" /><input class="shadow-sm" />
 ```
 
@@ -135,7 +144,7 @@ The `outline` utility now sets `outline-width: 1px` by default to be more consis
 
 HTML
 
-```html
+```
 <input class="outline outline-2" /><input class="outline-2" />
 ```
 
@@ -147,7 +156,7 @@ To update your project for this change, replace any usage of `outline-none` with
 
 HTML
 
-```html
+```
 <input class="focus:outline-none" /><input class="focus:outline-hidden" />
 ```
 
@@ -159,7 +168,7 @@ To update your project for this change, replace any usage of `ring` with `ring-3
 
 HTML
 
-```html
+```
 <input class="ring ring-blue-500" /><input class="ring-3 ring-blue-500" />
 ```
 
@@ -169,7 +178,7 @@ We've changed the selector used by the [`space-x-*` and `space-y-*` utilities](h
 
 CSS
 
-```css
+```
 /* Before */.space-y-4 > :not([hidden]) ~ :not([hidden]) {  margin-top: 1rem;}/* Now */.space-y-4 > :not(:last-child) {  margin-bottom: 1rem;}
 ```
 
@@ -179,9 +188,21 @@ If this change causes any issues in your project, we recommend migrating to a fl
 
 HTML
 
-```html
+```
 <div class="space-y-4 p-4"><div class="flex flex-col gap-4 p-4">  <label for="name">Name</label>  <input type="text" name="name" /></div>
 ```
+
+### [Divide selector](https://tailwindcss.com/docs/upgrade-guide\#divide-selector)
+
+We've changed the selector used by the [`divide-x-*` and `divide-y-*` utilities](https://tailwindcss.com/docs/border-width#between-children) to address serious performance issues on large pages:
+
+CSS
+
+```
+/* Before */.divide-y-4 > :not([hidden]) ~ :not([hidden]) {  border-top-width: 4px;}/* Now */.divide-y-4 > :not(:last-child) {  border-bottom-width: 4px;}
+```
+
+You might see changes in your project if you were ever using these utilities with inline elements, if you were adding other margins/padding to child elements to tweak their spacing, or adjusting the borders of specific child elements.
 
 ### [Using variants with gradients](https://tailwindcss.com/docs/upgrade-guide\#using-variants-with-gradients)
 
@@ -189,7 +210,7 @@ In v3, overriding part of a gradient with a variant would "reset" the entire gra
 
 HTML
 
-```html
+```
 <div class="bg-gradient-to-r from-red-500 to-yellow-400 dark:from-blue-500">  <!-- ... --></div>
 ```
 
@@ -199,7 +220,7 @@ This means you may need to explicitly use `via-none` if you want to "unset" a th
 
 HTML
 
-```html
+```
 <div class="bg-linear-to-r from-red-500 via-orange-400 to-yellow-400 dark:via-none dark:from-blue-500 dark:to-teal-400">  <!-- ... --></div>
 ```
 
@@ -211,7 +232,7 @@ To customize the `container` utility in v4, extend it using the `@utility` direc
 
 CSS
 
-```css
+```
 @utility container {  margin-inline: auto;  padding-inline: 2rem;}
 ```
 
@@ -221,7 +242,7 @@ In v3, the `border-*` and `divide-*` utilities used your configured `gray-200` c
 
 To update your project for this change, make sure you specify a color anywhere you're using a `border-*` or `divide-*` utility:
 
-```html
+```
 <div class="border border-gray-200 px-2 py-3 ...">  <!-- ... --></div>
 ```
 
@@ -229,7 +250,7 @@ Alternatively, add these base styles to your project to preserve the v3 behavior
 
 CSS
 
-```css
+```
 @layer base {  *,  ::after,  ::before,  ::backdrop,  ::file-selector-button {    border-color: var(--color-gray-200, currentColor);  }}
 ```
 
@@ -239,13 +260,13 @@ We've changed the width of the `ring` utility from 3px to 1px and changed the de
 
 To update your project for these changes, replace any use of `ring` with `ring-3`:
 
-```html
+```
 <button class="focus:ring ..."><button class="focus:ring-3 ...">  <!-- ... --></button>
 ```
 
 Then make sure to add `ring-blue-500` anywhere you were depending on the default ring color:
 
-```html
+```
 <button class="focus:ring-3 focus:ring-blue-500 ...">  <!-- ... --></button>
 ```
 
@@ -253,7 +274,7 @@ Alternatively, add these theme variables to your CSS to preserve the v3 behavior
 
 CSS
 
-```css
+```
 @theme {  --default-ring-width: 3px;  --default-ring-color: var(--color-blue-500);}
 ```
 
@@ -271,7 +292,7 @@ You probably won't even notice this change (it might even make your project look
 
 CSS
 
-```css
+```
 @layer base {  input::placeholder,  textarea::placeholder {    color: var(--color-gray-400);  }}
 ```
 
@@ -283,7 +304,7 @@ If you'd like to continue using `cursor: pointer` by default, add these base sty
 
 CSS
 
-```css
+```
 @layer base {  button:not(:disabled),  [role="button"]:not(:disabled) {    cursor: pointer;  }}
 ```
 
@@ -295,7 +316,7 @@ If you still want dialogs to be centered by default, add this CSS to your projec
 
 CSS
 
-```css
+```
 @layer base {  dialog {    margin: auto;  }}
 ```
 
@@ -307,21 +328,31 @@ Display classes like `block` or `flex` no longer take priority over the `hidden`
 
 Prefixes now look like variants and are always at the beginning of the class name:
 
-```html
+```
 <div class="tw:flex tw:bg-red-500 tw:hover:bg-red-600">  <!-- ... --></div>
 ```
 
 When using a prefix, you should still configure your theme variables as if you aren't using a prefix:
 
-```css
+```
 @import "tailwindcss" prefix(tw);@theme {  --font-display: "Satoshi", "sans-serif";  --breakpoint-3xl: 120rem;  --color-avocado-100: oklch(0.99 0 0);  --color-avocado-200: oklch(0.98 0.04 113.22);  --color-avocado-300: oklch(0.94 0.11 115.03);  /* ... */}
 ```
 
 The generated CSS variables _will_ include a prefix to avoid conflicts with any existing variables in your project:
 
-```css
+```
 :root {  --tw-font-display: "Satoshi", "sans-serif";  --tw-breakpoint-3xl: 120rem;  --tw-color-avocado-100: oklch(0.99 0 0);  --tw-color-avocado-200: oklch(0.98 0.04 113.22);  --tw-color-avocado-300: oklch(0.94 0.11 115.03);  /* ... */}
 ```
+
+### [The important modifier](https://tailwindcss.com/docs/upgrade-guide\#the-important-modifier)
+
+In v3 you could mark a utility as important by placing an `!` at the beginning of the utility name (but after any variants). In v4 you should place the `!` at the very end of the class name instead:
+
+```
+<div class="flex! bg-red-500! hover:bg-red-600/50!">  <!-- ... --></div>
+```
+
+The old way is still supported for compatibility but is deprecated.
 
 ### [Adding custom utilities](https://tailwindcss.com/docs/upgrade-guide\#adding-custom-utilities)
 
@@ -331,7 +362,7 @@ In v4 we are using native cascade layers and no longer hijacking the `@layer` at
 
 CSS
 
-```css
+```
 @layer utilities {  .tab-4 {    tab-size: 4;  }}@utility tab-4 {  tab-size: 4;}
 ```
 
@@ -339,7 +370,7 @@ Custom utilities are now also sorted based on the amount of properties they defi
 
 CSS
 
-```css
+```
 @layer components {  .btn {    border-radius: 0.5rem;    padding: 0.5rem 1rem;    background-color: ButtonFace;  }}@utility btn {  border-radius: 0.5rem;  padding: 0.5rem 1rem;  background-color: ButtonFace;}
 ```
 
@@ -353,7 +384,7 @@ To update your project for this change, reverse the order of any order-sensitive
 
 HTML
 
-```html
+```
 <ul class="py-4 first:*:pt-0 last:*:pb-0"><ul class="py-4 *:first:pt-0 *:last:pb-0">  <li>One</li>  <li>Two</li>  <li>Three</li></ul>
 ```
 
@@ -367,7 +398,7 @@ To update your project for this change, replace usage of the old variable shorth
 
 HTML
 
-```html
+```
 <div class="bg-[--brand-color]"></div><div class="bg-(--brand-color)"></div>
 ```
 
@@ -379,7 +410,7 @@ To update your project for this change, replace usage of commas that were intend
 
 HTML
 
-```html
+```
 <div class="grid-cols-[max-content,auto]"></div><div class="grid-cols-[max-content_auto]"></div>
 ```
 
@@ -389,7 +420,7 @@ In v4 we've updated the `hover` variant to only apply when the primary input dev
 
 CSS
 
-```css
+```
 @media (hover: hover) {  .hover\:underline:hover {    text-decoration: underline;  }}
 ```
 
@@ -397,7 +428,7 @@ This can create problems if you've built your site in a way that depends on touc
 
 CSS
 
-```css
+```
 @custom-variant hover (&:hover);
 ```
 
@@ -405,14 +436,38 @@ Generally though we recommend treating hover functionality as an enhancement, an
 
 ### [Transitioning outline-color](https://tailwindcss.com/docs/upgrade-guide\#transitioning-outline-color)
 
-The `transition` and `transition-color` utilities now include the `outline-color` property.
+The `transition` and `transition-colors` utilities now include the `outline-color` property.
 
 This means if you were adding an outline with a custom color on focus, you will see the color transition from the default color. To avoid this, make sure you set the outline color unconditionally, or explicitly set it for both states:
 
 HTML
 
-```html
+```
 <button class="transition hover:outline-2 hover:outline-cyan-500"></button><button class="outline-cyan-500 transition hover:outline-2"></button>
+```
+
+### [Individual transform properties](https://tailwindcss.com/docs/upgrade-guide\#individual-transform-properties)
+
+The `rotate-*`, `scale-*`, and `translate-*` utilities are now based on the individual `rotate`, `scale`, and `translate` properties in CSS. Normally this shouldn't affect the behavior but there's a couple of cases to look out for:
+
+#### [Resetting Transforms](https://tailwindcss.com/docs/upgrade-guide\#resetting-transforms)
+
+You previously would've been able to "reset" your rotate, scale, and translate utilities via `transform-none`. This no longer works and you will need to reset the individual properties instead:
+
+HTML
+
+```
+<button class="scale-150 focus:transform-none"></button><button class="scale-150 focus:scale-none"></button>
+```
+
+#### [Transitions](https://tailwindcss.com/docs/upgrade-guide\#transitions)
+
+If you customize the list of transitioned properties and include `transform` (e.g. by writing `transition-[opacity,transform]`) then these utilities will no longer transition. To fix this, include the individual properties in the list. For example, if you want to transition changes when using `opacity-*` and `scale-*` utilities you should use `transition-[opacity,scale]` instead.
+
+HTML
+
+```
+<button class="transition-[opacity,transform] hover:scale-150"></button><button class="transition-[opacity,scale] hover:scale-150"></button>
 ```
 
 ### [Disabling core plugins](https://tailwindcss.com/docs/upgrade-guide\#disabling-core-plugins)
@@ -425,7 +480,7 @@ Since v4 includes CSS variables for all of your theme values, we recommend using
 
 CSS
 
-```css
+```
 .my-class {  background-color: theme(colors.red.500);  background-color: var(--color-red-500);}
 ```
 
@@ -433,7 +488,7 @@ For cases where you still need to use the `theme()` function (like in media quer
 
 CSS
 
-```css
+```
 @media (width >= theme(screens.xl)) {@media (width >= theme(--breakpoint-xl)) {  /* ... */}
 ```
 
@@ -445,7 +500,7 @@ If you still need to use a JavaScript config file, you can load it explicitly us
 
 CSS
 
-```css
+```
 @config "../../tailwind.config.js";
 ```
 
@@ -461,7 +516,7 @@ For example, the popular [Motion](https://motion.dev/docs/react-quick-start) lib
 
 JSX
 
-```jsx
+```
 <motion.div animate={{ backgroundColor: "var(--color-blue-500)" }} />
 ```
 
@@ -469,6 +524,81 @@ If you need access to a resolved CSS variable value in JS, you can use `getCompu
 
 spaghetti.js
 
-```js
+```
 let styles = getComputedStyle(document.documentElement);let shadow = styles.getPropertyValue("--shadow-xl");
 ```
+
+### [Using @apply with Vue, Svelte, or CSS modules](https://tailwindcss.com/docs/upgrade-guide\#using-apply-with-vue-svelte-or-css-modules)
+
+In v4, stylesheets that are bundled separately from your main CSS file (e.g. CSS modules files, `<style>` blocks in Vue, Svelte, or Astro, etc.) do not have access to theme variables, custom utilities, and custom variants defined in other files.
+
+To make these definitions available in these contexts, use [`@reference`](https://tailwindcss.com/docs/functions-and-directives#reference-directive) to import them without duplicating any CSS in your bundle:
+
+Vue
+
+```
+<template>  <h1>Hello world!</h1></template><style>  @reference "../../app.css";  h1 {    @apply text-2xl font-bold text-red-500;  }</style>
+```
+
+Alternatively, you can use your CSS theme variables directly instead of using `@apply` at all, which will also improve performance since Tailwind won't need to process these styles:
+
+Vue
+
+```
+<template>  <h1>Hello world!</h1></template><style>  h1 {    color: var(--text-red-500);  }</style>
+```
+
+You can find more documentation on [using Tailwind with CSS modules](https://tailwindcss.com/docs/compatibility#css-modules).
+
+### [Using Sass, Less, and Stylus](https://tailwindcss.com/docs/upgrade-guide\#using-sass-less-and-stylus)
+
+Tailwind CSS v4.0 is not designed to be used with CSS preprocessors like Sass, Less, or Stylus. Think of Tailwind CSS itself as your preprocessor — you shouldn't use Tailwind with Sass for the same reason you wouldn't use Sass with Stylus. Because of this it is not possible to use Sass, Less, or Stylus for your stylesheets or `<style>` blocks in Vue, Svelte, Astro, etc.
+
+Learn more in the [compatibility documentation](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus).
+
+### On this page
+
+- [Using the upgrade tool](https://tailwindcss.com/docs/upgrade-guide#using-the-upgrade-tool)
+- [Upgrading manually](https://tailwindcss.com/docs/upgrade-guide#upgrading-manually)
+  - [Using PostCSS](https://tailwindcss.com/docs/upgrade-guide#using-postcss)
+  - [Using Vite](https://tailwindcss.com/docs/upgrade-guide#using-vite)
+  - [Using Tailwind CLI](https://tailwindcss.com/docs/upgrade-guide#using-tailwind-cli)
+- [Changes from v3](https://tailwindcss.com/docs/upgrade-guide#changes-from-v3)
+  - [Browser requirements](https://tailwindcss.com/docs/upgrade-guide#browser-requirements)
+  - [Removed @tailwind directives](https://tailwindcss.com/docs/upgrade-guide#removed-tailwind-directives)
+  - [Removed deprecated utilities](https://tailwindcss.com/docs/upgrade-guide#removed-deprecated-utilities)
+  - [Renamed utilities](https://tailwindcss.com/docs/upgrade-guide#renamed-utilities)
+  - [Space-between selector](https://tailwindcss.com/docs/upgrade-guide#space-between-selector)
+  - [Divide selector](https://tailwindcss.com/docs/upgrade-guide#divide-selector)
+  - [Using variants with gradients](https://tailwindcss.com/docs/upgrade-guide#using-variants-with-gradients)
+  - [Container configuration](https://tailwindcss.com/docs/upgrade-guide#container-configuration)
+  - [Default border color](https://tailwindcss.com/docs/upgrade-guide#default-border-color)
+  - [Default ring width and color](https://tailwindcss.com/docs/upgrade-guide#default-ring-width-and-color)
+  - [Preflight changes](https://tailwindcss.com/docs/upgrade-guide#preflight-changes)
+  - [Using a prefix](https://tailwindcss.com/docs/upgrade-guide#using-a-prefix)
+  - [The important modifier](https://tailwindcss.com/docs/upgrade-guide#the-important-modifier)
+  - [Adding custom utilities](https://tailwindcss.com/docs/upgrade-guide#adding-custom-utilities)
+  - [Variant stacking order](https://tailwindcss.com/docs/upgrade-guide#variant-stacking-order)
+  - [Variables in arbitrary values](https://tailwindcss.com/docs/upgrade-guide#variables-in-arbitrary-values)
+  - [Arbitrary values in grid and object-position utilities](https://tailwindcss.com/docs/upgrade-guide#arbitrary-values-in-grid-and-object-position-utilities)
+  - [Hover styles on mobile](https://tailwindcss.com/docs/upgrade-guide#hover-styles-on-mobile)
+  - [Transitioning outline-color](https://tailwindcss.com/docs/upgrade-guide#transitioning-outline-color)
+  - [Individual transform properties](https://tailwindcss.com/docs/upgrade-guide#individual-transform-properties)
+  - [Disabling core plugins](https://tailwindcss.com/docs/upgrade-guide#disabling-core-plugins)
+  - [Using the theme() function](https://tailwindcss.com/docs/upgrade-guide#using-the-theme-function)
+  - [Using a JavaScript config file](https://tailwindcss.com/docs/upgrade-guide#using-a-javascript-config-file)
+  - [Theme values in JavaScript](https://tailwindcss.com/docs/upgrade-guide#theme-values-in-javascript)
+  - [Using @apply with Vue, Svelte, or CSS modules](https://tailwindcss.com/docs/upgrade-guide#using-apply-with-vue-svelte-or-css-modules)
+  - [Using Sass, Less, and Stylus](https://tailwindcss.com/docs/upgrade-guide#using-sass-less-and-stylus)
+
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
+
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

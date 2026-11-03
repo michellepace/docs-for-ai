@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Getting started
 2. Editor setup
@@ -19,11 +19,27 @@ If you're using VS Code, our official [Tailwind CSS IntelliSense](https://market
 
 In some cases, you may need to disable native CSS linting/validations if your editor is very strict about the syntax it expects in your CSS files.
 
+## [Cursor](https://tailwindcss.com/docs/editor-setup\#cursor)
+
+[Cursor](https://cursor.com/?utm_source=tailwind) is an AI-native code editor with features like context-aware autocomplete and built-in coding agents. Since it supports VS Code extensions, all of the Tailwind CSS tooling you're already familiar with works out of the box – including our official [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension and the [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) for class sorting.
+
+![Tailwind CSS IntelliSense extension for Cursor](https://tailwindcss.com/_next/static/media/cursor-intellisense.0wd1~kc6nuaa5.png)
+
+Check out and download [Cursor](https://cursor.com/?utm_source=tailwind).
+
+## [Zed](https://tailwindcss.com/docs/editor-setup\#zed)
+
+[Zed](https://zed.dev/?utm_source=tailwind) is a fast, modern code editor, designed from the ground-up for cutting-edge development workflows, including agentic editing with AI. It has built-in support for Tailwind CSS autocompletions, linting, and hover previews, without the need to install and configure a separate extension. It also integrates tightly with Prettier, so our official [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) works seamlessly with Zed when installed.
+
+![Built-in support for Tailwind CSS in Zed via Tailwind CSS IntelliSense](https://tailwindcss.com/_next/static/media/zed-intellisense.14u74b6adm4bq.png)
+
+Check out [Zed](https://zed.dev/?utm_source=tailwind) and learn more about [how it works with Tailwind CSS](https://zed.dev/docs/languages/tailwindcss?utm_source=tailwind).
+
 ## [IntelliSense for VS Code](https://tailwindcss.com/docs/editor-setup\#intellisense-for-vs-code)
 
 The official [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for Visual Studio Code enhances the Tailwind development experience by providing users with advanced features such as autocomplete, syntax highlighting, and linting.
 
-![Tailwind CSS IntelliSense extension for Visual Studio Code](https://tailwindcss.com/_next/static/media/intellisense.c22de782.png)
+![Tailwind CSS IntelliSense extension for Visual Studio Code](https://tailwindcss.com/_next/static/media/intellisense.0tuj65em1.0j..png)
 
 - **Autocomplete** — providing intelligent suggestions for utility classes, as well as [CSS functions and directives](https://tailwindcss.com/docs/functions-and-directives).
 - **Linting** — highlighting errors and potential bugs in both your CSS and your markup.
@@ -36,9 +52,9 @@ Check out the project [on GitHub](https://github.com/tailwindcss/intellisense) t
 
 We maintain an official [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) for Tailwind CSS that automatically sorts your classes following our [recommended class order](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted).
 
-![](https://tailwindcss.com/_next/static/media/prettier-banner.79c40690.jpg)
+![](https://tailwindcss.com/_next/static/media/prettier-banner.0tuovfv573y0i.jpg)
 
-It works seamlessly with custom Tailwind configurations, and because it’s just a Prettier plugin, it works anywhere Prettier works—including every popular editor and IDE, and of course on the command line.
+It works seamlessly with custom Tailwind configurations, and because it’s just a Prettier plugin, it works anywhere Prettier works — including every popular editor and IDE, and of course on the command line.
 
 HTML
 
@@ -54,21 +70,16 @@ JetBrains IDEs like WebStorm, PhpStorm, and others include support for intellige
 
 [Learn more about Tailwind CSS support in JetBrains IDEs →](https://www.jetbrains.com/help/webstorm/tailwind-css.html)
 
-## [Zed](https://tailwindcss.com/docs/editor-setup\#zed)
-
-Zed includes built-in support for Tailwind CSS autocomplete, linting, and hover previews for a variety of languages. It also supports Prettier, so our official [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) works seamlessly in Zed when installed.
-
-[Learn more about Tailwind CSS support in Zed →](https://zed.dev/docs/languages/tailwindcss)
-
 ### On this page
 
 - [Syntax support](https://tailwindcss.com/docs/editor-setup#syntax-support)
+- [Cursor](https://tailwindcss.com/docs/editor-setup#cursor)
+- [Zed](https://tailwindcss.com/docs/editor-setup#zed)
 - [IntelliSense for VS Code](https://tailwindcss.com/docs/editor-setup#intellisense-for-vs-code)
 - [Class sorting with Prettier](https://tailwindcss.com/docs/editor-setup#class-sorting-with-prettier)
 - [JetBrains IDEs](https://tailwindcss.com/docs/editor-setup#jetbrains-ides)
-- [Zed](https://tailwindcss.com/docs/editor-setup#zed)
 
-[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.27d91093.png&w=256&q=75)\\
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
 \\
 From the creators of Tailwind CSS\\
 \\
@@ -78,4 +89,4 @@ Make your ideas look awesome, without relying on a designer.\\
 > \\
 > Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
 
-Copyright © 2025 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

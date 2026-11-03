@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Backgrounds
 2. background-image
@@ -56,7 +56,7 @@ Show more
 
 Use the `bg-[<value>]` syntax to set the background image of an element:
 
-```html
+```
 <div class="bg-[url(/img/mountains.jpg)] ..."></div>
 ```
 
@@ -64,39 +64,32 @@ Use the `bg-[<value>]` syntax to set the background image of an element:
 
 Use utilities like `bg-linear-to-r` and `bg-linear-<angle>` with the [color stop utilities](https://tailwindcss.com/docs/background-image#setting-gradient-color-stops) to add a linear gradient to an element:
 
-```html
-<div class="h-14 bg-linear-to-r from-cyan-500 to-blue-500"></div>
-<div class="h-14 bg-linear-to-t from-sky-500 to-indigo-500"></div>
-<div class="h-14 bg-linear-to-bl from-violet-500 to-fuchsia-500"></div>
-<div class="h-14 bg-linear-65 from-purple-500 to-pink-500"></div>
+```
+<div class="h-14 bg-linear-to-r from-cyan-500 to-blue-500"></div><div class="h-14 bg-linear-to-t from-sky-500 to-indigo-500"></div><div class="h-14 bg-linear-to-bl from-violet-500 to-fuchsia-500"></div><div class="h-14 bg-linear-65 from-purple-500 to-pink-500"></div>
 ```
 
 ### [Adding a radial gradient](https://tailwindcss.com/docs/background-image\#adding-a-radial-gradient)
 
 Use the `bg-radial` and `bg-radial-[<position>]` utilities with the [color stop utilities](https://tailwindcss.com/docs/background-image#setting-gradient-color-stops) to add a radial gradient to an element:
 
-```html
-<div class="size-18 rounded-full bg-radial from-pink-400 from-40% to-fuchsia-700"></div>
-<div class="size-18 rounded-full bg-radial-[at_50%_75%] from-sky-200 via-blue-400 to-indigo-900 to-90%"></div>
-<div class="size-18 rounded-full bg-radial-[at_25%_25%] from-white to-zinc-900 to-75%"></div>
+```
+<div class="size-18 rounded-full bg-radial from-pink-400 from-40% to-fuchsia-700"></div><div class="size-18 rounded-full bg-radial-[at_50%_75%] from-sky-200 via-blue-400 to-indigo-900 to-90%"></div><div class="size-18 rounded-full bg-radial-[at_25%_25%] from-white to-zinc-900 to-75%"></div>
 ```
 
 ### [Adding a conic gradient](https://tailwindcss.com/docs/background-image\#adding-a-conic-gradient)
 
 Use the `bg-conic` and `bg-conic-<angle>` utilities with the [color stop utilities](https://tailwindcss.com/docs/background-image#setting-gradient-color-stops) to add a conic gradient to an element:
 
-```html
-<div class="size-24 rounded-full bg-conic from-blue-600 to-sky-400 to-50%"></div>
-<div class="size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div>
-<div class="size-24 rounded-full bg-conic/decreasing from-violet-700 via-lime-300 to-violet-700"></div>
+```
+<div class="size-24 rounded-full bg-conic from-blue-600 to-sky-400 to-50%"></div><div class="size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div><div class="size-24 rounded-full bg-conic/decreasing from-violet-700 via-lime-300 to-violet-700"></div>
 ```
 
 ### [Setting gradient color stops](https://tailwindcss.com/docs/background-image\#setting-gradient-color-stops)
 
 Use utilities like `from-indigo-500`, `via-purple-500`, and `to-pink-500` to set the colors of the gradient stops:
 
-```html
-<div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ..."></div>
+```
+<div class="bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 ..."></div>
 ```
 
 ### [Setting gradient stop positions](https://tailwindcss.com/docs/background-image\#setting-gradient-stop-positions)
@@ -109,8 +102,8 @@ Use utilities like `from-10%`, `via-30%`, and `to-90%` to set more precise posit
 
 90%
 
-```html
-<div class="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ..."></div>
+```
+<div class="bg-linear-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ..."></div>
 ```
 
 ### [Changing interpolation mode](https://tailwindcss.com/docs/background-image\#changing-interpolation-mode)
@@ -133,15 +126,8 @@ increasing
 
 decreasing
 
-```html
-<div class="bg-linear-to-r/srgb from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/hsl from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/oklab from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/oklch from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/longer from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/shorter from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/increasing from-indigo-500 to-teal-400"></div>
-<div class="bg-linear-to-r/decreasing from-indigo-500 to-teal-400"></div>
+```
+<div class="bg-linear-to-r/srgb from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/hsl from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/oklab from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/oklch from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/longer from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/shorter from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/increasing from-indigo-500 to-teal-400"></div><div class="bg-linear-to-r/decreasing from-indigo-500 to-teal-400"></div>
 ```
 
 By default gradients are interpolated in the `oklab` color space.
@@ -150,7 +136,7 @@ By default gradients are interpolated in the `oklab` color space.
 
 Use the `bg-none` utility to remove an existing background image from an element:
 
-```html
+```
 <div class="bg-none"></div>
 ```
 
@@ -158,18 +144,14 @@ Use the `bg-none` utility to remove an existing background image from an element
 
 Use utilities like`bg-linear-[<value>]` and `from-[<value>]`to set the gradient based on a completely custom value:
 
-```html
-<div class="bg-linear-[25deg,red_5%,yellow_60%,lime_90%,teal] ...">
-  <!-- ... -->
-</div>
+```
+<div class="bg-linear-[25deg,red_5%,yellow_60%,lime_90%,teal] ...">  <!-- ... --></div>
 ```
 
 For CSS variables, you can also use the`bg-linear-(<custom-property>)`syntax:
 
-```html
-<div class="bg-linear-(--my-gradient) ...">
-  <!-- ... -->
-</div>
+```
+<div class="bg-linear-(--my-gradient) ...">  <!-- ... --></div>
 ```
 
 This is just a shorthand for`bg-linear-[var(<custom-property>)]`that adds the `var()` function for you automatically.
@@ -178,10 +160,8 @@ This is just a shorthand for`bg-linear-[var(<custom-property>)]`that adds the `v
 
 Prefix a`background-image` utilitywith a breakpoint variant like `md:` to only apply the utility at mediumscreen sizes and above:
 
-```html
-<div class="from-purple-400 md:from-yellow-500 ...">
-  <!-- ... -->
-</div>
+```
+<div class="from-purple-400 md:from-yellow-500 ...">  <!-- ... --></div>
 ```
 
 Learn more about using variants in the [variants documentation](https://tailwindcss.com/docs/hover-focus-and-other-states).
@@ -190,18 +170,42 @@ Learn more about using variants in the [variants documentation](https://tailwind
 
 Use the `--color-*` theme variables to customize the colorutilities in your project:
 
-```css
-@theme {
-  --color-regal-blue: #243c5a;
-}
+```
+@theme {  --color-regal-blue: #243c5a; }
 ```
 
 Now utilities like`from-regal-blue`,`via-regal-blue`, and `to-regal-blue`can be used in your markup:
 
-```html
-<div class="from-regal-blue">
-  <!-- ... -->
-</div>
+```
+<div class="from-regal-blue">  <!-- ... --></div>
 ```
 
 Learn more about customizing your theme in the [theme documentation](https://tailwindcss.com/docs/theme#customizing-your-theme).
+
+### On this page
+
+- [Quick reference](https://tailwindcss.com/docs/background-image#quick-reference)
+- [Examples](https://tailwindcss.com/docs/background-image#examples)
+  - [Basic example](https://tailwindcss.com/docs/background-image#basic-example)
+  - [Adding a linear gradient](https://tailwindcss.com/docs/background-image#adding-a-linear-gradient)
+  - [Adding a radial gradient](https://tailwindcss.com/docs/background-image#adding-a-radial-gradient)
+  - [Adding a conic gradient](https://tailwindcss.com/docs/background-image#adding-a-conic-gradient)
+  - [Setting gradient color stops](https://tailwindcss.com/docs/background-image#setting-gradient-color-stops)
+  - [Setting gradient stop positions](https://tailwindcss.com/docs/background-image#setting-gradient-stop-positions)
+  - [Changing interpolation mode](https://tailwindcss.com/docs/background-image#changing-interpolation-mode)
+  - [Removing background images](https://tailwindcss.com/docs/background-image#removing-background-images)
+  - [Using a custom value](https://tailwindcss.com/docs/background-image#using-a-custom-value)
+  - [Responsive design](https://tailwindcss.com/docs/background-image#responsive-design)
+- [Customizing your theme](https://tailwindcss.com/docs/background-image#customizing-your-theme)
+
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
+
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

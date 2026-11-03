@@ -77,6 +77,21 @@ Prompt caching lets you reuse prompt prefixes.
 """
 
 
+VERCEL_URL = "https://vercel.com/docs/ai-sdk"
+VERCEL_SUMMARY = (
+    "Build TypeScript agents and AI applications with a unified API"
+    " for models, tools, structured output, and streaming."
+)
+VERCEL_DOC = f"""\
+---
+title: AI SDK
+summary: {VERCEL_SUMMARY}
+---
+
+The AI SDK is a TypeScript toolkit for building AI applications.
+"""
+
+
 def run_script(*args: str) -> tuple[int, str]:
     """Run the curate-doc CLI via uv (real network) and return (exit_code, output)."""
     result = subprocess.run(
@@ -567,8 +582,9 @@ def test_curate_reports_pending_when_placeholder_carried_over(
             "en-build-with-claude-prompt-caching.md",
             PLATFORM_SUMMARY,
         ),
+        (VERCEL_URL, VERCEL_DOC, "ai-sdk.md", VERCEL_SUMMARY),
     ],
-    ids=["summary-line", "frontmatter"],
+    ids=["summary-line", "frontmatter-description", "frontmatter-summary"],
 )
 def test_curate_describes_new_trusted_site_doc_from_publisher_summary(
     tmp_path: Path,

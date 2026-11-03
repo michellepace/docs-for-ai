@@ -4,19 +4,21 @@ import re
 
 from docs_for_ai.direct_fetch import split_frontmatter
 
-# Anthropic only: other publishers' summaries are too generic to route by.
+# Opt-in per trusted publisher
 TRUSTED_SUMMARY_SITES = (
     "https://claude.com/docs/",
     "https://code.claude.com/docs/",
     "https://platform.claude.com/docs/",
+    "https://vercel.com/docs/",
+    "https://vercel.com/kb/",
 )
-FRONTMATTER_DESCRIPTION_RE = re.compile(
-    r"^description:[ \t]*(?P<val>.*)$", re.MULTILINE
+FRONTMATTER_SUMMARY_RE = re.compile(
+    r"^(?:description|summary):[ \t]*(?P<val>.*)$", re.MULTILINE
 )
 
 
-def _frontmatter_description(frontmatter: str) -> str | None:
-    match = FRONTMATTER_DESCRIPTION_RE.search(frontmatter)
+def _frontmatter_summary(frontmatter: str) -> str | None:
+    match = FRONTMATTER_SUMMARY_RE.search(frontmatter)
     value = match.group("val").strip().strip("\"'") if match else ""
     return value or None
 
@@ -35,4 +37,4 @@ def publisher_summary(content: str, source_url: str) -> str | None:
     if not source_url.startswith(TRUSTED_SUMMARY_SITES):
         return None
     frontmatter, body = split_frontmatter(content)
-    return _frontmatter_description(frontmatter) or _summary_line_under_h1(body)
+    return _frontmatter_summary(frontmatter) or _summary_line_under_h1(body)

@@ -65,7 +65,7 @@ Coverage collection is performed during runtime by instructing V8 using [`node:i
 
 ## Istanbul Provider
 
-[Istanbul code coverage tooling](https://istanbul.js.org/) has existed since 2012 and is very well battle-tested. This provider works on any JavaScript runtime as coverage tracking works by transforming your source code to add instrumentation logic. In practice, the code Vitest will end up running looks something like this:
+[Istanbul code coverage tooling](https://istanbul.js.org/) has existed since 2012 and is very well battle-tested. Vitest uses its own [`@vitest/istanbuljs`](https://github.com/vitest-dev/istanbuljs) that is a fork of the original [`istanbuljs/istanbuljs`](https://github.com/istanbuljs/istanbuljs) project. This provider works on any JavaScript runtime as coverage tracking works by transforming your source code to add instrumentation logic. In practice, the code Vitest will end up running looks something like this:
 
 ```js
 // Simplified example of branch and function coverage counters
@@ -502,6 +502,29 @@ export function ignored() { // [!code error]
 ## Coverage Performance
 
 If code coverage generation is slow on your project, see [Profiling Test Performance | Code coverage](/guide/profiling-test-performance#code-coverage).
+
+## HTML Report Theme
+
+By default Vitest's HTML coverage report uses Vitest-styled themes. The color theme, dark or light, is set by following order:
+
+* [Reporter options](/config/coverage#coverage-reporter): `coverage.reporter: [['html', { theme: 'light' | 'dark' | 'legacy' }]]`
+* Your previous selection from the theme picker
+* OS color preference
+
+When coverage report is viewed through Vitest UI, it will inherit the UI's color theme. Setting explicit reporter option can override this.
+
+If you do not want to use Vitest-styled reports, you can always set `coverage.reporter: [['html', { theme: 'legacy' }]]` to force the original Istanbul themed styles.
+
+::: tabs key:coverage-report-theme
+\== Light
+
+
+\== Dark
+
+
+\== Legacy
+
+:::
 
 ## Vitest UI
 

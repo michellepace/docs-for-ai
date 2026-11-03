@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Core concepts
 2. Hover, focus, and other states
@@ -192,7 +192,7 @@ You can use `has-*` with a pseudo-class, like `has-[:focus]`, to style an elemen
 
 If you need to style an element based on the descendants of a parent element, you can mark the parent with the `group` class and use the `group-has-*` variant to style the target element:
 
-![](https://spotlight.tailwindui.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Favatar.51a13c67.jpg&w=128&q=80)
+![](https://tailwindcss.com/_next/static/media/spencer-sharp.0veagit9r1~z_.jpg)
 
 Spencer Sharp
 
@@ -475,7 +475,7 @@ Choose profile photo
 
 Style the counters or bullets in lists using the `marker` variant:
 
-## [Ingredients](https://tailwindcss.com/docs/hover-focus-and-other-states\#ingredients)
+## Ingredients
 
 - 5 cups chopped Porcini mushrooms
 - 1/2 cup of olive oil
@@ -667,7 +667,7 @@ RAM
 <fieldset aria-label="Choose a memory option">  <div class="flex items-center justify-between">    <div>RAM</div>    <a href="#"> See performance specs </a>  </div>  <div class="mt-4 grid grid-cols-6 gap-2 pointer-coarse:mt-6 pointer-coarse:grid-cols-3 pointer-coarse:gap-4">    <label class="p-2 pointer-coarse:p-4 ...">      <input type="radio" name="memory-option" value="4 GB" className="sr-only" />      <span>4 GB</span>    </label>    <!-- ... -->  </div></fieldset>
 ```
 
-While `pointer` only targets the primary pointing device, `any-pointer` is used to target any of the pointing devices that might be available. Use the `any-pointer-fine` and `any-pointer-coarse` variants to provide different styles if at least one connected pointing device meets the criteria.
+While `pointer`only targets the primary pointing device, `any-pointer` is used to target any of the pointing devices that might be available. Use the `any-pointer-fine` and `any-pointer-coarse` variants to provide different styles if at least one connected pointing device meets the criteria.
 
 You can use `pointer-none` and `any-pointer-none` to target the absence of a pointing device.
 
@@ -901,7 +901,7 @@ This is useful for adding visual cues that make it clear that sections of conten
 
 While it's generally preferable to put utility classes directly on child elements, you can use the `*` variant in situations where you need to style direct children that you don’t have control over:
 
-## [Categories](https://tailwindcss.com/docs/hover-focus-and-other-states\#categories)
+## Categories
 
 Sales
 
@@ -1040,15 +1040,15 @@ A quick reference table of every single variant included in Tailwind by default.
 
 | Variant | CSS |
 | --- | --- |
-| [hover](https://tailwindcss.com/docs/hover-focus-and-other-states#hover) | `@media (hover: hover) { &:hover  }` |
+| [hover](https://tailwindcss.com/docs/hover-focus-and-other-states#hover) | `@media (hover: hover) {  &:hover  }` |
 | [focus](https://tailwindcss.com/docs/hover-focus-and-other-states#focus) | `&:focus` |
 | [focus-within](https://tailwindcss.com/docs/hover-focus-and-other-states#focus-within) | `&:focus-within` |
 | [focus-visible](https://tailwindcss.com/docs/hover-focus-and-other-states#focus-visible) | `&:focus-visible` |
 | [active](https://tailwindcss.com/docs/hover-focus-and-other-states#active) | `&:active` |
 | [visited](https://tailwindcss.com/docs/hover-focus-and-other-states#visited) | `&:visited` |
 | [target](https://tailwindcss.com/docs/hover-focus-and-other-states#target) | `&:target` |
-| [\*](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-direct-children) | `:is(& > *)` |
-| [\*\*](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-all-descendants) | `:is(& *)` |
+| [\*](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-direct-children) | `:is(&  > *)` |
+| [\*\*](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-all-descendants) | `:is(&  *)` |
 | [has-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#has) | `&:has(...)` |
 | [group-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-parent-state) | `&:is(:where(.group)... *)` |
 | [peer-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-sibling-state) | `&:is(:where(.peer)... ~ *)` |
@@ -1099,13 +1099,13 @@ A quick reference table of every single variant included in Tailwind by default.
 | [lg](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width >= 64rem)` |
 | [xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width >= 80rem)` |
 | [2xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width >= 96rem)` |
-| [min-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width >= ...)` |
+| [min-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width >=  ...)` |
 | [max-sm](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < 40rem)` |
 | [max-md](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < 48rem)` |
 | [max-lg](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < 64rem)` |
 | [max-xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < 80rem)` |
 | [max-2xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < 96rem)` |
-| [max-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width < ...)` |
+| [max-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@media (width <  ...)` |
 | [@3xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 16rem)` |
 | [@2xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 18rem)` |
 | [@xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 20rem)` |
@@ -1119,7 +1119,7 @@ A quick reference table of every single variant included in Tailwind by default.
 | [@5xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 64rem)` |
 | [@6xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 72rem)` |
 | [@7xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= 80rem)` |
-| [@min-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >= ...)` |
+| [@min-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width >=  ...)` |
 | [@max-3xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 16rem)` |
 | [@max-2xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 18rem)` |
 | [@max-xs](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 20rem)` |
@@ -1133,7 +1133,7 @@ A quick reference table of every single variant included in Tailwind by default.
 | [@max-5xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 64rem)` |
 | [@max-6xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 72rem)` |
 | [@max-7xl](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < 80rem)` |
-| [@max-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width < ...)` |
+| [@max-\[...\]](https://tailwindcss.com/docs/hover-focus-and-other-states#responsive-breakpoints) | `@container (width <  ...)` |
 | [dark](https://tailwindcss.com/docs/hover-focus-and-other-states#prefers-color-scheme) | `@media (prefers-color-scheme: dark)` |
 | [motion-safe](https://tailwindcss.com/docs/hover-focus-and-other-states#prefers-reduced-motion) | `@media (prefers-reduced-motion: no-preference)` |
 | [motion-reduce](https://tailwindcss.com/docs/hover-focus-and-other-states#prefers-reduced-motion) | `@media (prefers-reduced-motion: reduce)` |
@@ -1515,7 +1515,7 @@ Style an input when it is read-only using the `read-only` variant:
   - [Quick reference](https://tailwindcss.com/docs/hover-focus-and-other-states#quick-reference)
   - [Pseudo-class reference](https://tailwindcss.com/docs/hover-focus-and-other-states#pseudo-class-reference)
 
-[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.27d91093.png&w=256&q=75)\\
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
 \\
 From the creators of Tailwind CSS\\
 \\
@@ -1525,4 +1525,4 @@ Make your ideas look awesome, without relying on a designer.\\
 > \\
 > Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
 
-Copyright © 2025 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

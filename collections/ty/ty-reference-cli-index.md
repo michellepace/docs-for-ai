@@ -40,12 +40,14 @@ ty check [OPTIONS] [PATH]...
 
 [`--add-ignore`](#ty-check--add-ignore) : Adds `ty: ignore` comments to suppress all rule diagnostics
 
+[`--baseline`](#ty-check--baseline) *path* : Path to a JSON diagnostic baseline (preview)
+
 [`--color`](#ty-check--color) *when* : Control when colored output is used
 
 ```
 Possible values:
 
-- `auto`: Display colors if the output goes to an interactive terminal
+- `auto`: Use color when writing to a terminal, unless overridden by the environment
 - `always`: Always display colors
 - `never`: Never display colors
 ```
@@ -125,6 +127,7 @@ Possible values:
 - `gitlab`: Print diagnostics in the JSON format expected by GitLab Code Quality reports
 - `github`: Print diagnostics in the format used by GitHub Actions workflow error annotations
 - `junit`: Print diagnostics as a JUnit-style XML report
+- `sarif`: Print diagnostics as a SARIF report
 ```
 
 [`--project`](#ty-check--project) *project* : Run the command within the given project directory.
@@ -178,6 +181,8 @@ Possible values:
 [`--respect-ignore-files`](#ty-check--respect-ignore-files) : Respect file exclusions via `.gitignore` and other standard ignore files. Use `--no-respect-ignore-files` to disable
 
 [`--typeshed`](#ty-check--typeshed), `--custom-typeshed-dir` *path* : Custom directory to use for stdlib typeshed stubs
+
+[`--update-baseline`](#ty-check--update-baseline) : Create or update the configured diagnostic baseline (preview)
 
 [`--verbose`](#ty-check--verbose), `-v` : Use verbose output (or `-vv` and `-vvv` for more verbose output)
 

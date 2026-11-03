@@ -630,6 +630,13 @@ Serve sourcemaps of dependencies to the browser in headless runs, used by devtoo
 
 Control if Vitest catches uncaught exceptions so they can be reported (default: `true`)
 
+### browser.importMapMocks
+
+* **CLI:** `--browser.importMapMocks`
+* **Config:** [browser.importMapMocks](/config/browser/importmapmocks)
+
+Serve module mocks through an import map instead of request interception. By default, enabled when the browser supports it
+
 ### browser.trace
 
 * **CLI:** `--browser.trace <mode>`
@@ -642,7 +649,14 @@ Enable trace view mode. Supported: "on", "off", "on-first-retry", "on-all-retrie
 * **CLI:** `--browser.traceView.enabled`
 * **Config:** [browser.traceView.enabled](/config/browser/traceview#traceview-enabled)
 
-Enable Vitest trace-view collection for browser tests (default: `false`)
+Deprecated, use `--browser.traceView.mode` instead. `true` is the same as `--browser.traceView.mode=on`
+
+### browser.traceView.mode
+
+* **CLI:** `--browser.traceView.mode <mode>`
+* **Config:** [browser.traceView.mode](/config/browser/traceview#traceview-mode)
+
+How trace view records tests. Supported: "on" (every test), "failure-only" (only failed tests), "off" (default: `"failure-only"`)
 
 ### browser.traceView.recordCanvas
 
@@ -657,6 +671,13 @@ Capture canvas pixels in trace-view snapshots (default: `false`)
 * **Config:** [browser.traceView.inlineImages](/config/browser/traceview#traceview-inlineimages)
 
 Inline loaded image pixels in trace-view snapshots (default: `false`)
+
+### browser.traceView.ariaSnapshot
+
+* **CLI:** `--browser.traceView.ariaSnapshot`
+* **Config:** [browser.traceView.ariaSnapshot](/config/browser/traceview#traceview-ariasnapshot)
+
+Capture the accessibility tree in trace-view snapshots (default: `true`)
 
 ### browser.locators.exact
 
@@ -748,6 +769,12 @@ Ignore any unhandled errors that occur
 * **Config:** [changed](/config/changed)
 
 Run tests that are affected by the changed files (default: `false`)
+
+### lastFailed
+
+* **CLI:** `--lastFailed`
+
+Run only the tests that failed in the last run (default: `false`)
 
 ### sequence.shuffle.files
 
@@ -1228,12 +1255,19 @@ Control whether Vitest uses Vite's module runner to run the code or fallback to 
 
 Controls whether Vitest will use Node.js Loader API to process in-source or mocked files. This has no effect if `viteModuleRunner` is enabled. Disabling this can increase performance. (default: `true`)
 
+### experimental.traceTimeline
+
+* **CLI:** `--experimental.traceTimeline`
+* **Config:** [experimental.traceTimeline](/config/experimental#experimental-tracetimeline)
+
+Record `expect.poll`, `vi.waitFor`, and `vi.waitUntil` steps of each test and print them as a timeline when the test fails. This has no effect in browser mode. (default: `false`)
+
 ### experimental.vcsProvider
 
 * **CLI:** `--experimental.vcsProvider <path>`
 * **Config:** [experimental.vcsProvider](/config/experimental#experimental-vcsprovider)
 
-Custom provider for detecting changed files. (default: `git`)
+Provider for detecting changed files: `git`, `mtime` (requires `experimental.recordDependencies`) or a path to a custom provider. (default: `git`)
 
 ### experimental.recordDependencies
 
@@ -1312,3 +1346,39 @@ Merges every blob report located in the specified folder (`.vitest/blob/` by def
 ```sh
 vitest --merge-reports --reporter=junit
 ```
+
+### since-last-run 5.1.0 {#since-last-run}
+
+* **Type:** `boolean`
+* **Default:** `false`
+
+Run only the tests whose dependencies were modified since the last run of the test. A test is selected when one of the files it loaded during its last run has a newer modification time than that run, or was deleted. A test that never ran with this flag has no record and always runs. A test file that failed in its last run also runs, until it passes, because the cause of a failure can be outside the recorded files, for example an environment variable or a server that was down.
+
+```sh
+vitest run --since-last-run
+```
+
+The flag enables [`changed`](/config/changed), [`experimental.recordDependencies`](/config/experimental#experimental-recorddependencies) and the `mtime` [provider](/config/experimental#experimental-vcsprovider). Every run with this flag updates the records of the tests it ran, so the next run selects only the tests affected by changes made in between. To run every test again, run Vitest without the flag, or delete the cache with [`--clearCache`](#clearcache).
+
+The flag requires [`cache`](/config/cache). Vitest throws an error if the cache is disabled.
+
+::: warning
+The modification time comes from the file system. A `git checkout` or an unpacked archive that sets old modification times is not detected. Files that a test did not load during its last run, for example a new `.env` file or a new `__mocks__` file, are not detected either. See [`experimental.recordDependencies`](/config/experimental#experimental-recorddependencies) for the full list of recorded files.
+:::
+
+See [Running Only Affected Tests](/guide/recipes/affected-tests) for a comparison with `--changed`.
+
+### last-failed
+
+* **Type:** `boolean`
+* **Default:** `false`
+
+Run only the tests that failed in the last run. Vitest reads the failures from the [results cache](/config/cache) and skips every other test file and test:
+
+```sh
+vitest run --last-failed
+```
+
+A test file runs completely if it failed outside of a test, for example in a `beforeAll` hook or during collection. Vitest selects the tests by their full names, so a renamed test does not run until the file runs again without the flag. If no test failed in the last run, Vitest prints `No failed tests found` and exits with code 1 unless [`--passWithNoTests`](/config/passwithnotests) is set.
+
+The flag can be combined with other filters. For example, `vitest run --last-failed -t login` runs only the failed tests whose names match `login`. In watch mode, only the first run is limited to the failed tests.

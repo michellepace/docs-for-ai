@@ -302,9 +302,8 @@ changes:
   whitespace); otherwise it becomes PLACEHOLDER.
 
 description:
-  A doc from a trusted site (Claude docs: claude.com, code.claude.com,
-  platform.claude.com) whose description would be PLACEHOLDER gets the
-  site's own summary instead, if that is within the word band.
+  A doc from a trusted site whose description would be PLACEHOLDER gets
+  the site's own summary instead, if that is within the word band.
 
 exit:
   0 on success; 1 with `❌ <reason>`, having changed nothing.

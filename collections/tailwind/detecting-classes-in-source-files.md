@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Core concepts
 2. Detecting classes in source files
@@ -224,7 +224,7 @@ This will explicitly exclude the red background utilities, along with their hove
   - [Safelisting with ranges](https://tailwindcss.com/docs/detecting-classes-in-source-files#safelisting-with-ranges)
   - [Explicitly excluding classes](https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes)
 
-[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.27d91093.png&w=256&q=75)\\
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
 \\
 From the creators of Tailwind CSS\\
 \\
@@ -234,4 +234,4 @@ Make your ideas look awesome, without relying on a designer.\\
 > \\
 > Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
 
-Copyright © 2025 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

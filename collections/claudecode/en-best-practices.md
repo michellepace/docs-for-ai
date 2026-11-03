@@ -397,7 +397,7 @@ Both ends of the permission range have a cost:
 * Sensitive data sent to external endpoints
 * Actions that look driven by content Claude read rather than by you
 
-When it does block something, you get a notification and the action shows up under **Recently denied** in `/permissions`, where you can retry it with a manual approval. After [three blocks in a row](https://code.claude.com/docs/en/permission-modes.md#when-auto-mode-falls-back) (or twenty in total), auto mode pauses and goes back to asking you.
+When auto mode blocks an action, you get a notification and the action shows up under **Recently blocked** in `/permissions`, where you can [approve the action so Claude may retry](https://code.claude.com/docs/en/auto-mode-config.md#review-denials). After [three blocks in a row](https://code.claude.com/docs/en/permission-modes.md#when-auto-mode-falls-back) (or twenty in total), auto mode pauses and goes back to asking you.
 
 None of this replaces your deterministic controls, because it runs *after* them. Deny and ask rules and `PreToolUse` hooks apply before the classifier sees anything, so a deny rule blocks in auto mode exactly like it does everywhere else. The sandbox still confines the [shell commands it wraps](https://code.claude.com/docs/en/sandboxing.md#what-runs-outside-the-sandbox).
 
@@ -489,7 +489,7 @@ Ask Claude to `have the reviewer compare the rate limiter against SPEC.md` and t
 
 With a 1M-token window on most current models and compaction near the top of it, you'll rarely run out of context. You can still *pay* for context you don't need, though. Every request sends the whole conversation, so a session that's collected three unrelated tasks re-reads all three on every turn of the fourth. That's [discounted while the cache is warm](https://code.claude.com/docs/en/costs.md#why-usage-climbs-in-a-long-session) and full price once it expires.
 
-[`/usage`](https://code.claude.com/docs/en/costs) is the first place to look. On Pro, Max, Team, and Enterprise it breaks your usage down by skill, subagent, plugin, and MCP server. It also flags patterns like long context or frequent cache misses once one of them passes 10% of your usage. From there, the usual fixes:
+[`/usage`](https://code.claude.com/docs/en/costs) is the first place to look. On Pro, Max, Ultra, Team, and Enterprise it breaks your usage down by skill, subagent, plugin, and MCP server. It also flags patterns like long context or frequent cache misses once one of them passes 10% of your usage. From there, the usual fixes:
 
 * `/clear` between unrelated tasks. It costs nothing, and it means the next task doesn't keep paying for the previous one's history. `/clear oauth-migration` names the session you're leaving, so you can come back to it later.
 * `/compact` with a focus, like `/compact keep the API changes and the test commands`. On a long session `/compact` is itself a big request, since it reads the whole conversation to summarize it, and even more so once the cache has expired.

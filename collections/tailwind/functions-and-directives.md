@@ -1,6 +1,6 @@
-[Home](https://tailwindcss.com/) v4.1
+[Home](https://tailwindcss.com/) v4.3
 
-`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Sponsor](https://tailwindcss.com/sponsor) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
+`⌘K`  `Ctrl K` [Docs](https://tailwindcss.com/docs) [Play](https://play.tailwindcss.com/) [Blog](https://tailwindcss.com/blog) [Showcase](https://tailwindcss.com/showcase) [Partners](https://tailwindcss.com/partners) [Plus](https://tailwindcss.com/plus?ref=top) [GitHub repository](https://github.com/tailwindlabs/tailwindcss)
 
 1. Core concepts
 2. Functions and directives
@@ -111,12 +111,28 @@ Vue
 <template>  <h1>Hello world!</h1></template><style>  @reference "../../app.css";  h1 {    @apply text-2xl font-bold text-red-500;  }</style>
 ```
 
-If you’re just using the default theme with no customizations, you can import `tailwindcss` directly:
+If you’re just using the default theme with no customizations (e.g. by using things like `@theme`, `@custom-variant`, `@plugin`, etc…), you can import `tailwindcss` directly:
 
 Vue
 
 ```
 <template>  <h1>Hello world!</h1></template><style>  @reference "tailwindcss";  h1 {    @apply text-2xl font-bold text-red-500;  }</style>
+```
+
+### [Subpath Imports](https://tailwindcss.com/docs/functions-and-directives\#subpath-imports)
+
+When using the CLI, Vite, or PostCSS the directives `@import`, `@reference`, `@plugin`, and `@config` all support [subpath imports](https://nodejs.org/api/packages.html#subpath-imports) which work similarly to bundler and TypeScript path aliases:
+
+package.json
+
+```
+{  // ...  "imports": {    "#app.css": "./src/css/app.css"  }}
+```
+
+Vue
+
+```
+<template>  <h1>Hello world!</h1></template><style>  @reference "#app.css";  h1 {    @apply text-2xl font-bold text-red-500;  }</style>
 ```
 
 ## [Functions](https://tailwindcss.com/docs/functions-and-directives\#functions)
@@ -208,17 +224,18 @@ This function is deprecated, and we recommend [using CSS theme variables](https:
 ### On this page
 
 - [Directives](https://tailwindcss.com/docs/functions-and-directives#directives)
+  - [Subpath Imports](https://tailwindcss.com/docs/functions-and-directives#subpath-imports)
 - [Functions](https://tailwindcss.com/docs/functions-and-directives#functions)
 - [Compatibility](https://tailwindcss.com/docs/functions-and-directives#compatibility)
 
-![Build UIs that don’t suck — 5-day mini-course](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcourse-promo.a67fd268.jpg&w=384&q=75)
+[![Refactoring UI](https://tailwindcss.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbook-promo.0xtl10.r4k91k.png&w=256&q=75)\\
+\\
+From the creators of Tailwind CSS\\
+\\
+Make your ideas look awesome, without relying on a designer.\\
+\\
+> “This is the survival kit I wish I had when I started building apps.”\\
+> \\
+> Derrick Reimer, SavvyCal](https://www.refactoringui.com/?ref=sidebar)
 
-5-day mini-course
-
-Build UIs that don’t suck.
-
-Short, tactical video lessons from the creator of Tailwind CSS, delivered directly to your inbox every day for a week.
-
-[Get the free course →](https://tailwindcss.com/build-uis-that-dont-suck)
-
-Copyright © 2025 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)
+Copyright © 2026 Tailwind Labs Inc.· [Trademark Policy](https://tailwindcss.com/brand)

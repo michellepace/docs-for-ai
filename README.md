@@ -111,7 +111,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-11-04 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-11-03 | [Official](https://platform.claude.com/docs/) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-07-27 | [Official](https://docs.coderabbit.ai) |
+| 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-11-07 | [Official](https://docs.coderabbit.ai) |
 | 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
 | 📦 [`firecrawl/`](collections/firecrawl/) | 📄 [`INDEX.xml`](collections/firecrawl/INDEX.xml) | Web scraping for AI | 2026-07-18 | [Official](https://docs.firecrawl.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |

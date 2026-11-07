@@ -1,37 +1,37 @@
 <docs_index>
   <source>
     <title>Command-Line Review Tool</title>
-    <description>Reviewing uncommitted or committed Git changes locally — install via script or Homebrew, authenticate through browser or `--api-key`, `--agent` JSON for coding agents, plus rate limits and usage credits.</description>
+    <description>Get AI code reviews directly in your CLI before you commit. Catch race conditions, memory leaks, and security vulnerabilities without leaving your development environment.</description>
     <source_url>https://docs.coderabbit.ai/cli</source_url>
     <local_file>cli.md</local_file>
-    <curated_at>2026-07-27</curated_at>
+    <curated_at>2026-11-07</curated_at>
   </source>
   <source>
     <title>Claude Code integration</title>
-    <description>Installing the `coderabbit` plugin from marketplace `coderabbitai/claude-plugin`, `/coderabbit:review` scope and `--base` flags, natural-language triggers, `-c CLAUDE.md` context, plus troubleshooting auth and slow reviews.</description>
+    <description>AI-powered code review in Claude Code through the CodeRabbit plugin. Let AI code, review, and fix issues autonomously without human intervention.</description>
     <source_url>https://docs.coderabbit.ai/cli/claude-code-integration</source_url>
     <local_file>cli-claude-code-integration.md</local_file>
-    <curated_at>2026-07-27</curated_at>
+    <curated_at>2026-11-07</curated_at>
   </source>
   <source>
     <title>Plans and pricing</title>
-    <description>Free, OSS, Pro, Pro+ and Enterprise tiers priced per developer, their rolling hourly PR/IDE/CLI review and files-per-review limits, Fair Usage throttling, usage-based add-on, and MCP/linked-repo caps.</description>
+    <description>Compare CodeRabbit plans and understand per-developer review rate limits and feature limits.</description>
     <source_url>https://docs.coderabbit.ai/management/plans</source_url>
     <local_file>management-plans.md</local_file>
-    <curated_at>2026-07-27</curated_at>
+    <curated_at>2026-11-07</curated_at>
   </source>
   <source>
     <title>CodeRabbit glossary: review, Git, and code analysis terms</title>
-    <description>Defines `Walkthrough`, `Learnings`, `Finishing Touches`, `Profile` verbosity levels, and `Path Filters` versus `Path-based Instructions`, plus branch and status-check naming across GitHub, GitLab, Bitbucket, Azure DevOps.</description>
+    <description>Definitions of CodeRabbit product terms, Git platform terminology across GitHub, GitLab, Bitbucket, and Azure DevOps, and common code review concepts.</description>
     <source_url>https://docs.coderabbit.ai/reference/glossary</source_url>
     <local_file>reference-glossary.md</local_file>
-    <curated_at>2026-07-27</curated_at>
+    <curated_at>2026-11-07</curated_at>
   </source>
   <source>
     <title>CLI Command Reference</title>
-    <description>Every subcommand and flag, from the `cr` alias and `auth`, `doctor`, `stats`, `skills` to scope flags `--committed`, `--uncommitted`, `--include-untracked`, plus `--agent` NDJSON `finding` events carrying `codegenInstructions`.</description>
+    <description>Reference for CodeRabbit CLI commands and options, generated from the CLI help output.</description>
     <source_url>https://docs.coderabbit.ai/cli/reference</source_url>
     <local_file>cli-reference.md</local_file>
-    <curated_at>2026-07-27</curated_at>
+    <curated_at>2026-11-07</curated_at>
   </source>
 </docs_index>

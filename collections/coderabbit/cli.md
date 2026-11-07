@@ -6,15 +6,7 @@
 
 > Get AI code reviews directly in your CLI before you commit. Catch race conditions, memory leaks, and security vulnerabilities without leaving your development environment.
 
-export const OpenBetaBadge = ({tip = "This feature is currently in open beta. We are actively improving it based on your feedback. If you encounter any issues or have suggestions, please share them on our Discord community or visit the support page.", title = "Open Beta", cta = "Contact support", href = "/support", disabled = false}) => {
-  return <Tooltip tip={tip} cta={cta} href={href}>
-        <Badge icon="badge-alert" disabled={disabled || undefined}>
-            {title}
-        </Badge>
-    </Tooltip>;
-};
-
-<OpenBetaBadge />
+Open Beta (This feature is currently in open beta. We are actively improving it based on your feedback. If you encounter any issues or have suggestions, please share them on our Discord community or visit the support page.)
 
 ## Review local changes
 
@@ -29,113 +21,228 @@ coderabbit review --include-untracked    # Also review files not added to Git
 
 ## Key features
 
-<Card title="Review local changes" icon="code" horizontal>
-  Catch bugs before they reach your repository. CodeRabbit scans committed and uncommitted Git changes for race conditions, null pointer exceptions, and logic errors.
-</Card>
+> [card] Review local changes
+>
+> Catch bugs before they reach your repository. CodeRabbit scans committed and uncommitted Git changes for race conditions, null pointer exceptions, and logic errors.
 
-<Card title="Apply fixes in one step" icon="wand-sparkles" horizontal>
-  Fix simple issues like missing imports or syntax errors instantly. For complex architectural problems, send the full context directly to your AI coding agent.
-</Card>
+> [card] Turn findings into fixes
+>
+> CodeRabbit reports each issue with fix guidance. Apply the change in your editor, or pass structured findings to your AI coding agent to implement it.
 
-<Card title="Context-aware reviews" icon="brain" horizontal>
-  Paid plans unlock reviews powered by your team's codebase history: error handling conventions, architectural patterns, and coding preferences applied automatically to every review.
-</Card>
+> [card] Context-aware reviews
+>
+> Paid plans unlock reviews powered by your team's codebase history: error handling conventions, architectural patterns, and coding preferences applied automatically to every review.
 
-<Card title="Install agent skills" icon="wand-sparkles" href="/cli/skills" horizontal>
-  Run `coderabbit skills` to preview and install or update verified CodeRabbit skills for supported coding agents.
-</Card>
+> [card] [Install agent skills](https://docs.coderabbit.ai/cli/skills.md)
+>
+> Run `coderabbit skills` to preview and install or update verified CodeRabbit skills for supported coding agents.
 
 ## Getting started
 
-<Steps>
-  <Step title="Install CLI">
-    Download and install the CodeRabbit CLI using your preferred method.
+**1. Install CLI**
 
-    <CodeGroup>
-      ```bash Installation script theme={null}
-      curl -fsSL https://cli.coderabbit.ai/install.sh | sh
-      ```
+Install the CLI using your preferred method:
 
-      ```bash Homebrew theme={null}
-      brew install coderabbit
-      ```
-    </CodeGroup>
+> [tab] Install script
+>
+> ```bash theme={null}
+> curl -fsSL https://cli.coderabbit.ai/install.sh | sh
+> ```
+>
+> If `coderabbit` is not available immediately after installation, start a new shell, or run the exact shell-specific reload command printed under **Next steps**. If the install script offers browser sign-in without first asking for a region, EU users should skip it and authenticate later with an explicit `--region eu`.
 
-    After installation, restart your shell or reload your shell configuration:
+> [tab] Homebrew
+>
+> ```bash theme={null}
+> brew install coderabbit
+> ```
+>
+> If `coderabbit` is not available immediately after installation, start a new shell.
 
-    ```bash theme={null}
-    source ~/.zshrc
-    ```
-  </Step>
+> [tab] Windows
+>
+> ```powershell PowerShell theme={null}
+> irm https://cli.coderabbit.ai/install.ps1 | iex
+> ```
+>
+> See [Install CodeRabbit CLI on Windows](https://docs.coderabbit.ai/cli/windows.md) for prerequisites, version pinning, and troubleshooting. If `coderabbit` is not available immediately after installation, open a new PowerShell window.
 
-  <Step title="Authenticate">
-    Link your CodeRabbit account to enable personalized reviews based on your team's patterns.
+**2. Authenticate**
 
-    ```bash theme={null}
-    # cr is the short alias for coderabbit — both work identically
-    cr auth login
-    ```
+Link your CodeRabbit account to enable personalized reviews based on your team's patterns.
 
-    A browser window opens automatically. Sign in to CodeRabbit and the authentication completes in the browser.
+```bash theme={null}
+# US when no region is already saved. cr is the short alias for coderabbit.
+cr auth login
 
-    If your account has access to multiple CodeRabbit organizations, choose your default organization during sign-in. That choice sets the login/default org for browser-based auth, but CLI reviews still resolve the current repository first. You can change the default later with `cr auth org`.
+# EU
+cr auth login --region eu
+```
 
-    If browser sign-in is blocked or unavailable, authenticate with an Agentic API key instead:
+A browser window opens automatically. Sign in to CodeRabbit and the authentication completes in the browser.
 
-    ```bash theme={null}
-    cr auth login --api-key "cr-************"
-    ```
+When no region is specified or saved, login uses the US region. The CLI saves the selected region for future commands, and `cr auth status` displays it. Use `--region us` during login to switch back to US. Self-hosted authentication uses `--self-hosted` instead of a SaaS region.
 
-    API-key authentication uses the key's organization and is also the recommended flow for headless or bot-driven environments. Reviews use the assigned user's plan allowance first, then usage credits only for eligible over-limit reviews when the usage-based add-on is enabled.
-  </Step>
+For browser logins without SSO, choose your default organization during sign-in if your account has access to multiple CodeRabbit organizations. CLI reviews still resolve the current repository first. You can change the default later with `cr auth org`. [SSO logins use workspace billing](#sso-workspace-logins) instead of organization selection.
 
-  <Step title="Review your code">
-    Analyze your Git repository for issues using the CodeRabbit CLI.
+If browser sign-in is blocked or unavailable, authenticate with an Agentic API key instead:
 
-    <Info>
-      **Git repository required**: The CLI must be run from within an initialized Git repository. The `--dir` flag changes the review directory, but that directory must also contain a Git repository.
-    </Info>
+```bash theme={null}
+# US when no region is already saved
+cr auth login --api-key "cr-************"
 
-    ```bash wrap theme={null}
-    cr
-    ```
+# EU
+cr auth login --region eu --api-key "cr-************"
+```
 
-    If your main branch is not `main`, specify your base branch:
+API-key authentication uses the key's organization and is also the recommended flow for headless or bot-driven environments. Reviews use the assigned user's plan allowance first, then usage credits only for eligible over-limit reviews when usage-based reviews are enabled.
 
-    ```bash theme={null}
-    cr --base develop
-    # or for other base branches
-    cr --base master
-    ```
+**3. Review your code**
 
-    CodeRabbit scans the selected Git changes and provides specific feedback with suggested fixes.
-  </Step>
+Analyze your Git repository for issues using the CodeRabbit CLI.
 
-  <Step title="Verify local setup">
-    If setup, authentication, or review startup fails, run the local diagnostics command:
+> [!NOTE]
+>
+> **Local reviews require a Git repository**: Run the CLI from anywhere inside an initialized Git worktree. The `--dir` flag can target a Git worktree or a subdirectory within one. To review without a checkout, use a [remote review](#review-without-a-local-checkout).
 
-    ```bash theme={null}
-    cr doctor
-    ```
+```bash wrap theme={null}
+cr
+```
 
-    The command checks installation, local storage, authentication, Git repository state, and CodeRabbit service connectivity.
-  </Step>
+If your main branch is not `main`, specify your base branch:
 
-  <Step title="Apply suggestions">
-    Review findings in your terminal and either apply quick fixes or send complex issues to your AI coding agent.
-  </Step>
-</Steps>
+```bash theme={null}
+cr --base develop
+# or for other base branches
+cr --base master
+```
+
+To set a default base branch for the repository instead, see [Comparison base](#comparison-base).
+
+CodeRabbit scans the selected Git changes and provides specific feedback with suggested fixes.
+
+**4. Verify local setup**
+
+If setup, authentication, or review startup fails, run the local diagnostics command:
+
+```bash theme={null}
+cr doctor
+```
+
+The command checks installation, local storage, authentication, Git repository state, and CodeRabbit service connectivity.
+
+**5. Apply suggestions**
+
+Review findings in your terminal and either apply quick fixes or send complex issues to your AI coding agent.
+
+## Local review
+
+| Command | Files reviewed |
+| - | - |
+| `cr review` | Tracked changes |
+| `cr review --committed` | Only committed changes |
+| `cr review --uncommitted` | Staged changes and unstaged edits to tracked files |
+| `cr review --include-untracked` | Tracked changes plus non-ignored files not added to Git |
+
+> [!NOTE]
+>
+> New files are included once staged with `git add`. To review them before staging, use `--include-untracked`. You can combine it with `--uncommitted`, but not with `--committed`. Contradictory scope flags, such as `--committed` with `--uncommitted`, are rejected before a review starts.
+
+The default review uses the net changes for the selected Git comparison, so overlapping committed and uncommitted edits are reviewed together. `--committed` reads reviewed file content and automatically discovered configuration from the selected Git snapshot. Explicit `--config` files are read from the filesystem.
+
+Saved context for incremental reviews is reset when the comparison base changes. On upgrade to CLI 0.7.7, checkpoints from earlier versions reset once; the next review establishes a new checkpoint.
+
+> [!NOTE]
+>
+> PR reviews and CLI reviews will differ, even if run on the same code. CLI reviews optimize for immediate feedback during active development, while PR reviews provide comprehensive team collaboration context and broader repository analysis.
+
+### Comparison base
+
+A local review compares your changes with a base branch. The CLI uses the first of these that applies:
+
+1. The branch passed with `--base`. The CLI also saves it as the repository's `coderabbit.baseBranch` Git preference.
+2. In CLI 0.9.1 or later, a single branch listed in [`reviews.auto_review.base_branches`](https://docs.coderabbit.ai/reference/configuration#param-reviews-auto-review-base-branches) in the repository's `.coderabbit.yaml` or `.coderabbit.yml`.
+3. The saved `coderabbit.baseBranch` Git preference.
+4. Automatic detection, starting with the repository's default branch.
+
+To make `develop` the default base for everyone who reviews the repository with the CLI, list it as the only entry:
+
+```yaml .coderabbit.yaml theme={null}
+reviews:
+  auto_review:
+    base_branches:
+      - develop
+```
+
+The configured branch is used only when the list has exactly one entry, the entry is a literal branch name, and the branch exists locally or as `origin/<branch>`. The setting accepts regular expressions, so an entry that contains a regular-expression character, such as `.` in `release/1.0` or `*`, counts as a pattern. A list with several entries or a pattern is skipped. If a literal branch can't be found, the CLI logs a warning and moves on to the saved preference and automatic detection. A branch from the configuration is never saved as the Git preference, so removing the entry restores the previous selection. The same setting also selects which base branches, besides the default branch, get automatic pull request reviews. For pull requests, each entry is an unanchored regular expression, so `develop` also selects pull requests that target `develop-2`. Anchoring the entry as `^develop$` would make it a pattern, which the CLI skips.
+
+The CLI reads this setting from the working tree, so an uncommitted edit applies, also to `--committed` reviews. It uses the first `.coderabbit.yaml` or `.coderabbit.yml` it finds in the review directory, then in the Git repository root.
+
+`cr review findings` and `cr review findings --clear` choose the base branch in the same order, so pass the same `--base` that you used for the review to show or clear its findings. These commands don't save the branch as a preference.
+
+## Review without a local checkout
+
+With CLI 0.7.7 or later, review an installed GitHub repository from any directory:
+
+```bash theme={null}
+cr review --remote owner/repo --base main --source-branch feature
+```
+
+`--remote` accepts `owner/repo` or a GitHub HTTPS repository URL. Both `--base` and `--source-branch` are required. The source must be a branch name or a full 40-character commit SHA; source tags are unsupported. The server compares the source with the merge base and reads repository content at the resolved source commit, without uploading local files. Add `--agent` for structured output.
+
+Remote reviews require GitHub Cloud, a repository installed in the active CodeRabbit organization, and browser-based CodeRabbit SaaS authentication or an Agentic API key. Private repositories also require the authenticated user's repository read access. GitHub Enterprise, self-hosted CodeRabbit, and other providers are unsupported.
+
+Comparisons with 300 or more changed files are rejected because the provider response may be incomplete. Narrow the branch comparison before retrying. Remote reviews cannot be combined with local selectors such as `--dir`, `--committed`, `--uncommitted`, `--include-untracked`, or `--base-commit`, or with `--show-prompts`.
+
+The server reads configuration from the reviewed repository; local `--config` files are ignored. Remote findings appear in the existing plain or agent output stream, without locally generated diff snippets or local findings history. For agent output, `review_context` includes `remote`, `currentBranch`, and `baseBranch` and omits `workingDirectory`. See [agent mode output](https://docs.coderabbit.ai/cli/agent-mode.md).
+
+## Configure your repository
+
+With CLI 0.7.7 or later, run guided setup in an interactive terminal inside your Git repository:
+
+```bash theme={null}
+cr config
+cr config --detailed
+```
+
+Standard setup creates or updates the review style. Manual setup, also available with `--detailed`, lets you configure review style and [path instructions](https://docs.coderabbit.ai/configuration/path-instructions.md). The command creates `.coderabbit.yaml` at the repository root, or updates an existing `.coderabbit.yaml` or `.coderabbit.yml`. It validates against the current official schema, previews the changes, and asks before saving. Existing settings are preserved unless you choose to change them. Commit and push the configuration through your normal workflow to use it for pull request reviews.
+
+If both YAML filenames exist, resolve the duplicate before setup. Guided setup also refuses to replace a symbolic link, override a TypeScript-only configuration with YAML, or edit a file that delegates through `remote_config`; update the existing configuration source instead. To check a YAML file in your browser, use the [interactive YAML validator](https://docs.coderabbit.ai/configuration/yaml-validator.md).
+
+### Agent-guided setup
+
+Use structured output to inspect configuration or prepare a Standard proposal without writing files:
+
+```bash theme={null}
+cr config --agent
+cr config --agent --generate
+cr config --agent --generate --profile assertive
+```
+
+`--agent` returns the active configuration, whether it can be edited, and its content hash as `baseHash`. Adding `--generate` returns a validated proposal with `before` and `after` YAML. Supported profiles are `chill`, `quiet`, `assertive`, and `default`; `default` removes the explicit profile setting. These commands do not save the proposal.
+
+### Configuration discovery during local reviews
+
+Without explicit `--config` files, local reviews look for `.coderabbit.yaml`, `.coderabbit.yml`, `coderabbit.yaml`, `coderabbit.yml`, then `.coderabbit.config.ts`, in that order. For each filename, the CLI checks the review directory before the Git repository root and uses the first readable match. YAML therefore takes precedence over TypeScript.
+
+TypeScript discovery requires CLI 0.7.7 or later. Guided YAML setup does not evaluate or edit `.coderabbit.config.ts`. See the [configuration overview](https://docs.coderabbit.ai/guides/configuration-overview.md) for repository settings.
+
+## Continue local work in the cloud
+
+Use `cr code` to start and follow cloud Coding Agent tasks from your terminal, hand off a local agent session to a new task, and upload local skills. See [continue a local session in the cloud](https://docs.coderabbit.ai/cli/cloud-tasks.md#continue-a-local-session-in-the-cloud), [import local skills](https://docs.coderabbit.ai/cli/cloud-tasks.md#import-local-skills), and [Run Coding Agent tasks from the CLI](https://docs.coderabbit.ai/cli/cloud-tasks.md).
 
 ## Organization selection
 
-The active CodeRabbit organization is the login/default org for browser-based CLI auth. It is used when the current repository resolves to that org, but it is not a silent billing fallback for unrelated local repositories.
+For browser logins without SSO, the active CodeRabbit organization is the login/default org. It is used when the current repository resolves to that org, but it is not a silent billing fallback for unrelated local repositories. For SSO, see [SSO workspace logins](#sso-workspace-logins).
 
-During a review, CodeRabbit resolves the current repository first:
+During a local review, CodeRabbit resolves the current repository first:
 
 * If the repository matches the selected org, the review uses that org.
 * If the repository matches a different org you can access, CodeRabbit switches attribution to that org.
 * If the repository matches an installed public repo but you do not have access to the owning org, the review uses OSS behavior.
 * If the repository cannot be matched to an installed accessible repo, the CLI falls back to limited/free review behavior until CodeRabbit is installed for that repo or org.
+
+Remote reviews require the target repository to be installed in the active organization. They do not use the local repository fallback described above.
 
 To change organizations later, run:
 
@@ -143,24 +250,63 @@ To change organizations later, run:
 cr auth org
 ```
 
-`cr auth org` opens sign-in automatically if your local session is missing or expired. Organization switching is not available for self-hosted mode or API key authentication.
+`cr auth org` requires an active browser-based login. If your local session is missing or expired, run `cr auth login` first, then run `cr auth org` again. Organization switching is not available for workspace-based SSO, self-hosted mode, or API key authentication.
+
+### SSO workspace logins
+
+Starting with CLI 0.8.0, signing in through SSO binds review billing to your SSO workspace. You do not select a default organization, even if your account belongs to several organizations. Repository access and review configuration still depend on the repository being reviewed.
+
+`cr auth org` reports that reviews are billed to the SSO workspace and there is no organization to select. This is expected; no organization switch is needed.
+
+`cr auth status` shows `Billing: workspace ... (SSO)` and `Default: workspace/<username>`. This output omits the `Plan` and `Seat` lines, so it does not confirm or deny a seat or mean that you are on the Free plan. Check [seat assignment](https://docs.coderabbit.ai/management/seat-assignment.md) in the dashboard. `Provider: GitHub` names the Git provider and can appear after either SSO or GitHub OAuth login.
+
+### Older SSO login output
+
+CLI versions before 0.8.0 can show an organization, plan, and seat after a genuine SSO login. That output alone does not mean you chose GitHub OAuth. To use workspace-based SSO, update the CLI and sign in again:
+
+```bash theme={null}
+cr --version
+cr update
+cr --version
+cr auth logout
+cr auth login
+cr auth status
+```
+
+For Homebrew installations, use `brew upgrade coderabbit` instead of `cr update`. For an EU-hosted account, use `cr auth login --region eu`. Choose your organization's SSO option in the browser. After signing in, check for the workspace billing line in `cr auth status`.
 
 ## Review modes
 
-The CLI uses plain-text, human-readable output by default, with agent output and an optional lighter policy also available:
+The CLI uses plain-text, human-readable output by default, with agent output and an optional deeper review also available:
 
 ```bash theme={null}
 # Default mode - detailed plain-text feedback with fix suggestions
 coderabbit review
 
-# Agent mode - structured JSON output for Skills and agent integrations
+# Agent mode - NDJSON output (one JSON object per line) for Skills and agent integrations
 cr --agent
 
-# Faster local review policy
-cr review --light
+# Deeper review using the GitHub PR review policy
+cr review --deep
 ```
 
-The default plain-text mode displays a finding count and severity summary at the end of each run. No output flag is required. If the CLI detects a known agent environment, it suggests re-running with `--agent` for structured JSON output.
+`--deep` is available in CLI 0.8.0 or later with a compatible CodeRabbit server. It uses the same review capability policy as GitHub Pull Request Reviews and keeps your existing CLI limits and billing. Repository settings, plan access, and available context still apply. It does not attach your changes to an existing pull request or fetch its description and discussions, so findings can differ. Self-hosted installations must update the server before using this flag. You can combine `--deep` with `--agent`.
+
+The default plain-text mode displays a finding count and severity summary at the end of each run. No output flag is required. If the CLI detects a known agent environment, it suggests re-running with `--agent` for NDJSON output, which writes one JSON object per line.
+
+## Usage-based reviews and consent
+
+When an organization sets usage-based reviews to the **On demand** [continuation mode](https://docs.coderabbit.ai/management/usage-based-addon.md#pr-review-behavior) and the included review limit is reached, CodeRabbit shows the number of billable files and the maximum review price before starting paid work. See [usage-based review pricing](https://docs.coderabbit.ai/management/usage-based-addon.md#pricing) for rates. Only developers with an assigned seat can authorize them. This self-serve launch excludes Enterprise organizations.
+
+In an interactive terminal, confirm the price prompt to run that one review with usage credits. You can also give explicit consent when starting the review:
+
+```bash theme={null}
+coderabbit review --use-credits
+```
+
+The consent applies only to the current review content. If the content changes or you start another review, CodeRabbit requires confirmation again. A normal `coderabbit review` command never creates a charge in `on_demand` mode without this confirmation.
+
+In headless or agent mode, CodeRabbit never waits for or assumes confirmation. Instead, it returns a structured `action_required` result with `status: "awaiting_confirmation"`, the billable file count, maximum price, `confirmationHeadCommitId` content identity, and the explicit `coderabbit review --use-credits` command. Automation can inspect that result and decide whether to start a new authorized review.
 
 ## Diagnostics
 
@@ -192,6 +338,18 @@ cr stats
 cr stats --rebuild
 ```
 
+## Check your usage
+
+Run `cr usage` inside a repository to show available included reviews, the rolling quota window, and when capacity returns if the quota is exhausted. The report also shows your review count, usage-billing status, and, when available, spend and the reset date for the current billing period. `cr review --usage` and `cr --usage` are aliases that show the same report instead of starting a review.
+
+Add `--agent` to any of these forms for structured output. Availability is a snapshot, not a reservation. If quota cannot be verified, the report marks it unavailable while retaining any successful billing result.
+
+In CLI 0.9.1 or later, the agent output also reports the organization's shared review spending cap (`billingPeriod.reviewSpendingCap`) and two separate credit balances: prepaid Reviews credits (`reviewCredits.prepaid`) and legacy CLI credits (`reviewCredits.legacyCli`). The CLI reads them through the same permission checks as the **Subscription and Billing** page, so the shared balances require the `subscription:read` permission that the Admin and Billing Admin [roles](https://docs.coderabbit.ai/management/roles.md) include. Members without it still see their own usage, with the balances marked unavailable.
+
+Each balance has a `state` of `available` or `unavailable`. An unavailable balance includes a `reason`: `forbidden` without the permission, `api_key` for API-key authentication, `not_available` when the subscription has no prepaid credits or can't be read, and `lookup_failed` when the lookup failed or the server is too old to report the balance. Balances are snapshots. They don't authorize spending, reserve credits, or guarantee that a review can run. The human-readable report doesn't include them.
+
+The usage command requires authentication and is not available for self-hosted logins.
+
 ## Working with review results
 
 CodeRabbit analyzes your code and surfaces specific issues with actionable suggestions. Each finding includes the problem location, explanation, and recommended fix.
@@ -215,44 +373,68 @@ For AI agent integration, see the [AI agent integration](#ai-agent-integration) 
 
 ### Replay stored findings
 
-Run `cr review findings` to re-read the results from the most recent local review without re-running the full analysis. This is useful in multi-step agent loops where a downstream step needs to consume results from a prior review.
+Run `cr review findings` to read results from the most recent local review that produced findings, without re-running the analysis. The command shows the most recent local session that contains findings for the current review directory, branch, and base branch. An empty review can still show a reminder about earlier findings; that reminder does not mean the latest review found new issues. Up to ten sessions are retained per scope, with no time-based expiry. Remote reviews do not store findings locally.
+
+#### Clear stored findings
+
+> [!NOTE]
+>
+> Clearing stored findings requires CLI 0.7.7 or later. Run `cr update` to update.
+
+After fixing or rejecting earlier findings, clear them with:
+
+```bash theme={null}
+cr review findings --clear
+cr review findings --clear --dir src
+```
+
+`--clear` dismisses findings from every retained session in the selected scope. Other repositories, branches, base branches, and review directories are unchanged. A review run with `--dir src` has a separate scope from a whole-repository review.
+
+The command runs without a confirmation prompt and prints the review directory, current branch, and base branch it affected. Findings are dismissed, not deleted; incremental review state is preserved. Cleared findings stop appearing in both `cr review findings` and the zero-finding reminder. Repeating the command is safe, and future reviews can report new findings normally.
+
+If some findings cannot be updated, the command reports the affected scope and counts, then exits with code `1`. Successfully dismissed findings remain dismissed; retry after correcting the local storage permissions.
 
 ### Inspect AI prompts
 
-Run `cr review --show-prompts` to print the AI prompts saved from the most recent local review without triggering a new review. Useful for tuning `--config` instructions or understanding why the model flagged a particular finding.
+Run `cr review --show-prompts` to print the AI prompts saved from the most recent local review without triggering a new review. Useful for tuning `--config` instructions or understanding why the model flagged a particular finding. `--show-prompts` cannot be combined with `--agent`.
 
 ## AI agent integration
 
 CodeRabbit detects the problems, then your AI coding agent implements the fixes.
 
-<Info>
-  **Claude Code users**: Claude Code now supports CodeRabbit through a native
-  plugin. See the [Claude Code integration guide](/cli/claude-code-integration)
-  for the recommended plugin-based setup using `/coderabbit:review` instead of
-  the CLI commands shown below.
-</Info>
+> [!NOTE]
+>
+> **Claude Code users**: Claude Code now supports CodeRabbit through a native plugin. See the [Claude Code integration guide](https://docs.coderabbit.ai/cli/claude-code-integration.md) for the recommended plugin-based setup using `/coderabbit:coderabbit-review` instead of the CLI commands shown below.
 
 ### Integration guides
 
 See detailed workflows for AI coding agents and workflows:
 
-<Card title="CodeRabbit Skills" icon="wand-sparkles" href="/cli/skills" horizontal>
-  Run `coderabbit skills` to install agent-native Skills and trigger reviews with an explicit request such as "Run a CodeRabbit review."
-</Card>
+> [card] [CodeRabbit Skills](https://docs.coderabbit.ai/cli/skills.md)
+>
+> Run `coderabbit skills` to install agent-native Skills and trigger reviews with an explicit request such as "Run a CodeRabbit review."
 
-<CardGroup cols={2}>
-  <Card title="Claude Code integration" icon="bot" href="/cli/claude-code-integration">
-    Automated workflow with background execution and task-based fixes
-  </Card>
+> [card] [Antigravity integration](https://docs.coderabbit.ai/cli/antigravity.md)
+>
+> Install the CodeRabbit plugin in Antigravity so its agent reviews and fixes your changes.
 
-  <Card title="Codex integration" icon="terminal" href="/cli/codex-integration">
-    Integrated code review and fix implementation with Codex CLI
-  </Card>
-</CardGroup>
+> [card] [Claude Code integration](https://docs.coderabbit.ai/cli/claude-code-integration.md)
+>
+> Automated workflow with background execution and task-based fixes
 
-<Card title="Headless CLI integration" icon="workflow" href="/cli/headless-cli-integration" horizontal>
-  Authenticate CodeRabbit non-interactively in GitHub Actions and other bot-driven automation
-</Card>
+> [card] [Codex integration](https://docs.coderabbit.ai/cli/codex-integration.md)
+>
+> Integrated code review and fix implementation with Codex CLI
+
+> [card] [Cursor integration](https://docs.coderabbit.ai/cli/cursor-integration.md)
+>
+> Install the CodeRabbit plugin so Cursor Agent routes review requests to CodeRabbit
+
+> [card] [Headless CLI integration](https://docs.coderabbit.ai/cli/headless-cli-integration.md)
+>
+> Authenticate CodeRabbit non-interactively in GitHub Actions and other bot-driven automation
+
+For the structure of `--agent` output and the exit codes your agent should check, see [agent mode output and exit codes](https://docs.coderabbit.ai/cli/agent-mode.md). To make a review exit with code `2` when it reports findings at or above a severity, such as `cr review --agent --gate major`, see [Gate a review on finding severity](https://docs.coderabbit.ai/cli/agent-mode.md#gate-a-review-on-finding-severity).
 
 ### Example prompt for your AI agent
 
@@ -266,140 +448,184 @@ Please implement phase 7.3 of the planning doc and then run cr --agent, let it r
 
 Breaking down what makes an effective CodeRabbit + AI agent workflow:
 
-<AccordionGroup>
-  <Accordion title="1. Run CodeRabbit CLI">
-    Tell your AI agent to run CodeRabbit with the `--agent` flag:
+> [accordion] 1. Run CodeRabbit CLI
+>
+> Tell your AI agent to run CodeRabbit with the `--agent` flag:
+>
+> ```bash theme={null}
+> cr --agent
+> ```
+>
+> You can also specify a review scope or base branch:
+>
+> ```bash theme={null}
+> # Review staged and tracked local edits
+> cr review --agent --uncommitted
+>
+> # With specific base branch
+> cr --agent --base develop
+> ```
 
-    ```bash theme={null}
-    cr --agent
-    ```
+> [accordion] 2. Run in the background
+>
+> CodeRabbit reviews can take 7-30+ minutes depending on the scope of changes. Instruct your AI agent to run CodeRabbit in the background and set up a timer to check periodically:
+>
+> ```text Prompt wrap theme={null}
+> Run cr review --agent --uncommitted in the background, let it take as long as it needs, and check on it periodically.
+> ```
 
-    You can also specify a review scope or base branch:
+> [accordion] 3. Evaluate and implement fixes
+>
+> Once CodeRabbit completes, have your AI agent evaluate the findings and prioritize:
+>
+> ```text Prompt wrap theme={null}
+> Evaluate the fixes and considerations. Fix major issues only, or fix any critical issues and ignore the nits.
+> ```
+>
+> This keeps your agent focused on meaningful improvements rather than minor style issues. If the `complete` event has `status: "review_skipped"`, there were no file changes in scope.
 
-    ```bash theme={null}
-    # Review staged and tracked local edits
-    cr review --agent --uncommitted
+> [accordion] 4. Verify with a second pass
+>
+> Run CodeRabbit one more time to ensure fixes didn't introduce new issues:
+>
+> ```text Prompt wrap theme={null}
+> Once those changes are implemented, run cr --agent one more time to make sure we addressed all the critical issues and didn't introduce any additional bugs.
+> ```
 
-    # With specific base branch
-    cr --agent --base develop
-    ```
-  </Accordion>
-
-  <Accordion title="2. Run in the background">
-    CodeRabbit reviews can take 7-30+ minutes depending on the scope of changes. Instruct your AI agent to run CodeRabbit in the background and set up a timer to check periodically:
-
-    ```text Prompt wrap theme={null}
-    Run cr review --agent --uncommitted in the background, let it take as long as it needs, and check on it periodically.
-    ```
-  </Accordion>
-
-  <Accordion title="3. Evaluate and implement fixes">
-    Once CodeRabbit completes, have your AI agent evaluate the findings and prioritize:
-
-    ```text Prompt wrap theme={null}
-    Evaluate the fixes and considerations. Fix major issues only, or fix any critical issues and ignore the nits.
-    ```
-
-    This keeps your agent focused on meaningful improvements rather than minor style issues. If the `complete` event has `status: "review_skipped"`, there were no file changes in scope.
-  </Accordion>
-
-  <Accordion title="4. Verify with a second pass">
-    Run CodeRabbit one more time to ensure fixes didn't introduce new issues:
-
-    ```text Prompt wrap theme={null}
-    Once those changes are implemented, run cr --agent one more time to make sure we addressed all the critical issues and didn't introduce any additional bugs.
-    ```
-  </Accordion>
-
-  <Accordion title="5. Set loop limits">
-    Prevent infinite iteration by setting clear completion criteria:
-
-    ```text Prompt wrap theme={null}
-    Only run the loop twice. If on the second run you don't find any critical issues, ignore the nits and you're complete. Give me a summary of everything that was completed and why.
-    ```
-
-    This ensures your AI agent completes the task efficiently and provides a clear report.
-  </Accordion>
-</AccordionGroup>
+> [accordion] 5. Set loop limits
+>
+> Prevent infinite iteration by setting clear completion criteria:
+>
+> ```text Prompt wrap theme={null}
+> Only run the loop twice. If on the second run you don't find any critical issues, ignore the nits and you're complete. Give me a summary of everything that was completed and why.
+> ```
+>
+> This ensures your AI agent completes the task efficiently and provides a clear report.
 
 ## Pricing and capabilities
 
-See the [rate limits table on the Plans and pricing page](/management/plans#rate-limits) for current per-plan limits. To increase the limits, consider upgrading your plan or using the [Usage-based Add-on](#cli-with-usage-based-add-on).
+See the [rate limits table on the Plans and pricing page](https://docs.coderabbit.ai/management/plans.md#rate-limits) for current per-plan limits. To increase the limits, consider upgrading your plan or using [usage-based reviews](#cli-with-usage-based-add-on).
 
-<CardGroup cols={1}>
-  <Card title="Free tier" icon="heart">
-    Basic static analysis with limited daily usage. Catches syntax errors, logic issues, and security vulnerabilities. Eligible Free users may see a Pro+ trial prompt after sign-in or when a CLI review reaches the rate limit.
-  </Card>
+> [card] Free tier
+>
+> Basic static analysis with limited daily usage. Catches syntax errors, logic issues, and security vulnerabilities. Eligible Free users may see an Advanced trial prompt after sign-in or when a CLI review reaches the rate limit.
 
-  <Card title="Paid plans" icon="crown">
-    Enhanced reviews powered by learnings from your CodeRabbit organization plus higher rate limits and more files per review. Paid users reviewing repositories connected to that organization get:
+> [card] Paid plans
+>
+> Enhanced reviews powered by learnings from your CodeRabbit organization plus higher rate limits and more files per review. Paid users reviewing repositories connected to that organization get:
+>
+> * **Learnings-powered reviews**: Remembers your team's preferred patterns for error handling, state management, and architecture
+> * **Full contextual analysis**: Understands your imports, dependencies, and project structure
+> * **Team standards enforcement**: Applies your documented coding guidelines automatically
+> * **Advanced issue detection**: Spots subtle race conditions, performance bottlenecks, and security vulnerabilities
 
-    * **Learnings-powered reviews**: Remembers your team's preferred patterns for error handling, state management, and architecture
-    * **Full contextual analysis**: Understands your imports, dependencies, and project structure
-    * **Team standards enforcement**: Applies your documented coding guidelines automatically
-    * **Advanced issue detection**: Spots subtle race conditions, performance bottlenecks, and security vulnerabilities
-  </Card>
-
-  <Card title="Usage-based Add-On (Pay-as-you-Go)" icon="badge-dollar-sign">
-    Continues eligible CodeRabbit CLI reviews after rate limits
-
-    * Assigned-seat users use their plan allowance first
-    * Credits are charged only for eligible over-limit reviews
-    * Full control over usage and scaling through the dashboard
-    * Flexible purchase options (one-time & monthly subscription)
-  </Card>
-</CardGroup>
+> [card] Usage-based reviews (pay-as-you-go)
+>
+> Continues eligible CodeRabbit CLI reviews after rate limits
+>
+> * Assigned-seat users use their plan allowance first
+> * Usage is billed only for eligible over-limit reviews
+> * Full control over usage and spending caps through the dashboard
+> * Usage-based billing — each over-limit file is added to your monthly invoice
 
 Contact [sales@coderabbit.ai](mailto:sales@coderabbit.ai) for custom rate limits or enterprise needs.
 
-## CLI with Usage-based Add-on
+## CLI with usage-based reviews
 
-The usage-based add-on lets eligible CodeRabbit CLI reviews continue after the applicable review limit is reached. Authenticated CLI and agentic API-key reviews use the assigned user's plan allowance first. Credits are charged only when a review continues over that limit. Each reviewed file in the over-limit review costs **\$0.25** in credits. You can purchase credits as a one-time top-up or a recurring monthly subscription from the [Subscription and Billing](https://app.coderabbit.ai/settings/subscription) dashboard.
+Usage-based reviews let eligible CodeRabbit CLI reviews continue after the applicable review limit is reached. Authenticated CLI and agentic API-key reviews use the assigned user's plan allowance first. Usage is billed only when a review continues over that limit. See [usage-based review pricing](https://docs.coderabbit.ai/management/usage-based-addon.md#pricing) for per-file rates. Usage is added to your monthly invoice. Enable pay-as-you-go and set a spending cap from the Subscription and Billing dashboard for [US](https://app.coderabbit.ai/settings/subscription) or [EU](https://app.eu.coderabbit.ai/settings/subscription). This self-serve launch excludes Enterprise organizations.
 
-<Steps>
-  <Step title="Enable the add-on and buy credits">
-    Go to **[Subscription and Billing](https://app.coderabbit.ai/settings/subscription)** and open the **Usage-based add-on** tab to enable pay-as-you-go and purchase credits.
+**1. Enable the add-on**
 
-    For full setup details, see [Manage your subscription](/management/usage-based-addon).
-  </Step>
+Go to **Subscription and Billing** for [US](https://app.coderabbit.ai/settings/subscription) or [EU](https://app.eu.coderabbit.ai/settings/subscription), then open the **Usage-based add-on** tab to turn on pay-as-you-go and set a spending cap.
 
-  <Step title="Create an Agentic API key">
-    Navigate to the [API Keys](https://app.coderabbit.ai/settings/api-keys) section and generate your **Agentic API key**. The key should be used by a user with an assigned CodeRabbit seat so CLI reviews can use the seat allowance first and usage credits only after the review is rate-limited.
-  </Step>
+For full setup details, see [Manage your subscription](https://docs.coderabbit.ai/management/usage-based-addon.md).
 
-  <Step title="Authenticate with your API key">
-    You can pass `--api-key KEY` to any command directly, but if you plan to make multiple calls, it is more convenient to authenticate once with your CodeRabbit API key:
+**2. Create an Agentic API key**
 
-    ```bash theme={null}
-    coderabbit auth login --api-key "cr-************"
-    ```
+Navigate to **API Keys** for [US](https://app.coderabbit.ai/settings/api-keys) or [EU](https://app.eu.coderabbit.ai/settings/api-keys), then generate your **Agentic API key**. The key should be used by a user with an assigned CodeRabbit seat so CLI reviews can use the seat allowance first and usage billing only after the review is rate-limited.
 
-    For GitHub Actions and other non-interactive environments, see [Headless CLI integration](/cli/headless-cli-integration).
-  </Step>
+**3. Authenticate with your API key**
 
-  <Step title="Run a CodeRabbit review">
-    After logging in, prompt your agent to run a CodeRabbit CLI review without passing the API key again:
+You can pass `--api-key KEY` to a review directly, but if you plan to make multiple calls, it is more convenient to authenticate once with your CodeRabbit API key:
 
-    ```bash theme={null}
-    coderabbit review
-    ```
+```bash theme={null}
+# US when no region is already saved
+coderabbit auth login --api-key "cr-************"
 
-    If plan allowance is available, no usage credits are consumed. If the review is rate-limited, the add-on can continue the review only when pay-as-you-go is enabled, credits are available, and the review is attributed to an assigned-seat user.
-  </Step>
-</Steps>
+# EU
+coderabbit auth login --region eu --api-key "cr-************"
+```
+
+For GitHub Actions and other non-interactive environments, see [Headless CLI integration](https://docs.coderabbit.ai/cli/headless-cli-integration.md).
+
+**4. Run a CodeRabbit review**
+
+After logging in, prompt your agent to run a CodeRabbit CLI review without passing the API key again:
+
+```bash theme={null}
+coderabbit review
+```
+
+If plan allowance is available, no usage is billed. If the review is rate-limited, usage-based reviews can continue the review only when pay-as-you-go is enabled, remaining spending capacity is available, and the review is attributed to an assigned-seat user.
+
+## Update the CLI
+
+Run `cr update` for an installation made with the install script. For Homebrew installations, run `brew upgrade coderabbit`. See [Windows updates](https://docs.coderabbit.ai/cli/windows.md#update-coderabbit-cli) for the native Windows installer.
+
+On Linux, the install script and CLI 0.9.0 or later verify a signed release manifest before installing a stable release. A failed check leaves the installed CLI unchanged. Updating an older CLI to 0.9.0 uses that older updater; signed-manifest verification starts with subsequent updates.
+
+The Linux install script requires `openssl` and a release with a signed manifest, available from 0.9.0. Set `CODERABBIT_VERSION` to a plain `X.Y.Z` version without a leading `v`. A mirror configured through `CODERABBIT_DOWNLOAD_URL` must also serve `SHA256SUMS.sig` and `VERSION` alongside the archives and checksums.
+
+CLI 0.9.0 fixes access-token refresh for GitLab, Bitbucket, and Azure DevOps. If authentication errors continue after updating, run `cr auth login` again.
+
+## Shell completion
+
+With CLI 0.9.0 or later, `cr completion <shell>` prints a completion script for `bash`, `zsh`, `fish`, or `powershell`. The script completes commands and options for both `coderabbit` and `cr`. It also completes the IDs of the tasks that this computer listed or opened with `cr code`, and file names for options and arguments that take a path. A Tab press makes no network call.
+
+To turn on completion, add the line for your shell to its startup file:
+
+```bash Bash theme={null}
+# Add to ~/.bashrc
+eval "$(coderabbit completion bash)"
+```
+
+```bash Zsh theme={null}
+# Add to ~/.zshrc, after compinit
+eval "$(coderabbit completion zsh)"
+```
+
+```bash Fish theme={null}
+# Add to ~/.config/fish/config.fish
+coderabbit completion fish | source
+```
+
+```powershell PowerShell theme={null}
+# Add to $PROFILE
+coderabbit completion powershell | Out-String | Invoke-Expression
+```
+
+The Bash script does not need the `bash-completion` package, and it works with Bash 3.2.
 
 ## Command reference
 
-See the [CLI Command Reference](/cli/reference) for a complete list of commands and options.
+See the [CLI Command Reference](https://docs.coderabbit.ai/cli/reference.md) for command and option details, and [agent mode output and exit codes](https://docs.coderabbit.ai/cli/agent-mode.md) for machine-readable output.
 
 ## Uninstall
 
 Remove CodeRabbit CLI based on how you installed it.
 
 ```bash If installed using install script theme={null}
-rm $(which coderabbit)
+install_dir="${CODERABBIT_INSTALL_DIR:-$HOME/.local/bin}"
+rm -f "$install_dir/coderabbit" "$install_dir/cr"
 ```
+
+> [!WARNING]
+>
+> If you installed to a custom directory, set `CODERABBIT_INSTALL_DIR` to that same path before running the commands above. If the install script added its install directory to your `PATH`, remove the adjacent `# Added by CodeRabbit CLI installer` comment and PATH line from the shell profile named by the installer only when no other installed tools depend on that directory. Then start a new shell.
 
 ```bash If installed using Homebrew theme={null}
 brew remove coderabbit
 ```
+
+
+This documentation is built and hosted on [Mintlify](https://mintlify.com), a developer documentation platform.

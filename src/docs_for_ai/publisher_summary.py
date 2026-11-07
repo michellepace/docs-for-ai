@@ -8,6 +8,7 @@ from docs_for_ai.direct_fetch import split_frontmatter
 TRUSTED_SUMMARY_SITES = (
     "https://claude.com/docs/",
     "https://code.claude.com/docs/",
+    "https://docs.coderabbit.ai/",
     "https://platform.claude.com/docs/",
     "https://vercel.com/docs/",
     "https://vercel.com/kb/",

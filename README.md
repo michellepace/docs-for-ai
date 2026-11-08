@@ -108,7 +108,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | :--------- | :--------------- | :---------- | :------ | :----- |
 | 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-11-02 | [Official](https://biomejs.dev) |
 | 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-11-03 | [Official](https://claude.com/docs/) |
-| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-11-04 | [Official](https://code.claude.com/docs/) |
+| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-11-08 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-11-03 | [Official](https://platform.claude.com/docs/) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
 | 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-11-07 | [Official](https://docs.coderabbit.ai) |

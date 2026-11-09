@@ -3,6 +3,6 @@
 Curated docs for targeted AI context.
 
 - Curation Index: [INDEX.xml](INDEX.xml)
-- Curation Source: https://github.com/pmndrs/zustand/tree/main/docs
+- Curation Source: https://zustand.docs.pmnd.rs
 
-**What is Zustand?** A lightweight state management library for React applications that uses a hook-based API to create and consume state without requiring context providers. You define stores containing both state and actions, then bind components using selectors that trigger re-renders only when the selected state changes. The library handles common React pitfalls like zombie children and concurrency issues, and supports middleware for persistence, debugging, and immutable state updates.
+**What is Zustand?** A small, fast state management library for React. A store holds state and the actions that change it; components subscribe through hooks and re-render only when the slice they select changes. In Next.js, each request gets its own vanilla store (`createStore`), shared with client components through React context. Middleware adds persistence to storage, browser devtools debugging and Immer-style updates.

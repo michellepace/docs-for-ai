@@ -1,7 +1,4 @@
----
-title: Practice with no store actions
-nav: 5
----
+# Practice with no store actions
 
 The recommended usage is to colocate actions and states within the store (let your actions be located together with your state).
 
@@ -18,7 +15,7 @@ export const useBoundStore = create((set) => ({
 
 This creates a self-contained store with data and actions together.
 
----
+***
 
 An alternative approach is to define actions at module level, external to the store.
 
@@ -28,8 +25,7 @@ export const useBoundStore = create(() => ({
   text: 'hello',
 }))
 
-export const inc = () =>
-  useBoundStore.setState((state) => ({ count: state.count + 1 }))
+export const inc = () => useBoundStore.setState((state) => ({ count: state.count + 1 }))
 
 export const setText = (text) => useBoundStore.setState({ text })
 ```

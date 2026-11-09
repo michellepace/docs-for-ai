@@ -127,7 +127,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager (Astral) | 2026-11-03 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-11-03 | [Official](https://vercel.com) |
 | 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2026-11-06 | [Official](https://vitest.dev) |
-| 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-11-03 | [Official](https://zustand.docs.pmnd.rs) |
+| 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-11-09 | [Official](https://zustand.docs.pmnd.rs) |
 
 ---
 

@@ -1,7 +1,4 @@
----
-title: Advanced TypeScript Guide
-nav: 13
----
+# Advanced TypeScript Guide
 
 ## Basic usage
 
@@ -112,12 +109,8 @@ Here, `T` is inferred to be a `string` and `E` is inferred to be `unknown`. You 
 
 ```ts
 declare const withError: {
-  <E>(): <T>(
-    p: Promise<T>,
-  ) => Promise<[error: undefined, value: T] | [error: E, value: undefined]>
-  <T, E>(
-    p: Promise<T>,
-  ): Promise<[error: undefined, value: T] | [error: E, value: undefined]>
+  <E>(): <T>(p: Promise<T>) => Promise<[error: undefined, value: T] | [error: E, value: undefined]>
+  <T, E>(p: Promise<T>): Promise<[error: undefined, value: T] | [error: E, value: undefined]>
 }
 declare const doSomething: () => Promise<string>
 interface Foo {
@@ -253,9 +246,7 @@ If the value of the `replace` flag is not known at compile time and is determine
 
 ```ts
 const replaceFlag = Math.random() > 0.5
-const args = [{ bears: 5 }, replaceFlag] as Parameters<
-  typeof useBearStore.setState
->
+const args = [{ bears: 5 }, replaceFlag] as Parameters<typeof useBearStore.setState>
 store.setState(...args)
 ```
 
@@ -275,9 +266,7 @@ const useBearStore = create<BearState>()((set) => ({
 }))
 
 const replaceFlag = Math.random() > 0.5
-const args = [{ bears: 5 }, replaceFlag] as Parameters<
-  typeof useBearStore.setState
->
+const args = [{ bears: 5 }, replaceFlag] as Parameters<typeof useBearStore.setState>
 useBearStore.setState(...args) // Using the workaround
 ```
 
@@ -299,10 +288,7 @@ type Logger = <
   name?: string,
 ) => StateCreator<T, Mps, Mcs>
 
-type LoggerImpl = <T>(
-  f: StateCreator<T, [], []>,
-  name?: string,
-) => StateCreator<T, [], []>
+type LoggerImpl = <T>(f: StateCreator<T, [], []>, name?: string) => StateCreator<T, [], []>
 
 const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
   const loggedSet: typeof set = (...a) => {
@@ -336,13 +322,7 @@ const useBearStore = create<BearState>()(
 ### Middleware that changes the store type
 
 ```ts
-import {
-  create,
-  StateCreator,
-  StoreMutatorIdentifier,
-  Mutate,
-  StoreApi,
-} from 'zustand'
+import { create, StateCreator, StoreMutatorIdentifier, Mutate, StoreApi } from 'zustand'
 
 type Foo = <
   T,
@@ -360,10 +340,7 @@ declare module 'zustand' {
   }
 }
 
-type FooImpl = <T, A>(
-  f: StateCreator<T, [], []>,
-  bar: A,
-) => StateCreator<T, [], []>
+type FooImpl = <T, A>(f: StateCreator<T, [], []>, bar: A) => StateCreator<T, [], []>
 
 const fooImpl: FooImpl = (f, bar) => (set, get, _store) => {
   type T = ReturnType<typeof f>
@@ -431,33 +408,18 @@ interface SharedSlice {
   getBoth: () => number
 }
 
-const createBearSlice: StateCreator<
-  BearSlice & FishSlice,
-  [],
-  [],
-  BearSlice
-> = (set) => ({
+const createBearSlice: StateCreator<BearSlice & FishSlice, [], [], BearSlice> = (set) => ({
   bears: 0,
   addBear: () => set((state) => ({ bears: state.bears + 1 })),
   eatFish: () => set((state) => ({ fishes: state.fishes - 1 })),
 })
 
-const createFishSlice: StateCreator<
-  BearSlice & FishSlice,
-  [],
-  [],
-  FishSlice
-> = (set) => ({
+const createFishSlice: StateCreator<BearSlice & FishSlice, [], [], FishSlice> = (set) => ({
   fishes: 0,
   addFish: () => set((state) => ({ fishes: state.fishes + 1 })),
 })
 
-const createSharedSlice: StateCreator<
-  BearSlice & FishSlice,
-  [],
-  [],
-  SharedSlice
-> = (set, get) => ({
+const createSharedSlice: StateCreator<BearSlice & FishSlice, [], [], SharedSlice> = (set, get) => ({
   addBoth: () => {
     // you can reuse previous methods
     get().addBear()
@@ -475,7 +437,7 @@ const useBoundStore = create<BearSlice & FishSlice & SharedSlice>()((...a) => ({
 }))
 ```
 
-A detailed explanation on the slices pattern can be found [here](./slices-pattern.md).
+A detailed explanation on the slices pattern can be found [here](/learn/guides/slices-pattern.md).
 
 If you have some middlewares then replace `StateCreator<MyState, [], [], MySlice>` with `StateCreator<MyState, Mutators, [], MySlice>`. For example, if you are using `devtools` then it will be `StateCreator<MyState, [["zustand/devtools", never]], [], MySlice>`. See the ["Middlewares and their mutators reference"](#middlewares-and-their-mutators-reference) section for a list of all mutators.
 
@@ -518,8 +480,9 @@ const bearStore = createStore<BearState>()((set) => ({
   increase: (by) => set((state) => ({ bears: state.bears + by })),
 }))
 
-const createBoundedUseStore = ((store) => (selector) =>
-  useStore(store, selector)) as <S extends StoreApi<unknown>>(
+const createBoundedUseStore = ((store) => (selector) => useStore(store, selector)) as <
+  S extends StoreApi<unknown>,
+>(
   store: S,
 ) => {
   (): ExtractState<S>

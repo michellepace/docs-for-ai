@@ -1,10 +1,7 @@
----
-title: Setup with Next.js
-nav: 15
----
+# Setup with Next.js
 
-> [!NOTE]
-> We will be updating this guide soon based on our discussion in https://github.com/pmndrs/zustand/discussions/2740.
+> \[!NOTE]
+> We will be updating this guide soon based on our discussion in [https://github.com/pmndrs/zustand/discussions/2740](https://github.com/pmndrs/zustand/discussions/2740).
 
 [Next.js](https://nextjs.org) is a popular server-side rendering framework for React that presents
 some unique challenges for using Zustand properly.
@@ -18,7 +15,7 @@ These challenges include:
   and again on the client. Having different outputs on both the client and the server will result
   in "hydration errors." The store will have to be initialized on the server and then
   re-initialized on the client with the same data in order to avoid that. Please read more about
-  that in our [SSR and Hydration](./ssr-and-hydration.md) guide.
+  that in our [SSR and Hydration](/learn/guides/ssr-and-hydration.md) guide.
 - **SPA routing friendly:** Next.js supports a hybrid model for client side routing, which means
   that in order to reset a store, we need to initialize it at the component level using a
   `Context`.
@@ -86,15 +83,13 @@ export type CounterActions = {
   incrementCount: () => void
 }
 
-export type CounterStore = CounterState | CounterActions
+export type CounterStore = CounterState & CounterActions
 
 export const defaultInitState: CounterState = {
   count: 0,
 }
 
-export const createCounterStore = (
-  initState: CounterState = defaultInitState,
-) => {
+export const createCounterStore = (initState: CounterState = defaultInitState) => {
   return createStore<CounterStore>()((set) => ({
     ...initState,
     decrementCount: () => set((state) => ({ count: state.count - 1 })),
@@ -118,28 +113,18 @@ import { type CounterStore, createCounterStore } from '@/stores/counter-store'
 
 export type CounterStoreApi = ReturnType<typeof createCounterStore>
 
-export const CounterStoreContext = createContext<CounterStoreApi | undefined>(
-  undefined,
-)
+export const CounterStoreContext = createContext<CounterStoreApi | undefined>(undefined)
 
 export interface CounterStoreProviderProps {
   children: ReactNode
 }
 
-export const CounterStoreProvider = ({
-  children,
-}: CounterStoreProviderProps) => {
+export const CounterStoreProvider = ({ children }: CounterStoreProviderProps) => {
   const [store] = useState(() => createCounterStore())
-  return (
-    <CounterStoreContext.Provider value={store}>
-      {children}
-    </CounterStoreContext.Provider>
-  )
+  return <CounterStoreContext.Provider value={store}>{children}</CounterStoreContext.Provider>
 }
 
-export const useCounterStore = <T,>(
-  selector: (store: CounterStore) => T,
-): T => {
+export const useCounterStore = <T,>(selector: (store: CounterStore) => T): T => {
   const counterStoreContext = useContext(CounterStoreContext)
   if (!counterStoreContext) {
     throw new Error(`useCounterStore must be used within CounterStoreProvider`)
@@ -169,9 +154,7 @@ both architectures should be the same with slight differences related to each ar
 import { useCounterStore } from '@/providers/counter-store-provider'
 
 export const HomePage = () => {
-  const { count, incrementCount, decrementCount } = useCounterStore(
-    (state) => state,
-  )
+  const { count, incrementCount, decrementCount } = useCounterStore((state) => state)
 
   return (
     <div>
@@ -239,9 +222,7 @@ export default function Home() {
 import { useCounterStore } from '@/providers/counter-store-provider'
 
 export const HomePage = () => {
-  const { count, incrementCount, decrementCount } = useCounterStore(
-    (state) => state,
-  )
+  const { count, incrementCount, decrementCount } = useCounterStore((state) => state)
 
   return (
     <div>

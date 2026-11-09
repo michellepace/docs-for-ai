@@ -25,9 +25,7 @@ from tests.helpers import (
 if TYPE_CHECKING:
     from pathlib import Path
 
-URL_FIRECRAWL = (
-    "https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions"
-)
+URL_FIRECRAWL = "https://catalyst.tailwindui.com/docs/divider"  # no direct-fetch rule
 
 URL_GH_BLOB_MD = (
     "https://github.com/astral-sh/uv/blob/main/docs/getting-started/first-steps.md"
@@ -793,17 +791,15 @@ def test_cli_github_404_fails_without_writing_files(tmp_path: Path) -> None:
 @pytest.mark.firecrawl
 def test_cli_curates_via_firecrawl_scrape(tmp_path: Path) -> None:
     """Only what a live scrape proves: the real page title and slugged filename."""
-    new_dir = tmp_path / "zustand"
+    new_dir = tmp_path / "catalyst"
     exit_code, output = run_script(str(new_dir), URL_FIRECRAWL)
 
     assert exit_code == 0
+    assert "chars, firecrawl" in output
     assert "🏁 Success! curated doc" in output
 
     index = (new_dir / "INDEX.xml").read_text()
-    assert "<title>Practice with no store actions - Zustand Docs</title>" in index
+    assert "<title>Divider - Catalyst UI Kit for Tailwind CSS</title>" in index
     assert f"<source_url>{URL_FIRECRAWL}</source_url>" in index
-    assert (
-        "<local_file>learn-guides-practice-with-no-store-actions.md</local_file>"
-        in index
-    )
+    assert "<local_file>divider.md</local_file>" in index
     assert f"<description>{PLACEHOLDER_DESCRIPTION}</description>" in index

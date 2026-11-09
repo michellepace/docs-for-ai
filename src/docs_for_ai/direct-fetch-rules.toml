@@ -24,4 +24,5 @@ append-md = [
   "https://vitest.dev/api/",
   "https://vitest.dev/config/",
   "https://vitest.dev/guide/",
+  "https://zustand.docs.pmnd.rs/",
 ]

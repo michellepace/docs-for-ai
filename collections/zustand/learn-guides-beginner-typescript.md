@@ -1,7 +1,4 @@
----
-title: Beginner TypeScript Guide
-nav: 12
----
+# Beginner TypeScript Guide
 
 Zustand is a lightweight state manager, particularly used with React. Zustand avoids reducers, context, and boilerplate.
 Paired with TypeScript, you get a strongly typed store-state, actions, and selectors-with autocomplete and compile-time safety.
@@ -145,7 +142,7 @@ Sometimes you need more than one property. Returning an object from the selector
 However, directly destructuring properties from that object can cause unnecessary re-renders.
 To avoid this, it’s recommended to wrap the selector with `useShallow`, which prevents re-renders when the selected values remain shallowly equal.
 This is more efficient than subscribing to the whole store. TypeScript ensures you can’t accidentally misspell `bears` or `food`.
-See the [API documentation](../../reference/hooks/use-shallow.md) for more details on `useShallow`.
+See the [API documentation](/reference/hooks/use-shallow.md) for more details on `useShallow`.
 
 ```tsx
 import { create } from 'zustand'
@@ -209,7 +206,7 @@ function TotalFood() {
 This middleware separates initial state and actions, making the code cleaner.
 TS automatically infers types from the state and actions, no interface needed.
 This is different from JS, where type safety is missing. It’s a very popular style in TypeScript projects.
-See the [API documentation](../../reference/middlewares/combine.md) for more details.
+See the [API documentation](/reference/middlewares/combine.md) for more details.
 
 ```ts
 import { create } from 'zustand'
@@ -232,7 +229,7 @@ export const useBearStore = create<BearState>()(
 
 This middleware connects Zustand to Redux DevTools. You can inspect changes, time-travel, and debug state.
 It’s extremely useful in development. TS ensures your actions and state remain type-checked even here.
-See the [API documentation](../../reference/middlewares/devtools.md) for more details.
+See the [API documentation](/reference/middlewares/devtools.md) for more details.
 
 ```ts
 import { create } from 'zustand'
@@ -255,7 +252,7 @@ export const useBearStore = create<BearState>()(
 
 This middleware keeps your store in `localStorage` (or another storage). This means your bears survive a page refresh.
 Great for apps where persistence matters. In TS, the state type stays consistent, so no runtime surprises.
-See the [API documentation](../../reference/middlewares/persist.md) for more details.
+See the [API documentation](/reference/middlewares/persist.md) for more details.
 
 ```ts
 import { create } from 'zustand'
@@ -309,7 +306,7 @@ export const useBearStore = create<BearState>()((set) => ({
 
 Variant of `create` with equality built-in. Useful if you always want custom equality checks.
 Not common, but shows Zustand’s flexibility. TS still keeps full type inference.
-See the [API documentation](../../reference/apis/create-with-equality-fn.md) for more details.
+See the [API documentation](/reference/apis/create-with-equality-fn.md) for more details.
 
 ```ts
 import { createWithEqualityFn } from 'zustand/traditional'

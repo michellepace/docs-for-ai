@@ -108,15 +108,15 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | :--------- | :--------------- | :---------- | :------ | :----- |
 | 📦 [`biome/`](collections/biome/) | 📄 [`INDEX.xml`](collections/biome/INDEX.xml) | Fast linter/formatter | 2026-11-02 | [Official](https://biomejs.dev) |
 | 📦 [`claudeai/`](collections/claudeai/) | 📄 [`INDEX.xml`](collections/claudeai/INDEX.xml) | Chat apps & connectors | 2026-11-03 | [Official](https://claude.com/docs/) |
-| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-10-31 | [Official](https://code.claude.com/docs/) |
+| 📦 [`claudecode/`](collections/claudecode/) | 📄 [`INDEX.xml`](collections/claudecode/INDEX.xml) | Agentic coding tool | 2026-11-08 | [Official](https://code.claude.com/docs/) |
 | 📦 [`claudeplat/`](collections/claudeplat/) | 📄 [`INDEX.xml`](collections/claudeplat/INDEX.xml) | Developer platform | 2026-11-03 | [Official](https://platform.claude.com/docs/) |
 | 📦 [`clerk/`](collections/clerk/) | 📄 [`INDEX.xml`](collections/clerk/INDEX.xml) | Authentication | 2025-12-03 | [Official](https://clerk.com) |
-| 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-07-27 | [Official](https://docs.coderabbit.ai) |
+| 📦 [`coderabbit/`](collections/coderabbit/) | 📄 [`INDEX.xml`](collections/coderabbit/INDEX.xml) | AI code review | 2026-11-07 | [Official](https://docs.coderabbit.ai) |
 | 📦 [`convex/`](collections/convex/) | 📄 [`INDEX.xml`](collections/convex/INDEX.xml) | Reactive backend | 2026-07-14 | [Official](https://docs.convex.dev) |
 | 📦 [`firecrawl/`](collections/firecrawl/) | 📄 [`INDEX.xml`](collections/firecrawl/INDEX.xml) | Web scraping for AI | 2026-07-18 | [Official](https://docs.firecrawl.dev) |
 | 📦 [`marimo/`](collections/marimo/) | 📄 [`INDEX.xml`](collections/marimo/INDEX.xml) | Reactive Python notebooks | 2025-11-11 | [Official](https://docs.marimo.io) |
 | 📦 [`mcp/`](collections/mcp/) | 📄 [`INDEX.xml`](collections/mcp/INDEX.xml) | AI integration standard | 2026-11-03 | [Official](https://modelcontextprotocol.io) |
-| 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-09-26 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
+| 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-11-04 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
 | 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-11-03 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
@@ -126,8 +126,8 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`ty/`](collections/ty/) | 📄 [`INDEX.xml`](collections/ty/INDEX.xml) | Python type checker (Astral) | 2026-11-03 | [Official](https://docs.astral.sh/ty/) |
 | 📦 [`uv/`](collections/uv/) | 📄 [`INDEX.xml`](collections/uv/INDEX.xml) | Python package manager (Astral) | 2026-11-03 | [Official](https://github.com/astral-sh/uv/tree/main/docs) |
 | 📦 [`vercel/`](collections/vercel/) | 📄 [`INDEX.xml`](collections/vercel/INDEX.xml) | Deployment platform | 2026-11-03 | [Official](https://vercel.com) |
-| 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2026-11-03 | [Official](https://vitest.dev) |
-| 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-11-03 | [Official](https://zustand.docs.pmnd.rs) |
+| 📦 [`vitest/`](collections/vitest/) | 📄 [`INDEX.xml`](collections/vitest/INDEX.xml) | Testing framework | 2026-11-06 | [Official](https://vitest.dev) |
+| 📦 [`zustand/`](collections/zustand/) | 📄 [`INDEX.xml`](collections/zustand/INDEX.xml) | React state management | 2026-11-09 | [Official](https://zustand.docs.pmnd.rs) |
 
 ---
 

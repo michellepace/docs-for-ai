@@ -1,7 +1,4 @@
----
-title: Slices Pattern
-nav: 6
----
+# Slices Pattern
 
 ## Slicing the store into smaller stores
 
@@ -94,7 +91,7 @@ export const useBoundStore = create((...a) => ({
 
 Adding middlewares to a combined store is the same as with other normal stores.
 
-Adding [`persist` middleware](../../reference/integrations/persisting-store-data.md) to our `useBoundStore`:
+Adding [`persist` middleware](/reference/integrations/persisting-store-data.md) to our `useBoundStore`:
 
 ```js
 import { create } from 'zustand'
@@ -117,4 +114,4 @@ Please keep in mind you should only apply middlewares in the combined store. App
 
 ## Usage with TypeScript
 
-A detailed guide on how to use the slice pattern in Zustand with TypeScript can be found [here](./advanced-typescript.md#slices-pattern).
+A detailed guide on how to use the slice pattern in Zustand with TypeScript can be found [here](/learn/guides/advanced-typescript.md#slices-pattern).

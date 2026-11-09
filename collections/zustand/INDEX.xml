@@ -1,177 +1,184 @@
 <docs_index>
   <source>
-    <title>Learn</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/index.md</source_url>
-    <local_file>learn-index.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <title>Introduction</title>
+    <description>Install with `npm install zustand`, create a first store with `create` and `set`, and read state in components through selectors without providers.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/getting-started/introduction</source_url>
+    <local_file>learn-getting-started-introduction.md</local_file>
+    <curated_at>2026-11-09</curated_at>
+  </source>
+  <source>
+    <title>Comparison</title>
+    <description>How Zustand differs from Redux, Valtio, Jotai and Recoil: immutable vs mutable state, single store vs atoms, context providers, and selector-based render optimization.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/getting-started/comparison</source_url>
+    <local_file>learn-getting-started-comparison.md</local_file>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Tutorial: Tic-Tac-Toe</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/tutorial-tic-tac-toe.md</source_url>
+    <description>Hands-on React build using a `combine` store with `useState`-style setters, immutable updates, derived state and time-travel move history.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/tutorial-tic-tac-toe</source_url>
     <local_file>learn-guides-tutorial-tic-tac-toe.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Updating state</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/updating-state.md</source_url>
+    <description>How `set` shallowly merges flat updates, and immutably updating deeply nested state via spread, Immer `produce`, optics-ts or Ramda.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/updating-state</source_url>
     <local_file>learn-guides-updating-state.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Practice with no store actions</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/practice-with-no-store-actions.md</source_url>
+    <description>Define actions as module-level functions using `setState` instead of inside the store, so they're callable without a hook and code-split easily.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions</source_url>
     <local_file>learn-guides-practice-with-no-store-actions.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Slices Pattern</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/slices-pattern.md</source_url>
+    <description>Split a growing store into slice functions spread into one bound store; cross-slice actions via `get()`; apply middleware like `persist` only on the combined store.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/slices-pattern</source_url>
     <local_file>learn-guides-slices-pattern.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Immutable state and merging</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/immutable-state-and-merging.md</source_url>
+    <description>Why `set` shallow-merges so `...state` is optional, why nested objects need explicit spreading, and the `replace` flag to overwrite state.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/immutable-state-and-merging</source_url>
     <local_file>learn-guides-immutable-state-and-merging.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
+  </source>
+  <source>
+    <title>Map and Set in Zustand</title>
+    <description>Why mutating a Map or Set in state doesn't re-render; copy-on-update patterns to add, delete, toggle and clear, plus typing empty collections to avoid `never[]`.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/maps-and-sets-usage</source_url>
+    <local_file>learn-guides-maps-and-sets-usage.md</local_file>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Prevent rerenders with useShallow</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/prevent-rerenders-with-use-shallow.md</source_url>
+    <description>Why selectors returning new arrays or objects like `Object.keys(state)` rerender on unrelated updates, fixed by wrapping the selector in `useShallow`.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/prevent-rerenders-with-use-shallow</source_url>
     <local_file>learn-guides-prevent-rerenders-with-use-shallow.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
+  </source>
+  <source>
+    <title>Connect to state with URL</title>
+    <description>Sync a store to the URL hash or query params via a custom `persist` `StateStorage`, falling back to `localStorage`, and build shareable state URLs.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/connect-to-state-with-url-hash</source_url>
+    <local_file>learn-guides-connect-to-state-with-url-hash.md</local_file>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Beginner TypeScript Guide</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/beginner-typescript.md</source_url>
+    <description>Typing a store with the curried `create&lt;T&gt;()()`: resetting via `typeof initialState`, `ExtractState`, `useShallow` and derived selectors, typed `combine`/`devtools`/`persist`, async actions, multiple stores.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/beginner-typescript</source_url>
     <local_file>learn-guides-beginner-typescript.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Advanced TypeScript Guide</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/advanced-typescript.md</source_url>
+    <description>Why `create&lt;T&gt;()(...)` is curried; `combine` inference, `devtools` ordering, typing custom middlewares and slices with `StateCreator`, and the mutator tuples reference.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/advanced-typescript</source_url>
     <local_file>learn-guides-advanced-typescript.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Auto Generating Selectors</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/auto-generating-selectors.md</source_url>
+    <description>Stop writing `(state) =&gt; state.x` by hand: a `createSelectors` helper adds typed `store.use.x()` hooks to React or vanilla stores.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/auto-generating-selectors</source_url>
     <local_file>learn-guides-auto-generating-selectors.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Setup with Next.js</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/nextjs.md</source_url>
+    <description>Avoid sharing state across requests with a per-request `createStore` factory and Context provider; why Server Components shouldn't touch the store; App and Pages Router examples.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/nextjs</source_url>
     <local_file>learn-guides-nextjs.md</local_file>
-    <curated_at>2026-11-03</curated_at>
-  </source>
-  <source>
-    <title>SSR and Hydration</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/ssr-and-hydration.md</source_url>
-    <local_file>learn-guides-ssr-and-hydration.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Initialize state with props</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/initialize-state-with-props.md</source_url>
+    <description>Per-component store instances via `createStore` and React context: a provider wrapper passing props, a custom `useStore` hook, plus `useShallow` and custom equality functions.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/initialize-state-with-props</source_url>
     <local_file>learn-guides-initialize-state-with-props.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Testing</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/testing.md</source_url>
+    <description>Reset stores between tests with a `__mocks__/zustand.ts` mock for Jest or Vitest, then test components and Context-provided stores with React Testing Library.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/testing</source_url>
     <local_file>learn-guides-testing.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>Flux inspired practice</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/flux-inspired-practice.md</source_url>
+    <description>Recommended store conventions (single store, updating via `set`, colocated actions) and Redux-style reducers with a `dispatch` function or the `redux` middleware.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/flux-inspired-practice</source_url>
     <local_file>learn-guides-flux-inspired-practice.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>How to reset state</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/learn/guides/how-to-reset-state.md</source_url>
+    <description>Add a `reset` action using `store.getInitialState()`, and wrap `create` so one call resets every store at once.</description>
+    <source_url>https://zustand.docs.pmnd.rs/learn/guides/how-to-reset-state</source_url>
     <local_file>learn-guides-how-to-reset-state.md</local_file>
-    <curated_at>2026-11-03</curated_at>
-  </source>
-  <source>
-    <title>Reference</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/index.md</source_url>
-    <local_file>reference-index.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>create</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create.md</source_url>
+    <description>Make a React hook store: `set` shallow merge vs `replace`, updater functions, immutable object/array updates, actions outside the store, `subscribe`, and why mutated state doesn't re-render.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/apis/create</source_url>
     <local_file>reference-apis-create.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>createStore</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/create-store.md</source_url>
+    <description>Non-React store from `zustand/vanilla`: updater functions, `replace` for primitives and arrays, `subscribe`, and why mutating state doesn't update the screen.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/apis/create-store</source_url>
     <local_file>reference-apis-create-store.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
-    <title>shallow</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/apis/shallow.md</source_url>
-    <local_file>reference-apis-shallow.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <title>useStore</title>
+    <description>Read a `createStore` vanilla store in React components via a selector, with global, per-key dynamic and Context-provider-scoped store patterns.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/hooks/use-store</source_url>
+    <local_file>reference-hooks-use-store.md</local_file>
+    <curated_at>2026-11-09</curated_at>
+  </source>
+  <source>
+    <title>useShallow</title>
+    <description>Stop re-renders when a selector returns a new array or object, and fix v5 "Maximum update depth exceeded" from multi-value selectors.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/hooks/use-shallow</source_url>
+    <local_file>reference-hooks-use-shallow.md</local_file>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>persist</title>
-    <description>Reference and tutorials: saving state to localStorage or custom storage, persisting some fields, version migrations, merging nested state, manual rehydration for SSR.</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/persist.md</source_url>
+    <description>All options: `partialize`, custom `storage`, `version`/`migrate`, deep `merge` for nested state, `skipHydration` plus manual `rehydrate()` for SSR; `createJSONStorage` doesn't validate stored data.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/middlewares/persist</source_url>
     <local_file>reference-middlewares-persist.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>devtools</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/devtools.md</source_url>
+    <description>Debug stores in Redux DevTools: `name`, `enabled`, `actionsDenylist` options, typing slices, naming actions via `set`'s third argument to fix 'anonymous' labels, and `cleanup`.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/middlewares/devtools</source_url>
     <local_file>reference-middlewares-devtools.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
     <title>immer</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/middlewares/immer.md</source_url>
+    <description>Mutate nested state directly inside `set` instead of spreading copies; requires installing the `immer` package. Includes the signature and `zustand/immer` mutator type.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/middlewares/immer</source_url>
     <local_file>reference-middlewares-immer.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <curated_at>2026-11-09</curated_at>
   </source>
   <source>
-    <title>Persisting store data</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/persisting-store-data.md</source_url>
-    <local_file>reference-integrations-persisting-store-data.md</local_file>
-    <curated_at>2026-11-03</curated_at>
-  </source>
-  <source>
-    <title>Immer middleware</title>
-    <description>PLACEHOLDER</description>
-    <source_url>https://github.com/pmndrs/zustand/blob/main/docs/reference/integrations/immer-middleware.md</source_url>
-    <local_file>reference-integrations-immer-middleware.md</local_file>
-    <curated_at>2026-11-03</curated_at>
+    <title>combine</title>
+    <description>Merge an initial state object with an actions creator so TypeScript infers the store type without explicit types or curried `create&lt;T&gt;()()`.</description>
+    <source_url>https://zustand.docs.pmnd.rs/reference/middlewares/combine</source_url>
+    <local_file>reference-middlewares-combine.md</local_file>
+    <curated_at>2026-11-09</curated_at>
   </source>
 </docs_index>

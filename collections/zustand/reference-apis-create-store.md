@@ -1,8 +1,4 @@
----
-title: createStore
-description: How to create vanilla stores
-nav: 22
----
+# createStore
 
 `createStore` lets you create a vanilla store that exposes API utilities.
 
@@ -20,7 +16,7 @@ const someStore = createStore(stateCreatorFn)
   - [Updating Arrays in State](#updating-arrays-in-state)
   - [Subscribing to state updates](#subscribing-to-state-updates)
 - [Troubleshooting](#troubleshooting)
-  - [I’ve updated the state, but the screen doesn’t update](#i’ve-updated-the-state,-but-the-screen-doesn’t-update)
+  - [I’ve updated the state, but the screen doesn’t update](#ive-updated-the-state-but-the-screen-doesnt-update)
 
 ## Types
 
@@ -37,8 +33,11 @@ createStore<T>()(stateCreatorFn: StateCreator<T, [], []>): StoreApi<T>
 #### Parameters
 
 - `stateCreatorFn`: A function that takes `set` function, `get` function and `store` as arguments.
-  Usually, you will return an object with the methods you want to expose. Note that `set`, `get` and
-  `store` cannot be used while this function is running, only after the store has been created.
+  Usually, you will return an object with the methods you want to expose.
+
+> \[!CAUTION]
+> `set`, `get` and `store` must not be called synchronously during initialization — they are only
+> safe to call after the store has been created (e.g., from within action methods).
 
 #### Returns
 
@@ -58,9 +57,7 @@ type AgeStoreState = { age: number }
 
 type AgeStoreActions = {
   setAge: (
-    nextAge:
-      | AgeStoreState['age']
-      | ((currentAge: AgeStoreState['age']) => AgeStoreState['age']),
+    nextAge: AgeStoreState['age'] | ((currentAge: AgeStoreState['age']) => AgeStoreState['age']),
   ) => void
 }
 
@@ -78,15 +75,9 @@ function increment() {
   ageStore.getState().setAge((currentAge) => currentAge + 1)
 }
 
-const $yourAgeHeading = document.getElementById(
-  'your-age',
-) as HTMLHeadingElement
-const $incrementBy3Button = document.getElementById(
-  'increment-by-3',
-) as HTMLButtonElement
-const $incrementBy1Button = document.getElementById(
-  'increment-by-1',
-) as HTMLButtonElement
+const $yourAgeHeading = document.getElementById('your-age') as HTMLHeadingElement
+const $incrementBy3Button = document.getElementById('increment-by-3') as HTMLButtonElement
+const $incrementBy1Button = document.getElementById('increment-by-1') as HTMLButtonElement
 
 $incrementBy3Button.addEventListener('click', () => {
   increment()
@@ -121,7 +112,7 @@ State can hold any kind of JavaScript value. When you want to update built-in pr
 numbers, strings, booleans, etc. you should directly assign new values to ensure updates are applied
 correctly, and avoid unexpected behaviors.
 
-> [!NOTE]
+> \[!NOTE]
 > By default, `set` function performs a shallow merge. If you need to completely replace
 > the state with a new one, use the `replace` parameter set to `true`
 
@@ -151,10 +142,7 @@ xStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -211,10 +199,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -232,7 +217,7 @@ By default, `set` function performs a shallow merge. To update array values we s
 values to ensure updates are applied correctly, and avoid unexpected behaviors. To completely
 replace the state with a new one, use the `replace` parameter set to `true`.
 
-> [!IMPORTANT]
+> \[!CAUTION]
 > We should prefer immutable operations like: `[...array]`, `concat(...)`, `filter(...)`,
 > `slice(...)`, `map(...)`, `toSpliced(...)`, `toSorted(...)`, and `toReversed(...)`, and avoid
 > mutable operations like `array[arrayIndex] = ...`, `push(...)`, `unshift(...)`, `pop(...)`,
@@ -264,10 +249,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -327,10 +309,7 @@ positionStore.subscribe(logger)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -371,9 +350,7 @@ const personStore = createStore<PersonStore>()((set) => ({
   setPerson: (person) => set({ person }),
 }))
 
-const $firstNameInput = document.getElementById(
-  'first-name',
-) as HTMLInputElement
+const $firstNameInput = document.getElementById('first-name') as HTMLInputElement
 const $lastNameInput = document.getElementById('last-name') as HTMLInputElement
 const $emailInput = document.getElementById('email') as HTMLInputElement
 const $result = document.getElementById('result') as HTMLDivElement
@@ -441,7 +418,7 @@ personStore.getState().setPerson({
 })
 ```
 
-> [!NOTE]
+> \[!NOTE]
 > We don’t need to copy every property separately due to `set` function performing shallow merge by
 > default.
 
@@ -472,9 +449,7 @@ const personStore = createStore<PersonStore>()((set) => ({
   setPerson: (person) => set({ person }),
 }))
 
-const $firstNameInput = document.getElementById(
-  'first-name',
-) as HTMLInputElement
+const $firstNameInput = document.getElementById('first-name') as HTMLInputElement
 const $lastNameInput = document.getElementById('last-name') as HTMLInputElement
 const $emailInput = document.getElementById('email') as HTMLInputElement
 const $result = document.getElementById('result') as HTMLDivElement

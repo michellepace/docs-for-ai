@@ -1,15 +1,9 @@
----
-title: devtools
-description: How to time-travel debug your store
-nav: 29
----
-
 # devtools
 
 `devtools` middleware lets you use [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools)
 without Redux. Read more about the benefits of using [Redux DevTools for debugging](https://redux.js.org/style-guide/#use-the-redux-devtools-extension-for-debugging).
 
-> [!IMPORTANT]
+> \[!WARNING]
 > In order to use `devtools` from `zustand/middleware` you need to install
 > `@redux-devtools/extension` library.
 
@@ -28,7 +22,7 @@ const nextStateCreatorFn = devtools(stateCreatorFn, devtoolsOptions)
   - [Cleanup](#cleanup)
 - [Troubleshooting](#troubleshooting)
   - [Only one store is displayed](#only-one-store-is-displayed)
-  - [Action names are labeled as 'anonymous'](#all-action-names-are-labeled-as-'anonymous')
+  - [Action names are labeled as 'anonymous'](#all-action-names-are-labeled-as-anonymous)
 
 ## Types
 
@@ -88,15 +82,9 @@ type JungleStore = {
 const useJungleStore = create<JungleStore>()(
   devtools((set) => ({
     bears: 0,
-    addBear: () =>
-      set((state) => ({ bears: state.bears + 1 }), undefined, 'jungle/addBear'),
+    addBear: () => set((state) => ({ bears: state.bears + 1 }), undefined, 'jungle/addBear'),
     fishes: 0,
-    addFish: () =>
-      set(
-        (state) => ({ fishes: state.fishes + 1 }),
-        undefined,
-        'jungle/addFish',
-      ),
+    addFish: () => set((state) => ({ fishes: state.fishes + 1 }), undefined, 'jungle/addFish'),
   })),
 )
 ```
@@ -121,34 +109,18 @@ type FishSlice = {
 
 type JungleStore = BearSlice & FishSlice
 
-const createBearSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  BearSlice
-> = (set) => ({
+const createBearSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], BearSlice> = (
+  set,
+) => ({
   bears: 0,
-  addBear: () =>
-    set(
-      (state) => ({ bears: state.bears + 1 }),
-      undefined,
-      'jungle:bear/addBear',
-    ),
+  addBear: () => set((state) => ({ bears: state.bears + 1 }), undefined, 'jungle:bear/addBear'),
 })
 
-const createFishSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  FishSlice
-> = (set) => ({
+const createFishSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], FishSlice> = (
+  set,
+) => ({
   fishes: 0,
-  addFish: () =>
-    set(
-      (state) => ({ fishes: state.fishes + 1 }),
-      undefined,
-      'jungle:fish/addFish',
-    ),
+  addFish: () => set((state) => ({ fishes: state.fishes + 1 }), undefined, 'jungle:fish/addFish'),
 })
 
 const useJungleStore = create<JungleStore>()(
@@ -182,8 +154,7 @@ const useStore = create<Store>()(
       token: null,
       login: (user, token) => set({ user, token }, undefined, 'auth/login'),
       logout: () => set({ user: null, token: null }, undefined, 'auth/logout'),
-      updateData: () =>
-        set({ user: 'updated' }, undefined, 'internal/updateData'),
+      updateData: () => set({ user: 'updated' }, undefined, 'internal/updateData'),
     }),
     {
       name: 'AuthStore',
@@ -210,7 +181,7 @@ const useStore = create<Store>()(
 )
 ```
 
-> [!NOTE]
+> \[!NOTE]
 > The `actionsDenylist` option uses regex pattern matching and is handled directly by Redux DevTools Extension.
 > All actions are still sent to DevTools, but matching actions are filtered from the display.
 
@@ -265,23 +236,17 @@ type FishSlice = {
 
 type JungleStore = BearSlice & FishSlice
 
-const createBearSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  BearSlice
-> = (set) => ({
+const createBearSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], BearSlice> = (
+  set,
+) => ({
   bears: 0,
   addBear: () => set((state) => ({ bears: state.bears + 1 })),
   eatFish: () => set((state) => ({ fishes: state.fishes - 1 })),
 })
 
-const createFishSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  FishSlice
-> = (set) => ({
+const createFishSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], FishSlice> = (
+  set,
+) => ({
   fishes: 0,
   addFish: () => set((state) => ({ fishes: state.fishes + 1 })),
 })
@@ -316,26 +281,18 @@ type FishSlice = {
 
 type JungleStore = BearSlice & FishSlice
 
-const createBearSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  BearSlice
-> = (set) => ({
+const createBearSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], BearSlice> = (
+  set,
+) => ({
   bears: 0,
-  addBear: () =>
-    set((state) => ({ bears: state.bears + 1 }), undefined, 'bear/addBear'),
+  addBear: () => set((state) => ({ bears: state.bears + 1 }), undefined, 'bear/addBear'),
 })
 
-const createFishSlice: StateCreator<
-  JungleStore,
-  [['zustand/devtools', never]],
-  [],
-  FishSlice
-> = (set) => ({
+const createFishSlice: StateCreator<JungleStore, [['zustand/devtools', never]], [], FishSlice> = (
+  set,
+) => ({
   fishes: 0,
-  addFish: () =>
-    set((state) => ({ fishes: state.fishes + 1 }), undefined, 'fish/addFish'),
+  addFish: () => set((state) => ({ fishes: state.fishes + 1 }), undefined, 'fish/addFish'),
 })
 
 const useJungleStore = create<JungleStore>()(
@@ -346,6 +303,6 @@ const useJungleStore = create<JungleStore>()(
 )
 ```
 
-> [!IMPORTANT]
+> \[!WARNING]
 > Do not set the second parameter to `true` or `false` unless you want to override the default
 > replacement logic

@@ -1,7 +1,4 @@
----
-title: Immutable state and merging
-nav: 7
----
+# Immutable state and merging
 
 Like with React's `useState`, we need to update state immutably.
 
@@ -48,7 +45,7 @@ const useCountStore = create((set) => ({
 ```
 
 For complex use cases, consider using some libraries that help with immutable updates.
-You can refer to [Updating nested state object values](./updating-state.md#deeply-nested-object).
+You can refer to [Updating nested state object values](/learn/guides/updating-state.md#deeply-nested-object).
 
 ## Replace flag
 

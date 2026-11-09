@@ -6,232 +6,211 @@
 
 > Compare CodeRabbit plans and understand per-developer review rate limits and feature limits.
 
-export const Hint = ({type, children, headline, tip, href, cta}) => {
-  const TIPS = {
-    learnings: {
-      headline: "Learnings",
-      tip: "Review preferences CodeRabbit learns from your chat conversations and applies automatically to future reviews.",
-      cta: "Learn about Learnings",
-      href: "/knowledge-base/learnings",
-      content: "Learnings"
-    },
-    walkthrough: {
-      headline: "PR Walkthrough",
-      tip: "A structured comment posted by CodeRabbit at the top of every pull request, summarizing changes, sequence diagrams, review effort, and more.",
-      cta: "Learn about PR Walkthroughs",
-      href: "/pr-reviews/walkthroughs",
-      content: "Walkthrough"
-    },
-    "finishing-touches": {
-      headline: "Finishing Touches",
-      tip: "Post-review agentic actions (Autofix, writing docstrings or unit tests, and more) you trigger from a PR comment or a checkbox in the Walkthrough.",
-      cta: "See all Finishing Touches",
-      href: "/finishing-touches",
-      content: "Finishing Touches"
-    },
-    "coding-plan": {
-      headline: "Coding Plan",
-      tip: "A detailed, codebase-aware implementation plan CodeRabbit generates from an issue or description, ready to hand off to any coding agent.",
-      cta: "Learn about Coding Plans",
-      href: "/plan",
-      content: "Coding Plan"
-    },
-    "knowledge-base": {
-      headline: "Knowledge Base",
-      tip: "The collected context sources CodeRabbit draws on during reviews: Learnings, Code Guidelines, issue trackers, connected MCP servers, and cross-repo analysis.",
-      cta: "Explore the Knowledge Base",
-      href: "/knowledge-base",
-      content: "Knowledge Base"
-    },
-    "path-instructions": {
-      headline: "Path Instructions",
-      tip: "Custom review rules that only apply to files matching a glob pattern, e.g. 'src/controllers/**'.",
-      cta: "Configure path instructions",
-      href: "/configuration/path-instructions",
-      content: "Path Instructions"
-    },
-    "change-stack": {
-      headline: "Change Stack",
-      tip: "An improved code inspection interface that reorganizes a pull request from a flat file list into a structured, layer-by-layer walkthrough with range-specific summaries and diagrams when useful.",
-      cta: "Learn about Change Stack",
-      href: "/pr-reviews/change-stack",
-      content: "Change Stack"
-    },
-    scope: {
-      headline: "Scope",
-      tip: "A named set of repositories, connections, and spend limits that controls what CodeRabbit Agent can access in a given Slack conversation.",
-      cta: "Learn about Scopes",
-      href: "/slack-agent/scopes",
-      content: "Scope"
-    },
-    "coderabbit-agent": {
-      headline: "CodeRabbit Agent for Slack",
-      tip: "An AI agent built into Slack that investigates issues, generates implementation plans, and opens pull requests right from the Slack threads.",
-      cta: "Explore CodeRabbit Agent",
-      href: "/slack-agent",
-      content: "CodeRabbit Agent"
-    },
-    "configuration-inheritance": {
-      headline: "Configuration Inheritance",
-      tip: "A setting that merges configuration values across multiple levels — repository YAML, central YAML, and UI settings — instead of using only the highest-priority source.",
-      cta: "Learn about Configuration Inheritance",
-      href: "/configuration/configuration-inheritance",
-      content: "Configuration Inheritance"
-    }
-  };
-  const defaults = TIPS[type] || ({});
-  return <Tooltip headline={headline ?? defaults.headline} tip={tip ?? defaults.tip} cta={cta ?? defaults.cta} href={href ?? defaults.href}>
-      {children ?? defaults.content}
-    </Tooltip>;
-};
-
-CodeRabbit offers five plans with per-developer review rate limits; **Pro**, **Pro+**, and **Enterprise** subscribers can also enable the [usage-based add-on](/management/usage-based-addon) to pay for usage beyond those limits.
+CodeRabbit offers Free and OSS access plus four paid plans: Essentials, Team, Advanced, and Enterprise. Essentials, Team, and Advanced subscribers can also enable [usage-based reviews](https://docs.coderabbit.ai/management/usage-based-addon.md) to pay for eligible usage beyond their included limits.
 
 This page covers what each plan includes, the review rate limits enforced **per developer**, and feature limits that vary by plan.
 
+## On demand products
+
+On demand products are billed separately from your base plan. They include [CodeRabbit Security Scan](https://docs.coderabbit.ai/security.md#access-and-billing) and [CodeRabbit Agent](https://docs.coderabbit.ai/code/access-and-billing.md#agent-minutes). Each product has its own usage pricing and eligibility requirements.
+
 ## Plans
 
-<CardGroup cols={1}>
-  <Card icon="gift" horizontal>
-    ### Free plan
+> [card]
+>
+> ### Free plan
+>
+> Unlimited public and private repositories, no credit card required.
+>
+> PR summarization only; code reviews are available through the VS Code extension and CLI. New organizations start with a **14-day Advanced trial**. When the trial expires, USD-billed organizations can choose Essentials, Team, or Advanced, while INR-billed organizations can choose Essentials or Team. Organizations that do not subscribe revert to Free with lower [rate limits](#rate-limits).
 
-    Unlimited public and private repositories, no credit card required.
+> [card]
+>
+> ### Open source
+>
+> Unlimited public repositories, no credit card required.
+>
+> Open-source projects receive Team features with no paid subscription required. OSS reviews use a separate rate-limit tier that varies with the project's community and popularity; see [Rate limits](#rate-limits).
 
-    PR summarization only, code reviews are available via the VS Code extension and CLI. Includes a **14-day Pro+ trial**. When the trial expires, choose Pro or Pro+ to continue, or revert to Free with lower [rate limits](#rate-limits).
-  </Card>
+> [card]
+>
+> ### Essentials plan ⓘ (Previously called Pro.)
+>
+> **\$24 per developer per month** billed annually, or **\$30** month-to-month.
+>
+> Includes everything in Free, plus PR reviews, higher rate limits, integration, Knowledge base, linter and SAST tool support, analytics, docstrings, review fixes, and [usage-based reviews](https://docs.coderabbit.ai/management/usage-based-addon.md) access.
 
-  <Card icon="code" horizontal>
-    ### Open source
+> [card]
+>
+> ### Team plan ⓘ (Previously called Pro+.)
+>
+> **\$48 per developer per month** billed annually, or **\$60** month-to-month.
+>
+> Everything in Essentials, plus tasks and actions upstream and downstream of the review process: Triage (A single cross-repository queue of open pull requests, ranked by what each one needs next and what acting on it is worth.), [CodeRabbit Plan](https://docs.coderabbit.ai/plan/index.md), issue planning, unit test generation, merge conflict resolution, and other pre/post-merge actions. Team also offers higher [rate limits](#rate-limits).
 
-    Unlimited public repositories, no credit card required.
+> [card]
+>
+> ### Advanced plan
+>
+> **\$72 per developer per month** billed annually, or **\$90** month-to-month.
+>
+> Everything in Team, plus continuous pull request security review through CodeRabbit Security. Deep Scan is usage-based and billed separately.
 
-    Open-source projects receive Pro+ features with no paid subscription required. OSS reviews use a separate rate-limit tier that varies with the project's community and popularity; see [Rate limits](#rate-limits).
-  </Card>
+> [card]
+>
+> ### Enterprise plan
+>
+> **Contact sales** — [coderabbit.ai/contact-us/sales](https://www.coderabbit.ai/contact-us/sales)
+>
+> Includes everything in Advanced, plus self-hosting options, multi-organization support, SSO, SLA support with a dedicated Customer Success Manager, AWS and GCP Marketplace billing, API access, custom RBAC, and audit logging. Pricing and billing terms are set with your account team.
 
-  <Card icon="shield-check" horizontal>
-    ### Pro plan
+## Feature availability
 
-    **\$24 per developer per month** billed annually, or **\$30** month-to-month.
+Essentials was previously called Pro, and Team was previously called Pro+. Advanced is a new tier. Each plan includes the capabilities in the plans before it.
 
-    Includes everything in Free, plus PR reviews, higher rate limits, integration, Knowledge base, linter and SAST tool support, analytics, docstrings, autofix, and [usage-based add-on](/management/usage-based-addon) access.
-  </Card>
-
-  <Card icon="shield-plus" horizontal>
-    ### Pro+ plan
-
-    **\$48 per developer per month** billed annually, or **\$60** month-to-month.
-
-    Everything in Pro, plus tasks and actions upstream and downstream of the review process: [CodeRabbit Plan](/plan/index) and issue planning, unit test generation, merge conflict resolution, and other pre/post-merge actions. Pro+ also offers higher [rate limits](#rate-limits).
-  </Card>
-
-  <Card icon="building-2" horizontal>
-    ### Enterprise plan
-
-    **Contact sales** — [coderabbit.ai/contact-us/sales](https://www.coderabbit.ai/contact-us/sales)
-
-    Includes everything in Pro+, plus self-hosting options, multi-organization support, SSO, SLA support with a dedicated Customer Success Manager, AWS and GCP Marketplace billing, API access, custom RBAC, and audit logging.
-  </Card>
-</CardGroup>
+| Capability | Essentials | Team | Advanced | Enterprise |
+| - | - | - | - | - |
+| AI code review, Fix comments, Docstrings, MCP, and built-in Pre-Merge Checks | Included | Included | Included | Included |
+| Triage | Not included | Included | Included | Included |
+| Change Stack core experience | Included | Included | Included | Included |
+| Change Stack AI chat and coding-agent tasks | Not included | Included | Included | Included |
+| CI fixer, issue planning, unit test generation, and merge-conflict resolution | Not included | Included | Included | Included |
+| Continuous pull request security review | Not included | Not included | Included | Included |
+| Deep Scan | Usage-based | Usage-based | Usage-based | Usage-based |
 
 ## Rate limits
 
-The following review and chat limits are enforced **per developer** over rolling time windows. Each one is a rolling allowance rather than a one-time quota: you can use your full hourly amount in a burst, and additional reviews become available as earlier reviews age out of the window instead of resetting all at once at the top of the hour. For example, Pro includes 5 PR reviews per hour.
+The following review and chat limits are enforced **per developer** over rolling time windows. OSS PR review limits are additionally scoped per repository. For how the allowance is counted and refills, see [Review rate limits](https://docs.coderabbit.ai/management/rate-limits.md).
 
 The **Files/review** column is the maximum number of files CodeRabbit reviews in a single review, not an hourly limit. The files per review are counted after path filter exclusions.
 
-| Plan       | PR   | IDE | CLI | Files/review | Chat |
-| ---------- | ---- | --- | --- | ------------ | ---- |
-| Free       | 1    | 3   | 3   | 150          | N/A  |
-| OSS        | 1–10 | 1   | 3   | 50–150       | 25   |
-| Pro        | 5    | 5   | 5   | 150          | 50   |
-| Pro+       | 10   | 10  | 10  | 300          | 100  |
-| Enterprise | 12   | 12  | 12  | 300          | 100  |
+<table>
+  <thead>
+    <tr>
+      <th rowSpan="2">
+        Plan
+      </th>
 
-PR, IDE, and CLI columns are reviews per developer per hour. Free PR reviews are summaries only. OSS PR review and file limits vary by project community and popularity. For sustained high-volume PR review activity, review availability may adjust under the [Fair Usage Limits Policy](#fair-usage-limits-policy).
+      <th colSpan="3">
+        Reviews<sup>\*</sup> per developer per hour
+      </th>
 
-Pro, Pro+, and Enterprise organizations can enable the [usage-based add-on](/management/usage-based-addon) (subject to billing-method eligibility) to continue processing eligible over-limit reviews without interruption.
+      <th rowSpan="2">
+        Files/review
+      </th>
+
+      <th rowSpan="2">
+        Chat
+      </th>
+    </tr>
+
+    <tr>
+      <th>PR</th>
+      <th>IDE</th>
+      <th>CLI</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>Free</td>
+
+      <td>
+        1 (Summary only)
+      </td>
+
+      <td>3</td>
+      <td>3</td>
+      <td>150</td>
+      <td>N/A</td>
+    </tr>
+
+    <tr>
+      <td>OSS</td>
+
+      <td>
+        1-10 (OSS PR review rate limits vary by repository star count.)
+      </td>
+
+      <td>1</td>
+      <td>3</td>
+
+      <td>
+        100-300 (OSS PR review file limits vary by project community and popularity.)
+      </td>
+
+      <td>25</td>
+    </tr>
+
+    <tr>
+      <td>Essentials (Previously called Pro.)</td>
+      <td>5</td>
+      <td>5</td>
+      <td>5</td>
+      <td>150</td>
+      <td>50</td>
+    </tr>
+
+    <tr>
+      <td>Team (Previously called Pro+.)</td>
+      <td>8</td>
+      <td>8</td>
+      <td>8</td>
+      <td>300</td>
+      <td>75</td>
+    </tr>
+
+    <tr>
+      <td>Advanced</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>300</td>
+      <td>100</td>
+    </tr>
+
+    <tr>
+      <td>Enterprise</td>
+      <td>12</td>
+      <td>12</td>
+      <td>12</td>
+      <td>300</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+
+<sup>\*</sup> Unless otherwise noted, PR, IDE, and CLI review limits are shown per developer, per hour, as rolling allowances rather than one-time quotas. Existing customers who are grandfathered from `Pro+` into `Team` retain their 10-review-per-hour allowance. For sustained high-volume PR review activity, review availability may adjust under the [Fair Usage Limits Policy](https://docs.coderabbit.ai/management/rate-limits.md#fair-usage-limits-policy).
+
+Enterprise Plan (This feature is available exclusively as part of the Enterprise plan. Please refer to our pricing page for more information about our plans and features.)
+
+Enterprise's 12 reviews per hour is the baseline. Only new Enterprise contracts explicitly enrolled in [adaptive limits](https://docs.coderabbit.ai/management/rate-limits.md#fair-usage-limits-policy) have a native Git review refill rate that adjusts with delivered included reviews. Existing Enterprise agreements remain unchanged unless otherwise agreed. Any upgrade requires new approved Enterprise contract terms and explicit enrollment; an upgrade alone does not enroll you. Trials, CLI/IDE reviews, self-hosted deployments, custom limits, and exemptions are unchanged.
+
+For public repositories with less than 10 stars, CodeRabbit requires reviews to be triggered manually. Select **Trigger review** in the CodeRabbit status comment, or comment `@coderabbitai review` for the latest changes or `@coderabbitai full review` for a full review.
+
+Essentials, Team, and Advanced organizations can enable [usage-based reviews](https://docs.coderabbit.ai/management/usage-based-addon.md#enable-the-add-on) to continue processing eligible over-limit reviews without interruption. A valid payment method is required before paid activation; eligible trial PR overages are free.
 
 The file limits in the table apply to pull request and merge request reviews after path filters are applied. When an eligible GitHub or GitHub Enterprise review exceeds its included file limit but contains no more than 300 files, CodeRabbit can offer a **Review on demand using usage pricing** action. Reviews with more than 300 files are not supported through usage pricing.
 
-Each PR review run uses one PR review from this allowance, including automatic incremental reviews after new pushes, manual `@coderabbitai review`, and manual `@coderabbitai full review`. To check your own PR review limit without starting a new review, comment `@coderabbitai rate limit` or ask a clear question like `@coderabbitai reviews remaining?`.
+> [!NOTE]
+>
+> A PR review run admitted within your included plan limit uses one PR review from this allowance, including automatic incremental reviews after new pushes and manual review commands. For the full list of actions that produce a review event, what happens when the allowance runs out, and how to spend fewer reviews, see [Review rate limits](https://docs.coderabbit.ai/management/rate-limits.md).
 
-<Info>
-  When no PR reviews are available, CodeRabbit pauses new reviews until more reviews become available or eligible over-limit reviews continue through the usage-based add-on.
-</Info>
+### Default Advanced trial limits
 
-### Default Pro+ trial limits
+Eligible PR reviews continue beyond the included trial allowance through [free usage-based reviews](https://docs.coderabbit.ai/management/usage-based-addon.md#pr-reviews-during-your-trial), unless you opt out. CodeRabbit enables usage-based reviews on the first eligible over-limit review and completes that review for \$0. Eligible usage-priced large PR reviews also receive the trial waiver, even when included review quota remains. CLI/IDE pricing is unchanged.
 
-The default 14-day trial starts on **Pro+**. The limits below apply to that default Pro+ trial experience.
+Trial review limits match the selected plan: Essentials trials allow 5 PR, IDE, and CLI reviews per developer per hour; Team trials allow 8; Advanced trials allow 10; and Enterprise trials allow 12. The default 14-day trial includes Advanced features and 50 chat messages per hour. The additional limits below also apply to the default trial.
 
-| Category                                                                      | Default Pro+ trial |
-| ----------------------------------------------------------------------------- | ------------------ |
-| PR reviews per developer per hour                                             | 10                 |
-| Files per pull request or merge request                                       | 300                |
-| [Custom Finishing Touch recipes](/finishing-touches/custom-finishing-touches) | 20                 |
-| [Custom Pre-Merge Checks](/pr-reviews/custom-checks)                          | 20                 |
-| [Linked repositories](/knowledge-base/multi-repo-analysis)                    | 10                 |
+| Category | Default Advanced trial |
+| - | - |
+| Files per pull request or merge request | 300 |
+| [Custom Finishing Touch recipes](https://docs.coderabbit.ai/finishing-touches/custom-finishing-touches.md) | 20 |
+| [Custom Pre-Merge Checks](https://docs.coderabbit.ai/pr-reviews/custom-checks.md) | 20 |
+| [Linked repositories](https://docs.coderabbit.ai/knowledge-base/multi-repo-analysis.md) | 10 |
+| [MCP server connections](https://docs.coderabbit.ai/connections/mcp-servers.md) | 15 |
 
-The default Pro+ trial also includes access to <Hint type="finishing-touches" />
-, [Pre-Merge Checks](/pr-reviews/pre-merge-checks), and [CodeRabbit Plan](/issue
-s/planner).
-
-### Fair Usage Limits Policy
-
-CodeRabbit's PR review limits are designed for modern development workflows where humans, coding agents, and automation may all request reviews. Each PR review uses compute. Fair usage limits keep review capacity reliable and economically sustainable for all customers.
-
-Your plan allowance is not changed. Pro includes 5 PR reviews per hour, Pro+ includes 10 PR reviews per hour, and Enterprise uses the rate shown in the table above. During typical usage, reviews become available at the normal plan rate. When one developer identity reaches the 95th percentile or higher of recent CodeRabbit PR review usage, CodeRabbit gradually spaces out additional reviews for that developer.
-
-Reducing or pausing review activity lets recent usage come down over time, which can restore faster review availability.
-
-The following limits apply per developer identity in an organization:
-
-<Tabs>
-  <Tab title="Pro" icon="shield-check">
-    | Recent PR review activity        | Review availability                 |
-    | -------------------------------- | ----------------------------------- |
-    | 0-29 reviews in the last 7 days  | 5 reviews/hour                      |
-    | 30-39 reviews in the last 7 days | 4 reviews/hour                      |
-    | 40-49 reviews in the last 7 days | 3 reviews/hour                      |
-    | 50-59 reviews in the last 7 days | 2 reviews/hour                      |
-    | 60+ reviews in the last 7 days   | 1 review/hour, one review at a time |
-  </Tab>
-
-  <Tab title="Pro+" icon="shield-plus">
-    | Recent PR review activity        | Review availability                 |
-    | -------------------------------- | ----------------------------------- |
-    | 0-29 reviews in the last 7 days  | 10 reviews/hour                     |
-    | 30-39 reviews in the last 7 days | 8 reviews/hour                      |
-    | 40-49 reviews in the last 7 days | 6 reviews/hour                      |
-    | 50-59 reviews in the last 7 days | 5 reviews/hour                      |
-    | 60-69 reviews in the last 7 days | 4 reviews/hour                      |
-    | 70-79 reviews in the last 7 days | 3 reviews/hour                      |
-    | 80-89 reviews in the last 7 days | 2 reviews/hour                      |
-    | 90+ reviews in the last 7 days   | 1 review/hour, one review at a time |
-  </Tab>
-</Tabs>
-
-### When a review is rate-limited
-
-When a push is rate-limited, CodeRabbit posts a rate-limit comment on the pull request and a passing check titled **"Review rate limited"** — the check passes by design so it never blocks merging on protected branches. The comment is the authoritative signal that no review ran. A previously approved PR keeps its approval.
-
-Comment `@coderabbitai rate limit` to see remaining capacity, then `@coderabbitai review` to trigger a review once capacity is restored.
-
-<Info>
-  A blocked push does not consume a review or delay when your next review becomes available. Capacity is limited by earlier reviews in the rolling window, not by the current push.
-</Info>
-
-#### How to continue with credits
-
-If your team expects sustained high-volume review activity, buy on-demand credits and enable the [usage-based add-on](/management/usage-based-addon). Eligible over-limit PR reviews can then continue without waiting for the next included review to become available.
-
-#### How to avoid reaching limits
-
-Reduce unnecessary automatic reviews before relying on credits:
-
-* Set [`reviews.auto_review.auto_pause_after_reviewed_commits`](/configuration/auto-review#auto_pause_after_reviewed_commits) to `1` or `2` so CodeRabbit pauses automatic incremental reviews earlier.
-* Use [label-based opt-in](/configuration/auto-review#labels) so CodeRabbit reviews only PRs marked ready for review.
-* Use [title-based exclusions](/configuration/auto-review#ignore_title_keywords) for WIP, generated, or automation-heavy PRs.
-* Turn off automatic reviews for noisy repositories and request reviews manually when the PR is ready.
+The default Advanced trial also includes access to Finishing Touches (Post-review agentic actions (Fix comments, writing docstrings or unit tests, and more) you trigger from a PR comment or a checkbox in the Walkthrough.), [Pre-Merge Checks](https://docs.coderabbit.ai/pr-reviews/pre-merge-checks.md), [CodeRabbit Plan](https://docs.coderabbit.ai/issues/planner), and continuous pull request security review.
 
 ## Feature limits
 
@@ -239,50 +218,65 @@ Some features have per-plan limits that are separate from the rate limits above.
 
 ### Linked repositories
 
-[Multi-Repo Analysis](/knowledge-base/multi-repo-analysis) lets CodeRabbit detect cross-repository breaking changes during reviews. The number of linked repositories you can activate depends on your plan:
+[Multi-Repo Analysis](https://docs.coderabbit.ai/knowledge-base/multi-repo-analysis.md) lets CodeRabbit detect cross-repository breaking changes during reviews. The number of linked repositories you can activate depends on your plan:
 
-| Free | Pro | Pro+ | Enterprise |
-| ---- | --- | ---- | ---------- |
-| 0    | 1   | 10   | 20         |
+| Free | Essentials | Team | Advanced | Enterprise |
+| - | - | - | - | - |
+| 0 | 1 | 5 | 10 | 20 |
 
-For details on how limits are enforced when your configuration exceeds your plan's allowance, see [Multi-Repo Analysis — Plan limits](/knowledge-base/multi-repo-analysis#plan-limits).
+For details on how limits are enforced when your configuration exceeds your plan's allowance, see [Multi-Repo Analysis — Plan limits](https://docs.coderabbit.ai/knowledge-base/multi-repo-analysis.md#plan-limits).
+
+These limits also apply to [linked context in Deep Scan](https://docs.coderabbit.ai/security.md#linked-repositories), with a maximum of 20 context repositories per scan. Essentials supports manual links; Team and higher also support automatic linking. Deep Scan usage is billed separately, and enabling usage billing does not add linked context to the Free plan. Scan source access has a separate saved selection in Security repository settings.
+
+### Knowledge repositories
+
+[Knowledge repositories](https://docs.coderabbit.ai/knowledge-base/connected-repositories.md) give CodeRabbit your team's documents, such as a handbook, runbooks, or architecture notes, as reference knowledge in reviews, chat, scans, and agent tasks. The number of repositories you can connect depends on your plan:
+
+| Free | Essentials | Team | Advanced | Enterprise |
+| - | - | - | - | - |
+| 0 | 0 | 1 | 1 | 10 |
 
 ### MCP servers
 
-[MCP server](/integrations/mcp-servers) connections let CodeRabbit pull in richer context from your external tools during reviews. The number of MCP server connections you can configure depends on your plan:
+[MCP server](https://docs.coderabbit.ai/connections/mcp-servers.md) connections let CodeRabbit pull in richer context from your external tools during reviews. The number of MCP server connections you can configure depends on your plan:
 
-| Pro | Pro+ | Enterprise |
-| --- | ---- | ---------- |
-| 5   | 15   | 20         |
+| Essentials | Team | Advanced | Enterprise |
+| - | - | - | - |
+| 5 | 10 | 15 | 20 |
 
 ### Custom Finishing Touch recipes
 
-[Custom Finishing Touch recipes](/finishing-touches/custom-finishing-touches) let you define your own post-review automation. The number of custom recipes you can define per repository depends on your plan:
+[Custom Finishing Touch recipes](https://docs.coderabbit.ai/finishing-touches/custom-finishing-touches.md) let you define your own post-review automation. The number of custom recipes you can define per repository depends on your plan:
 
-| Pro+ | Enterprise |
-| ---- | ---------- |
-| 20   | 20         |
+| Essentials | Team | Advanced | Enterprise |
+| - | - | - | - |
+| 0 | 10 | 20 | 20 |
 
 ### Custom Pre-Merge Checks
 
-[Custom Pre-Merge Checks](/pr-reviews/custom-checks) let you define organization-specific gating checks. The number of custom checks you can define per organization depends on your plan:
+[Custom Pre-Merge Checks](https://docs.coderabbit.ai/pr-reviews/custom-checks.md) let you define organization-specific gating checks. The number of custom checks you can define per organization depends on your plan:
 
-| Pro+ | Enterprise |
-| ---- | ---------- |
-| 20   | 20         |
+| Essentials | Team | Advanced | Enterprise |
+| - | - | - | - |
+| 0 | 10 | 20 | 20 |
+
+> [!NOTE]
+>
+> Public, non-trial repositories on Essentials receive an open-source exception of up to 10 custom Finishing Touch recipes and 10 custom Pre-Merge Checks. Private repositories and Essentials trials use the standard limits in the tables above.
 
 ## What's next
 
-<CardGroup cols={1}>
-  <Card title="Manage your subscription" href="/management/billing" icon="credit-card" horizontal>
-    View invoices, change your subscription plan, and adjust seat counts
-  </Card>
+> [card] [Manage your subscription](https://docs.coderabbit.ai/management/billing.md)
+>
+> View invoices, change your subscription plan, and adjust seat counts
 
-  <Card title="Seat assignment" href="/management/seat-assignment" icon="users" horizontal>
-    Control how CodeRabbit assigns seats to team members automatically or manually
-  </Card>
+> [card] [Seat assignment](https://docs.coderabbit.ai/management/seat-assignment.md)
+>
+> Control how CodeRabbit assigns seats to team members automatically or manually
 
-  <Card title="Pricing page" href="https://coderabbit.ai/pricing" icon="tag" horizontal>
-    See the full plan comparison and contact sales for Enterprise pricing
-  </Card>
-</CardGroup>
+> [card] [Pricing page](https://coderabbit.ai/pricing)
+>
+> See the full plan comparison and contact sales for Enterprise pricing
+
+
+This documentation is built and hosted on [Mintlify](https://mintlify.com), a developer documentation platform.

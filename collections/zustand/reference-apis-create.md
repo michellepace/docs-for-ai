@@ -1,9 +1,4 @@
----
-title: create
-description: How to create stores
-tag: react
-nav: 21
----
+# create
 
 `create` lets you create a React Hook with API utilities attached.
 
@@ -22,7 +17,7 @@ const useSomeStore = create(stateCreatorFn)
   - [Updating state with no store actions](#updating-state-with-no-store-actions)
   - [Subscribing to state updates](#subscribing-to-state-updates)
 - [Troubleshooting](#troubleshooting)
-  - [I’ve updated the state, but the screen doesn’t update](#i’ve-updated-the-state,-but-the-screen-doesn’t-update)
+  - [I’ve updated the state, but the screen doesn’t update](#ive-updated-the-state-but-the-screen-doesnt-update)
 
 ## Types
 
@@ -39,8 +34,11 @@ create<T>()(stateCreatorFn: StateCreator<T, [], []>): UseBoundStore<StoreApi<T>>
 #### Parameters
 
 - `stateCreatorFn`: A function that takes `set` function, `get` function and `store` as arguments.
-  Usually, you will return an object with the methods you want to expose. Note that `set`, `get` and
-  `store` cannot be used while this function is running, only after the store has been created.
+  Usually, you will return an object with the methods you want to expose.
+
+> \[!CAUTION]
+> `set`, `get` and `store` must not be called synchronously during initialization — they are only
+> safe to call after the store has been created (e.g., from within action methods).
 
 #### Returns
 
@@ -64,9 +62,7 @@ type AgeStoreState = { age: number }
 
 type AgeStoreActions = {
   setAge: (
-    nextAge:
-      | AgeStoreState['age']
-      | ((currentAge: AgeStoreState['age']) => AgeStoreState['age']),
+    nextAge: AgeStoreState['age'] | ((currentAge: AgeStoreState['age']) => AgeStoreState['age']),
   ) => void
 }
 
@@ -119,7 +115,7 @@ State can hold any kind of JavaScript value. When you want to update built-in pr
 numbers, strings, booleans, etc. you should directly assign new values to ensure updates are applied
 correctly, and avoid unexpected behaviors.
 
-> [!NOTE]
+> \[!NOTE]
 > By default, `set` function performs a shallow merge. If you need to completely replace the state
 > with a new one, use the `replace` parameter set to `true`
 
@@ -237,7 +233,7 @@ By default, `set` function performs a shallow merge. To update array values we s
 values to ensure updates are applied correctly, and avoid unexpected behaviors. To completely
 replace the state with a new one, use the `replace` parameter set to `true`.
 
-> [!IMPORTANT]
+> \[!CAUTION]
 > We should prefer immutable operations like: `[...array]`, `concat(...)`, `filter(...)`,
 > `slice(...)`, `map(...)`, `toSpliced(...)`, `toSorted(...)`, and `toReversed(...)`, and avoid
 > mutable operations like `array[arrayIndex] = ...`, `push(...)`, `unshift(...)`, `pop(...)`,
@@ -290,7 +286,7 @@ export default function MovingDot() {
 Defining actions at module level, external to the store have a few advantages like: it doesn't
 require a hook to call an action, and it facilitates code splitting.
 
-> [!NOTE]
+> \[!NOTE]
 > The recommended way is to colocate actions and states within the store (let your actions be
 > located together with your state).
 
@@ -371,11 +367,9 @@ export default function MovingDot() {
   const setPosition = usePositionStore((state) => state.setPosition)
 
   useEffect(() => {
-    const unsubscribePositionStore = usePositionStore.subscribe(
-      ({ position }) => {
-        console.log('new position', { position })
-      },
-    )
+    const unsubscribePositionStore = usePositionStore.subscribe(({ position }) => {
+      console.log('new position', { position })
+    })
 
     return () => {
       unsubscribePositionStore()
@@ -502,7 +496,7 @@ fields has changed:
 setPerson({ ...person, firstName: e.target.value }) // New first name from the input
 ```
 
-> [!NOTE]
+> \[!NOTE]
 > We don’t need to copy every property separately due to `set` function performing shallow merge by
 > default.
 

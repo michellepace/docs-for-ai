@@ -1,9 +1,3 @@
----
-title: persist
-description: How to persist a store
-nav: 28
----
-
 # persist
 
 `persist` middleware lets you persist a store's state across page reloads or application
@@ -185,10 +179,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -219,9 +210,7 @@ type PositionStoreState = {
 
 type PositionStoreActions = {
   actions: {
-    setPosition: (
-      nextPosition: PositionStoreState['context']['position'],
-    ) => void
+    setPosition: (nextPosition: PositionStoreState['context']['position']) => void
   }
 }
 
@@ -287,9 +276,7 @@ type PositionStoreState = {
 
 type PositionStoreActions = {
   actions: {
-    setPosition: (
-      nextPosition: PositionStoreState['context']['position'],
-    ) => void
+    setPosition: (nextPosition: PositionStoreState['context']['position']) => void
   }
 }
 
@@ -334,10 +321,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -353,7 +337,7 @@ Here's the `html` code
 > validates the persisted value, for example using a schema validation library like
 > [Zod](https://zod.dev).
 
-In this mini tutorial, we'll create a simple position-tracking system using vanilla store, where
+In this mini tutorial, we’ll create a simple position-tracking system using vanilla store, where
 the position state is persisted in the URL's search parameters. This approach allows state
 persistence directly in the browser's URL, which can be useful for maintaining state across page
 reloads or sharing links with state embedded.
@@ -367,11 +351,7 @@ const getSearchParams = () => {
 }
 
 const updateSearchParams = (searchParams: URLSearchParams) => {
-  window.history.replaceState(
-    {},
-    '',
-    `${location.pathname}?${searchParams.toString()}`,
-  )
+  window.history.replaceState({}, '', `${location.pathname}?${searchParams.toString()}`)
 }
 
 const getSearchParam = (key: string) => {
@@ -483,11 +463,7 @@ const getSearchParams = () => {
 }
 
 const updateSearchParams = (searchParams: URLSearchParams) => {
-  window.history.replaceState(
-    {},
-    '',
-    `${location.pathname}?${searchParams.toString()}`,
-  )
+  window.history.replaceState({}, '', `${location.pathname}?${searchParams.toString()}`)
 }
 
 const getSearchParam = (key: string) => {
@@ -550,10 +526,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -696,10 +669,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -850,10 +820,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"
@@ -986,10 +953,7 @@ positionStore.subscribe(render)
 Here's the `html` code
 
 ```html
-<div
-  id="dot-container"
-  style="position: relative; width: 100vw; height: 100vh;"
->
+<div id="dot-container" style="position: relative; width: 100vw; height: 100vh;">
   <div
     id="dot"
     style="position: absolute; background-color: red; border-radius: 50%; left: -10px; top: -10px; width: 20px; height: 20px;"

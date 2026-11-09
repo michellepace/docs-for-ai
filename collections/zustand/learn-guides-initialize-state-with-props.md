@@ -1,7 +1,4 @@
----
-title: Initialize state with props
-nav: 17
----
+# Initialize state with props
 
 In cases where [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) is needed, such as when a store should be initialized with props from a component, the recommended approach is to use a vanilla store with React.context.
 
@@ -131,9 +128,7 @@ const meals = ['Salmon', 'Berries', 'Nuts']
 function CommonConsumer() {
   const bearMealsOrder = useBearContext(
     useShallow((s) =>
-      Array.from({ length: s.bears }).map((_, index) =>
-        meals.at(index % meals.length),
-      ),
+      Array.from({ length: s.bears }).map((_, index) => meals.at(index % meals.length)),
     ),
   )
   return (

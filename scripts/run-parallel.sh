@@ -13,7 +13,8 @@ Run each line of a file as its own `claude -p` session, in parallel.
 
 Usage: scripts/run-parallel.sh --effort <level> <prompt-file> [jobs]
 
-  --effort <level>  low|medium|high|xhigh|max (all sessions)
+  --effort <level>  low|medium|high|xhigh|max (all sessions, even inside
+                    skills whose frontmatter sets its own effort)
   <prompt-file>     One prompt per line, blank lines skipped. Runs from the
                     repo root, so skills work: `/curate-doc uv <url>`
   [jobs]            Max concurrent sessions (default 7)
@@ -54,6 +55,8 @@ case "$effort" in
     exit 2
     ;;
 esac
+# --effort alone loses to a skill's `effort:` frontmatter; this env var beats both
+export CLAUDE_CODE_EFFORT_LEVEL="$effort"
 
 [ -r "$prompt_file" ] || {
   printf 'error: cannot read prompt-file: %s\n' "$prompt_file" >&2

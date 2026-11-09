@@ -1,7 +1,4 @@
----
-title: Auto Generating Selectors
-nav: 14
----
+# Auto Generating Selectors
 
 We recommend using selectors when using either the properties or actions from the store. You can access values from the store like so:
 
@@ -20,9 +17,7 @@ type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }
   : never
 
-const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
-  _store: S,
-) => {
+const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) => {
   const store = _store as WithSelectors<typeof _store>
   store.use = {}
   for (const k of Object.keys(store.getState())) {
@@ -80,8 +75,7 @@ const createSelectors = <S extends StoreApi<object>>(_store: S) => {
   const store = _store as WithSelectors<typeof _store>
   store.use = {}
   for (const k of Object.keys(store.getState())) {
-    ;(store.use as any)[k] = () =>
-      useStore(_store, (s) => s[k as keyof typeof s])
+    ;(store.use as any)[k] = () => useStore(_store, (s) => s[k as keyof typeof s])
   }
 
   return store

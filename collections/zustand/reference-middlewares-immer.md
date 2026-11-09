@@ -1,14 +1,8 @@
----
-title: immer
-description: How to perform immutable updates in a store without boilerplate code
-nav: 31
----
-
 # immer
 
 `immer` middleware lets you perform immutable updates.
 
-> [!IMPORTANT]
+> \[!WARNING]
 > In order to use `immer` from `zustand/middleware/immer` you need to install
 > `immer` library.
 
@@ -82,16 +76,11 @@ const personStore = createStore<PersonStore>()((set) => ({
   },
   setPerson: (nextPerson) =>
     set((state) => ({
-      person:
-        typeof nextPerson === 'function'
-          ? nextPerson(state.person)
-          : nextPerson,
+      person: typeof nextPerson === 'function' ? nextPerson(state.person) : nextPerson,
     })),
 }))
 
-const $firstNameInput = document.getElementById(
-  'first-name',
-) as HTMLInputElement
+const $firstNameInput = document.getElementById('first-name') as HTMLInputElement
 const $lastNameInput = document.getElementById('last-name') as HTMLInputElement
 const $emailInput = document.getElementById('email') as HTMLInputElement
 const $result = document.getElementById('result') as HTMLDivElement
@@ -182,17 +171,12 @@ const personStore = createStore<PersonStore>()(
     },
     setPerson: (nextPerson) =>
       set((state) => {
-        state.person =
-          typeof nextPerson === 'function'
-            ? nextPerson(state.person)
-            : nextPerson
+        state.person = typeof nextPerson === 'function' ? nextPerson(state.person) : nextPerson
       }),
   })),
 )
 
-const $firstNameInput = document.getElementById(
-  'first-name',
-) as HTMLInputElement
+const $firstNameInput = document.getElementById('first-name') as HTMLInputElement
 const $lastNameInput = document.getElementById('last-name') as HTMLInputElement
 const $emailInput = document.getElementById('email') as HTMLInputElement
 const $result = document.getElementById('result') as HTMLDivElement

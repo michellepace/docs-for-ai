@@ -209,7 +209,7 @@ function authorizationServerMetadata() {
 
 > [!NOTE]
 >
-> Claude selects CIMD only when the authorization-server metadata advertises both `client_id_metadata_document_supported: true` and `"none"` in `token_endpoint_auth_methods_supported`. The second is required because Claude's CIMD client authenticates as a public client with `token_endpoint_auth_method: "none"`, so the token endpoint must accept [PKCE](https://datatracker.ietf.org/doc/html/rfc7636)-only requests without a client secret. If either property is missing, Claude falls back to looking for a `registration_endpoint`.
+> Claude normally selects CIMD only when the authorization-server metadata advertises both `client_id_metadata_document_supported: true` and `"none"` in `token_endpoint_auth_methods_supported`, and otherwise looks for a `registration_endpoint`. The second property is required because Claude's CIMD client authenticates as a public client with `token_endpoint_auth_method: "none"` in that case, so the token endpoint must accept [PKCE](https://datatracker.ietf.org/doc/html/rfc7636)-only requests without a client secret. If the metadata lists `private_key_jwt`, Claude can present a second, confidential metadata document instead, as [DCR and CIMD details](https://claude.com/docs/connectors/building/authentication.md#dcr-and-cimd-details) describes.
 
 If you move to a real issuer, keep `client_id_metadata_document_supported: true` in that issuer's metadata if you want registration-free onboarding for Claude clients.
 
@@ -318,6 +318,6 @@ See [Test a local server](https://claude.com/docs/connectors/building/testing.md
 ## Next steps
 
 * [Authentication for connectors](https://claude.com/docs/connectors/building/authentication.md): check the OAuth requirements your authorization server must meet, including redirect URIs and token refresh
-* [Enterprise Managed Auth](https://claude.com/docs/connectors/building/enterprise-managed-auth.md): let organizations with SSO answer the same `401` with a silent token exchange
+* [Enterprise Managed Auth](https://claude.com/docs/connectors/building/enterprise-managed-auth.md): let Claude answer the same `401` with a silent token exchange for organizations that set up auto-connect for your connector
 * [Test your connector](https://claude.com/docs/connectors/building/testing.md): expose the server through a tunnel and add it as a custom connector
 * [Troubleshoot your connector](https://claude.com/docs/connectors/building/troubleshooting.md): diagnose discovery and authorization failures

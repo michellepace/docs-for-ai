@@ -1,7 +1,6 @@
 {
     // General editor settings
     "window.commandCenter": true,   // command + file search in the title bar
-    "editor.colorDecorators": true, // colour swatches next to hex/rgb values
 
     // Hide generated dirs from Explorer, search & quick-open
     "files.exclude": {

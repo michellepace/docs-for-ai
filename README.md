@@ -118,7 +118,7 @@ My curations — a starting point. Keep what's useful, delete the rest, re-curat
 | 📦 [`mcp/`](collections/mcp/) | 📄 [`INDEX.xml`](collections/mcp/INDEX.xml) | AI integration standard | 2026-11-03 | [Official](https://modelcontextprotocol.io) |
 | 📦 [`mdformat/`](collections/mdformat/) | 📄 [`INDEX.xml`](collections/mdformat/INDEX.xml) | Markdown formatter | 2026-11-04 | [Official](https://github.com/hukkin/mdformat/tree/master/docs) |
 | 📦 [`nextjs/`](collections/nextjs/) | 📄 [`INDEX.xml`](collections/nextjs/INDEX.xml) | React framework | 2025-12-02 | [Official](https://nextjs.org) |
-| 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-11-03 | [Official](https://github.com/microsoft/playwright/tree/main/docs/src) |
+| 📦 [`playwrightcli/`](collections/playwrightcli/) | 📄 [`INDEX.xml`](collections/playwrightcli/INDEX.xml) | Browser automation CLI | 2026-11-19 | [Official](https://github.com/microsoft/playwright.dev/tree/main/agent-cli) |
 | 📦 [`rich/`](collections/rich/) | 📄 [`INDEX.xml`](collections/rich/INDEX.xml) | Terminal text formatting | 2026-09-28 | [Official](https://rich.readthedocs.io) |
 | 📦 [`shiny/`](collections/shiny/) | 📄 [`INDEX.xml`](collections/shiny/INDEX.xml) | Python web apps | 2026-10-19 | [Official](https://shiny.posit.co/py/) |
 | 📦 [`tailwind/`](collections/tailwind/) | 📄 [`INDEX.xml`](collections/tailwind/INDEX.xml) | CSS framework | 2026-11-03 | [Official](https://tailwindcss.com/docs/) |

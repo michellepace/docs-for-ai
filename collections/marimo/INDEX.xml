@@ -1,12 +1,5 @@
 <docs_index>
   <source>
-    <title>Marimo — The Dan MacKinlay stable of variably-well-consider’d enterprises</title>
-    <description>Third-party notes: trade-offs versus Jupyter, fixing VS Code extension hangs, and Claude Code setup with `marimo-pair` and a `marimo check` hook.</description>
-    <source_url>https://danmackinlay.name/notebook/marimo.html</source_url>
-    <local_file>notebook-marimo.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
     <title>marimo</title>
     <description>Large CLI reference to search, not read whole: every flag for `edit`, `run`, `new`, `convert`, `export` (html, wasm, ipynb, pdf), `check`, `cache`, `pair` and `recover`, incl. sandboxing and token auth.</description>
     <source_url>https://docs.marimo.io/cli</source_url>
@@ -123,6 +116,20 @@
     <description>Snippets for dynamic UI element lists (why plain Python lists fail), forms, `mo.stop`, button triggers, `mo.ui.refresh` timers and caching.</description>
     <source_url>https://docs.marimo.io/recipes</source_url>
     <local_file>recipes.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>marimo pair: work on notebooks with coding agents</title>
+    <description>Let Claude Code, Codex and others work in your running notebooks, exploring data, explaining results and editing cells alongside you.</description>
+    <source_url>https://docs.marimo.io/guides/generate_with_ai/marimo_pair</source_url>
+    <local_file>guides-generate-with-ai-marimo-pair.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Skills</title>
+    <description>Task skills, separate from marimo pair, for converting Jupyter notebooks to marimo or building custom anywidget widgets.</description>
+    <source_url>https://docs.marimo.io/guides/generate_with_ai/skills</source_url>
+    <local_file>guides-generate-with-ai-skills.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
 </docs_index>

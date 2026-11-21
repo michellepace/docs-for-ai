@@ -5,6 +5,7 @@ argument-hint: "[collection] \"your question\""
 allowed-tools:
   - Bash(grep *)
   - Bash(printf *)
+  - Bash(uvx --from yq xq *)
   - Glob
   - Grep
   - mcp__firecrawl__firecrawl_scrape
@@ -27,7 +28,14 @@ If the question clearly belongs to another collection from `<available_collectio
 
 ## Step 2. Research a grounded answer
 
-1. Read `~/.claude/docs-for-ai/collections/{collection}/INDEX.xml` — the authoritative manifest. Route by each source's `<title>` and `<description>`; its `<local_file>` names a doc in the same directory.
+1. List the collection's docs from its `INDEX.xml` (the authoritative manifest):
+
+   ```shell
+   uvx --from yq xq -r --xml-force-list source '
+     "local_file | title | description",
+     (.docs_index.source[] | "\(.local_file) | \(.title) | \(.description)")
+   ' ~/.claude/docs-for-ai/collections/{collection}/INDEX.xml
+   ```
 
 2. Answer from the relevant docs. If they fall short, re-check the index for other files, then **ask before any web fallback**.
 
@@ -37,7 +45,7 @@ Fallback to the web only when the curated collection is insufficient and the use
 Always prefer Firecrawl:
 
 - Known URL: `firecrawl_scrape` with just the `url` — always markdown, never `json` extraction (grounding needs the page text).
-- Discovery: `firecrawl_search` with `includeDomains` as bare hostname(s) from `<source_url>` (drop the filter if nothing useful returns). Never add `scrapeOptions` — it embeds every result's full text. Pick the 1–3 best hits, then scrape them.
+- Discovery: `firecrawl_search` with `includeDomains` as bare hostname(s) from `INDEX.xml`'s `<source_url>` (drop the filter if nothing useful returns). Never add `scrapeOptions` — it embeds every result's full text. Pick the 1–3 best hits, then scrape them.
 
 ONLY if Firecrawl is unavailable, fall back to your lossy/noisy `WebSearch`/`WebFetch`.
 </web_fallback>

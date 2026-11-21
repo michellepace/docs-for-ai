@@ -58,8 +58,9 @@ Workflow:
 This will set up `/ask-docs`, `/curate-doc` and `/recurate-docs` to work anywhere — not just inside your repo.
 
 ```bash
-# 1. Install uv
+# 1. Install uv and jq (jq is used by /ask-docs)
 # 👉 https://docs.astral.sh/uv/getting-started/installation/
+# 👉 https://jqlang.org/download/
 
 # 2. Clone repository
 git clone https://github.com/michellepace/docs-for-ai.git

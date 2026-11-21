@@ -21,7 +21,7 @@ marimo check --fix .
 
 ## Rule Categories
 
-marimo's lint rules are organized into three main categories based on their severity:
+marimo's lint rules are organized into categories based on their severity:
 
 ### 🚨 Breaking Rules
 
@@ -44,6 +44,7 @@ These issues may cause runtime problems.
 | [MR001](https://docs.marimo.io/guides/lint_rules/rules/self_import/) | self-import | Importing a module with the same name as the file | ❌ |
 | [MR002](https://docs.marimo.io/guides/lint_rules/rules/branch_expression/) | branch-expression | Branch statements with output expressions that won't be displayed | ❌ |
 | [MR003](https://docs.marimo.io/guides/lint_rules/rules/reusable_definition_order/) | reusable-definition-order | Reusable definitions depending on later reusable definitions | ⚠️ |
+| [MR004](https://docs.marimo.io/guides/lint_rules/rules/private_import_alias/) | private-import-alias | Import aliased to a private (underscore-prefixed) name | ❌ |
 
 ### ✨ Formatting Rules
 
@@ -58,6 +59,16 @@ These are style and formatting issues.
 | [MF005](https://docs.marimo.io/guides/lint_rules/rules/sql_parse_error/) | sql-parse-error | SQL parsing errors during dependency analysis | ❌ |
 | [MF006](https://docs.marimo.io/guides/lint_rules/rules/misc_log_capture/) | misc-log-capture | Miscellaneous log messages during processing | ❌ |
 | [MF007](https://docs.marimo.io/guides/lint_rules/rules/markdown_indentation/) | markdown-indentation | Markdown cells in `mo.md()` should be properly indented. | 🛠️ |
+
+### 🌐 WASM Rules
+
+These issues affect WASM/Pyodide compatibility (off by default).
+
+| Code | Name | Description | Fixable |
+| --- | --- | --- | --- |
+| [MW001](https://docs.marimo.io/guides/lint_rules/rules/incompatible_import/) | incompatible-import | Importing a module unavailable in WASM/Pyodide | ❌ |
+| [MW002](https://docs.marimo.io/guides/lint_rules/rules/unsafe_system_call/) | unsafe-system-call | System call that fails in WASM/Pyodide | ❌ |
+| [MW003](https://docs.marimo.io/guides/lint_rules/rules/incompatible_package/) | incompatible-package | Package with native extensions not available in Pyodide | ❌ |
 
 ## Legend
 

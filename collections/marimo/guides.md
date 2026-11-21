@@ -19,7 +19,7 @@ These guides cover marimo's core concepts.
 | [Understanding errors](https://docs.marimo.io/guides/understanding_errors/) | Understanding marimo's constraints on notebook code |
 | [Lint rules](https://docs.marimo.io/guides/lint_rules/) | Comprehensive linting system and rule reference |
 | [Working with data](https://docs.marimo.io/guides/working_with_data/) | Using SQL cells, no-code dataframe, and reactive plots |
-| [Package management](https://docs.marimo.io/guides/package_management/) | Inlining dependencies in notebook files and other package management guides |
+| [Package management](https://docs.marimo.io/guides/package_management/) | Managing packages for projects and standalone notebooks |
 | [Generate with AI](https://docs.marimo.io/guides/generate_with_ai/) | Generate notebooks with AI |
 | [Editor features](https://docs.marimo.io/guides/editor_features/) | View variables, dataframe schemas, docstrings, and more |
 | [Using your own editor](https://docs.marimo.io/guides/editor_features/watching/) | Edit notebooks in your own editor and stream changes back to the browser |

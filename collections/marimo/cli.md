@@ -24,12 +24,175 @@ marimo [OPTIONS] COMMAND [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `--version` | boolean | Show the version and exit. | `False` |
+| `--version` | boolean | Show the version and exit. | `Sentinel.UNSET` |
 | `-l`, `--log-level` | choice (`DEBUG` \| `INFO` \| `WARN` \| `ERROR` \| `CRITICAL`) | Choose logging level. | `WARN` |
 | `-q`, `--quiet` | boolean | Suppress standard out. | `False` |
 | `-y`, `--yes` | boolean | Automatic yes to prompts, running non-interactively. | `False` |
 | `-d`, `--development-mode` | boolean | Run in development mode; enables debug logs and server autoreload. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+## marimo cache
+
+Inspect and clean up the on-disk cache.
+
+These commands work on the `__marimo__/cache/` directories written by marimo's
+caching (`mo.persistent_cache`).
+
+**Usage:**
+
+```text
+marimo cache [OPTIONS] COMMAND [ARGS]...
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo cache clean
+
+Delete all relevant cache entries for a notebook or directory.
+
+When this command is given a notebook path, it deletes all corresponding cache
+entries. When given a directory path, it deletes all cache entries that
+correspond to notebooks in that directory and (optionally) its subdirectories.
+Additionally accepts explicit cache keys, as provided to `mo.persistent_cache`.
+Defaults to the current directory if no path is provided.
+
+Pass one or more arguments. Accepts `-r`/`--recursive` to search `path`
+recursively. A prompt is provided before deletion; use `-y`/`--yes` to
+skip the prompt, or `--dry-run` to simulate the deletion.
+
+Example usage:
+
+```text
+marimo cache clean my_notebook.py
+
+marimo cache clean my_notebook.py train
+
+marimo cache clean notebooks/
+```
+
+**Usage:**
+
+```text
+marimo cache clean [OPTIONS] [PATH] [NAME]...
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-r`, `--recursive` | boolean | Search a directory PATH recursively for cache directories, skipping dot-folders. | `False` |
+| `-y`, `--yes` | boolean | Delete without asking for confirmation. | `False` |
+| `--dry-run` | boolean | Report what deletions would occur. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo cache dir
+
+Print the cache directories for the directory of the argument.
+
+A blank argument defaults to the current directory, otherwise the provided
+argument should be a notebook file or directory. A notebook path resolves to the
+cache directory used by a given notebook. A directory resolves within that
+directory, as if a notebook ran there. With `-r`/`--recursive`, the directory is
+instead searched recursively for `cache` directories, skipping dot-folders.
+
+Example usage:
+
+```text
+marimo cache dir
+
+marimo cache dir notebook.py
+
+marimo cache dir -r notebooks/
+```
+
+**Usage:**
+
+```text
+marimo cache dir [OPTIONS] [PATH]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-r`, `--recursive` | boolean | Search a directory PATH recursively for cache directories, skipping dot-folders. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo cache prune
+
+Delete cache entries without an associated notebook or cell.
+
+This command deletes cache entries that cannot be reached within a notebook. For
+instance, when the notebook no longer has an associated cell, or the associated
+notebook is deleted.
+
+Files that may be part of a running write are not deleted by default, nor are
+files that may still be associated with a notebook. These files may still be
+active, so the flag `--force` should be provided to delete all unneeded files.
+
+Defaults to the current directory if no path is provided. Accepts
+`-r`/`--recursive` to search `path` recursively. A prompt is provided
+before deletion; use `-y`/`--yes` to skip the prompt, or `--dry-run` to
+simulate the deletion.
+
+Example usage:
+
+```text
+marimo cache prune my_notebook.py
+
+marimo cache prune --dry-run -r notebooks/
+
+marimo cache prune -y notebooks/
+```
+
+**Usage:**
+
+```text
+marimo cache prune [OPTIONS] [PATH]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-r`, `--recursive` | boolean | Search a directory PATH recursively for cache directories, skipping dot-folders. | `False` |
+| `-y`, `--yes` | boolean | Delete without asking for confirmation. | `False` |
+| `--dry-run` | boolean | Report what deletions would occur. | `False` |
+| `--force` | boolean | Delete cache files from abandoned or active writes, and clear cache files that may still be associated with a notebook. Use with caution. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo cache size
+
+Print disk usage and entry counts for the cache.
+
+Prints the disk usage and entry count for each cache directory that
+PATH resolves to, and a total when there is more than one. Accepts
+`-r`/`--recursive` to search PATH recursively.
+
+Example usage:
+
+```text
+marimo cache size
+
+marimo cache size -r notebooks/
+```
+
+**Usage:**
+
+```text
+marimo cache size [OPTIONS] [PATH]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-r`, `--recursive` | boolean | Search a directory PATH recursively for cache directories, skipping dot-folders. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo check
 
@@ -53,7 +216,7 @@ marimo check [OPTIONS] [FILES]...
 | `--format` | choice (`full` \| `json`) | Output format for diagnostics. | `full` |
 | `--select` | text | Comma-separated rule codes/prefixes to enable, replacing config. e.g. --select MB,MR001 | None |
 | `--ignore` | text | Comma-separated rule codes/prefixes to ignore. e.g. --ignore MF004,MF007 | None |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo config
 
@@ -69,7 +232,7 @@ marimo config [OPTIONS] COMMAND [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo config describe
 
@@ -85,7 +248,7 @@ marimo config describe [OPTIONS]
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo config show
 
@@ -94,14 +257,15 @@ Show the marimo config.
 **Usage:**
 
 ```text
-marimo config show [OPTIONS]
+marimo config show [OPTIONS] [NOTEBOOK]
 ```
 
 **Options:**
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `--show-sources` | boolean | Include source comments for configuration settings and tables. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo convert
 
@@ -177,14 +341,15 @@ marimo convert [OPTIONS] FILENAME
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
 | `-o`, `--output` | path | Output file to save the converted notebook to. If not provided, the converted notebook will be printed to stdout. | None |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo edit
 
 Create or edit notebooks.
 If NAME is a url, the notebook will be downloaded to a temporary file.
-\* marimo edit Start the marimo notebook server
-\* marimo edit notebook.py Create or edit notebook.py
+
+- marimo edit Start the marimo notebook server
+- marimo edit notebook.py Create or edit notebook.py
 
 **Usage:**
 
@@ -196,23 +361,26 @@ marimo edit [OPTIONS] [NAME] [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-p`, `--port` | integer | Port to attach to. | None |
+| `--config` | text | Override a configuration field for this invocation. Can be repeated. | `Sentinel.UNSET` |
+| `-p`, `--port` | integer range (between `0` and `65535`) | Port to attach to. | None |
 | `--host` | text | Host to attach to. | `127.0.0.1` |
 | `--proxy` | text | Address of reverse proxy. | None |
 | `--headless` | boolean | Don't launch a browser. | `False` |
 | `--token` / `--no-token` | boolean | Use a token for authentication. This enables session-based authentication. A random token will be generated if --token-password is not set. If --no-token is set, session-based authentication will not be used. | `True` |
-| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. | None |
+| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. Pass -q before to this flag to suppress the connection message and keep the token out of logs. | None |
 | `--token-password-file` | text | Path to file containing token password, or '-' for stdin. Mutually exclusive with --token-password. | None |
 | `--base-url` | text | Base URL for the server. Should start with a /. | `` |
-| `--allow-origins` | text | Allowed origins for CORS. Can be repeated. Use \* for all origins. | None |
+| `--allow-origins` | text | Allowed origins for HTTP and WebSocket connections. Can be repeated. Use \* for all origins. | None |
 | `--skip-update-check` | boolean | Don't check if a new version of marimo is available for download. | `False` |
-| `--sandbox` / `--no-sandbox` | boolean | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Requires uv. | None |
-| `--trusted` / `--untrusted` | boolean | Run notebooks hosted remotely on the host machine; if --untrusted, runs marimo in a Docker container. | None |
+| `--sandbox` | choice (`uv` \| `pixi`) | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Choose uv (default) or pixi. | None |
+| `--no-sandbox` | boolean | Never run in a sandbox, and never prompt to. | `False` |
+| `--trusted` / `--untrusted` | boolean | Use --trusted to run remote notebooks on the host. Use --untrusted to run one remote or local notebook in a container. | None |
+| `--container-engine` | text | Engine for container execution. Use docker, podman, nerdctl, finch, container (Apple), or a Docker-compatible executable name or path. | `docker` |
 | `--watch` | boolean | Watch the file for changes and reload the code when saved in another editor. | `False` |
 | `--skew-protection` / `--no-skew-protection` | boolean | Enable skew protection middleware to prevent version mismatch issues. | `True` |
 | `--timeout` | float | Enable a global timeout to shut down the server after specified number of minutes of no connection | None |
 | `--session-ttl` | integer | Seconds to wait before closing a session on websocket disconnect. If None is provided, sessions are not automatically closed. | None |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo env
 
@@ -228,7 +396,7 @@ marimo env [OPTIONS]
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo export
 
@@ -244,7 +412,7 @@ marimo export [OPTIONS] COMMAND [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export html
 
@@ -277,7 +445,7 @@ marimo export html [OPTIONS] NAME [ARGS]...
 | `-o`, `--output` | path | Output file to save the HTML to. If not provided, the HTML will be printed to stdout. | None |
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export html-wasm
 
@@ -289,17 +457,17 @@ Example:
 marimo export html-wasm notebook.py -o notebook.wasm.html
 ```
 
-The exported HTML file will run the notebook using WebAssembly, making it
-completely self-contained and executable in the browser. This lets you
-share interactive notebooks on the web without setting up
-infrastructure to run Python code.
+The exported HTML file runs the notebook using WebAssembly, without a local
+Python or marimo installation. This lets you share interactive notebooks on
+the web without setting up infrastructure to run Python code. By default, the
+browser downloads the Python runtime and packages from hosted sources.
 
 The exported notebook runs using Pyodide, which supports most
 but not all Python packages. To learn more, see the Pyodide
 documentation.
 
-In order for this file to be able to run, it must be served over HTTP,
-and cannot be opened directly from the file system (e.g. file://).
+By default, the export must be served over HTTP. Use --single-file to load
+assets from a CDN and open the HTML file directly. Internet access is required.
 
 **Usage:**
 
@@ -311,7 +479,8 @@ marimo export html-wasm [OPTIONS] NAME [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-o`, `--output` | path | Output directory to save the HTML to. | \_required |
+| `-o`, `--output` | path | Output directory or HTML file. | `Sentinel.UNSET` |
+| `--single-file` | boolean | Export one HTML file with CDN assets that can be opened directly. | `Sentinel.UNSET` |
 | `--mode` | choice (`edit` \| `run`) | Whether the notebook code should be editable or readonly. | `run` |
 | `--watch` / `--no-watch` | boolean | Whether to watch the original file and export upon change | `False` |
 | `--show-code` / `--no-show-code` | boolean | Whether to show code by default in the exported HTML file; only relevant for run mode. | `False` |
@@ -319,7 +488,10 @@ marimo export html-wasm [OPTIONS] NAME [ARGS]...
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
 | `--execute` / `--no-execute` | boolean | Execute the notebook before exporting and embed outputs as a preview. Runs in an isolated environment pinned to WASM-compatible packages when possible. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `--offline` | boolean | Download the Python runtime and notebook packages into the export directory. | `Sentinel.UNSET` |
+| `--pyodide-index-url` | text | Mirror of the Pyodide 314.0.0 full/ distribution to bundle the runtime and its packages from. Requires --offline. | `Sentinel.UNSET` |
+| `--pypi-index-url` | text | Package index, such as a PyPI mirror, for packages outside the Pyodide distribution. Requires --offline. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export ipynb
 
@@ -361,7 +533,7 @@ marimo export ipynb [OPTIONS] NAME [ARGS]...
 | `--include-outputs` / `--no-include-outputs` | boolean | Run the notebook and include outputs in the exported ipynb file. | `False` |
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export md
 
@@ -390,10 +562,11 @@ marimo export md [OPTIONS] NAME
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
 | `--watch` / `--no-watch` | boolean | Watch notebook for changes and regenerate the output on modification. If watchdog is installed, it will be used to watch the file. Otherwise, file watcher will poll the file every 1s. | `False` |
-| `-o`, `--output` | path | Output file to save the markdown to. If not provided, markdown will be printed to stdout. | None |
+| `-o`, `--output` | path | Output file to save the markdown to. If --flavor is omitted, this file's extension selects the markdown flavor. If not provided, markdown will be printed to stdout; shell redirection is not inspected for flavor inference. | None |
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
+| `--flavor` | choice (`pymdown` \| `qmd` \| `mystmd` \| `mdx`) | Markdown flavor to export. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export pdf
 
@@ -437,10 +610,10 @@ marimo export pdf [OPTIONS] NAME [ARGS]...
 | `--raster-server` | choice (`static` \| `live`) | Server mode used for raster capture. Use 'static' (default) for faster captures, or 'live' if outputs require a live Python connection. For --as=slides, 'live' is recommended. | `static` |
 | `--as` | choice (`document` \| `slides`) | PDF export preset. Use `slides` for reveal.js slide-style output. If omitted, marimo exports as a standard document PDF. | None |
 | `--watch` / `--no-watch` | boolean | Watch notebook for changes and regenerate the output on modification. If watchdog is installed, it will be used to watch the file. Otherwise, file watcher will poll the file every 1s. | `False` |
-| `-o`, `--output` | path | Output PDF file to save to. | \_required |
+| `-o`, `--output` | path | Output PDF file to save to. | `Sentinel.UNSET` |
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export script
 
@@ -472,7 +645,7 @@ marimo export script [OPTIONS] NAME
 | `-o`, `--output` | path | Output file to save the script to. If not provided, the script will be printed to stdout. | None |
 | `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
 | `-f`, `--force` | boolean | Force overwrite of the output file if it already exists. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export session
 
@@ -488,10 +661,11 @@ marimo export session [OPTIONS] NAME [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `--sandbox` / `--no-sandbox` | boolean | Run the command in an isolated virtual environment using `uv run --isolated`. Requires `uv`. | None |
+| `--sandbox` | choice (`uv` \| `pixi`) | Execute each notebook in an isolated environment with its inline dependencies. Use --sandbox (uv), --sandbox=uv, or --sandbox=pixi. | None |
+| `--no-sandbox` | boolean | Never run in a sandbox, and never prompt to. | `False` |
 | `--force-overwrite` / `--no-force-overwrite` | boolean | Overwrite all existing session snapshots, even if they are already up-to-date. | `False` |
 | `--continue-on-error` / `--no-continue-on-error` | boolean | Continue processing other notebooks if one notebook fails. | `True` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo export thumbnail
 
@@ -515,46 +689,109 @@ marimo export thumbnail [OPTIONS] NAME [ARGS]...
 | `--overwrite` / `--no-overwrite` | boolean | Overwrite existing thumbnails. | `False` |
 | `--include-code` / `--no-include-code` | boolean | Whether to include code in the rendered HTML before screenshot. | `False` |
 | `--execute` / `--no-execute` | boolean | Execute notebooks and include their outputs in thumbnails. In --no-execute mode (default), thumbnails are generated from notebook structure without running code (and will not include outputs). | `False` |
-| `--sandbox` / `--no-sandbox` | boolean | Render notebooks in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Requires uv. Only applies when --execute is used. | None |
+| `--sandbox` | choice (`uv` \| `pixi`) | Render notebooks in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Use --sandbox (uv), --sandbox=uv, or --sandbox=pixi. Only applies when --execute is used. | None |
+| `--no-sandbox` | boolean | Never run in a sandbox, and never prompt to. | `False` |
 | `--continue-on-error` / `--fail-fast` | boolean | Continue processing other notebooks if one notebook fails. | `True` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo new
 
-Create an empty notebook, or generate from a prompt with AI
-
-- marimo new Create an empty notebook
-- marimo new prompt.txt Generate a notebook from a prompt in a file.
-- marimo new "Plot an interactive 3D surface with matplotlib." Generate a notebook from a prompt.
-
-Visit [https://marimo.app/ai](https://marimo.app/ai) for more prompt examples.
+Create an empty notebook.
 
 **Usage:**
 
 ```text
-marimo new [OPTIONS] [PROMPT]
+marimo new [OPTIONS]
 ```
 
 **Options:**
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-p`, `--port` | integer | Port to attach to. | None |
+| `--config` | text | Override a configuration field for this invocation. Can be repeated. | `Sentinel.UNSET` |
+| `-p`, `--port` | integer range (between `0` and `65535`) | Port to attach to. | None |
 | `--host` | text | Host to attach to. | `127.0.0.1` |
 | `--proxy` | text | Address of reverse proxy. | None |
 | `--headless` | boolean | Don't launch a browser. | `False` |
 | `--token` / `--no-token` | boolean | Use a token for authentication. This enables session-based authentication. A random token will be generated if --token-password is not set. If --no-token is set, session-based authentication will not be used. | `True` |
-| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. | None |
+| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. Pass -q before to this flag to suppress the connection message and keep the token out of logs. | None |
 | `--token-password-file` | text | Path to file containing token password, or '-' for stdin. Mutually exclusive with --token-password. | None |
 | `--base-url` | text | Base URL for the server. Should start with a /. | `` |
-| `--sandbox` / `--no-sandbox` | boolean | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Requires uv. | None |
+| `--sandbox` | choice (`uv` \| `pixi`) | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Choose uv (default) or pixi. | None |
+| `--no-sandbox` | boolean | Never run in a sandbox, and never prompt to. | `False` |
 | `--skew-protection` / `--no-skew-protection` | boolean | Enable skew protection middleware to prevent version mismatch issues. | `True` |
 | `--timeout` | float | Enable a global timeout to shut down the server after specified number of minutes of no connection | None |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo pair
 
-Commands for pair programming with AI.
+Pair with a live marimo notebook.
+
+Authentication:
+Local discovery and execution use private credentials automatically.
+For explicit server access, pass --token or --token-file, or set
+MARIMO\_TOKEN. Explicit credentials override local discovery.
+
+Workflow:
+Start a notebook if needed:
+marimo edit
+Execute in the selected notebook:
+marimo pair execute --notebook  --code 'print("hello")'
+For multiline Python, use --file , or --file - for stdin:
+marimo pair execute --notebook  --file - <<'PY'
+import marimo.\_code\_mode as cm
+async with cm.get\_context() as ctx:
+for cell in ctx.cells.values():
+print(cell.id, cell.code, cell.status)
+PY
+
+Target selection:
+Use `marimo pair list` if you need to find the notebook ID.
+Pass the notebook ID with --notebook.
+Local notebook IDs resolve their URL automatically.
+--session is a legacy selector, kept for compatibility. It accepts a
+notebook ID or an existing stable session ID. Stable session IDs
+require --url, and pair connect does not accept them.
+With either selector, --url restricts discovery to that server.
+With --url alone, the server must have exactly one running notebook.
+If several notebooks are open, ask the user which one.
+Do not switch notebooks after authentication or connection errors,
+or when execution is unconfirmed.
+
+Agent messages (preview):
+Execute automatically attempts an inbox connection in supported harnesses.
+After identifying the notebook and conversation, setup is attempted once per owner process.
+In a supported harness, retry once. If it fails, continue without messaging:
+marimo pair connect --notebook
+Codex must use its shared daemon and support codex queue.
+Claude Code requires its native inbox on macOS or Linux.
+OpenCode 2.0 requires its registered local service.
+Inbound message settings still apply; messages can be held or refused.
+Notebook agent messages arrive here as messages from marimo.
+Oversized agent messages include a complete JSON file on this machine.
+Files remain after detach. Cleanup removes owned files older than 24 hours.
+Use pair detach --notebook  to stop the inbox.
+
+Rules:
+Cells are the unit of work. The scratchpad is temporary; only code mode edits persist.
+Cells do not run on creation. Call run\_cell after create\_cell or edit\_cell.
+Use async with. Do not await ctx methods.
+Install packages with ctx.packages.add, not uv add or pip. Installs change
+the project; confirm when the user did not ask.
+If an empty cell exists, edit\_cell it instead of creating one.
+delete\_cell drops the cell's variables. Ask before deleting.
+Do not edit the notebook file directly. Code mode is the only write path.
+
+Code-mode API:
+Prefer marimo.\_code\_mode to inspect, create, edit, run, and delete notebook cells.
+ctx.cells # each has .id .code .status .errors .console\_outputs
+ctx.create\_cell(code) # returns the new cell id
+ctx.edit\_cell(cid, code)
+ctx.run\_cell(cid)
+ctx.delete\_cell(cid)
+ctx.packages.add("pandas>=2") # queued, installs on exit
+If a cm call fails, run help(cm):
+marimo pair execute --notebook  --code 'import marimo.\_code\_mode as cm; help(cm)'
 
 **Usage:**
 
@@ -566,7 +803,112 @@ marimo pair [OPTIONS] COMMAND [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo pair connect
+
+Connect this harness inbox to a live notebook.
+
+Supported harnesses: Codex, Claude Code, and OpenCode (macOS/Linux).
+
+OpenCode 2.0 requires its registered local service.
+
+For other harnesses, use pair execute to work with the notebook.
+
+**Usage:**
+
+```text
+marimo pair connect [OPTIONS]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `--url` | text | Restrict notebook selection to this server. | `Sentinel.UNSET` |
+| `--notebook` | text | Notebook ID from `marimo pair list`. | `Sentinel.UNSET` |
+| `--session` | text | Legacy selector, kept for compatibility. Accepts a notebook ID or an existing stable session ID. | `Sentinel.UNSET` |
+| `--token` | text | Server token. Overrides MARIMO\_TOKEN and local discovery. | `Sentinel.UNSET` |
+| `--token-file` | file | Read the server token from a local file. | `Sentinel.UNSET` |
+| `--harness` | choice (`codex` \| `claude` \| `opencode`) | Select the inbox harness. | `Sentinel.UNSET` |
+| `--pid` | integer range (`1` and above) | Process to track for connection lifetime. Defaults to the current harness. Its start time is captured automatically. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo pair detach
+
+Stop the forwarder and detach its notebook inbox.
+
+**Usage:**
+
+```text
+marimo pair detach [OPTIONS]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `--notebook` | text | Notebook ID to disconnect. | `Sentinel.UNSET` |
+| `--harness` | choice (`codex` \| `claude` \| `opencode`) | Select the harness to disconnect. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo pair docs
+
+Read notebook guidance on demand.
+
+**Usage:**
+
+```text
+marimo pair docs [OPTIONS] [TOPIC]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo pair execute
+
+Run Python in the selected live notebook kernel's scratchpad.
+
+**Usage:**
+
+```text
+marimo pair execute [OPTIONS]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `--url` | text | Restrict notebook selection to this server. | `Sentinel.UNSET` |
+| `--notebook` | text | Notebook ID from `marimo pair list`. | `Sentinel.UNSET` |
+| `--session` | text | Legacy selector, kept for compatibility. Accepts a notebook ID or an existing stable session ID. | `Sentinel.UNSET` |
+| `--token` | text | Server token. Overrides MARIMO\_TOKEN and local discovery. | `Sentinel.UNSET` |
+| `--token-file` | file | Read the server token from a local file. | `Sentinel.UNSET` |
+| `--code`, `-c` | text | Inline Python. | `Sentinel.UNSET` |
+| `--file`, `--code-file`, `-f` | text | Read Python from a UTF-8 file, or from stdin when PATH is '-'. Supply exactly one input option. | `Sentinel.UNSET` |
+| `--stream` | boolean | Write stdout and stderr as they arrive. Default: print one JSON result. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
+
+### marimo pair list
+
+List active notebooks and their host IDs.
+
+**Usage:**
+
+```text
+marimo pair list [OPTIONS]
+```
+
+**Options:**
+
+| Name | Type | Description | Default |
+| --- | --- | --- | --- |
+| `--url` | text | Server URL. Repeat to list more than one server. | `Sentinel.UNSET` |
+| `--token-file` | file | Read the server token from a local file. | `Sentinel.UNSET` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ### marimo pair prompt
 
@@ -582,12 +924,11 @@ marimo pair prompt [OPTIONS]
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `--url` | text | URL of the running marimo kernel. | \_required |
-| `--claude` | boolean | Validate that the marimo-pair Claude Code skill is installed. | `False` |
-| `--codex` | boolean | Validate that the marimo-pair Codex skill is installed. | `False` |
-| `--opencode` | boolean | Validate that the marimo-pair opencode skill is installed. | `False` |
-| `--with-token` | boolean | Prompt for an auth token and store it in a temp file. | `False` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `--url` | text | URL to include in the prompt. | `Sentinel.UNSET` |
+| `--notebook` | text | Notebook ID to include in the prompt. | `Sentinel.UNSET` |
+| `--session` | text | Notebook ID or stable session ID to include in the prompt. | `Sentinel.UNSET` |
+| `--with-token` | boolean | Prompt for an auth token and store it in a temp file. Leave empty if MARIMO\_TOKEN is set. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo recover
 
@@ -614,7 +955,7 @@ marimo recover [OPTIONS] NAME
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo run
 
@@ -640,25 +981,29 @@ marimo run [OPTIONS] NAME [ARGS]...
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-p`, `--port` | integer | Port to attach to. | None |
+| `--config` | text | Override a configuration field for this invocation. Can be repeated. | `Sentinel.UNSET` |
+| `-p`, `--port` | integer range (between `0` and `65535`) | Port to attach to. | None |
 | `--host` | text | Host to attach to. | `127.0.0.1` |
 | `--proxy` | text | Address of reverse proxy. | None |
 | `--headless` | boolean | Don't launch a browser. | `False` |
 | `--token` / `--no-token` | boolean | Use a token for authentication. This enables session-based authentication. A random token will be generated if --token-password is not set. If --no-token is set, session-based authentication will not be used. | `False` |
-| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. | None |
+| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. Pass -q before to this flag to suppress the connection message and keep the token out of logs. | None |
 | `--token-password-file` | text | Path to file containing token password, or '-' for stdin. Mutually exclusive with --token-password. | None |
 | `--include-code` | boolean | Send notebook source code to the client. By default, code is not sent to the client and cannot be viewed in the browser. | `False` |
 | `--session-ttl` | integer | Seconds to wait before closing a session on websocket disconnect. | `120` |
 | `--watch` | boolean | Watch the file for changes and reload the app. If watchdog is installed, it will be used to watch the file. Otherwise, file watcher will poll the file every 1s. | `False` |
 | `--skew-protection` / `--no-skew-protection` | boolean | Enable skew protection middleware to prevent version mismatch issues. | `True` |
 | `--base-url` | text | Base URL for the server. Should start with a /. | `` |
-| `--allow-origins` | text | Allowed origins for CORS. Can be repeated. | None |
+| `--allow-origins` | text | Allowed origins for HTTP and WebSocket connections. Can be repeated. | None |
 | `--redirect-console-to-browser` | boolean | Redirect console logs to the browser console. | `False` |
-| `--sandbox` / `--no-sandbox` | boolean | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Requires uv. | None |
+| `--sandbox` | choice (`uv` \| `pixi`) | Run the notebook in an isolated environment, with dependencies tracked via PEP 723 inline metadata. If already declared, dependencies will install automatically. Choose uv (default) or pixi. | None |
+| `--no-sandbox` | boolean | Never run in a sandbox, and never prompt to. | `False` |
 | `--check` / `--no-check` | boolean | Disable a static check of the notebook before running. | `True` |
-| `--trusted` / `--untrusted` | boolean | Run notebooks hosted remotely on the host machine; if --untrusted, runs marimo in a Docker container. | None |
+| `--trusted` / `--untrusted` | boolean | Use --trusted to run remote notebooks on the host. Use --untrusted to run one remote or local notebook in a container. | None |
+| `--container-engine` | text | Engine for container execution. Use docker, podman, nerdctl, finch, container (Apple), or a Docker-compatible executable name or path. | `docker` |
+| `--execute-opengraph-generators` | boolean | Execute OpenGraph generators for trusted notebooks. | `Sentinel.UNSET` |
 | `--show-tracebacks` / `--no-show-tracebacks` | boolean | Show detailed error tracebacks in a modal when exceptions occur. | None |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo shell-completion
 
@@ -674,7 +1019,7 @@ marimo shell-completion [OPTIONS]
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |
 
 ## marimo tutorial
 
@@ -715,12 +1060,12 @@ marimo tutorial [OPTIONS] {intro|dataflow|ui|markdown|plots|sql|layout|filefor
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `-p`, `--port` | integer | Port to attach to. | None |
+| `-p`, `--port` | integer range (between `0` and `65535`) | Port to attach to. | None |
 | `--host` | text | Host to attach to. | `127.0.0.1` |
 | `--proxy` | text | Address of reverse proxy. | None |
 | `--headless` | boolean | Don't launch a browser. | `False` |
 | `--token` / `--no-token` | boolean | Use a token for authentication. This enables session-based authentication. A random token will be generated if --token-password is not set. If --no-token is set, session-based authentication will not be used. | `True` |
-| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. | None |
+| `--token-password` | text | Use a specific token for authentication. This enables session-based authentication. A random token will be generated if not set. Pass -q before to this flag to suppress the connection message and keep the token out of logs. | None |
 | `--token-password-file` | text | Path to file containing token password, or '-' for stdin. Mutually exclusive with --token-password. | None |
 | `--skew-protection` / `--no-skew-protection` | boolean | Enable skew protection middleware to prevent version mismatch issues. | `True` |
-| `-h`, `--help` | boolean | Show this message and exit. | `False` |
+| `-h`, `--help` | boolean | Show this message and exit. | `Sentinel.UNSET` |

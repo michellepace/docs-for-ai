@@ -1,3 +1,5 @@
+[Skip to main content](https://danmackinlay.name/notebook/marimo.html#quarto-document-content)
+
 ### Assumed audience: [Anchor](https://danmackinlay.name/notebook/marimo.html\#assumed-audience)
 
 People interactively developing code on annoying remote clusters
@@ -7,7 +9,7 @@ People interactively developing code on annoying remote clusters
 Figure 1
 [Anchor](https://danmackinlay.name/notebook/marimo.html#fig-rammer)
 
-[marimo](https://marimo.io/?ref=danmackinlay.name) is a Python-specific computational notebook that mostly just works. In particular, it solves many pain points of [Jupyter](https://danmackinlay.name/notebook/jupyter.html) (HT [Jean-Michel Perraud](https://au.linkedin.com/in/jean-michel-perraud-ba916078?ref=danmackinlay.name)). I think Jupyter is an ongoing disaster — a tarpit filled with problems that are each individually poisonous and on fire.
+[marimo](https://marimo.io/?ref=danmackinlay.name) is a Python-specific computational notebook that mostly just works. In particular, it solves many pain points of [Jupyter](https://danmackinlay.name/notebook/jupyter.html) (HT [Jean-Michel Perraud](https://au.linkedin.com/in/jean-michel-perraud-ba916078?ref=danmackinlay.name)). For context, I think Jupyter is an ongoing disaster — a tarpit filled with problems that are each individually poisonous and somehow also on fire.
 
 ## 1 Value proposition [Anchor](https://danmackinlay.name/notebook/marimo.html\#value-proposition)
 
@@ -30,14 +32,14 @@ The [FAQ](https://docs.marimo.io/faq.html?ref=danmackinlay.name#faq-jupyter) exp
 The prices we pay:
 
 1. Marimo is less widely supported. Jupyter is everywhere.
-2. Unlike Jupyter, Marimo does not store the output of cells, so we can’t see the output of a cell without running it (unless we introduce our own explicit caching). This is a loss, true, but that supposed “feature” of Jupyter has caused me more pain than joy, so I do not miss it. \[traumatic flashback to purging a gigabyte-sized notebook from my team’s git repo\]. Caching should be explicit, not impossible to avoid.
+2. Unlike Jupyter, Marimo does not store the output of cells, so we can’t see the output of a cell without running it (unless we introduce our own explicit caching). This is a loss, true, but that supposed “feature” of Jupyter has caused me more pain than joy, so I do not miss it. \[traumatic flashback to purging a gigabyte-sized notebook from my team’s git repo\]. Caching should be explicit, rather than involuntary.
 3. The “topological” execution order of cells can be confusing because it is not what Python traditionally does, although it is the only way to keep a notebook consistent. Note that notebook cells can appear in any order on the page, but they may execute in a totally different and sometimes surprising order (for example, if we made a typo and defined a variable somewhere foolish).
 4. The browser UI is pretty good (better than Jupyter), but not quite as polished as my [VS Code](https://danmackinlay.name/notebook/vs_code_python.html) setup.
 5. Marimo has a [VS Code integration](https://danmackinlay.name/notebook/vs_code_python.html), not quite as fancy as the Jupyter integration; [make sure you use their recommended settings](https://github.com/marimo-team/vscode-marimo?ref=danmackinlay.name#python-configuration)
 6. To keep execution order deterministic and names consistent, we can’t change the referent of a variable between cells. That would be fine in a functional language but is kind of tedious in Python, whose programming patterns depend on changing variable referents; this results in lots of awkwardly named things like `experiment1`, `experiment2`, etc. There are [patterns to work around it](https://docs.marimo.io/guides/coming_from/jupyter/?h=stop&ref=danmackinlay.name#adapting-to-marimos-restriction-on-redefining-variables) but they are not idiomatic in Python.
 7. … Not sure yet. I’ll note problems as I discover them.
 
-Places where Marimo’s trade-offs are likely to be worthwhile for me:
+To be clear, I regard these friction as significant but way less annoying than the problems of Jupyter. Places where Marimo’s trade-offs seem to me to be worthwhile:
 
 1. Development of code on [HPC clusters](https://danmackinlay.name/notebook/hpc_hell.html) where we want interactivity and persistence.
 2. Sharing code in a literate/exploratory way, i.e. with colleagues or students.
@@ -45,13 +47,13 @@ Places where Marimo’s trade-offs are likely to be worthwhile for me:
 
 Places where I might prefer Jupyter:
 
-1. If I were working on some system that uses Jupyter but bans Marimo. This might arise in situations like Google Colab, where Jupyter is the primary interface, or in other turnkey data-science systems. A lot of people drank the Jupyter Kool-Aid.
+1. If I were working on some system that uses Jupyter but bans Marimo. This might arise in situations like Google Colab, where Jupyter is the primary interface, or in other turnkey data-science systems. A lot of people drank the Jupyter Kool-Aid and decided to get forever married to it.
 
 Places where I would use neither:
 
 1. When I am working inside VS Code on my local machine and have my IDE set up just how I like it, and have no need to share with others. Then I’ll use that and plot using the local GUI infrastructure and the local [AI coding assistants](https://danmackinlay.name/notebook/automatic_coding.html).
 
-Note that this leaves only a slender niche for Jupyter in my life.
+Note that this leaves only a slender niche for Jupyter in my life. Take that, jupyter.
 
 ## 2 Installation [Anchor](https://danmackinlay.name/notebook/marimo.html\#installation)
 
@@ -63,7 +65,7 @@ See [Getting Started with marimo](https://docs.marimo.io/getting_started/index.h
 
 ## 3 IDE integration [Anchor](https://danmackinlay.name/notebook/marimo.html\#ide-integration)
 
-IDE integration has been marimo’s weak suit for me so far. I use [VS Code for Python](https://danmackinlay.name/notebook/vs_code_python.html) — the marimo extension exists, but it’s somewhat janky.
+IDE integration has been marimo’s weak suit for me so far. I use [VS Code for Python](https://danmackinlay.name/notebook/vs_code_python.html) — the VS Code marimo extension exists, but it was somewhat janky last I looked.
 
 I don’t tend to use it; I run marimo notebooks in the browser.
 
@@ -112,36 +114,11 @@ Let’s say I am using a [coding agent](https://danmackinlay.name/notebook/autom
 
 First, marimo has [in-built LLM support](https://docs.marimo.io/guides/editor_features/ai_completion?ref=danmackinlay.name). I don’t use this workflow much because I am usually generating across a large codebase, and the notebook context is insufficient. Although maybe I am using it wrong?
 
-For a more general agent, the syntactic constraints of `marimo` notebooks can work sometimes but can also be taxing. In principle, generating marimo notebooks is efficient because they are pure Python files. In practice there is some friction — agents drift toward Jupyter-shaped patterns, redefine variables across cells, and reorder things in ways that violate marimo’s DAG.
+For a more general agent, the syntactic constraints of `marimo` notebooks can be punishing if they expect normal python. In principle, generating marimo notebooks is efficient because they are pure Python files. In practice, the fact that they are not idiomatic python confounds the coding agents. But there are many tricks for this! Read on.
 
-### 7.1 Layout for a mostly-non-marimo repo [Anchor](https://danmackinlay.name/notebook/marimo.html\#layout-for-a-mostly-non-marimo-repo)
+### 7.1 marimo-pair for live sessions [Anchor](https://danmackinlay.name/notebook/marimo.html\#marimo-pair-for-live-sessions)
 
-Most of my repos are mostly _not_ marimo, but contain a few notebooks for interactive visualisation and so forth. [Claude Code](https://danmackinlay.name/notebook/automatic_coding.html)’s recommended pattern for that situation is to keep always-loaded instructions broad and push specialised guidance into skills that load only when relevant. Concretely we want four pieces:
-
-1. A short repo-level `CLAUDE.md` for general repo guidance only — not marimo-specific. AFAICT, anything always-loaded that is rarely relevant just dilutes the prompt.
-2. A repo-local marimo skill in `.claude/skills/marimo/SKILL.md` that loads when a marimo file is in scope. The skill describes what makes a marimo notebook different from generic Python — preserve `import marimo`, `app = marimo.App(...)`, and `@app.cell` structure; prefer single-cell edits over notebook-wide refactors; be careful renaming values that downstream cells consume — and points at `uvx marimo check <file>` (or `--fix`) for validation.
-3. A marimo-only [PostToolUse hook](https://docs.claude.com/en/docs/claude-code/hooks?ref=danmackinlay.name) that runs `marimo check` after edits to notebook files. The hook is the deterministic counterpart to the skill: the skill _suggests_ validation, the hook _enforces_ it.
-4. Optionally, the official marimo prompt at `~/.claude/prompts/marimo.md`, sourced from `https://docs.marimo.io/CLAUDE.md`. This keeps marimo-aware guidance available across all my repos without each repo’s `CLAUDE.md` having to carry it.
-
-The hook script reads the tool call payload from stdin, plucks the file path with `jq`, and only runs the validator if the file looks like a marimo notebook (i.e. contains both `import marimo` and `@app.cell`):
-
-```
-#!/usr/bin/env bash
-set -euo pipefail
-INPUT="$(cat)"
-FILE_PATH="$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // .tool_response.filePath // empty')"
-[ -z "${FILE_PATH:-}" ] || [ "${FILE_PATH:-}" = "null" ] && exit 0
-[ -f "$FILE_PATH" ] || exit 0
-if grep -q "import marimo" "$FILE_PATH" 2>/dev/null && grep -q "@app.cell" "$FILE_PATH" 2>/dev/null; then
-  uvx marimo check "$FILE_PATH"
-fi
-```
-
-…wired into `.claude/settings.json` as a `PostToolUse` entry with matcher `”Edit|Write”` pointing at the script.
-
-### 7.2 marimo-pair for live sessions [Anchor](https://danmackinlay.name/notebook/marimo.html\#marimo-pair-for-live-sessions)
-
-For interactive collaboration on a _running_ notebook — Claude inspecting variables, running cells, poking UI state — the marimo team ships an official skill called [marimo-pair](https://docs.marimo.io/guides/generate_with_ai/marimo_pair/?ref=danmackinlay.name). File-level edits via the skill+hook setup above are blind to runtime state; marimo-pair closes that loop.
+For interactive collaboration on a _running_ notebook — Claude inspecting variables, running cells, updating UI state — the marimo team ships an official skill called [marimo-pair](https://docs.marimo.io/guides/generate_with_ai/marimo_pair/?ref=danmackinlay.name). The marimo-pair thing lets us intervene live in a running notebook.
 
 Install (from the repo root):
 
@@ -155,9 +132,9 @@ Without `npx`:
 uvx deno -A npm:skills add marimo-team/marimo-pair
 ```
 
-Upgrade later: `npx skills upgrade marimo-team/marimo-pair`. There is also a [broader official skill pack](https://github.com/marimo-team/skills?ref=danmackinlay.name): `npx skills add marimo-team/skills`. It bundles a handful of file-editing-oriented skills, including `marimo-notebook` (the file-edits sibling to `marimo-pair`), `marimo-batch` (operations across many notebooks at once), and `implement-paper` (turning a paper into a notebook).
+Upgrade later: `npx skills upgrade marimo-team/marimo-pair`. There is also a [supplementary official skill pack](https://github.com/marimo-team/skills?ref=danmackinlay.name): `npx skills add marimo-team/skills`. It bundles a handful of file-editing-oriented skills, including [`marimo-notebook`](https://github.com/marimo-team/skills/blob/main/skills/marimo-notebook/SKILL.md?ref=danmackinlay.name) (helps Claude understand the on-disk file format), [`marimo-batch`](https://github.com/marimo-team/skills/blob/main/skills/marimo-batch/SKILL.md?ref=danmackinlay.name) (operations across many notebooks at once), and [`implement-paper`](https://github.com/marimo-team/skills/blob/main/skills/implement-paper/SKILL.md?ref=danmackinlay.name) (turning a paper into a notebook) and other stuff like that
 
-To use it, run the notebook in watch mode and invoke the skill from Claude Code:
+To use it, we run the notebook in watch mode and invoke the skill from Claude Code:
 
 ```
 marimo edit --watch notebooks/example.py
@@ -167,18 +144,38 @@ marimo edit --watch notebooks/example.py
 /marimo-pair pair with me on notebooks/example.py
 ```
 
-### 7.3 Minimal prompt as a fallback [Anchor](https://danmackinlay.name/notebook/marimo.html\#minimal-prompt-as-a-fallback)
+### 7.2 Bareback [Anchor](https://danmackinlay.name/notebook/marimo.html\#bareback)
 
-If we are not running Claude Code — some other agent, a one-shot prompt — a serviceable minimum is:
-
-- Marimo notebooks are just `.py` files with clear internal structure and marked cells.
-- Each cell begins with Python code, optionally using marimo’s API (`import marimo as mo`).
-- Variables cannot be redeclared across cells, and each cell forms part of a directed acyclic graph.
-- Test any candidate change for syntactic validity using one of the [export commands](https://danmackinlay.name/notebook/marimo.html#export-import), e.g. `python notebook.py`.
+Without a skills-aware agent and the MCP interactions, I can sometimes get away with pure prompting.
 
 Pointing the assistant at an [example marimo notebook](https://danmackinlay.name/notebook/marimo.html#example-notebook) and asking for new content modelled on it works better than asking for a notebook from scratch.
 
 For a maximal ready-made `CLAUDE.md`-style prompt, see [koaning’s gist](https://gist.github.com/koaning/ce4786b532f1e0477bc89bd804907e40?ref=danmackinlay.name) — predates marimo’s own prompt file, but still a useful comparator.
+
+### 7.3 Layout for a mostly-non-marimo repo [Anchor](https://danmackinlay.name/notebook/marimo.html\#layout-for-a-mostly-non-marimo-repo)
+
+Most of my repos are mostly _not_ marimo, but contain a few notebooks for interactive visualisation and so forth. [Claude Code](https://danmackinlay.name/notebook/automatic_coding.html)’s recommended pattern for that situation is to keep always-loaded instructions broad and push specialised guidance into skills that load only when relevant. Concretely we want four pieces:
+
+1. A short repo-level `CLAUDE.md` for general repo guidance only — not marimo-specific. AFAICT, anything always-loaded that is rarely relevant just dilutes the prompt.
+2. A repo-local marimo skill in `.claude/skills/marimo/SKILL.md` that loads when a marimo file is in scope. The skill describes what makes a marimo notebook different from generic Python — preserve `import marimo`, `app = marimo.App(...)`, and `@app.cell` structure; prefer single-cell edits over notebook-wide refactors; be careful renaming values that downstream cells consume — and points at `uvx marimo check <file>` (or `--fix`) for validation.
+3. A marimo-only [PostToolUse hook](https://docs.claude.com/en/docs/claude-code/hooks?ref=danmackinlay.name) that runs `marimo check` after edits to notebook files.
+4. Optionally, put official marimo prompt at `~/.claude/prompts/marimo.md`, sourced from `https://docs.marimo.io/CLAUDE.md`. This keeps marimo-aware guidance available across all my repos so I need not copy it to each individually. I have a superstitious instinct to keep skills local though.
+
+The following hook script reads the tool call payload from stdin, extracts the file path with `jq`, and only runs the validator if the file looks like a marimo notebook (i.e. contains both `import marimo` and `@app.cell`):
+
+```
+#!/usr/bin/env bash
+set -euo pipefail
+INPUT="$(cat)"
+FILE_PATH="$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // .tool_response.filePath // empty')"
+[ -z "${FILE_PATH:-}" ] || [ "${FILE_PATH:-}" = "null" ] && exit 0
+[ -f "$FILE_PATH" ] || exit 0
+if grep -q "import marimo" "$FILE_PATH" 2>/dev/null && grep -q "@app.cell" "$FILE_PATH" 2>/dev/null; then
+  uvx marimo check "$FILE_PATH"
+fi
+```
+
+We can wire this into `.claude/settings.json` as a `PostToolUse` entry with matcher `"Edit|Write"` pointing at the script.
 
 ## 8 Exporting/importing [Anchor](https://danmackinlay.name/notebook/marimo.html\#export-import)
 

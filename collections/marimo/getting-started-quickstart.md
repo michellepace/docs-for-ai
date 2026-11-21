@@ -37,6 +37,12 @@ marimo edit your_notebook.py
 (If `your_notebook.py` doesn't exist, marimo will create a blank notebook
 named `your_notebook.py`.)
 
+## Pair with AI
+
+Pair with AI agents like Claude Code, Codex, or OpenCode using [marimo
+pair](https://marimo.io/pair), which transforms marimo from a notebook into a
+collaborative canvas for computation that yields a reproducible software artifact.
+
 ## Deploy as apps
 
 Use `marimo run` to [serve your notebook as an app](https://docs.marimo.io/guides/apps/), with
@@ -148,9 +154,9 @@ Use [molab](https://molab.marimo.io/notebooks), a cloud-based marimo notebook
 service similar to Google Colab, to create and share notebook links
 ([docs](https://docs.marimo.io/guides/molab/)).
 
-## VS Code/Cursor extension
+## Editor extensions
 
-You can edit and run marimo notebooks in VS Code or Cursor using our
+**VS Code/Cursor.** You can edit and run marimo notebooks in VS Code or Cursor using our
 extension; this provides a user interface that's similar to VS Code
 Jupyter, but with marimo's reactive execution, interactive elements,
 built-in package management, Git-friendly file format, and more.
@@ -158,3 +164,8 @@ built-in package management, Git-friendly file format, and more.
 Install the extension by searching "marimo" in the extensions sidebar
 (`Cmd/Ctrl-Shift-P`, type "install extension", then search "marimo")
 or from the [VS Code marketplace site](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo).
+
+**PyCharm.** Our [PyCharm
+plugin](https://plugins.jetbrains.com/plugin/32416-marimo), available on the
+JetBrains Marketplace, brings the full marimo editor inside PyCharm, letting you open, edit, and
+run notebooks without leaving your IDE.

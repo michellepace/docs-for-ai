@@ -70,7 +70,9 @@ interact with the query result.
 The SQL statement itself is an f-string, letting you
 interpolate Python values into the query with `{}`. In particular, this means
 your SQL queries can depend on the values of UI elements or other Python values,
-and they are fit into marimo's reactive dataflow graph.
+and they are fit into marimo's reactive dataflow graph. The values become part
+of the SQL text, so read the section on [avoiding SQL injection](#avoiding-sql-injection)
+before interpolating input that other people can control.
 
 ## SQL Output Types
 
@@ -128,21 +130,134 @@ SELECT * FROM read_parquet('path/to/example.parquet');
 For a full list you can check out the [duckdb extensions](https://duckdb.org/docs/extensions/overview).
 You can also check out our [examples on GitHub](https://github.com/marimo-team/marimo/tree/main/examples/sql).
 
+## Refreshing SQL queries
+
+If you'd like to refresh your SQL cells automatically, you can wire a UI element into the SQL cell's dependency graph.
+
+### Periodic refresh with `mo.ui.refresh`
+
+Add a [`mo.ui.refresh`](https://docs.marimo.io/api/inputs/refresh/#marimo.ui.refresh) control and reference it in your SQL query. Because SQL cells use f-strings, include the refresh control in a SQL comment so it does not affect the query:
+
+```python
+refresh = mo.ui.refresh(default_interval="30s")
+refresh
+```
+
+```sql
+SELECT * FROM my_table
+-- {refresh}
+```
+
+Each time the refresh timer fires, the SQL cell re-runs. See the [refresh recipe](https://docs.marimo.io/recipes/#run-a-cell-on-a-timer) for more details.
+
+### Manual refresh with a button
+
+For on-demand refresh, add a [`mo.ui.button`](https://docs.marimo.io/api/inputs/button/#marimo.ui.button) and reference it in the cell that runs your query.
+
+In a **SQL cell**, reference the button in a comment:
+
+```python
+refresh_button = mo.ui.button(label="Refresh data")
+refresh_button
+```
+
+```sql
+SELECT * FROM my_table
+-- {refresh_button}
+```
+
+### Other UI elements
+
+SQL queries can interpolate any Python value, so dropdowns, sliders, text inputs, and other UI elements already trigger re-queries when their values change. See the [`parametrizing_sql_queries.py` example](https://github.com/marimo-team/marimo/blob/main/examples/sql/parametrizing_sql_queries.py) on GitHub. If other people can type into a text input, bind its value as a parameter instead; see the section on [avoiding SQL injection](#avoiding-sql-injection).
+
 ## Escaping SQL brackets
 
-Our "SQL" cells are really just Python under the hood to keep notebooks as pure Python scripts. By default, we use `f-strings` for SQL strings, which allows for parameterized SQL like `SELECT * from table where value < {min}`.
+Our "SQL" cells are really just Python under the hood to keep notebooks as pure Python scripts. By default, we use `f-strings` for SQL strings, which lets you interpolate Python values into SQL like `SELECT * from table where value < {min}`.
 
-To escape real `{`/`}` that you don't want parameterized, use double `{{...}}`:
+To escape real `{`/`}` that you don't want interpolated, use double `{{...}}`:
 
 ```sql
 SELECT unnest([{{'a': 42, 'b': 84}}, {{'a': 100, 'b': NULL}}]);
+```
+
+## Avoiding SQL injection
+
+Using `{}` inserts a Python value into the SQL text before the query runs. It is string formatting, not parameter binding, so the query can include any Python value that can be coerced into a string. This approach works well for values your *own* code sets.
+
+However, if someone else can supply the value, they can change the query, so don't interpolate it directly. Examples include a [`mo.ui.text`](https://docs.marimo.io/api/inputs/text/#marimo.ui.text) in a shared app, [`mo.query_params()`](https://docs.marimo.io/api/query_params/#marimo.query_params), and data from files or APIs you don't control.
+
+> **Unsafe: interpolating untrusted input**
+>
+> ```sql
+> SELECT * FROM df WHERE species = '{species.value}'
+> ```
+> If `species` is a text input, typing `setosa' OR '1'='1` makes this query
+> return every row. Other inputs can end the statement and run new ones, for
+> example to create or drop tables.
+
+### Bind values with parameters
+
+To use an untrusted value, pass it to the database separately from the SQL
+text with parameter binding. The database never parses the value as SQL.
+marimo's SQL cells don't accept parameters, so you'll need to use a Python cell instead. With DuckDB, use `?`
+placeholders and a list:
+
+```python
+import duckdb
+
+result = duckdb.sql(
+    "SELECT * FROM df WHERE species = ?",
+    params=[species.value],
+).pl()
+```
+
+or named `$name` placeholders and a dictionary:
+
+```python
+result = duckdb.sql(
+    "SELECT * FROM df WHERE species = $species",
+    params={"species": species.value},
+).pl()
+```
+
+Typing `setosa' OR '1'='1` now matches no rows, because it is compared with
+`species` as an ordinary string. See DuckDB's
+[prepared statements](https://duckdb.org/docs/stable/sql/query_syntax/prepared_statements)
+documentation for more. For other databases, use the parameter binding of your
+database's Python library; placeholder syntax varies between libraries.
+
+> **Keep the query as the only positional argument**
+>
+> marimo reads the query to find the dataframes and tables it uses, like `df`
+> above, so the cell reruns when they change. For `duckdb.sql` and
+> `duckdb.execute`, it does this only when the query is a string literal and
+> the only positional argument. Write the query inline and pass parameters by
+> keyword: `params=` for `duckdb.sql`, `parameters=` for `duckdb.execute`.
+
+### Use an allowlist for table and column names
+
+Parameters can't stand in for identifiers such as table or column names. To let users of a marimo app choose an identifier safely, offer them a fixed set of choices, for example with a [`mo.ui.dropdown`](https://docs.marimo.io/api/inputs/dropdown/#marimo.ui.dropdown):
+
+```python
+sort_column = mo.ui.dropdown(
+    options=["species", "petal_length"],
+    value="species",
+    label="Sort by",
+)
+sort_column
+```
+
+and interpolate its value in a SQL cell:
+
+```sql
+SELECT * FROM df ORDER BY {sort_column.value}
 ```
 
 ## Connecting to a custom database
 
 There are two ways to connect to a database in marimo:
 
-### 1. Using the UI
+### Using the UI
 
 Click the "Add Database Connection" button in your notebook to connect to PostgreSQL, MySQL, SQLite, DuckDB, Snowflake, or BigQuery databases. The UI will guide you through entering your connection details securely. Environment variables picked up from your [`dotenv`](https://docs.marimo.io/guides/configuration/runtime_configuration/#environment-variables) can be used to fill out the database configuration fields.
 
@@ -150,9 +265,30 @@ Click the "Add Database Connection" button in your notebook to connect to Postgr
 
 *Add a database connection through the UI*
 
+#### Detecting data sources from your environment
+
+marimo scans your kernel's environment for connection details it recognizes and offers them as **Quick add** suggestions.
+Click a suggestion to insert a ready-to-run cell.
+
+![](https://docs.marimo.io/_static/docs-sql-datasource-quick-add.png)
+
+| Integration | Detected from |
+| --- | --- |
+| PostgreSQL | `PGHOST`, `PGUSER`, `PGDATABASE` (plus `PGPORT`, `PGPASSWORD`) |
+| MySQL | `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_DATABASE`, and `MYSQL_PASSWORD`/`MYSQL_PWD` (plus `MYSQL_TCP_PORT`) |
+| Trino | `TRINO_HOST`, `TRINO_USER`, `TRINO_CATALOG` (plus `TRINO_PORT`, `TRINO_PASSWORD`, `TRINO_SCHEMA`) |
+| Databricks SQL warehouse | `DATABRICKS_SQL_WAREHOUSE_ID` (plus `DATABRICKS_CONFIG_PROFILE`) |
+| DuckDB | `DUCKDB_PATH` or a local `DUCKDB_DATABASE` (plus `DUCKDB_READ_ONLY`) |
+| MotherDuck | `MOTHERDUCK_DATABASE`, an `md:` URL in `DUCKDB_DATABASE`, or `MOTHERDUCK_TOKEN` / `DUCKDB_MOTHERDUCK_TOKEN` / `motherduck_token` |
+| Quack | A `quack:` URI in `QUACK_DATABASE` or `DUCKDB_DATABASE` (plus `QUACK_TOKEN` / `QUACK_API_KEY`) |
+| PySpark (Spark Connect) | `SPARK_REMOTE` |
+| PyIceberg catalogs | `PYICEBERG_CATALOG__<name>__*` environment variables, or catalogs resolved from a `.pyiceberg.yaml` file |
+
+Only the *names* of environment variables are shown in the UI — their values are never sent to the frontend.
+
 If you'd like to connect to a database that isn't supported by the UI, you can use the code method below, or submit a [feature request](https://github.com/marimo-team/marimo/issues/new?title=New%20database%20connection:&labels=enhancement&template=feature_request.yaml).
 
-### 2. Using Code
+### Using code
 
 You can bring your own database via a **connection engine** with one of the following libraries
 
@@ -292,14 +428,17 @@ marimo will automatically discover the database connection and display the datab
 
 > **Note**
 >
-> By default, marimo auto-discovers databases and schemas, but not tables and columns (to avoid performance issues with large databases). You can configure this behavior in your `pyproject.toml` file. Options are `true`, `false`, or `"auto"`. `"auto"` will determine whether to auto-discover based on the type of database (e.g. when the value is `"auto"`, Snowflake and BigQuery will not auto-discover tables and columns while SQLite, Postgres, and MySQL will):
+> By default, marimo auto-discovers databases but may not discover tables, columns and schemas (to avoid performance issues with large databases). You can configure this behavior in your `pyproject.toml` file. Options are `true`, `false`, or `"auto"`. `"auto"` will determine whether to discover based on the type of database: databases that are cheap to introspect (e.g. SQLite, Postgres, MySQL) are discovered, while data warehouses (e.g. Snowflake, BigQuery) are not:
 > pyproject.toml
 > ```toml
 > [tool.marimo.datasources]
-> auto_discover_schemas = true   # Default: true
+> auto_discover_schemas = "auto"  # Default: "auto"
 > auto_discover_tables = "auto"   # Default: "auto"
-> auto_discover_columns = "auto"  # Default: false
+> auto_discover_columns = false   # Default: false
 > ```
+> SQL cell autocompletion relies on discovery so it may not work if the schema has not been discovered. You can either use the Data Sources panel and expand the schemas and tables you want which will register the autocompletion semantics, or change the config set above.
+> You can also change these settings through the notebook settings menu (gear icon), under **Packages & Data**:
+> ![Database schema discovery settings](https://docs.marimo.io/_static/docs-sql-discovery-settings.png)
 
 ## Catalogs
 

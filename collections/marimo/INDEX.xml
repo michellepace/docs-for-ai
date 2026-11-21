@@ -1,30 +1,9 @@
 <docs_index>
   <source>
-    <title>marimo</title>
-    <description>Large CLI reference to search, not read whole: every flag for `edit`, `run`, `new`, `convert`, `export` (html, wasm, ipynb, pdf), `check`, `cache`, `pair` and `recover`, incl. sandboxing and token auth.</description>
-    <source_url>https://docs.marimo.io/cli</source_url>
-    <local_file>cli.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>FAQ</title>
-    <description>marimo vs Jupyter, stopping expensive cells auto-running, `on_change` handlers not firing, escaping SQL `{}`, `dotenv`, remote SSH and `--headless` use.</description>
-    <source_url>https://docs.marimo.io/faq</source_url>
-    <local_file>faq.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
     <title>Installation</title>
     <description>Install with pip, `uv`, Pixi or conda and verify via `marimo tutorial intro`; try `--sandbox` notebooks without a project; what `marimo[recommended]` extras unlock.</description>
     <source_url>https://docs.marimo.io/getting_started/installation</source_url>
     <local_file>getting-started-installation.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Key concepts</title>
-    <description>Reactive execution mental model: why cell order doesn't matter, mutations aren't tracked, and UI elements must be global; plus `marimo run` apps and scripts.</description>
-    <source_url>https://docs.marimo.io/getting_started/key_concepts</source_url>
-    <local_file>getting-started-key-concepts.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
@@ -35,10 +14,10 @@
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
-    <title>Guides</title>
-    <description>Table of contents for all marimo guides, one line and URL each, for finding the page on an uncurated topic; mentions launching `marimo tutorial`.</description>
-    <source_url>https://docs.marimo.io/guides</source_url>
-    <local_file>guides.md</local_file>
+    <title>Key concepts</title>
+    <description>Reactive execution mental model: why cell order doesn't matter, mutations aren't tracked, and UI elements must be global; plus `marimo run` apps and scripts.</description>
+    <source_url>https://docs.marimo.io/getting_started/key_concepts</source_url>
+    <local_file>getting-started-key-concepts.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
@@ -49,31 +28,17 @@
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
-    <title>Custom HTML Head</title>
-    <description>Inject analytics, fonts, meta tags or external scripts via `html_head_file`; explains why it's ignored in edit mode (only `marimo run`).</description>
-    <source_url>https://docs.marimo.io/guides/configuration/html_head</source_url>
-    <local_file>guides-configuration-html-head.md</local_file>
+    <title>FAQ</title>
+    <description>marimo vs Jupyter, stopping expensive cells auto-running, `on_change` handlers not firing, escaping SQL `{}`, `dotenv`, remote SSH and `--headless` use.</description>
+    <source_url>https://docs.marimo.io/faq</source_url>
+    <local_file>faq.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
-    <title>Configuring LLM providers</title>
-    <description>Set `chat_model`, `edit_model` and `autocomplete_model` per provider (Anthropic, Bedrock, Ollama, Copilot…), API keys via env vars or `env:`, custom OpenAI-compatible providers, and fixing `/v1` 404s.</description>
-    <source_url>https://docs.marimo.io/guides/configuration/llm_providers</source_url>
-    <local_file>guides-configuration-llm-providers.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Snippets Configuration</title>
-    <description>Add reusable custom code snippets via `custom_paths` in `marimo.toml`, write the snippet file format, and disable built-in defaults with `include_default_snippets`.</description>
-    <source_url>https://docs.marimo.io/guides/configuration/snippets</source_url>
-    <local_file>guides-configuration-snippets.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Theming</title>
-    <description>Apply custom CSS via `css_file` or `custom_css`, the stable CSS variables, styling individual cells, forcing dark mode, and why plots ignore dark mode (matplotlib, plotly, bokeh, Altair).</description>
-    <source_url>https://docs.marimo.io/guides/configuration/theming</source_url>
-    <local_file>guides-configuration-theming.md</local_file>
+    <title>Recipes</title>
+    <description>Snippets for dynamic UI element lists (why plain Python lists fail), forms, `mo.stop`, button triggers, `mo.ui.refresh` timers and caching.</description>
+    <source_url>https://docs.marimo.io/recipes</source_url>
+    <local_file>recipes.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
@@ -91,34 +56,6 @@
     <curated_at>2026-11-21</curated_at>
   </source>
   <source>
-    <title>Interactive dataframes</title>
-    <description>Transform pandas/Polars dataframes without code via `mo.ui.dataframe`, select rows with `mo.ui.table`, opt out with `mo.plain`, use row viewer and column explorer panels, set `default_sql_output`.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/dataframes</source_url>
-    <local_file>guides-working-with-data-dataframes.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Plotting</title>
-    <description>Select data on charts via `mo.ui.matplotlib`, `mo.ui.altair_chart` or `mo.ui.plotly` and filter it in Python; plus displaying matplotlib figures, pan/zoom, `vegafusion` for Altair transforms, and the chart builder.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/plotting</source_url>
-    <local_file>guides-working-with-data-plotting.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Using SQL</title>
-    <description>`mo.sql` cells over dataframes, files and databases: output types, escaping `{{ }}`, injection-safe parameters, refresh triggers, connecting engines, and why schema autocomplete is missing.</description>
-    <source_url>https://docs.marimo.io/guides/working_with_data/sql</source_url>
-    <local_file>guides-working-with-data-sql.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
-    <title>Recipes</title>
-    <description>Snippets for dynamic UI element lists (why plain Python lists fail), forms, `mo.stop`, button triggers, `mo.ui.refresh` timers and caching.</description>
-    <source_url>https://docs.marimo.io/recipes</source_url>
-    <local_file>recipes.md</local_file>
-    <curated_at>2026-11-21</curated_at>
-  </source>
-  <source>
     <title>marimo pair: work on notebooks with coding agents</title>
     <description>Let Claude Code, Codex and others work in your running notebooks, exploring data, explaining results and editing cells alongside you.</description>
     <source_url>https://docs.marimo.io/guides/generate_with_ai/marimo_pair</source_url>
@@ -130,6 +67,69 @@
     <description>Task skills, separate from marimo pair, for converting Jupyter notebooks to marimo or building custom anywidget widgets.</description>
     <source_url>https://docs.marimo.io/guides/generate_with_ai/skills</source_url>
     <local_file>guides-generate-with-ai-skills.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Configuring LLM providers</title>
+    <description>Set `chat_model`, `edit_model` and `autocomplete_model` per provider (Anthropic, Bedrock, Ollama, Copilot…), API keys via env vars or `env:`, custom OpenAI-compatible providers, and fixing `/v1` 404s.</description>
+    <source_url>https://docs.marimo.io/guides/configuration/llm_providers</source_url>
+    <local_file>guides-configuration-llm-providers.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Interactive dataframes</title>
+    <description>Transform pandas/Polars dataframes without code via `mo.ui.dataframe`, select rows with `mo.ui.table`, opt out with `mo.plain`, use row viewer and column explorer panels, set `default_sql_output`.</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/dataframes</source_url>
+    <local_file>guides-working-with-data-dataframes.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Using SQL</title>
+    <description>`mo.sql` cells over dataframes, files and databases: output types, escaping `{{ }}`, injection-safe parameters, refresh triggers, connecting engines, and why schema autocomplete is missing.</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/sql</source_url>
+    <local_file>guides-working-with-data-sql.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Plotting</title>
+    <description>Select data on charts via `mo.ui.matplotlib`, `mo.ui.altair_chart` or `mo.ui.plotly` and filter it in Python; plus displaying matplotlib figures, pan/zoom, `vegafusion` for Altair transforms, and the chart builder.</description>
+    <source_url>https://docs.marimo.io/guides/working_with_data/plotting</source_url>
+    <local_file>guides-working-with-data-plotting.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Snippets Configuration</title>
+    <description>Add reusable custom code snippets via `custom_paths` in `marimo.toml`, write the snippet file format, and disable built-in defaults with `include_default_snippets`.</description>
+    <source_url>https://docs.marimo.io/guides/configuration/snippets</source_url>
+    <local_file>guides-configuration-snippets.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Theming</title>
+    <description>Apply custom CSS via `css_file` or `custom_css`, the stable CSS variables, styling individual cells, forcing dark mode, and why plots ignore dark mode (matplotlib, plotly, bokeh, Altair).</description>
+    <source_url>https://docs.marimo.io/guides/configuration/theming</source_url>
+    <local_file>guides-configuration-theming.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Custom HTML Head</title>
+    <description>Inject analytics, fonts, meta tags or external scripts via `html_head_file`; explains why it's ignored in edit mode (only `marimo run`).</description>
+    <source_url>https://docs.marimo.io/guides/configuration/html_head</source_url>
+    <local_file>guides-configuration-html-head.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>marimo</title>
+    <description>Large CLI reference to search, not read whole: every flag for `edit`, `run`, `new`, `convert`, `export` (html, wasm, ipynb, pdf), `check`, `cache`, `pair` and `recover`, incl. sandboxing and token auth.</description>
+    <source_url>https://docs.marimo.io/cli</source_url>
+    <local_file>cli.md</local_file>
+    <curated_at>2026-11-21</curated_at>
+  </source>
+  <source>
+    <title>Guides</title>
+    <description>Table of contents for all marimo guides, one line and URL each, for finding the page on an uncurated topic; mentions launching `marimo tutorial`.</description>
+    <source_url>https://docs.marimo.io/guides</source_url>
+    <local_file>guides.md</local_file>
     <curated_at>2026-11-21</curated_at>
   </source>
 </docs_index>

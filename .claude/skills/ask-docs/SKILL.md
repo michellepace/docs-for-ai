@@ -4,7 +4,6 @@ disable-model-invocation: false
 argument-hint: "[collection] \"your question\""
 allowed-tools:
   - Bash(grep *)
-  - Bash(find *)
   - Bash(printf *)
   - Glob
   - Grep
@@ -18,7 +17,7 @@ allowed-tools:
 
 Your task is to provide a grounded answer to a user's question against the applicable curated documentation collection.
 
-Available collections: !`printf '<available_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
+Available collections: !`printf '<available_collections>\n%s\n</available_collections>\n' "$(ls ~/.claude/docs-for-ai/collections)"`
 
 ## Step 1. Parse Arguments
 

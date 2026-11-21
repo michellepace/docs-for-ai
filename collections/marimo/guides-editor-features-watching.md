@@ -9,12 +9,13 @@ the marimo editor or running application. This lets you edit your notebook
 using an editor of your choice, like neovim, VSCode, Cursor, or PyCharm, and
 have the changes automatically reflected in your browser.
 
-> **Prefer VS Code/Cursor? Try our extension!**
+> **Use our editor extensions**
 >
 > This guide teaches you how to use marimo with arbitrary text editors.
-> If you use VS Code or Cursor, you might prefer using [our
-> extension](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo), which provides a first-class experience for editing and
-> running marimo notebooks.
+> If you use VS Code, Cursor, or PyCharm, you might prefer using our [VS Code
+> extension](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo)
+> or [PyCharm plugin](https://plugins.jetbrains.com/plugin/32416-marimo), which
+> provide first-class experiences for editing and running marimo notebooks.
 
 ## marimo's file format
 
@@ -147,7 +148,7 @@ at the command-line, or rename your file to have an `.md` extension in the noteb
 marimo conforms to standard markdown document format, and will render most
 places like Github. Metadata in this file format is saved in the frontmatter,
 which marimo may use for information like
-[sandboxing](https://docs.marimo.io/guides/package_management/inlining_dependencies/), and the marimo version. All other
+[sandboxing](https://docs.marimo.io/guides/package_management/sandboxes/), and the marimo version. All other
 fields are kept, but ignored.
 
 For execution, marimo extracts code fences that contain `marimo` in braces. For

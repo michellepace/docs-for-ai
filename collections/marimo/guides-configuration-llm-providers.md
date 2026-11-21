@@ -19,9 +19,9 @@ The path to `marimo.toml` is printed at the top of the output.
 
 marimo uses three roles:
 
-- **`chat_model`**: chat panel
-- **`edit_model`**: refactor cells (Cmd/Ctrl-Shift-E) and Generate with AI
-- **`autocomplete_model`**: inline code completion
+- **`chat_model`** handles chat panel requests.
+- **`edit_model`** refactors existing cells with `Cmd/Ctrl-Shift-E`.
+- **`autocomplete_model`** provides inline code completion.
 
 Models are written as `provider/model`, and the provider prefix routes to the matching config section:
 
@@ -29,7 +29,7 @@ marimo.toml
 ```toml
 [ai.models]
 chat_model = "openai/gpt-4o-mini"           # Routes to OpenAI config
-edit_model = "anthropic/claude-3-sonnet"    # Routes to Anthropic config
+edit_model = "anthropic/claude-sonnet-5-5"  # Routes to Anthropic config
 autocomplete_model = "ollama/codellama"     # Routes to Ollama config
 autocomplete_model = "some_other_provider/some_model" # Routes to OpenAI compatible config
 ```
@@ -57,32 +57,59 @@ rules = """
 max_tokens = 1000
 ```
 
+## API keys from environment variables
+
+Some providers use a default environment variable when `api_key` is not set.
+
+| Provider | Environment variable |
+| --- | --- |
+| OpenAI | `OPENAI_API_KEY` |
+| GitHub Copilot | `GITHUB_COPILOT_API_KEY` |
+| Anthropic | `ANTHROPIC_API_KEY` |
+| Google AI | `GEMINI_API_KEY`, then `GOOGLE_API_KEY` |
+| Azure OpenAI | `AZURE_API_KEY` |
+| OpenRouter | `OPENROUTER_API_KEY` |
+| Weights & Biases | `WANDB_API_KEY` |
+| OpenCode Go | `OPENCODE_API_KEY` |
+
+For example, you can configure OpenAI without an `api_key` value:
+
+```bash
+export OPENAI_API_KEY="sk-proj-..."
+marimo edit notebook.py
+```
+
+You can also use a different environment variable. Set `api_key` to an
+`env:` reference:
+
+marimo.toml
+```toml
+[ai.custom_providers.enterprise_gateway]
+api_key = "env:ENTERPRISE_AI_API_KEY"
+base_url = "https://gateway.example.com/v1"
+```
+
+The `env:` syntax works with each provider that accepts `api_key`. This
+includes custom providers. marimo returns a configuration error when the
+referenced variable is empty or absent.
+
+The `env:` prefix is reserved for environment variable references. A literal
+API key cannot start with this prefix.
+
+> **Use trusted configuration**
+>
+> Use `env:` references only in configuration files that you trust. A provider
+> sends the resolved value to its configured endpoint.
+
+marimo first reads the environment of the server process. Then marimo reads
+the configured [`.env` files](https://docs.marimo.io/guides/configuration/runtime_configuration/#env-files) in order.
+The first value takes precedence.
+
 ## Supported providers
 
-![](https://docs.marimo.io/_static/docs-provider-config.png)
-
-*Configure LLM providers in the notebook settings panel.*
-
-You can configure the following providers:
-
-- Anthropic
-- AWS Bedrock
-- GitHub
-- Google AI
-- DeepSeek
-- xAI
-- LM Studio
-- Mistral
-- Ollama
-- OpenAI
-- OpenCode Go
-- OpenRouter
-- Weights & Biases
-- Together AI
-- Vercel v0
-- and any OpenAI-compatible provider
-
-Below we describe how to connect marimo to your AI provider.
+Providers can be configured in the notebook settings. All major commercial and
+open providers are supported. Below we describe how to connect marimo to your
+AI provider.
 
 ### OpenAI
 
@@ -123,7 +150,7 @@ api_key = "sk-proj-..."
 marimo.toml
 ```toml
 [ai.models]
-chat_model = "anthropic/claude-3-7-sonnet-latest" # other options: claude-3-haiku, claude-3-opus
+chat_model = "anthropic/claude-sonnet-5-5" # other options: claude-haiku-5-5, claude-opus-5-5
 # See Anthropic model list: https://docs.anthropic.com/en/docs/about-claude/models
 
 [ai.anthropic]
@@ -145,7 +172,7 @@ AWS Bedrock exposes multiple foundation models via a unified AWS API.
 marimo.toml
 ```toml
 [ai.models]
-chat_model = "bedrock/anthropic.claude-3-sonnet-latest"
+chat_model = "bedrock/global.anthropic.claude-sonnet-5"
 # Example model families include Anthropic Claude, Meta Llama, Cohere Command
 
 [ai.bedrock]
@@ -176,7 +203,7 @@ You can use Google AI via two backends: **Google AI Studio** (API key) or **Goog
 marimo.toml
 ```toml
 [ai.models]
-chat_model = "google/gemini-2.5-pro"
+chat_model = "google/gemini-3.8-flash"
 # or any model from https://ai.google.dev/gemini-api/docs/models/gemini
 
 [ai.google]
@@ -206,7 +233,7 @@ For details and advanced configuration, see the `google-genai` Python client doc
 
 There are two offerings for serving LLMs on Azure
 
-**Azure OpenAI**
+#### Azure OpenAI
 
 marimo.toml
 ```toml
@@ -220,9 +247,9 @@ base_url = "https://<your-resource-name>.openai.azure.com/openai/deployments/<de
 
 The deployment name is typically the model name.
 
-**Azure AI Foundry**
+#### Microsoft Foundry
 
-AI Foundry uses OpenAI-compatible models. You can configure it as a custom provider:
+Microsoft Foundry uses OpenAI-compatible models. You can configure it as a custom provider:
 
 marimo.toml
 ```toml
@@ -237,31 +264,41 @@ base_url = "https://<your-resource-name>.services.ai.azure.com/openai/v1"
 
 ### GitHub Copilot
 
-Use Copilot for code refactoring or the chat panel (Copilot subscription required).
+You can use models from your Copilot subscription in marimo's AI assistant.
 
 **Requirements**
 
-- Install the [gh CLI](https://cli.github.com/)
-- Get a token: `gh auth token`
+- Install `pydantic-ai-slim[openai]>=2.42.0`.
+- Install the [GitHub CLI](https://cli.github.com/).
+- Sign in with `gh auth login`.
+- Get your OAuth token with `gh auth token`.
 
 **Configuration**
+
+The available models depend on your Copilot subscription.
+
+Add an available model to `custom_models`. Use the `github/` prefix.
 
 marimo.toml
 ```toml
 [ai.models]
-chat_model = "github/gpt-4o-mini"
+custom_models = ["github/gpt-5.4"]
+chat_model = "github/gpt-5.4"
 
 [ai.github]
-api_key = "gho_..."
+api_key = "env:GITHUB_COPILOT_API_KEY"
 ```
 
-> **My token starts withghp_instead ofgho_?**
->
-> This usually happens when you previously authenticated `gh` by pasting a *personal* access token (`ghp_...`). However, GitHub Copilot is not available through `ghp_...`, and you will encounter errors such as:
-> > bad request: Personal Access Tokens are not supported for this endpoint
-> To resolve this issue, you could switch to an *OAuth* access token (`gho_...`):
-> 1. Re-authenticate by running `gh auth login`.
-> 2. Choose *Login with a web browser* (instead of *Paste an authentication token*) this time.
+Set the token before you start marimo:
+
+```bash
+export GITHUB_COPILOT_API_KEY="$(gh auth token)"
+```
+
+You can also set `GITHUB_COPILOT_API_TOKEN` or `COPILOT_GITHUB_TOKEN`.
+GitHub Copilot supports chat completions only. See the
+[Pydantic AI GitHub Copilot guide](https://pydantic.dev/docs/ai/models/github-copilot/)
+for authentication details and current limitations.
 
 ### OpenRouter
 
@@ -331,7 +368,7 @@ marimo.toml
 [ai.models]
 # Use opencode-go/ prefix for OpenCode Go models. Examples:
 chat_model = "opencode-go/kimi-k2.6"
-edit_model = "opencode-go/qwen3.6-plus"
+edit_model = "opencode-go/qwen3.7-plus"
 
 [ai.opencode_go]
 api_key = "your-opencode-api-key"
@@ -339,6 +376,10 @@ base_url = "https://opencode.ai/zen/go/v1/"  # Optional, this is the default
 ```
 
 You can also set the `OPENCODE_API_KEY` environment variable instead of `api_key`. See available models at the [OpenCode Go documentation](https://opencode.ai/docs/go/). Make sure to prepend `opencode-go/` to the model slug.
+
+marimo automatically sends `User-Agent: marimo/<version>`, `x-opencode-client: marimo`, and a stable `x-opencode-session` header for OpenCode Go.
+marimo derives the session header from the conversation ID, with a notebook-session fallback.
+You can override these headers using `extra_headers` in `[ai.opencode_go]`.
 
 ### Local models with Ollama
 

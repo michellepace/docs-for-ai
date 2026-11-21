@@ -55,7 +55,7 @@ The most common stop reason. Indicates Claude completed its response naturally.
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -740,7 +740,7 @@ Claude stopped because it reached the [`max_tokens`](https://platform.claude.com
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -888,11 +888,11 @@ Claude stopped because it reached the [`max_tokens`](https://platform.claude.com
 
   <CodeGroup exclude="shell:cURL, shell:CLI">
     <CodeGroupItem language="cURL">
-      This workflow needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
+      This workflow needs more logic than a single shell command. Use the [Anthropic SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
     </CodeGroupItem>
 
     <CodeGroupItem language="CLI">
-      This workflow needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
+      This workflow needs more logic than a single shell command. Use the [Anthropic SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
     </CodeGroupItem>
 
     ```python Python
@@ -1052,7 +1052,7 @@ Claude encountered one of your custom [stop sequences](https://platform.claude.c
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -1196,7 +1196,7 @@ Claude is calling a tool that you need to run.
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -1539,7 +1539,7 @@ When this occurs, the response might contain a `server_tool_use` block without a
   # on the response and re-POST with the assistant content appended.
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -1757,7 +1757,7 @@ Claude declined to generate a response. Safety classifiers return this stop reas
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -1894,12 +1894,12 @@ Claude declined to generate a response. Safety classifiers return this stop reas
 </CodeGroup>
 
 <Tip>
-  If you encounter `refusal` stop reasons frequently while using Claude Sonnet 4.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) or Claude Opus 4.1 (the latter [retired, except on Bedrock and Claude Models on Google Cloud (Google managed)](https://platform.claude.com/docs/en/about-claude/model-deprecations)), you can try updating your API calls to use Haiku 4.5 (`claude-haiku-4-5-20251001`), which has different usage restrictions. Learn more about [understanding Sonnet 4.5’s API safety filters](https://support.claude.com/en/articles/12449294-understanding-sonnet-4-5-s-api-safety-filters).
+  If you encounter `refusal` stop reasons frequently while using Claude Sonnet 4.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) or Claude Opus 4.1 (the latter [retired, except on Claude Models on Google Cloud (Google managed) and Amazon Bedrock](https://platform.claude.com/docs/en/about-claude/model-deprecations)), you can try updating your API calls to use Claude Haiku 4.5 (`claude-haiku-4-5-20251001`), which has different usage restrictions. Learn more about [understanding Sonnet 4.5’s API safety filters](https://support.claude.com/en/articles/12449294-understanding-sonnet-4-5-s-api-safety-filters).
 </Tip>
 
 On a refusal, the [`stop_details`](https://platform.claude.com/docs/en/api/messages/create#message.stop_details) object identifies the policy category that triggered it. The categories and the full refusal response shape are covered in [What a refusal looks like](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#refusal-response). `stop_details` is `null` for all stop reasons other than `refusal`.
 
-A refused request on Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, Claude Sonnet 5.5, or Claude Haiku 5.5 can usually be served by retrying on another Claude model. [Refusals and fallback](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) shows how to set up that retry, server-side or in your client. Claude Haiku 5.5 has no server-side fallback, so set up its retry [in your client](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#client-side-fallback). If you build the retry yourself from Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, or Claude Sonnet 5.5, [fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) covers how to avoid paying the prompt-cache cost twice.
+You can usually get a response to a refused request by retrying it on another Claude model. This works for Claude Fable 5.2, Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, Claude Sonnet 5.5, and Claude Haiku 5.5. [Refusals and fallback](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) shows how to set up that retry, server-side or in your client. Claude Haiku 5.5 has no server-side fallback, so set up its retry with [client-side fallback](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#client-side-fallback). If you build the retry yourself from any of these models except Claude Haiku 5.5, [Fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) covers how to avoid paying the prompt-cache cost twice.
 
 ### model\_context\_window\_exceeded
 
@@ -1913,7 +1913,7 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```bash cURL
   curl https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -1930,6 +1930,8 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```python Python
+  client = anthropic.Anthropic()
+
   # Request with maximum tokens to get as much as possible
   response = client.beta.messages.create(
       model="claude-opus-5-5",
@@ -1946,6 +1948,8 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```typescript TypeScript
+  const client = new Anthropic();
+
   // Request with maximum tokens to get as much as possible
   const response = await client.beta.messages.create({
     model: "claude-opus-5-5",
@@ -1961,8 +1965,7 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```csharp C#
-  using Anthropic.Models.Beta.Messages;
-  using Model = Anthropic.Models.Messages.Model;
+  AnthropicClient client = new();
 
   // Request with maximum tokens to get as much as possible
   var response = await client.Beta.Messages.Create(new MessageCreateParams
@@ -1981,6 +1984,8 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```go Go
+  client := anthropic.NewClient()
+
   // Request with maximum tokens to get as much as possible
   response, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
   	Model:     anthropic.ModelClaudeOpus5_5,
@@ -2001,9 +2006,7 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```java Java
-  import com.anthropic.models.beta.messages.BetaMessage;
-  import com.anthropic.models.beta.messages.BetaStopReason;
-  import com.anthropic.models.beta.messages.MessageCreateParams;
+  AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
   // Request with maximum tokens to get as much as possible
   BetaMessage response = client.beta().messages().create(
@@ -2022,6 +2025,8 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```php PHP
+  $client = new Client();
+
   // Request with maximum tokens to get as much as possible
   $response = $client->beta->messages->create(
       maxTokens: 20000,
@@ -2037,6 +2042,8 @@ Claude stopped because it reached the model’s context window limit. This lets 
   ```
 
   ```ruby Ruby
+  client = Anthropic::Client.new
+
   # Request with maximum tokens to get as much as possible
   response = client.beta.messages.create(
     model: "claude-opus-5-5",
@@ -2330,11 +2337,11 @@ When you use [server tools](https://platform.claude.com/docs/en/agents-and-tools
 
 <CodeGroup exclude="shell:cURL, shell:CLI">
   <CodeGroupItem language="cURL">
-    This workflow needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
+    This workflow needs more logic than a single shell command. Use the [Anthropic SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
   </CodeGroupItem>
 
   <CodeGroupItem language="CLI">
-    This workflow needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
+    This workflow needs more logic than a single shell command. Use the [Anthropic SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
   </CodeGroupItem>
 
   ```python Python
@@ -2703,7 +2710,7 @@ It’s important to distinguish between `stop_reason` values and actual errors:
   # $? for errors and stop_reason for successful responses.
   curl --fail-with-body https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",
@@ -2917,7 +2924,7 @@ When using streaming, `stop_reason` is:
   # The message_delta event in the SSE stream carries stop_reason.
   curl -N https://api.anthropic.com/v1/messages \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
-    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-version: 2026-10-21" \
     -H "content-type: application/json" \
     -d '{
       "model": "claude-opus-5-5",

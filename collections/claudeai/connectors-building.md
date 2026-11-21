@@ -48,7 +48,7 @@ If you use OAuth, check these parts of your setup against Claude's client:
 If you need one of these related flows, follow its page:
 
 * **[Lazy authentication](https://claude.com/docs/connectors/building/lazy-authentication.md)**: if some of your tools work without the user's account, people can use those right away and sign in only when Claude reaches a tool that needs it
-* **[Enterprise Managed Auth](https://claude.com/docs/connectors/building/enterprise-managed-auth.md)**: lets enterprise users connect through their organization's SSO without a consent screen
+* **[Enterprise Managed Auth](https://claude.com/docs/connectors/building/enterprise-managed-auth.md)**: support auto-connect, so an organization can connect its users without a consent screen
 
 ### Decide what the server exposes
 
@@ -81,7 +81,7 @@ An MCP App is interactive UI that your MCP server renders inside a Claude conver
 
 ## Test your server against Claude
 
-You test against the real Claude client, not a staging environment. [Test your connector](https://claude.com/docs/connectors/building/testing.md) covers adding the server to Claude as a custom connector, validating auth flows with the MCP Inspector, tunneling a local server, and preparing test credentials for review. To connect and debug from the Claude Code command line, see the [Claude Code MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart).
+You test against the real Claude client, not a staging environment. [Test your connector](https://claude.com/docs/connectors/building/testing.md) covers adding the server to Claude as a custom connector, validating auth flows with the MCP Inspector, tunneling a local server, and preparing a test account for Verified review. To connect and debug from the Claude Code command line, see the [Claude Code MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart).
 
 ## Decide how people get your server
 

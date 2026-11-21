@@ -14,6 +14,10 @@ marimo automatically sends the selected data back to Python!
 
 > For a video overview of reactive plots, check out our [YouTube tutorial](https://youtu.be/KFXsm1wr408).
 
+Plots keep their library default themes in both light and dark notebooks. See
+[Plot themes](https://docs.marimo.io/guides/configuration/theming/#plot-themes) if you want plots to
+follow the notebook theme.
+
 ## Reactive plots! ⚡
 
 > **Requirements**
@@ -93,6 +97,18 @@ so you can always write:
 ```python
 mask = ax.value.get_mask(x, y)
 ```
+
+Pass `value` to start with a box selection:
+
+```python
+ax = mo.ui.matplotlib(
+    plt.gca(),
+    value={"x": (1, 3), "y": (2, 4)},
+)
+```
+
+The initial selection is clamped to the axes. If it does not overlap the
+axes, `ax.value` is an `EmptySelection`.
 
 ### Altair
 

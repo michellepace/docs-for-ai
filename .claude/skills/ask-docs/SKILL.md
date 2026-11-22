@@ -1,4 +1,5 @@
 ---
+name: ask-docs
 description: Get a grounded answer against a doc collection
 disable-model-invocation: false
 argument-hint: "[collection] \"your question\""

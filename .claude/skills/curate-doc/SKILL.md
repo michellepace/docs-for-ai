@@ -1,4 +1,5 @@
 ---
+name: curate-doc
 description: Curate a source URL into a collection
 disable-model-invocation: false
 argument-hint: "<collection> <url>"

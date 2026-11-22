@@ -20,6 +20,11 @@ fi
 uv sync
 uv run pre-commit install
 
+# Uses the platform's pre-installed Chromium; skill is vendored in .claude/skills
+command -v playwright-cli >/dev/null \
+  || npm install -g @playwright/cli@latest \
+  || echo "⚠️ playwright-cli not installed" >&2
+
 jq -r '.extraKnownMarketplaces[].source.repo' "$settings" \
   | while read -r repo; do
     claude plugin marketplace add "$repo" || echo "⚠️ marketplace not added: $repo" >&2

@@ -22,9 +22,6 @@
       "Bash(uv auth token*)"
     ]
   },
-  "worktree": {
-    "baseRef": "head"
-  },
   "hooks": {
     "SessionStart": [
       {
@@ -37,6 +34,9 @@
         ]
       }
     ]
+  },
+  "worktree": {
+    "baseRef": "head"
   },
   "enabledPlugins": {
     "git-utils@my-claude-marketplace": true,

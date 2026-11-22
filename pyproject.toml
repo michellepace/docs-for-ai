@@ -27,6 +27,11 @@ dev = [
   "ruff>=0.17.3",
 ]
 
+[tool.uv]
+# Floor read by .claude/hooks/session-start.sh; keep in step with
+# the uv-pre-commit rev in .pre-commit-config.yaml
+required-version = ">=0.13.6"
+
 
 # TESTING (PYTEST)
 # =================================

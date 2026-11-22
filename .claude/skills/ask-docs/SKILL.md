@@ -4,13 +4,10 @@ disable-model-invocation: false
 argument-hint: "[collection] \"your question\""
 allowed-tools:
   - Bash(grep *)
-  - Bash(find *)
   - Bash(printf *)
+  - Bash(uvx --from yq xq *)
   - Glob
   - Grep
-  - mcp__firecrawl__firecrawl_scrape
-  - mcp__firecrawl__firecrawl_search
-  - mcp__firecrawl__firecrawl_search_feedback
   - Read
   - WebFetch
   - WebSearch
@@ -18,7 +15,7 @@ allowed-tools:
 
 Your task is to provide a grounded answer to a user's question against the applicable curated documentation collection.
 
-Available collections: !`printf '<available_collections>\n'; find ~/.claude/docs-for-ai/collections -mindepth 1 -maxdepth 1 -type d -printf '%f\n'; printf '</available_collections>\n'`
+Available collections: !`printf '<available_collections>\n%s\n</available_collections>\n' "$(ls ~/.claude/docs-for-ai/collections)"`
 
 ## Step 1. Parse Arguments
 
@@ -28,20 +25,16 @@ If the question clearly belongs to another collection from `<available_collectio
 
 ## Step 2. Research a grounded answer
 
-1. Read `~/.claude/docs-for-ai/collections/{collection}/INDEX.xml` — the authoritative manifest. Route by each source's `<title>` and `<description>`; its `<local_file>` names a doc in the same directory.
+1. List the collection's docs from its `INDEX.xml` (the authoritative manifest):
 
-2. Answer from the relevant docs. If they fall short, re-check the index for other files, then **ask before any web fallback**.
+   ```shell
+   uvx --from yq xq -r --xml-force-list source '
+     "local_file | title | description",
+     (.docs_index.source[] | "\(.local_file) | \(.title) | \(.description)")
+   ' ~/.claude/docs-for-ai/collections/{collection}/INDEX.xml
+   ```
 
-<web_fallback>
-Fallback to the web only when the curated collection is insufficient and the user has agreed.
-
-Always prefer Firecrawl:
-
-- Known URL: `firecrawl_scrape` with just the `url` — always markdown, never `json` extraction (grounding needs the page text).
-- Discovery: `firecrawl_search` with `includeDomains` as bare hostname(s) from `<source_url>` (drop the filter if nothing useful returns). Never add `scrapeOptions` — it embeds every result's full text. Pick the 1–3 best hits, then scrape them.
-
-ONLY if Firecrawl is unavailable, fall back to your lossy/noisy `WebSearch`/`WebFetch`.
-</web_fallback>
+2. Answer from the relevant docs. If they fall short, re-check the index for other files. If still short, **ask before** searching the web, preferring the official source domain(s) in `INDEX.xml`'s `<source_url>`.
 
 ## Step 3. Craft the answer
 

@@ -10,7 +10,7 @@ description = "Curate and index clean docs for targeted AI context"
 readme = "README.md"
 requires-python = ">=3.15"
 dependencies = [
-  "firecrawl-py>=4.54.0", # scrape docs to markdown
+  "firecrawl-py>=4.57.0", # scrape docs to markdown
 ]
 
 [project.scripts]
@@ -24,13 +24,13 @@ dev = [
   "pyright>=1.1.414",
   "pytest>=9.2.0",
   "rich>=15.0.0",
-  "ruff>=0.17.3",
+  "ruff>=0.17.6",
 ]
 
 [tool.uv]
 # Floor read by .claude/hooks/session-start.sh; keep in step with
 # the uv-pre-commit rev in .pre-commit-config.yaml
-required-version = ">=0.13.6"
+required-version = ">=0.13.9"
 
 
 # TESTING (PYTEST)

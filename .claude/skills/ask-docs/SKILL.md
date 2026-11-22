@@ -1,10 +1,11 @@
 ---
+name: ask-docs
 description: Get a grounded answer against a doc collection
 disable-model-invocation: false
 argument-hint: "[collection] \"your question\""
 allowed-tools:
   - Bash(grep *)
-  - Bash(printf *)
+  - Bash(ls *)
   - Bash(uvx --from yq xq *)
   - Glob
   - Grep
@@ -15,7 +16,11 @@ allowed-tools:
 
 Your task is to provide a grounded answer to a user's question against the applicable curated documentation collection.
 
-Available collections: !`printf '<available_collections>\n%s\n</available_collections>\n' "$(ls ~/.claude/docs-for-ai/collections)"`
+Available collections:
+
+<available_collections>
+!`ls -1 ~/.claude/docs-for-ai/collections`
+</available_collections>
 
 ## Step 1. Parse Arguments
 

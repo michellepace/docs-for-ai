@@ -1,4 +1,5 @@
 ---
+name: recurate-docs
 description: Re-curate a collection's docs and descriptions
 disable-model-invocation: true
 argument-hint: "<collection>"

@@ -1,36 +1,38 @@
 #!/bin/bash
-# Cloud ignores enabledPlugins: install all; true/false still applies.
 set -euo pipefail
-
-if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
-  exit 0
-fi
-
+[ "${CLAUDE_CODE_REMOTE:-}" = "true" ] || exit 0
 cd "$CLAUDE_PROJECT_DIR"
-settings=.claude/settings.json
+# Claude reads a hook's stdout, not its stderr: send it warnings only
+exec 3>&1 1>&2
+warn() { echo "⚠️ $*" >&3; }
 
-# Platform uv can't self-update: reinstall at the pyproject.toml floor if below it
+# Cloud's uv can't self-update: reinstall it at the pyproject.toml floor
 uv_floor=$(sed -nE 's/^required-version *= *">= *([0-9.]+)".*/\1/p' pyproject.toml)
 uv_now=$(uv --version | awk '{print $2}')
 if [ -n "$uv_floor" ] && [ "$(printf '%s\n' "$uv_floor" "$uv_now" | sort -V | head -1)" != "$uv_floor" ]; then
-  curl -LsSf "https://astral.sh/uv/$uv_floor/install.sh" | UV_NO_MODIFY_PATH=1 sh \
-    || echo "⚠️ uv $uv_floor not installed; using $uv_now" >&2
+  curl -LsSf "https://github.com/astral-sh/uv/releases/download/$uv_floor/uv-installer.sh" | UV_NO_MODIFY_PATH=1 sh \
+    || warn "uv $uv_floor not installed; using $uv_now"
 fi
 
-uv sync
-uv run pre-commit install
+{ uv sync && uv run pre-commit install; } || warn "uv sync or pre-commit install failed"
 
-# Uses the platform's pre-installed Chromium; skill is vendored in .claude/skills
+# Cloud doesn't install the repo's plugins
+settings=.claude/settings.json
+jq -r '.extraKnownMarketplaces // {} | .[].source.repo' "$settings" \
+  | while read -r repo; do
+    claude plugin marketplace add "$repo" --scope project || warn "marketplace not added: $repo"
+  done
+# Install all, so false ones are ready to enable; install writes true, so re-disable them
+jq -r '.enabledPlugins // {} | to_entries[] | "\(.key) \(.value)"' "$settings" \
+  | while read -r plugin enabled; do
+    if ! claude plugin install "$plugin" --scope project; then
+      warn "plugin not installed: $plugin"
+    elif [ "$enabled" != true ]; then
+      claude plugin disable "$plugin" --scope project || warn "plugin not disabled: $plugin"
+    fi
+  done
+
+# The image has Chromium but not playwright-cli
 command -v playwright-cli >/dev/null \
   || npm install -g @playwright/cli@latest \
-  || echo "⚠️ playwright-cli not installed" >&2
-
-jq -r '.extraKnownMarketplaces[].source.repo' "$settings" \
-  | while read -r repo; do
-    claude plugin marketplace add "$repo" || echo "⚠️ marketplace not added: $repo" >&2
-  done
-
-jq -r '.enabledPlugins | keys[]' "$settings" \
-  | while read -r plugin; do
-    claude plugin install "$plugin" || echo "⚠️ plugin not installed: $plugin" >&2
-  done
+  || warn "playwright-cli not installed"

@@ -35,7 +35,7 @@ Bots work on their own cloud computer. A Bot runs a command on your desktop
 only if you allow it. The setting is under
 **Settings → Computer → Your computer**, labeled
 **Execution on this computer**. If no desktop is listed there yet, the same
-page shows **Execution on Local Computer**. By default it asks you each time.
+page shows **Execution on local computer**. By default it asks you each time.
 See [Run commands on your desktop](/grok-bot/settings-and-notifications#run-commands-on-your-desktop).
 
 ## Do my Bots share one computer?
@@ -188,8 +188,8 @@ with your Cursor account email and the Grok account email.
 **Link Grok Account** is on the **Get Started with Grok Bot** page at
 [cursor.com/bot/onboarding](https://cursor.com/bot/onboarding), and on the
 phone's paywall screen. If you already have access, open
-**Settings → Usage & Billing** and look under **Manage Plan** for
-**Get Access with Grok**. It appears only when linking would raise your usage.
+**Settings → Usage & billing** and look under **Manage plan** for
+**Get access with Grok**. It appears only when linking would raise your usage.
 
 ## I linked SuperGrok to the wrong Cursor account. Can I unlink it?
 
@@ -214,7 +214,7 @@ If you upgrade SuperGrok after linking, allow up to 24 hours for the
 ## Why doesn't my SuperGrok limit match my Grok Bot usage?
 
 They are two separate meters for two products. Grok Bot usage lives on your
-Cursor account. See it in Grok Bot under **Settings → Usage & Billing**, not in
+Cursor account. See it in Grok Bot under **Settings → Usage & billing**, not in
 the Grok app.
 
 ## How do I stop charges after my weekly usage runs out?
@@ -223,7 +223,7 @@ On The X Subscription, leave Auto Top-up off or set a monthly additional usage
 limit under **Additional usage credits** at
 [grok.com/dashboard/billing](https://grok.com/dashboard/billing). On a legacy
 Cursor plan, turn off on-demand or set a cap: in Grok Bot, open
-**Settings → Usage & Billing → On-demand monthly limit**, or on the web go to
+**Settings → Usage & billing → On-demand monthly limit**, or on the web go to
 [cursor.com/dashboard](https://cursor.com/dashboard) and set **Monthly Limit**
 under **Spending**. The cap does not stop a Bot in the middle of a run, so a
 running task can go a little past it. If on-demand is off, Grok Bot stops when
@@ -232,7 +232,7 @@ weekly usage runs out and resumes when weekly usage resets.
 ## Is there a free trial?
 
 Some accounts can try Grok Bot before they pay: when the access screen offers
-**Start Trial**, choose it. The trial is a usage credit, and a 7-day window also
+**Start trial**, choose it. The trial is a usage credit, and a 7-day window also
 applies. It never turns into a paid plan. The credit is drawn down by how much
 work your agents do, measured by agent steps and tokens rather than the number
 of messages you send, so start small, scope tasks tightly, and check your usage
@@ -241,7 +241,7 @@ of it, and used credit is not restored.
 
 **Cancel Trial** appears on free-plan accounts. There is no charge to cancel.
 On a free plan, you can end it early with **Cancel Trial** in
-**Settings → Usage & Billing** on desktop or **Settings → Usage** on iPhone
+**Settings → Usage & billing** on desktop or **Settings → Usage** on iPhone
 and Android. That removes any remaining trial credit, and you can't start the trial
 again. On a paid plan or Teams seat, the trial ends on its own.
 
@@ -296,7 +296,7 @@ a button and has no keybinding.
 ## Can I change the app language?
 
 Yes. On desktop, open **Settings**, go to **General**, and choose a
-**Language** under **Appearance**. **Follow System** uses your computer's
+**Language** under **Appearance**. **Follow system** uses your computer's
 language. On iPhone and Android, open **Settings** and choose **Language**;
 **System** uses your phone's language. Desktop and the phone app each have 38
 languages.

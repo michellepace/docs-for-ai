@@ -55,8 +55,8 @@ Grok Bot** page at [cursor.com/bot/onboarding](https://cursor.com/bot/onboarding
 On iPhone and Android, choose **Link Grok Account** on the access screen, finish
 signing in to Grok, then choose **Finished Linking? Refresh My Status**.
 
-If you already have access, open **Settings → Usage & Billing** and look under
-**Manage Plan** for **Get Access with Grok**. It appears only when linking would
+If you already have access, open **Settings → Usage & billing** and look under
+**Manage plan** for **Get access with Grok**. It appears only when linking would
 raise your usage.
 
 If sign-in doesn't finish, see

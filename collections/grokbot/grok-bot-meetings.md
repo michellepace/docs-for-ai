@@ -38,9 +38,9 @@ scheduled meeting, or **Taking notes** while it's in the call.
 
 Hover a meeting you scheduled and open its menu to see **Meeting actions**:
 
-* **Disable Interactivity** keeps the Bot listening and taking notes, without
+* **Disable interactivity** keeps the Bot listening and taking notes, without
   answering in the meeting. The row shows **Muted**. While the meeting is still
-  scheduled, **Enable Interactivity** turns it back on. Once the Bot is joining
+  scheduled, **Enable interactivity** turns it back on. Once the Bot is joining
   or in the call, quit and add it again to turn it back on.
 * **Cancel** removes a scheduled meeting.
 * **Quit** takes the Bot out of a meeting it's joining or attending.

@@ -109,7 +109,7 @@ approval first.
 To add one yourself in the desktop app, choose **Add a custom connector** at
 the bottom of **Connect apps**. Enter a **Name**, then pick a **Type**:
 **Remote HTTPS** takes a **Server URL**, with optional **HTTP headers** and an
-OAuth **Client ID** (a **Client Secret** field appears once you enter one);
+OAuth **Client ID** (a **Client secret** field appears once you enter one);
 **Command** takes a **Command** and its **Arguments**. Choose **Add plugin** to save it.
 If your team admin's MCP policy blocks the server, it can't be saved.
 
@@ -288,7 +288,7 @@ it in; your Bots never see the values. The new 1Password integration is rolling
 out gradually. It works with personal and Family 1Password accounts and needs
 1Password 8.12.42 or later.
 
-1. Choose **Connect apps** and open **1Password**, under **Password Managers**.
+1. Choose **Connect apps** and open **1Password**, under **Password managers**.
 2. On your computer, choose **Connect 1Password**.
 3. Your browser opens. Sign in to 1Password there and approve Grok Bot. Grok Bot
    updates when you're done.
@@ -499,7 +499,7 @@ The app and the computer update separately.
 
 | Action | What it does | What it keeps | What it removes |
 | --- | --- | --- | --- |
-| **Update** | Moves the computer to the latest version. Some updates only refresh Grok Bot's software; others replace the whole computer, and you may be able to schedule those for later. The text under **Update Bot's Computer** says which kind is waiting. | Software update: everything, including installed apps. Computer update: Bots, files, and logins. | Software update: nothing. Computer update: installed apps and packages. |
+| **Update** | Moves the computer to the latest version. Some updates only refresh Grok Bot's software; others replace the whole computer, and you may be able to schedule those for later. The text under **Update Bot's computer** says which kind is waiting. | Software update: everything, including installed apps. Computer update: Bots, files, and logins. | Software update: nothing. Computer update: installed apps and packages. |
 | **Recover** | Saves what it can, then builds a new computer on the latest version from your saved data. Running work is interrupted. | Bots, files, and logins that were saved | Installed apps and packages, and very recent changes if the computer could not be reached to save them |
 | **Reset** | Builds a new computer on the latest version from your last saved data. Running work is interrupted. | Bots, files, and logins that were saved | Installed apps and packages, and very recent changes if the computer could not be reached to save them |
 
@@ -510,17 +510,17 @@ support](/grok-bot/troubleshooting) before you use **Recover** or **Reset**.
 When the computer is unreachable, work from the least destructive option first:
 
 1. Wait, then choose **Retry** if the computer says **Reconnecting** or
-   **Couldn't Reach Grok Bot's Computer**, or reopen the conversation. Bots,
+   **Couldn't reach Grok Bot's computer**, or reopen the conversation. Bots,
    files, and logins are safe while it reconnects. Do not **Reset** during this.
 2. Fully quit Grok Bot and reopen it, and check for an app update. On Mac,
    choose **Quit** from the menu bar, not just close the window.
-3. Use **Update Bot's Computer** in **Settings → Computer** if an update is
+3. Use **Update Bot's computer** in **Settings → Computer** if an update is
    offered.
 4. Choose **Recover computer** (the confirmation dialog calls it **Recover Grok
-   Bot's Computer**) if it still cannot reconnect, or if an update looks stuck
+   Bot's computer**) if it still cannot reconnect, or if an update looks stuck
    and **Recover computer** is shown. On a slow update, **Keep waiting** is the
    safe default.
-5. Use **Reset Bot's Computer** only after those steps.
+5. Use **Reset Bot's computer** only after those steps.
 
 Do not start a second Update or Reset while one is already running; repeated
 resets can interrupt a restore that is still finishing. **Reconnecting** and
@@ -536,7 +536,7 @@ Settings says **An agent couldn't pause in time, so the computer was not
 updated**, let that Bot finish, then choose **Update** again.
 
 A Bot cannot finish a turn while the computer says **Reconnecting** or
-**Couldn't Reach Grok Bot's Computer**. Fix the connection with the steps above,
+**Couldn't reach Grok Bot's computer**. Fix the connection with the steps above,
 then send the message again. See [Troubleshooting](/grok-bot/troubleshooting)
 for missing chats and when to contact support.
 

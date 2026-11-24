@@ -108,8 +108,8 @@ and Android, it's in the **Bot** group of **Settings**. With Auto Review off,
 the Bot runs actions without checking them first, and your Custom Rules are
 hidden and not used but kept; turn it back on to use them again.
 
-While Auto Review is on, **Custom Rules** appears under the switch on desktop;
-on the phone, tap **Custom Rules** in the **Bot** group. To add a rule:
+While Auto Review is on, **Custom rules** appears under the switch on desktop;
+on the phone, tap **Custom rules** in the **Bot** group. To add a rule:
 
 1. Under **When Grok Bot wants to:**, describe one action in plain words, like
    “reply to emails for me.”
@@ -181,7 +181,7 @@ or remove it in **Settings → Vault**.
 
 If you sign in with a hardware security key, such as a YubiKey, the Bot's
 browser can use a key plugged into your desktop while **Use hardware security
-keys** is on under **Settings → General → Security Key**. The setting is on by
+keys** is on under **Settings → General → Security key**. The setting is on by
 default on macOS and Windows and is not yet supported on Linux; every use asks
 you to approve it first.
 
@@ -193,7 +193,7 @@ computer in front of you is a separate capability.
 In **Settings → Computer → Your computer**, choose **Ask every time**,
 **Always allow**, or **Never allow** in **Execution on this computer**. Each
 listed desktop has its own setting; until a desktop is listed, the page shows
-**Execution on Local Computer** instead.
+**Execution on local computer** instead.
 
 The default is **Ask every time**. Use **Never allow** unless a Bot has a
 specific reason to work on your local files. Your team admin can cap this
@@ -207,7 +207,7 @@ Your team's cap also applies when a Bot uses apps on your phone. See
 The first time a Bot asks to run a command on your computer, the conversation
 shows **Allow Grok Bot and all Bots to run commands on your local computer?**
 with **Always allow**, **Allow once**, **Never**, and **Deny once** (Esc).
-**Always allow** and **Never** set **Execution on Local Computer** for every
+**Always allow** and **Never** set **Execution on local computer** for every
 Bot, and you can change the setting later in Settings. If your team's admin has
 set a stricter ceiling, **Always allow** is unavailable.
 

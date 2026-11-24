@@ -173,7 +173,7 @@ stops further deletions.
 
 ## What members see
 
-During a recreate, the desktop app shows **Updating Grok Bot's Computer** until
+During a recreate, the desktop app shows **Updating Grok Bot's computer** until
 the switch completes. Bots that were working pause at a safe point and continue
 on the new computer. Sign-in sessions inside the computer can drop when it is
 recreated, so members sign in to company tools again under your identity

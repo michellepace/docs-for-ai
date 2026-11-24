@@ -147,13 +147,6 @@
     <curated_at>2026-11-24</curated_at>
   </source>
   <source>
-    <title>Set up Okta Verify and FastPass</title>
-    <description>Enterprise only: install via the `setup-okta.sh` Team Setup Script, enrol each computer once, and avoid the Ctrl+V passcode crash.</description>
-    <source_url>https://docs.x.ai/grok-bot/okta-fastpass</source_url>
-    <local_file>grok-bot-okta-fastpass.md</local_file>
-    <curated_at>2026-11-24</curated_at>
-  </source>
-  <source>
     <title>Connect to private networks</title>
     <description>Reach intranet or VPC services by installing Tailscale or Cloudflare Tunnel with Team Setup Scripts and Team Secrets.</description>
     <source_url>https://docs.x.ai/grok-bot/private-networks</source_url>
@@ -165,20 +158,6 @@
     <description>Hosted computer setup failing behind Zscaler or other gateways: the `*.*.cursorvm.com` allowlist and TLS inspection exemptions.</description>
     <source_url>https://docs.x.ai/grok-bot/proxies</source_url>
     <local_file>grok-bot-proxies.md</local_file>
-    <curated_at>2026-11-24</curated_at>
-  </source>
-  <source>
-    <title>Manage Grok Bot computers</title>
-    <description>Enterprise admins: bulk recreate, terminate or wipe members' computers via dashboard or API, auto-delete inactive ones, and read failed results.</description>
-    <source_url>https://docs.x.ai/grok-bot/computers</source_url>
-    <local_file>grok-bot-computers.md</local_file>
-    <curated_at>2026-11-24</curated_at>
-  </source>
-  <source>
-    <title>Grok Bot inference hooks</title>
-    <description>Large reference: route model requests and tool calls to your security server for allow/deny verdicts; signing, fail-open/closed modes, frame JSON.</description>
-    <source_url>https://docs.x.ai/grok-bot/inference-hooks</source_url>
-    <local_file>grok-bot-inference-hooks.md</local_file>
     <curated_at>2026-11-24</curated_at>
   </source>
   <source>

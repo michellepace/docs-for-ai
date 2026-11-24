@@ -13,7 +13,7 @@ just closing the window), reopen it, and try again before anything else.
 2. Confirm the browser shows a successful Cursor sign-in.
 3. Return to the app manually if it does not regain focus.
 4. Choose **Sign in** on the welcome screen again. If you are already in the
-   app, use **Sign In with Cursor** from Settings.
+   app, use **Sign in with Cursor** from Settings.
 5. Confirm that your account has Grok Bot access.
 
 If your organization uses SSO, complete the organization login rather than
@@ -58,7 +58,7 @@ the computer can't be reached to save them.
 If the status page shows no incident and the Bot says **Bot failed to respond**
 or **Model provider is overloaded**, wait a moment and send the message again.
 If the Bot still doesn't reply, fully quit and reopen Grok Bot. A Bot also can't finish a turn while the computer says **Reconnecting** or
-**Couldn't Reach Grok Bot's Computer**; see
+**Couldn't reach Grok Bot's computer**; see
 [The computer cannot be reached](#the-computer-cannot-be-reached). If the
 computer is connected and the same prompt still fails,
 [contact support](#before-contacting-support) with the error title, the
@@ -68,7 +68,7 @@ request ID, and a screenshot of the computer status.
 
 First setup and a computer update can take several minutes. Keep the app open
 while it shows progress, such as **Setting up your Grok Bot…** during first
-setup or **Updating Grok Bot's Computer** during an update. On your phone, the
+setup or **Updating Grok Bot's computer** during an update. On your phone, the
 home screen shows **Starting your computer…**. A slow update may say
 **Update still running** or **Taking longer than usual**; **Keep waiting** is
 the safe choice unless the update looks stuck. An update can take a few
@@ -107,14 +107,14 @@ or a company firewall. Try another network, or ask your network admin.
 Recover in this order:
 
 1. If the computer says **Reconnecting** or
-   **Couldn't Reach Grok Bot's Computer**, wait, then choose **Retry**. Do not
+   **Couldn't reach Grok Bot's computer**, wait, then choose **Retry**. Do not
    **Reset** during this.
 2. Fully quit Grok Bot and reopen it.
 3. If an update is offered, open **Settings → Computer** and choose
-   **Update Bot's Computer**.
+   **Update Bot's computer**.
 4. Choose **Recover computer** if it still cannot reconnect, or if an update
    looks stuck and **Recover computer** is shown (the confirmation dialog calls
-   it **Recover Grok Bot's Computer**).
+   it **Recover Grok Bot's computer**).
 5. Use **Reset** only after those steps. On iPhone and Android,
    **Settings → Bot → Bot Computer** has **Reset Computer**; updating and
    recovering the computer require the desktop app.
@@ -126,7 +126,7 @@ finishing. If **Recover** or **Reset** fails, use **Retry Recovery** or
 **Retry Reset** once, then stop and
 [contact support](#before-contacting-support).
 
-The text under **Update Bot's Computer** says which kind of update is waiting.
+The text under **Update Bot's computer** says which kind of update is waiting.
 A software update keeps everything, including installed apps. A full computer
 update keeps your Bots, files, and logins but removes installed apps and
 packages, and you may be able to schedule it for later. **Recover computer**
@@ -231,7 +231,7 @@ sign-on, choose **Take over** on the **Computer** card marked
 **Action needed**, sign in with a method your company allows there, such as a
 password with a code or a push approval on your phone, then choose
 **I'm done**. On Mac and Windows, you can also use a hardware security key: in
-**Settings → General**, under **Security Key**, turn on
+**Settings → General**, under **Security key**, turn on
 **Use hardware security keys**.
 
 ## A website times out or won't connect
@@ -388,7 +388,7 @@ then:
 2. Send the Bot a replacement instruction
 3. Ask it to regenerate the action with the corrected scope
 
-If an action keeps requiring approval, check **Custom Rules** under
+If an action keeps requiring approval, check **Custom rules** under
 **Settings → General → Bot** for a matching **Ask first** rule, including team rules your
 admin requires. **Ask first** rules take precedence over **Allow
 automatically** rules.
@@ -397,7 +397,7 @@ automatically** rules.
 
 Cloud-computer work and local-computer work use different permissions. Open
 **Settings → Computer → Your computer**, find **Execution on this computer**
-for the desktop (**Execution on Local Computer** until the desktop is listed),
+for the desktop (**Execution on local computer** until the desktop is listed),
 and review the policy.
 
 Keep local access disabled unless the task specifically requires files or
@@ -459,7 +459,7 @@ The Grok Bot app and Grok Bot's computer have separate updates.
   menu shows **New update available**. Choose **Install**, then
   **Restart to update**.
 * To check yourself, open **Settings → Updates → Check for Updates**. If an
-  update is ready, choose **Restart to Update**. With **Automatic Updates** on,
+  update is ready, choose **Restart to Update**. With **Automatic updates** on,
   the default, a downloaded update also installs while you're away.
 * On a Linux `.deb` or `.rpm` install, **Check for Updates** only tells you a new
   version is out. Update with your package manager, for example
@@ -467,7 +467,7 @@ The Grok Bot app and Grok Bot's computer have separate updates.
   `sudo dnf upgrade --refresh grok-bot`.
 * Phone updates come from the App Store or Google Play.
 * To rebuild the cloud computer, open **Settings → Computer** and choose
-  **Update Bot's Computer**.
+  **Update Bot's computer**.
 
 Updating the desktop app does not reset the cloud computer. Product changes are
 listed on the [changelog](https://cursor.com/changelog).

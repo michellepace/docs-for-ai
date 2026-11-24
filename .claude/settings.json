@@ -42,9 +42,7 @@
     "git-utils@my-claude-marketplace": true,
     "alwayson-misc@my-claude-marketplace": true,
     "pyright-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": false,
-    "superpowers@claude-plugins-official": false,
-    "mattpocock-skills@claude-plugins-official": false
+    "skill-creator@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {
     "my-claude-marketplace": {

@@ -193,6 +193,22 @@ again. Only a Bot's owner can pay its orders. See [Pay for
 things](/grok-bot/vault#pay-for-things) for the cards and wallets a Bot pays
 with.
 
+## Book a hotel
+
+Ask a Bot for a place to stay, with where you're going and roughly when, and it
+searches hotels with live prices. In the Grok Bot app it replies with a card of
+hotels you can view as a grid or on a map. Open a hotel to see its photos,
+rooms and rates, and its check-in, check-out, cancellation, and payment
+details, then choose **Book**. The Bot books the stay for you on the hotel's
+own site, and you approve the payment on an order card as with any other
+purchase. Where the app can't show hotel cards, the Bot lists the hotels in its
+reply; to book one, reply with the hotel's name.
+
+Searching never books or holds a room, and the hotel's site sets the final
+price, which can differ from the one on the card. Only the Bot's owner can
+search for hotels with it. If a booking isn't confirmed yet, check your email
+for the hotel's confirmation before you book the same stay again.
+
 ## Have a Bot make a phone call
 
 A Bot can call a business for you, for example to book a table or ask about an

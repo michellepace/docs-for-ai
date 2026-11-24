@@ -241,9 +241,9 @@ learns](/grok-bot/team-bots#what-it-learns)
 ### Import memory from another assistant
 
 To bring over what another AI assistant knows about you, open Settings →
-**General** and choose **Start Import** under **Import**. Copy the prompt into
+**General** and choose **Start import** under **Import**. Copy the prompt into
 a chat with your other assistant, paste its answer into the second box, and
-choose **Add to Memory**. Grok Bot sends it to your
+choose **Add to memory**. Grok Bot sends it to your
 [primary Bot](#your-primary-bot) and opens that chat.
 
 ### Memory is not a source of truth

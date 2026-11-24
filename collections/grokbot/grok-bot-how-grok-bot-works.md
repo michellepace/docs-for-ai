@@ -113,7 +113,7 @@ their own. When one needs you, the Bot shows an approval card with the action
 and its details, then waits.
 
 You can add your own rules too. In **Settings → General**, under **Bot**, open
-**Custom Rules**. Describe an action in plain words, like “send an email,” and
+**Custom rules**. Describe an action in plain words, like “send an email,” and
 choose **Ask first** or **Allow automatically**. An **Ask first** rule always
 stops a matching action. That's the rule that stopped this email.
 

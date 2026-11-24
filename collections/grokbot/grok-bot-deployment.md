@@ -142,12 +142,12 @@ info** copies the version, release track, and operating system.
 
 | Install | How updates arrive |
 | --- | --- |
-| macOS `.dmg`, Windows Setup `.exe`, Linux AppImage | The app checks for updates automatically and offers each new version to the member. **Restart to Update**, in the [Updates](/grok-bot/settings-and-notifications#updates) section of settings, installs it. With **Automatic Updates** on, the default, the app also installs a downloaded update while the member is away. |
+| macOS `.dmg`, Windows Setup `.exe`, Linux AppImage | The app checks for updates automatically and offers each new version to the member. **Restart to Update**, in the [Updates](/grok-bot/settings-and-notifications#updates) section of settings, installs it. With **Automatic updates** on, the default, the app also installs a downloaded update while the member is away. |
 | Linux `.deb` or `.rpm` | The app doesn't install updates. New versions arrive through your package manager. |
 
 For macOS, Windows, and AppImage installs, no device policy, installer option,
 or dashboard setting turns off desktop app updates. Members can turn off
-**Automatic Updates** so updates wait for **Restart to Update**, but the app
+**Automatic updates** so updates wait for **Restart to Update**, but the app
 still checks for and offers new versions. Pinning decides which version you
 install; the app still offers newer ones afterward.
 
@@ -196,7 +196,7 @@ to pin or supply. A computer moves to a newer image in one of three ways:
 | Trigger | What happens | Who starts it |
 | --- | --- | --- |
 | New image | Idle computers are recreated on the new image in the background, gradually and without a fixed schedule. Until then, a computer stays on its current image. Member files carry over, and Team Setup runs again. | Automatic, in the background |
-| **Update Bot's Computer** | Rebuilds the member's computer on the latest image. Scheduling it for a later time isn't available to every account yet. | The member, from **Settings → Computer** in the desktop app, under **Bot's computer** |
+| **Update Bot's computer** | Rebuilds the member's computer on the latest image. Scheduling it for a later time isn't available to every account yet. | The member, from **Settings → Computer** in the desktop app, under **Bot's computer** |
 | **Recreate VMs** | Rebuilds the selected members' computers on the latest image and Team Setup Scripts. | Admins on Enterprise, from [Manage Member Computers and Data](/grok-bot/computers) |
 
 Running computers pick up Team Setup manifest changes roughly once a day; to
@@ -243,7 +243,7 @@ them from TLS inspection before you push the app.
 ### Can I turn off automatic updates for the desktop app?
 
 On macOS, Windows, and AppImage installs, no. The app checks for updates and
-offers them to members. Each member can turn off **Automatic Updates** so an
+offers them to members. Each member can turn off **Automatic updates** so an
 update installs only when they choose **Restart to Update**, but there's no
 admin control. Linux `.deb` and `.rpm` installs don't update themselves, so you
 control them with your package manager. See

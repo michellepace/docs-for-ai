@@ -232,7 +232,7 @@ It can let an action proceed, require approval, or deny it.
   adds, edits, or deletes a rule. If admins turn enforcement off, the team
   rules stop applying and members go back to their own rules only.
 * **Members can add personal rules** under **Settings → General →
-  Auto-review**, in **Custom Rules**. **Ask first** rules always stop matching
+  Auto-review**, in **Custom rules**. **Ask first** rules always stop matching
   actions, and **Allow automatically** rules let matching actions proceed only
   when the reviewer finds no other reason to stop. Members can add personal
   rules on top of team rules, but they only make behavior stricter;
@@ -410,7 +410,7 @@ it is distinct from Auto Review, which governs work inside the hosted computer.
 Per-command approval is the default, and the approval card shows the exact
 command. Members choose the policy under
 **Settings → Computer → Your computer**, in **Execution on this computer**
-(**Execution on Local Computer** until the desktop is listed): **Ask every
+(**Execution on local computer** until the desktop is listed): **Ask every
 time**, **Always allow**, or **Never allow**. Recommend **Never allow** unless
 a Bot has a specific reason to work on local files. Admins can cap the policy
 for the whole team with

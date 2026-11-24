@@ -127,7 +127,7 @@ The Grok Bot usage-credit trial claimed on web or desktop is separate; see
 A usage limit reset brings your weekly usage back to 0% right away, without
 waiting for your regular weekly reset. Resets you have are listed under **Usage
 limit resets** in **Settings** > **Usage**, with the date each one expires. Tap
-**Usage Limit Reset**, then **Confirm**. After you use one, you have to wait
+**Usage limit reset**, then **Confirm**. After you use one, you have to wait
 before you can use another.
 
 When you reach your weekly usage limit, the warning above the message box also

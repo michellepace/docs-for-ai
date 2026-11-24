@@ -4,223 +4,202 @@
     <description>What Bots can do: teamwork, a shared cloud computer, voice, app and MCP connections, and prebuilt marketplace Bots.</description>
     <source_url>https://docs.x.ai/grok-bot/overview</source_url>
     <local_file>grok-bot-overview.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Get started</title>
     <description>Install the app, which plans include it, SSO and Grok account sign-in, and a first task set to repeat.</description>
     <source_url>https://docs.x.ai/grok-bot/get-started</source_url>
     <local_file>grok-bot-get-started.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Use Cases</title>
     <description>Starter prompts for app-connected tasks, single-job Bots like sales or invoicing, and multi-Bot teams like month-end close.</description>
     <source_url>https://docs.x.ai/grok-bot/use-cases</source_url>
     <local_file>grok-bot-use-cases.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>How Grok Bot Works</title>
     <description>One request traced end to end: per-Bot vs shared memory, login lookup order, Auto Review, and why Bots aren't isolated.</description>
     <source_url>https://docs.x.ai/grok-bot/how-grok-bot-works</source_url>
     <local_file>grok-bot-how-grok-bot-works.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Message and collaborate</title>
-    <description>Voice and dictation, reviewing drafts, group chats and Bot handoffs, X Chat fixes, shopping and phone calls.</description>
+    <description>Voice chat, disabling email and Slack drafts, group chats and Bot handoffs, stopping Bot-to-Bot messaging, shopping, hotel booking, phone calls, keyboard shortcuts.</description>
     <source_url>https://docs.x.ai/grok-bot/chat-and-collaboration</source_url>
     <local_file>grok-bot-chat-and-collaboration.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Files and results</title>
     <description>Attachment size limits, moving files via Drive or email, image and video generation, pages, the Library, Cloud Agent outputs.</description>
     <source_url>https://docs.x.ai/grok-bot/files-and-results</source_url>
     <local_file>grok-bot-files-and-results.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Use the computer and apps</title>
     <description>Connect apps, custom MCP servers or 1Password; fix Google or Microsoft admin blocks; claim a `mail.grokbot.com` address; recover an unreachable computer.</description>
     <source_url>https://docs.x.ai/grok-bot/computer-and-apps</source_url>
     <local_file>grok-bot-computer-and-apps.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Create and manage Bots</title>
     <description>Setting a primary Bot, renaming, hiding vs deleting, sharing templates, and viewing, correcting, forgetting or importing what a Bot remembers.</description>
     <source_url>https://docs.x.ai/grok-bot/bots</source_url>
     <local_file>grok-bot-bots.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Skills and routines</title>
     <description>Save, publish or demonstrate skills; trigger routines from Slack, webhooks or email; why one didn't run; rate limits and usage.</description>
     <source_url>https://docs.x.ai/grok-bot/skills-routines-and-automations</source_url>
     <local_file>grok-bot-skills-routines-and-automations.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Approvals, security, and privacy</title>
     <description>Answer approval cards and why they expire, write Ask first or Allow automatically rules, allow local-computer commands, and revoke access.</description>
     <source_url>https://docs.x.ai/grok-bot/approvals-security-and-privacy</source_url>
     <local_file>grok-bot-approvals-security-and-privacy.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Vault and secure sign-in</title>
     <description>CSV import, API key and Team Bot secrets, approving every payment, order cards, and why saved values look blank or deleted.</description>
     <source_url>https://docs.x.ai/grok-bot/vault</source_url>
     <local_file>grok-bot-vault.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Team Bots</title>
     <description>Who can change a shared Bot, why lessons need approval, and whose apps and usage apply in shared chats.</description>
     <source_url>https://docs.x.ai/grok-bot/team-bots</source_url>
     <local_file>grok-bot-team-bots.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Create and share a Team Bot</title>
     <description>Publish and share it, connect it to Slack or Microsoft Teams, approve its learnings, and share one app account.</description>
     <source_url>https://docs.x.ai/grok-bot/create-a-team-bot</source_url>
     <local_file>grok-bot-create-a-team-bot.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Grok Bot for Mobile</title>
     <description>Cancelling App Store or Google Play subscriptions, Siri shortcuts, and letting Bots use your phone's Calendar, Contacts or Home.</description>
     <source_url>https://docs.x.ai/grok-bot/mobile</source_url>
     <local_file>grok-bot-mobile.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Use Grok Bot in Microsoft Teams</title>
     <description>Admin approval, linking your Microsoft account, files via OneDrive, and fixing "Waiting on admin approval" or blocked custom apps.</description>
     <source_url>https://docs.x.ai/grok-bot/microsoft-teams</source_url>
     <local_file>grok-bot-microsoft-teams.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Add a Bot to Your Meetings</title>
     <description>Join Google Meet, Zoom or Teams calls by link or calendar; mute or remove the Bot; summaries, transcripts and plan availability.</description>
     <source_url>https://docs.x.ai/grok-bot/meetings</source_url>
     <local_file>grok-bot-meetings.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>When Your Bot Takes Initiative</title>
     <description>What the primary Bot does unprompted, like offering tasks or flagging signed-out apps, and how to mute its alerts.</description>
     <source_url>https://docs.x.ai/grok-bot/initiative</source_url>
     <local_file>grok-bot-initiative.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Tag @bot on X</title>
     <description>Account and region requirements (not UK, EU or Australia), what each @bot reply means, and why @bot stayed silent.</description>
     <source_url>https://docs.x.ai/grok-bot/tag-on-x</source_url>
     <local_file>grok-bot-tag-on-x.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Grok Bot for teams and enterprises</title>
     <description>Large admin reference: every dashboard control and which are Enterprise only, group overrides, Team Secrets, retention, Action Recording, recommended baseline.</description>
     <source_url>https://docs.x.ai/grok-bot/teams-and-enterprises</source_url>
     <local_file>grok-bot-teams-and-enterprises.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Deploy Grok Bot to your organization</title>
     <description>Push installers with MDM or `.deb`/`.rpm`, pin a version, why auto-updates can't be turned off, and the Update required screen.</description>
     <source_url>https://docs.x.ai/grok-bot/deployment</source_url>
     <local_file>grok-bot-deployment.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Configure identity and access</title>
     <description>Fix "User is not assigned to this application" in Okta or Entra ID, and IdP device rules blocking the Bot's computer.</description>
     <source_url>https://docs.x.ai/grok-bot/identity-and-access</source_url>
     <local_file>grok-bot-identity-and-access.md</local_file>
-    <curated_at>2026-11-22</curated_at>
-  </source>
-  <source>
-    <title>Set up Okta Verify and FastPass</title>
-    <description>Enterprise only: install via the `setup-okta.sh` Team Setup Script, enrol each computer once, and avoid the Ctrl+V passcode crash.</description>
-    <source_url>https://docs.x.ai/grok-bot/okta-fastpass</source_url>
-    <local_file>grok-bot-okta-fastpass.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Connect to private networks</title>
     <description>Reach intranet or VPC services by installing Tailscale or Cloudflare Tunnel with Team Setup Scripts and Team Secrets.</description>
     <source_url>https://docs.x.ai/grok-bot/private-networks</source_url>
     <local_file>grok-bot-private-networks.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Configure TLS-inspecting proxies</title>
     <description>Hosted computer setup failing behind Zscaler or other gateways: the `*.*.cursorvm.com` allowlist and TLS inspection exemptions.</description>
     <source_url>https://docs.x.ai/grok-bot/proxies</source_url>
     <local_file>grok-bot-proxies.md</local_file>
-    <curated_at>2026-11-22</curated_at>
-  </source>
-  <source>
-    <title>Manage Grok Bot computers</title>
-    <description>Enterprise admins: bulk recreate, terminate or wipe members' computers via dashboard or API, auto-delete inactive ones, and read failed results.</description>
-    <source_url>https://docs.x.ai/grok-bot/computers</source_url>
-    <local_file>grok-bot-computers.md</local_file>
-    <curated_at>2026-11-22</curated_at>
-  </source>
-  <source>
-    <title>Grok Bot inference hooks</title>
-    <description>Large reference: route model requests and tool calls to your security server for allow/deny verdicts; signing, fail-open/closed modes, frame JSON.</description>
-    <source_url>https://docs.x.ai/grok-bot/inference-hooks</source_url>
-    <local_file>grok-bot-inference-hooks.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Grok Bot security</title>
     <description>Network policy modes, blocked sites and connector hosts, credential handling, audit logs and data residency.</description>
     <source_url>https://docs.x.ai/grok-bot/security</source_url>
     <local_file>grok-bot-security.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Grok Bot security FAQ</title>
     <description>Quick answers for security reviews: microVM isolation, egress IPs, Zscaler hangs, model restrictions, data residency, certifications.</description>
     <source_url>https://docs.x.ai/grok-bot/security-faq</source_url>
     <local_file>grok-bot-security-faq.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Settings and notifications</title>
     <description>Where each option lives, why alerts reach desktop not phone, and routing traffic through your desktop.</description>
     <source_url>https://docs.x.ai/grok-bot/settings-and-notifications</source_url>
     <local_file>grok-bot-settings-and-notifications.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Deep links</title>
     <description>Build `grokbot://` links that prefill a Bot's message from shortcuts or other apps, plus plugin install links.</description>
     <source_url>https://docs.x.ai/grok-bot/deep-links</source_url>
     <local_file>grok-bot-deep-links.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Troubleshooting</title>
     <description>Sign-in loops, outages, an unreachable computer (Recover vs Reset), plugin auth failures, sites timing out, and what to send support.</description>
     <source_url>https://docs.x.ai/grok-bot/troubleshooting</source_url>
     <local_file>grok-bot-troubleshooting.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
   <source>
     <title>Frequently asked questions</title>
     <description>Grab-bag answers: Grok app vs Grok Bot, no model picker, SuperGrok linking, usage caps, trials, refunds, account deletion.</description>
     <source_url>https://docs.x.ai/grok-bot/faq</source_url>
     <local_file>grok-bot-faq.md</local_file>
-    <curated_at>2026-11-22</curated_at>
+    <curated_at>2026-11-24</curated_at>
   </source>
 </docs_index>

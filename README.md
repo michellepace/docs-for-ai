@@ -81,7 +81,7 @@ uv sync && uv run pre-commit install
 ln -sfn "$PWD" ~/.claude/docs-for-ai
 # link each skill folder into your personal skills
 mkdir -p ~/.claude/skills
-ln -sfn ~/.claude/docs-for-ai/.claude/skills/* ~/.claude/skills/
+ln -sfn ~/.claude/docs-for-ai/.claude/skills/{ask-docs,curate-doc,recurate-docs} ~/.claude/skills/
 
 # print the absolute path for step 7 below
 printf "\n 🌸 Use for step 7:\t" && readlink -f ~/.claude/docs-for-ai
